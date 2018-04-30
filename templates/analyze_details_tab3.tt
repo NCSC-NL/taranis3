@@ -1,0 +1,24 @@
+[% IF results && results.size > 0 %]
+	[% FOREACH result IN results %]
+<div class="item-row">
+	<div class="block analyze-details-tab3-result-date">
+	[% result.date %]
+	</div>
+	<div class="block analyze-details-tab3-result-title">
+	[% SWITCH result.type %]
+		[% CASE 'assess' %]
+		<span class="span-link assess-details-link" data-digest="[% result.id | uri %]">[% result.title %]</span>		
+		[% CASE 'analysis' %]
+		<span class="span-link analyze-item-details-link" data-analysisid="[% result.id %]"><span class="bold">AN-[% result.id.substr(0,4) _ '-' _ result.id.substr(4) %]</span>: [% result.title %]</span>
+		[% CASE 'advisory' %]
+		<span class="span-link advisory-details-link" data-advisoryid="[% result.id %]"><span class="bold">[% result.govcertid _ ' [v' _ result.version _ ']' %]</span> [% result.title %]</span>
+		[% CASE 'eow' %]
+		<span class="span-link eow-details-link" data-eowid="[% result.id %]"><span class="bold">[% result.title %]</span> [[% result.created %]]</span>
+	[% END %]
+	</div><br>
+	<div class="block analyze-details-tab3-result-description">[% result.description %]</div><br>
+</div>
+	[% END %]
+[% ELSE %]
+<div class="block">No matches found.</div>
+[% END %]

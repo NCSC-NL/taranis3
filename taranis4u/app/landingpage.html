@@ -1,0 +1,20 @@
+<div ng-init="showList = true" ng-click='showList = !showList' class="block">
+	<span id="nav-item-display-btn" ng-class="{'fa-list': !showList, 'fa-th': showList}" class="block nav-item fa"></span><br>
+</div>
+<div id="nav-items">
+	<div ng-class="{'nav-list': showList}" class="block">
+		<span ng-class="{'nav-item': !showList, 'nav-list-item': showList}" class="marked" ng-repeat="stream in streams.result" ng-click="startStream(stream)">
+			<div ng-class="{'center': !showList}">
+			{{ stream.description }}<br ng-if="!showList">
+			<span class="stream-display-count">[ {{ stream.displays.length }} ]</span>
+			</div>
+		</span>
+	</div>
+	<div ng-class="{'nav-list': showList}" class="block">
+		<a ng-href="#{{ menuItem.url }}" ng-class="{'nav-item': !showList, 'nav-list-item': showList}" ng-repeat="menuItem in menuItems">
+			<div ng-class="{'center': !showList}">
+				{{ menuItem.name }}
+			</div>
+		</a>
+	</div>
+</div>

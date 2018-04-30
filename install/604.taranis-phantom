@@ -1,0 +1,38 @@
+#!/usr/bin/env perl
+# Install the phantomjs scripts
+
+use warnings;
+use strict;
+
+use Carp       qw(confess);
+use File::Copy qw(copy);
+use File::Glob qw(bsd_glob);
+
+use Taranis::Install::Config qw(taranis_sources config_release config_generic
+	become_user_taranis);
+
+become_user_taranis;
+
+my $generic = config_generic;
+
+my $release = config_release;
+my $version = $release->{version};
+if($version eq 'git') {
+	print "*   development sources in git are used without copy\n";
+	exit 0;
+}
+
+my $dest	= "$release->{install}/PhantomJS";
+-d $dest || mkdir $dest
+	or die "ERROR: cannot create $dest: $!\n";
+
+my $taranis = taranis_sources $version
+	or confess;
+
+print "*   clone phantomjs/* --> $dest\n";
+foreach my $templ (bsd_glob "$taranis/phantomjs/*") {
+	copy $templ, $dest
+		or die "ERROR: cannot copy $templ to $dest: $!\n";
+}
+
+exit 0;

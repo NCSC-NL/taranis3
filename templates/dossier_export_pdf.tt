@@ -1,0 +1,280 @@
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="file://[% absroot %]/include/css/reset.css">
+</head>
+<style type="text/css">
+html { margin-top: 0px; }
+body { 
+	font-size: 9pt;
+	padding: 0 40px;
+	margin-top: 0px;
+	line-height: 13pt;
+}
+ul {
+	list-style: none;
+	margin-left: 0;
+	padding-left: 0;
+}
+
+li {
+	padding-left: 1em;
+	text-indent: -1em;
+}
+
+li:before {
+	content: "\0BB\020";
+	color: #EA2122;
+	vertical-align: top;
+}
+
+h1 { font-size: 30pt; line-height: 30pt }
+h2 { font-size: 11pt; }
+h3 { font-size: 10pt; }
+
+.page-break { 
+	display: block; 
+	page-break-before: always;
+}
+
+.block { display: inline-block; }
+.align-top { vertical-align: top; }
+.ncsc-red { color: #EA2122; }
+.ncsc-blue { color: #00ADEF; }
+.break-word { word-wrap: break-word; }
+.small-font { font-size: 9pt; }
+.font-courier { font-family: courier, courier new !important; }
+.bold { font-weight: bold; }
+.italic { font-style: italic; }
+.tlp-span { 
+	padding: 0 15px;
+	color: #FFF;
+}
+.tlp-white { background-color: #BBB; }
+.tlp-green { background-color: #00FF00; }
+.tlp-amber { background-color: #FF7E00; }
+.tlp-red { background-color: #FF0000; }
+
+.content-even { 
+	background-color: #eee; 
+	padding: 10px; 
+}
+.content-odd { 
+	background-color: #f6f6f6; 
+	padding: 10px; 
+}
+</style>
+
+<body>
+	[% USE date %]
+	<h1 class="ncsc-red italic">[% dossier.description %]</h1><br><br>
+	<div>
+		<h2 class="ncsc-red bold">Contributors</h2><br>
+		<ul>
+			[% FOREACH contributor IN contributors %]
+			<li>[% contributor.fullname %]</li>
+			[% END %]
+		</ul>
+	</div><br>
+	
+	<div>
+		<h2 class="ncsc-red bold">Associated tags</h2><br>
+		<ul>
+		[% FOREACH tag IN tags.split(',') %]
+			<li>[% tag %]</li>
+		[% END %]
+		</ul>
+	</div><br>
+	
+	<h2 class="ncsc-red bold">Timeline summary</h2><br>
+
+	[% IF start_date || end_date %]
+	<div class="content-even ncsc-red bold">
+		[% IF start_date && end_date %]
+		Only showing items between [% start_date %] and [% end_date %].
+		[% ELSIF start_date %]
+		Only showing items since [% start_date %].
+		[% ELSE #end_date %]
+		Only showing items until [% end_date %].
+		[% END %]
+	</div>&nbsp;
+	[% END %]
+
+	[% IF dossierItems && dossierItems.size > 0 %]
+		<ul>
+		[% FOREACH eventEpoch IN dossierItems.keys.sort.reverse %]
+			[% item = dossierItems.$eventEpoch %]
+			<li>
+			[% IF item.dossier_item_type == 'assess' %]
+				<span class="bold">[% item.title %]</span>
+				[% IF item.classification != 4 %]
+				<span class="bold italic tlp-span block tlp-[% item.classification.displayTLPColor %]">TLP [% item.classification.displayTLPColor %]</span>
+				[% END %]<br>
+				Collected item. <span>[% date.format( item.event_timestamp.stripSeconds, format = '%A %d %B %Y at %H:%M' ) %]</span><br>
+			[% ELSIF item.dossier_item_type == 'analyze' %]
+				<span class="bold">AN-[% item.id.substr(0,4) _ '-' _ item.id.substr(4,4) %]&nbsp;[% item.title %]</span>
+				[% IF item.classification != 4 %]
+				<span class="bold italic tlp-span block tlp-[% item.classification.displayTLPColor %]">TLP [% item.classification.displayTLPColor %]</span>
+				[% END %]<br>
+				Analysis. <span>[% date.format( item.event_timestamp.stripSeconds, format = '%A %d %B %Y at %H:%M' ) %]</span><br>
+			[% ELSIF item.dossier_item_type == 'advisory' || item.dossier_item_type == 'forward' %]
+				<span class="bold">[% item.govcertid %] [v[% item.version %]]&nbsp;[%+ item.title %]</span>
+				[% IF item.classification != 4 %]
+				<span class="bold italic tlp-span block tlp-[% item.classification.displayTLPColor %]">TLP [% item.classification.displayTLPColor %]</span>
+				[% END %]<br>
+				Advisory. <span>[% date.format( item.event_timestamp.stripSeconds, format = '%A %d %B %Y at %H:%M' ) %]</span><br>
+			[% ELSIF item.dossier_item_type == 'eos' %]
+				<span class="bold">Shift from [% date.format( item.timeframe_begin.stripSeconds, format = '%d-%m-%Y %H:%M' ) %] to [% date.format( item.timeframe_end.stripSeconds, format = '%d-%m-%Y %H:%M' ) +%]</span>
+				[% IF item.classification != 4 %]
+				<span class="bold italic tlp-span block tlp-[% item.classification.displayTLPColor %]">TLP [% item.classification.displayTLPColor %]</span>
+				[% END %]<br>
+				End-Of-Shift. <span>[% date.format( item.event_timestamp.stripSeconds, format = '%A %d %B %Y at %H:%M' ) %]</span><br>
+			[% ELSIF item.dossier_item_type == 'eod' %]
+				<span class="bold">Day from [% date.format( item.timeframe_begin.stripSeconds, format = '%d-%m-%Y %H:%M' ) %] to [% date.format( item.timeframe_end.stripSeconds, format = '%d-%m-%Y %H:%M' ) +%]</span>
+				[% IF item.classification != 4 %]
+				<span class="bold italic tlp-span block tlp-[% item.classification.displayTLPColor %]">TLP [% item.classification.displayTLPColor %]</span>
+				[% END %]<br>
+				End-Of-Day. <span>[% date.format( item.event_timestamp.stripSeconds, format = '%A %d %B %Y at %H:%M' ) %]</span><br>
+			[% ELSIF item.dossier_item_type == 'eow' %]
+				<span class="bold">End-Of-Week</span>
+				[% IF item.classification != 4 %]
+				<span class="bold italic tlp-span block tlp-[% item.classification.displayTLPColor %]">TLP [% item.classification.displayTLPColor %]</span>
+				[% END %]<br>
+				End-Of-Week. <span>[% date.format( item.event_timestamp.stripSeconds, format = '%A %d %B %Y at %H:%M' ) %]</span><br>
+			[% ELSIF item.dossier_item_type == 'note' %]
+				<span class="bold">[%+ item.text.replace( "^(?s)(.*?)\n.*$", '$1') || '[NO DESCRIPTION]' +%]</span>
+				[% IF item.classification != 4 %]
+				<span class="bold italic tlp-span block tlp-[% item.classification.displayTLPColor %]">TLP [% item.classification.displayTLPColor %]</span>
+				[% END %]<br>
+				Dossier Note.<span>[% date.format( item.event_timestamp.stripSeconds, format = '%A %d %B %Y at %H:%M' ) %]</span><br>
+			[% END %]<br>
+			</li>
+		[% END %]
+		</ul>
+	[% END %]
+	
+[% IF export_content == 'all_content' %]
+	<h2 class="ncsc-red bold">Timeline content</h2><br>
+	[% IF dossierItems && dossierItems.size > 0 %]
+		[% FOREACH eventEpoch IN dossierItems.keys.sort.reverse %]
+			[% item = dossierItems.$eventEpoch %]
+			<div class="content-[% loop.parity %]">
+			[% IF item.dossier_item_type == 'assess' %]
+				<h3 class="bold ncsc-red block">[% item.title %]</h3>
+				[% IF item.classification != 4 %]
+				<span class="bold italic tlp-span block tlp-[% item.classification.displayTLPColor %]">TLP [% item.classification.displayTLPColor %]</span>
+				[% END %]<br>
+				<span class="italic">[% date.format( item.event_timestamp.stripSeconds, format = '%A %d %B %Y at %H:%M' ) %]</span><br>
+				<span class="italic">Assess item collected on [% date.format( item.created.stripSeconds, format = '%d-%m-%Y at %H:%M' ) %]</span><br>
+				<span class="break-word italic">[% item.link %]</span><br><br>
+				<span class="break-word font-courier">
+					[% item.description %]
+				</span>
+			[% ELSIF item.dossier_item_type == 'analyze' %]
+				<h3 class="bold ncsc-red block">AN-[% item.id.substr(0,4) _ '-' _ item.id.substr(4,4) %]&nbsp;[% item.title %]</h3>
+				[% IF item.classification != 4 %]
+				<span class="bold italic tlp-span block tlp-[% item.classification.displayTLPColor %]">TLP [% item.classification.displayTLPColor %]</span>
+				[% END %]<br>
+				<span class="italic">[% date.format( item.event_timestamp.stripSeconds, format = '%A %d %B %Y at %H:%M' ) %]</span><br>
+				<span class="italic">Analysis created on [% date.format( item.orgdatetime.stripSeconds, format = '%d-%m-%Y at %H:%M' ) %]</span><br>
+				<pre class="break-word font-courier">
+					[% item.comments %]
+				</pre>				
+			[% ELSIF item.dossier_item_type == 'advisory' || item.dossier_item_type == 'forward' %]
+				<h3 class="bold ncsc-red block">[% item.govcertid %] [v[% item.version %]]&nbsp;[%+ item.title %]</h3>
+				[% IF item.classification != 4 %]
+				<span class="bold italic tlp-span block tlp-[% item.classification.displayTLPColor %]">TLP [% item.classification.displayTLPColor %]</span>
+				[% END %]<br>
+				<span class="italic">[% date.format( item.event_timestamp.stripSeconds, format = '%A %d %B %Y at %H:%M' ) %]</span><br>
+				<span class="italic">
+				[% IF item.published_on %]
+					Advisory published on [% date.format( item.published_on.stripSeconds, format = '%d-%m-%Y at %H:%M' ) %]
+				[% ELSE %]
+					Advisory is not published yet
+				[% END %]
+				</span><br>
+				<pre class="break-word font-courier">
+					[% item.contents %]
+				</pre>					
+			[% ELSIF item.dossier_item_type == 'eos' %]
+				<h3 class="bold ncsc-red block">Shift from [% date.format( item.timeframe_begin.stripSeconds, format = '%d-%m-%Y %H:%M' ) %] to [% date.format( item.timeframe_end.stripSeconds, format = '%d-%m-%Y %H:%M' ) +%]</h3>
+				[% IF item.classification != 4 %]
+				<span class="bold italic tlp-span block tlp-[% item.classification.displayTLPColor %]">TLP [% item.classification.displayTLPColor %]</span>
+				[% END %]<br>
+				<span class="italic">[% date.format( item.event_timestamp.stripSeconds, format = '%A %d %B %Y at %H:%M' ) %]</span><br>
+				<span class="italic">
+				[% IF item.published_on %]
+					End-Of-Shift published on [% date.format( item.published_on.stripSeconds, format = '%d-%m-%Y at %H:%M' ) %]
+				[% ELSE %]
+					End-Of-Shift is not published yet
+				[% END %]
+				</span><br>
+				<pre class="break-word font-courier">
+					[% item.contents %]
+				</pre>
+			[% ELSIF item.dossier_item_type == 'eod' %]
+				<h3 class="bold ncsc-red block">Day from [% date.format( item.timeframe_begin.stripSeconds, format = '%d-%m-%Y %H:%M' ) %] to [% date.format( item.timeframe_end.stripSeconds, format = '%d-%m-%Y %H:%M' ) +%]</h3>
+				[% IF item.classification != 4 %]
+				<span class="bold italic tlp-span block tlp-[% item.classification.displayTLPColor %]">TLP [% item.classification.displayTLPColor %]</span>
+				[% END %]<br>
+				<span class="italic">[% date.format( item.event_timestamp.stripSeconds, format = '%A %d %B %Y at %H:%M' ) %]</span><br>
+				<span class="italic">
+				[% IF item.published_on %]
+					End-Of-Day published on [% date.format( item.published_on.stripSeconds, format = '%d-%m-%Y at %H:%M' ) %]
+				[% ELSE %]
+					End-Of-Day is not published yet
+				[% END %]
+				</span><br>
+				<pre class="break-word font-courier">
+					[% item.contents %]
+				</pre>
+			[% ELSIF item.dossier_item_type == 'eow' %]
+				<h3 class="bold ncsc-red block">End-Of-Week</h3>
+				[% IF item.classification != 4 %]
+				<span class="bold italic tlp-span block tlp-[% item.classification.displayTLPColor %]">TLP [% item.classification.displayTLPColor %]</span>
+				[% END %]<br>
+				<span class="italic">[% date.format( item.event_timestamp.stripSeconds, format = '%A %d %B %Y at %H:%M' ) %]</span><br>
+				<span class="italic">
+				[% IF item.published_on %]
+					End-Of-Week published on [% date.format( item.published_on.stripSeconds, format = '%d-%m-%Y at %H:%M' ) %]
+				[% ELSE %]
+					End-Of-Week is not published yet
+				[% END %]
+				</span><br>
+				<pre class="break-word font-courier">
+					[% item.contents %]
+				</pre>				
+			[% ELSIF item.dossier_item_type == 'note' %]
+				<h3 class="bold ncsc-red block">[%+ item.text.replace( "^(?s)(.*?)\n.*$", '$1') || '[NO DESCRIPTION]' +%]</h3>
+				[% IF item.classification != 4 %]
+				<span class="bold italic tlp-span block tlp-[% item.classification.displayTLPColor %]">TLP [% item.classification.displayTLPColor %]</span>
+				[% END %]<br>
+				<span class="italic">[% date.format( item.event_timestamp.stripSeconds, format = '%A %d %B %Y at %H:%M' ) %]</span><br>
+				<span class="italic">Note added on [% date.format( item.created.stripSeconds, format = '%d-%m-%Y at %H:%M' ) %][% IF item.created_by; ' by ' _ item.created_by; END %]</span><br>
+				<pre class="break-word font-courier">
+					[% item.text %]
+				</pre>
+			[% END %]
+			<br>
+			[% FOREACH note IN item.notes %]
+				<div class="ncsc-blue">
+					<span class="bold">comment on [%+ date.format( note.created.stripSeconds, format = '%d-%m-%Y at %H:%M' ) %][% IF note.created_by; ' by ' _ note.created_by; END %]</span>
+					<pre class="break-word">[% note.text %]</pre>
+					<ul>
+				[% FOREACH url IN note.urls %]
+						<li>URL: [% url.description %]&nbsp;[% url.url %]</li>
+				[% END %]
+				[% FOREACH file IN note.files %]
+						<li>FILE: [% file.name %]</li>
+				[% END %]
+				[% FOREACH ticket IN note.tickets %]
+						<li>TICKET: #[% ticket.reference %]&nbsp;[% ticketURL _ ticket.reference %]</li>
+				[% END %]
+					</ul>
+				</div>
+			[% END %]
+			</div><br>
+		[% END %]
+	[% END %]
+[% END %]
+</body>
+</html>

@@ -1,0 +1,39 @@
+[% IF renderItemContainer %]
+<div class="dossier-item item-row" id="[% dossier.id %]">
+[% END %]
+
+	<div class="dossier-item-select block">
+		[% IF write_right && dossier.status.displayDossierStatus != 'JOINED' %]
+		<input class="dossier-item-select-input" type="checkbox" value="[% dossier.id %]">
+		[% END %]
+	</div>
+
+	<div class="dossier-item-description block">
+		<span class="span-link dossier-item-link" data-dossierid="[% dossier.id %]">[% dossier.description %]</span>
+	</div>
+
+	<div class="dossier-item-contributors block">
+		[% FOREACH contributor IN dossier.contributors %]
+		<span>[% contributor.fullname %]</span><br>
+		[% END %]
+	</div>
+
+	<div class="dossier-item-last-activity block">
+		[% USE date %]
+		<span>[% date.format( dossier.latestActivity.stripSeconds, format = '%d-%m-%Y %H:%M' ) %]</span>
+	</div>
+
+	<div class="dossier-item-status block">
+		<span>[% dossier.status.displayDossierStatus %]</span>
+	</div>
+
+	<div class="block align-block-right">
+	[% IF write_right && dossier.status.displayDossierStatus != 'JOINED' %]
+		<img src="[% webroot %]/images/icon_modify.png" alt="edit" title="edit dossier" class="pointer btn-edit-dossier" data-id="[% dossier.id %]">
+	[% ELSE %]
+		<img src="[% webroot %]/images/icon_details.png" alt="view" title="view details" class="pointer btn-view-dossier" data-id="[% dossier.id %]">
+	[% END %]		
+	</div>
+[% IF renderItemContainer %]
+</div>
+[% END %]

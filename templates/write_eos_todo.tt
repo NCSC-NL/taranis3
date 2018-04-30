@@ -1,0 +1,11 @@
+[% USE date %]
+[% IF todos.size > 0 %]
+[%+ FOREACH todo IN todos %]
+[%+ todo.done_status +%]% done -- due on [% date.format( todo.due_date.stripSeconds, format = '%d-%m-%Y' ) +%]
+[%+ todo.description +%]
+
+notes:
+[%+ todo.notes +%]
+######################################################################
+[%+ END %]
+[% END %]

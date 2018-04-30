@@ -1,0 +1,17 @@
+#!/usr/bin/env perl
+# We expect bash
+
+use warnings;
+use strict;
+
+use Taranis::Install::Config qw(config_generic);
+
+my $generic  = config_generic;
+my $username = $generic->{username};
+
+my $shell    = (getpwnam $username)[8];
+
+$shell =~ m!/bash$!
+	or print "!! WARNING: login scripts expect bash as default shell.\n";
+
+exit 0;

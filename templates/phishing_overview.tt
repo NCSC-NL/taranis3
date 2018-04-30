@@ -1,0 +1,42 @@
+<div id="phishing-content-heading" class="content-heading">
+	<div id="phishing-content-heading-url" class="block pointer content-heading-sorter" data-column="url">
+		<span class="fa fa-sort"></span>
+		<span>URL</span>
+	</div>
+	<div id="phishing-content-heading-reference" class="block pointer content-heading-sorter" data-column="reference">
+		<span class="fa fa-sort"></span>
+		<span>Reference</span>
+	</div>
+	<div id="phishing-content-heading-campaign" class="block pointer content-heading-sorter" data-column="campaign">
+		<span class="fa fa-sort"></span>
+		<span>Campaign</span>
+	</div>	
+	<div id="phishing-content-heading-date-time-added" class="block pointer content-heading-sorter" data-column="added">
+		<span class="fa fa-sort"></span>
+		<span>Date/Time added</span>
+	</div>
+	<div id="phishing-content-heading-status" class="block pointer content-heading-sorter" data-column="status">
+		<span class="fa fa-sort"></span>
+		<span>Status</span>
+	</div>
+	<div id="phishing-content-heading-date-time-last-status" class="block pointer content-heading-sorter" data-column="last status">
+		<span class="fa fa-sort"></span>
+		<span>Date/Time of last status</span>
+	</div>
+</div>
+
+[% IF phishingItems.size > 0 %]
+	[% FOREACH phishingItem IN phishingItems %]
+	
+		[% INCLUDE phishing_item.tt %]
+	
+	[% END %]
+[% ELSE %]
+
+<div class="phishing-item bold item-row no-items" id="empty-row">No phishing checks to display.</div>
+
+[% END %]
+
+<div class="action-block filter-block-separator">
+	<div class="block">&nbsp;</div>
+</div>

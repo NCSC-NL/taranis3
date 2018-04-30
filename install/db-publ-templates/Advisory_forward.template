@@ -1,0 +1,120 @@
+<publication>
+<template><![CDATA[
+   #########################################
+  ##  S E C U R I T Y   A D V I S O R Y  ##
+ #########################################
+
+Titel           : _fld_title_
+Advisory ID     : _fld_govcert_id_
+Versie          : _fld_version_
+Kans            : _fld_probability_
+CVE ID          : _fld_cve_ids_
+                  (http://cve.mitre.org/cve/)
+Schade          : _fld_damage_
+                  _fld_damage_descriptions_
+Uitgiftedatum   : _fld_publication_date_
+Toepassing      : _fld_affected_products_
+Versie(s)       : _fld_product_versions_
+Platform(s)     : _fld_platforms_
+
+   _fld_summary_
+
+   _fld_tlpamber_
+
+   _fld_source_
+
+   _fld_links_
+
+
+]]></template>
+
+<fields>
+  <fld_summary type="database">
+    <tbl type="key" column="id">publication_advisory_forward</tbl>
+    <tbl type="select" column="summary">publication_advisory_forward</tbl>
+  </fld_summary>
+  <fld_summary type="settings">
+    <setting type="heading">Advies</setting>
+  </fld_summary>
+  <fld_source type="database">
+    <tbl type="key" column="id">publication_advisory_forward</tbl>
+    <tbl type="select" column="source">publication_advisory_forward</tbl>
+  </fld_source>
+  <fld_source type="settings">
+    <setting type="heading">Origineel bericht</setting>
+  </fld_source>
+  <fld_tlpamber type="database">
+    <tbl type="key" column="id">publication_advisory_forward</tbl>
+    <tbl type="select" column="tlpamber">publication_advisory_forward</tbl>
+  </fld_tlpamber>
+  <fld_tlpamber type="settings">
+    <setting type="heading">= TLP:AMBER =</setting>
+  </fld_tlpamber>
+  <fld_tlpamber type="settings">
+    <setting type="footer">=============</setting>
+  </fld_tlpamber>
+  <fld_links type="database">
+    <tbl type="key" column="id">publication_advisory_forward</tbl>
+    <tbl type="select" column="hyperlinks">publication_advisory_forward</tbl>
+  </fld_links>
+  <fld_links type="settings">
+    <setting type="heading">Hyperlinks</setting>
+  </fld_links>
+  <fld_publication_date type="database">
+    <tbl type="key" column="id">publication</tbl>
+    <tbl type="select_date" column="published_on">publication</tbl>
+  </fld_publication_date>
+  <fld_cve_ids type="database">
+    <tbl type="key" column="id">publication_advisory_forward</tbl>
+    <tbl type="select" column="ids">publication_advisory_forward</tbl>
+  </fld_cve_ids>
+  <fld_damage type="replace">
+    <rp original_value="1">high</rp>
+    <rp original_value="2">medium</rp>
+    <rp original_value="3">low</rp>
+  </fld_damage>
+  <fld_damage type="database">
+    <tbl type="key" column="id">publication_advisory_forward</tbl>
+    <tbl type="select" column="damage">publication_advisory_forward</tbl>
+  </fld_damage>
+  <fld_probability type="database">
+    <tbl type="key" column="id">publication_advisory_forward</tbl>
+    <tbl type="select" column="probability">publication_advisory_forward</tbl>
+  </fld_probability>
+  <fld_probability type="replace">
+    <rp original_value="1">high</rp>
+    <rp original_value="2">medium</rp>
+    <rp original_value="3">low</rp>
+  </fld_probability>
+  <fld_title type="database">
+    <tbl type="key" column="id">publication_advisory_forward</tbl>
+    <tbl type="select" column="title">publication_advisory_forward</tbl>
+  </fld_title>
+  <fld_govcert_id type="database">
+    <tbl type="key" column="id">publication_advisory_forward</tbl>
+    <tbl type="select" column="govcertid">publication_advisory_forward</tbl>
+  </fld_govcert_id>
+  <fld_version type="database">
+    <tbl type="key" column="id">publication_advisory_forward</tbl>
+    <tbl type="select" column="version">publication_advisory_forward</tbl>
+  </fld_version>
+  <fld_damage_descriptions type="database">
+    <tbl type="key" column="advisory_forward_id">advisory_forward_damage</tbl>
+    <tbl type="join1" column="damage_id">advisory_forward_damage</tbl>
+    <tbl type="join2" column="id">damage_description</tbl>
+    <tbl type="select" column="description">damage_description</tbl>
+  </fld_damage_descriptions>
+  <fld_platforms type="database">
+    <tbl type="key" column="id">publication_advisory_forward</tbl>
+    <tbl type="select" column="platforms_text">publication_advisory_forward</tbl>
+  </fld_platforms>
+  <fld_affected_products type="database">
+    <tbl type="key" column="id">publication_advisory_forward</tbl>
+    <tbl type="select" column="products_text">publication_advisory_forward</tbl>
+  </fld_affected_products>
+  <fld_product_versions type="database">
+    <tbl type="key" column="id">publication_advisory_forward</tbl>
+    <tbl type="select" column="versions_text">publication_advisory_forward</tbl>
+  </fld_product_versions>
+</fields>
+</publication>

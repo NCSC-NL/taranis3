@@ -1,0 +1,101 @@
+#!/usr/bin/env perl
+# Install ChartDirectory
+
+use warnings;
+use strict;
+
+use LWP::UserAgent ();
+use File::Basename qw(basename);
+use File::Compare  qw(compare);
+use File::Copy     qw(move copy);
+use POSIX          qw(strftime);
+
+use Taranis::Install::Bare   qw(has_internet);
+use Taranis::Install::Config qw(config_generic taranis_sources
+	become_user_taranis);
+
+my $package = 'http://download2.advsofteng.com/chartdir_perl_linux_64.tar.gz';
+
+become_user_taranis;
+
+my $generic     = config_generic;
+my $charthome   = "$generic->{charts}";
+my $licence_in  = "$generic->{etc}/chartdir.lic";
+my $licence_out = "$charthome/lib/chartdir.lic";
+
+# It's a pity we cannot see the version in the download uri... it's
+# not possible to detect whether there is a new version without loading
+# over 11MB.
+my $tar       = "$charthome/" . basename $package;
+if(-f $tar && -d $charthome) {
+	print "*   reusing $tar\n";
+	print "    remove that file to get a new version installed.\n";
+
+} elsif( ! has_internet ) {
+	print "--> no internet acces, but we need to download ChartDirectory\n";
+	print "    You may put it by hand at $tar\n";
+	exit 0;
+
+} else {
+
+	print "*   downloading $package.  (It's >11MB so will take a while)\n";
+	my $ua       = LWP::UserAgent->new;
+
+	my $response = $ua->get($package, ':content_file' => $tar);
+	unless($response->is_success) {
+		my $error = $response->message;
+		print "--> cannot fetch ChartDirectory sources: $error\n";
+		print "    You may put it by hand at $tar\n";
+		exit 0;
+	}
+}
+
+my $pm_file = "$charthome/lib/perlchartdir.pm";
+if(-f $pm_file && -C $pm_file < -C $tar) {
+	print "*   already extracted\n";
+} else {
+	print "*   extract perl code into $charthome/lib\n";
+
+	# Most of the tar is documentation which we do not need.  So, only
+	# the perl stuff is unpacked.
+
+	system tar =>
+		'--extract',
+		'--file'             => $tar,
+		'--directory'        => $charthome,
+		'--strip-components' => 1,
+		'ChartDirector/lib'
+		and die "ERROR: cannot extract lib from $tar: $!\n";
+}
+
+### LICENCE
+
+! -f $licence_in && -f $licence_out and die <<__ERROR;
+ERROR: you installed the license file on the wrong spot.  Put it in
+$licence_in, not in $licence_out.
+__ERROR
+
+if( -f $licence_in ) {
+	if( -f $licence_out ) {
+		if(compare($licence_in, $licence_out)==0) {
+			print "*   keeping installed licence.\n";
+		} else {
+			my $date   = strftime "%Y%m%d-%H%M", localtime();
+			my $backup = "$licence_out.$date";
+			move $licence_out, $backup
+				or die "ERROR: cannot backup old licence to $backup: $!\n";
+
+			print "*   moved aside the old licence into $backup\n";
+		}
+	}
+
+	unless( -f $licence_out) {
+		copy $licence_in, $licence_out
+			or die "ERROR: cannot install licence into $licence_out: $!\n";
+	}
+
+} else {
+	print "*   put baught licence into $licence_in\n";
+}
+
+exit 0;

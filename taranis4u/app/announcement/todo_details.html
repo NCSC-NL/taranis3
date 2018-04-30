@@ -1,0 +1,12 @@
+<div class="taranis4u-block">
+	<span class="font-monospace">{{ announcement.created_str }}</span><br><br>
+	<h1 class="bold">{{ announcement.title }}</h1><br>
+	<ul>
+		<li ng-repeat="todo in announcement.content.todos">
+			<h3 class="fa fa-angle-double-right"></h3>
+			<h3 class="block" ng-class="{'strikethrough': todo.donestatus == 100 }">&nbsp;{{ todo.description }}</h3><br>
+			<p class="list-item-indent">{{ todo.donestatus }} % done</p>
+			<p class="list-item-indent">{{ todo.comment }}</p>
+		</li>
+	</ul>
+</div>

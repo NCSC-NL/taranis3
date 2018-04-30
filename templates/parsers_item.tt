@@ -1,0 +1,23 @@
+[% IF renderItemContainer %]
+<div class="parsers-item item-row" id="[% parser.parsername | uri %]">
+[% END %]
+	
+	<div class="parsers-item-name block">
+		<span>[% parser.parsername %]</span>
+	</div>		
+
+	<div class="block align-block-right">
+	
+	[% IF write_right %]
+		[% IF parser.parsername != 'xml' && parser.parsername != 'twitter' %]
+		<img src="[% webroot %]/images/icon_modify.png" alt="edit" title="edit parser" class="pointer btn-edit-parser" data-id="[% parser.parsername %]">
+		<img src="[% webroot %]/images/icon_delete.png" alt="delete" title="delete parser" class="pointer btn-delete-parser" data-id="[% parser.parsername %]">
+		[% END %]
+	[% ELSE %]
+		<img src="[% webroot %]/images/icon_details.png" alt="view" title="view details" class="pointer btn-view-parser" data-id="[% parser.parsername %]">
+	[% END %]
+		
+	</div>
+[% IF renderItemContainer %]
+</div>
+[% END %]

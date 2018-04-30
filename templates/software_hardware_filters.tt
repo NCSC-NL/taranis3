@@ -1,0 +1,58 @@
+<div class="filter-block filter-block-separator">
+
+	<form id="form-software-hardware-search">
+
+		<div class="block">
+			<label for="software-hardware-filters-search">Search</label><br>
+			<input id="software-hardware-filters-search" name="name" type="text" class="input-default">
+		</div>
+
+		<div class="block">
+			<label for="software-hardware-filters-producer">Producer</label><br>
+			<select name="vendor_name" class="select-single" id="software-hardware-filters-producer">
+				<option value="" >-Search All Producers-</option>
+				[%- FOREACH vendorname IN vendors.sort +%]
+				<option value="[% vendorname %]">[% vendorname %]</option>
+				[%- END +%]
+			</select>
+		</div>
+
+		<div class="block">
+			<label for="software-hardware-filters-type">Type</label><br>
+			<select name="product_type" class="select-single" id="software-hardware-filters-type">
+				<option value="" >-Search All Types-</option>
+				[%- FOREACH type IN base_types.keys +%]
+				<option value="[% type %]">[% base_types.$type %]</option>
+				[%- END +%]
+			</select>
+		</div>
+
+		<div class="block software-hardware-filters-inuse bold">
+			<label for="software-hardware-filters-inuse-yes" class="block software-hardware-filters-inuse-label" title="product in use only">
+				<span>U</span><br>
+				<input type="checkbox" id=software-hardware-filters-inuse-yes name="in_use" value="1">
+			</label>
+		</div>
+
+		<div class="block">
+			<span>&nbsp;</span>
+			<input type="button" id="btn-software-hardware-search" class="button" value="Search!">		
+		</div>
+		
+	</form>
+</div>
+
+<div class="action-block filter-block-separator">
+	[% IF write_right %]
+	<div class="block">
+		<input type="button" id="btn-add-software-hardware" class="button" value="Add new software/hardware">		
+	</div>&nbsp;
+	
+	<div class="block">
+		<input type="button" id="btn-import-cpe-dictionary" class="button" value="Import CPE dictionary">		
+	</div>
+	[% END %]
+	<div class="block align-block-right">
+		<span class="bold page-title">Software/Hardware</span>
+	</div>
+</div>

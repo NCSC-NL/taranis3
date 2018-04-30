@@ -1,0 +1,192 @@
+<form id="form-meta-search-advanced">
+	
+	<div class="filter-block filter-block-separator meta-search-advanced center">
+		<div class="block align-text-left">
+			<label for="meta-search-filters-search">Search</label><br>
+			<input id="meta-search-filters-search" name="search" type="text" class="input-default">
+		</div>
+
+		<div class="block align-text-left">
+			<label for="meta-search-start-date">From date</label><br>
+			<input id="meta-search-start-date" name="startdate" type="text" class="input-default date-picker">
+		</div>	
+	
+		<div class="block align-text-left">
+			<label for="meta-search-end-date">To date</label><br>
+			<input id="meta-search-end-date" name="enddate" type="text" class="input-default date-picker">
+		</div>
+
+		<div class="block">
+			<span>&nbsp;</span>
+			<input type="button" id="btn-meta-search-advanced-search" class="button" value="Search!">		
+		</div>
+	</div>
+
+	<div class="filter-block filter-block-separator meta-search-advanced-settings">
+		<div class="cell padding-default separator-vertical meta-search-advanced-assess">
+			<input type="checkbox" id="meta-search-assess" name="as_searchAssess" value="as" checked="checked">
+			<label for="meta-search-assess" class="page-title">Assess</label><br>
+
+			<div class="block indentation">
+				<label for="meta-search-advanced-assess-archive">Search in Archive</label><br>
+				<select name="as_archive" id="meta-search-advanced-assess-archive" class="select-single select-tiny">
+					<option value="1">Yes</option>
+					<option value="0" selected="selected">No</option>
+				</select>
+			</div><br>
+			<div class="block indentation">
+				<label for="meta-search-advanced-assess-status">Status</label><br>
+				<select name="as_status" id="meta-search-advanced-assess-status" class="select-single select-narrower">
+					<option value="">-select assess item status-</option>
+					<option value="0">Unread</option>
+					<option value="1">Read</option>
+					<option value="2">Important</option>
+					<option value="3">Waitingroom</option>
+				</select>
+			</div><br>
+			<div class="block indentation">
+				<label for="meta-search-advanced-assess-category">Category</label><br>
+				<select name="as_category" id="meta-search-advanced-assess-category" class="select-single select-narrower">
+					<option value="">-select assess item category-</option>
+					[% FOREACH category IN item_categories %]
+					<option value="[% category.id %]">[% category.name %]</option>
+					[% END %]
+				</select>
+			</div><br>
+			<div class="block indentation">
+				<label for="meta-search-advanced-assess-source">Source</label><br>
+				<select name="as_source" id="meta-search-advanced-assess-source" class="select-single select-narrower">
+					<option value="">-select assess item source-</option>
+					[% FOREACH source IN item_sources %]
+					<option value="[% source %]">[% source %]</option>
+					[% END %]
+				</select>
+			</div>
+		</div>
+
+		<div class="cell padding-default separator-vertical meta-search-advanced-analyze">
+			<input type="checkbox" id="meta-search-analyze" name="an_searchAnalyze" value="1" checked="checked">
+			<label for="meta-search-analyze" class="page-title">Analyze</label><br>
+
+			<div class="block indentation">
+				<label for="meta-search-advanced-analyze-status">Status</label><br>
+				<select name="an_status" id="meta-search-advanced-analyze-status" class="select-single select-narrower">
+					<option value="">-select analysis status-</option>
+					[% FOREACH status IN an_status %]
+					<option value="[% status %]">[% status %]</option>
+					[% END %]			
+				</select>
+			</div><br>
+	
+			<div class="block indentation">
+				<label for="meta-search-advanced-analyze-rating">Rating</label><br>
+				<select name="an_rating" id="meta-search-advanced-analyze-rating" class="select-single select-narrower">
+					<option value="">-select analysis rating-</option>
+					<option value="3">High</option>
+					<option value="2">Medium</option>
+					<option value="1">Low</option>
+					<option value="4">Undefined</option>		
+				</select>
+			</div>
+		</div>
+		
+		<div class="cell padding-default meta-search-advanced-publications">
+			<input type="checkbox" id="meta-search-publications" name="pr_searchAllProducts" value="1" checked="checked">
+			<label for="meta-search-publications" class="page-title">Publications</label><br>
+			
+			<div class="cell separator-vertical">
+				<div class="block indentation">
+					<label for="meta-search-advanced-publications-status">Status</label><br>
+					<select name="pr_status" id="meta-search-advanced-publications-status" class="select-single select-narrower">
+						<option value="">-select publication status-</option>
+						<option value="0">Pending</option>
+						<option value="1">Ready for review</option>
+						<option value="2">Approved</option>
+						<option value="3">Published</option>
+					</select>
+				</div><br>			
+				
+				<div class="block indentation">
+					<label for="meta-search-advanced-publications-created-by">Created by</label><br>
+					<select name="pr_created_by" id="meta-search-advanced-publications-created-by" class="select-single select-narrower">
+						<option value="">-select user-</option>
+						[% FOREACH user IN publication_users %]
+						<option value="[% user.username %]">[% user.fullname _ ' (' _ user.username _ ')' %]</option>
+						[% END %]
+					</select>
+				</div><br>
+	
+				<div class="block indentation">
+					<label for="meta-search-advanced-publications-approved-by">Approved by</label><br>
+					<select name="pr_approved_by" id="meta-search-advanced-publications-approved-by" class="select-single select-narrower">
+						<option value="">-select user-</option>
+						[% FOREACH user IN publication_users %]
+						<option value="[% user.username %]">[% user.fullname _ ' (' _ user.username _ ')' %]</option>
+						[% END %]
+					</select>
+				</div><br>
+	
+				<div class="block indentation">
+					<label for="meta-search-advanced-publications-published-by">Published by</label><br>
+					<select name="pr_published_by" id="meta-search-advanced-publications-published-by" class="select-single select-narrower">
+						<option value="">-select user-</option>
+						[% FOREACH user IN publication_users %]
+						<option value="[% user.username %]">[% user.fullname _ ' (' _ user.username _ ')' %]</option>
+						[% END %]
+					</select>
+				</div><br>
+			</div>
+			
+			<div class="cell default-padding">
+				<ul>
+					<li>
+						<input type="checkbox" id="meta-search-publications-end-of-shift" name="eos_searchEndOfShift" value="1" checked="checked" class="align-middle">
+						<label for="meta-search-publications-end-of-shift" class="bold outline-font">End-of-Shift</label><br>
+					</li>
+					<li>
+						<input type="checkbox" id="meta-search-publications-end-of-day" name="eod_searchEndOfDay" value="1" checked="checked" class="align-middle">
+						<label for="meta-search-publications-end-of-day" class="bold outline-font">End-of-Day</label><br>
+					</li>
+					<li>
+						<input type="checkbox" id="meta-search-publications-end-of-week" name="eow_searchEndOfWeek" value="1" checked="checked" class="align-middle">
+						<label for="meta-search-publications-end-of-week" class="bold outline-font">End-of-Week</label><br>
+					</li>
+					<li>
+						<input type="checkbox" id="meta-search-publications-advisory" name="adv_searchAdvisory" value="1" checked="checked" class="align-middle">
+						<label for="meta-search-publications-advisory" class="bold outline-font">Advisory</label><br>
+						<div class="block indentation">
+							<label for="meta-search-advanced-publications-advisory-probability">Probability</label><br>
+							<select name="adv_probability" id="meta-search-advanced-publications-advisory-probability" class="select-single select-narrower">
+								<option value="">-select probability level-</option>
+								<option value="1">High</option>
+								<option value="2">Medium</option>
+								<option value="3">Low</option>	
+							</select>					
+						</div><br>
+						<div class="block indentation">
+							<label for="meta-search-advanced-publications-advisory-damage">Damage</label><br>
+							<select name="adv_damage" id="meta-search-advanced-publications-advisory-damage" class="select-single select-narrower">
+								<option value="">-select damage level-</option>
+								<option value="1">High</option>
+								<option value="2">Medium</option>
+								<option value="3">Low</option>	
+							</select>					
+						</div>
+					</li>
+				</ul>
+				
+			</div>
+			
+		</div>
+	</div>
+	
+</form>
+<div class="action-block filter-block-separator">
+	<br>
+	<div class="block">
+		<input type="button" class="button" id="btn-meta-search-advanced-show" value="Show advanced search settings">
+	</div>
+	<div class="block align-block-right">
+		<span class="bold page-title">Taranis Search</span>
+	</div>
+</div>

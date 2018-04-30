@@ -1,0 +1,113 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden[% END %] ui-state-error ui-corner-all">[% message %]</div>
+
+	[% IF constituentIndividual.firstname || constituentIndividual.lastname %]
+	<div class="dialog-title">
+		<span>[% constituentIndividual.firstname _ ' ' _  constituentIndividual.lastname %]</span>	
+	</div>
+	[% END %]
+	
+	<div id="publishing-details-tabs" class="dialog-tabs">
+		<ul>
+			<li><a href="#publishing-details-tabs-general">General</a></li>
+			[% IF details.publication.damage == 1 && details.publication.probability == 1 +%]			
+			<li><a href="#publishing-details-tabs-callinglist">Calling list</a></li>
+			[% END %]
+		</ul>
+
+<!-- TAB GENERAL -->
+		<div id="publishing-details-tabs-general">
+			<fieldset>
+				<div class="dialog-input-wrapper block">
+					<span class="dialog-input-label">Publishing details</span><br>
+					<textarea readonly="readonly" id="publising-details-text" class="input-default">"[% details.publication.pub_title +%]"
+Approved by [% details.publication.approved_by %] on [% details.publication.approved_on_str +%]
+Published by [% details.publication.published_by %] on [% details.publication.published_on_str +%]
+
+[% IF details.receivers_list && details.receivers_list.size > 0 %]
+Publication was sent to:
+
+[% FOREACH person IN details.receivers_list +%]
+[% person.lastname _ ', '  _ person.firstname _ ' (' _  person.groupname  _ ') - ' _ person.emailaddress _ ' [' _ person.timestamp_str _ ']' +%]
+[%+ END -%][%+ END -%]</textarea>
+				</div>
+			</fieldset>
+		</div>
+		
+		[% IF details.publication.damage == 1 && details.publication.probability == 1 +%]
+<!-- TAB Callinglist -->		
+		<div id="publishing-details-tabs-callinglist">
+			<fieldset class="no-padding">
+				[% FOREACH call IN calling_list %]
+				<div [% IF !loop.last %]class="separator"[% END %]>
+					<div class="dialog-input-wrapper">
+						<div class="block">
+							<span data-id="[% call.id %]" class="publishing-details-open-close-call [% IF !call.locked_by || call.locked_by == user %]span-link pointer[% END %]">open call for</span>									
+							<span class="bold">[% call.groupname %]</span>
+							<span data-id="[% call.id %]" class="publishing-details-call-opened-by">[% IF call.locked_by && call.locked_by != user %][ is opened by [% call.fullname %] ][% END %]</span>
+							[% IF is_admin %]
+							<br><span data-id="[% call.id %]" class="span-link pointer publishing-details-call-remove-lock">remove lock</span>
+							[% ELSIF call.locked_by && call.locked_by != user %]
+							<br>(admins can remove the lock)
+							[% END %]
+						</div>
+						<div class="block align-block-right">
+							[% IF call.is_called %]
+							<span data-id="[% call.id %]" class="publishing-details-is-called publishing-details-is-called-yes bold">&nbsp;has been informed&nbsp;</span>
+							[% ELSE %]
+							<span data-id="[% call.id %]" class="publishing-details-is-called publishing-details-is-called-no bold">&nbsp;has NOT been informed&nbsp;</span>
+							[% END %]		
+						</div>
+					</div>
+					<div class="publishing-details-call-details dialog-input-wrapper" data-id="[% call.id %]">
+						<div class="hidden publishing-details-call-error" data-id="[% call.id %]">
+							<span class="bold">The following error occurred: </span><br>
+							<span class="publishing-details-call-error-text"></span>
+						</div><br>
+						<div>
+							<div class="block">
+								<span class="dialog-input-label">Informed constituent:</span><br>
+								<input name="is_called_[% call.id %]" type="radio" [% IF call.is_called %]checked="checked"[% END %] value="1" id="is_called_yes_[% call.id %]">
+								<label for="is_called_yes_[% call.id %]">Yes</label> 
+								<input name="is_called_[% call.id %]" type="radio" [% IF !call.is_called %]checked="checked"[% END %] value="0" id="is_called_no_[% call.id %]">
+								<label for="is_called_no_[% call.id %]">No</label>
+							</div>
+							<div class="block align-block-right">
+								<input type="button" class="button btn-publishing-details-call-save" value="Save & Close call" data-id="[% call.id %]">
+							</div>
+						</div><br>
+						<div>
+							<span class="dialog-input-label">Contacts:</span><br>
+							<table class="publishing-details-call-contacts-table">
+								[% FOREACH individual IN call.individuals +%]
+								<tr class="publishing-details-call-contacts">
+									<td>[% IF individual.call247 %]24/7[% ELSE %]day[% END %]</td>
+									<td>[% individual.lastname _ ', ' _ individual.firstname %]</td>
+									<td>[% individual.role_name %]</td>
+									<td>tel: [% IF individual.tel_regular; individual.tel_regular; ELSE; '-'; END %]</td> 
+									<td>mob: [% IF individual.tel_mobile; individual.tel_mobile; ELSE; '-'; END %]</td>
+								</tr>
+								[% END +%]
+							</table>
+						</div><br>
+					[% IF call.group_notes %]
+						<div>
+							<span class="dialog-input-label">Notes:</span><br>
+							<div class="publishing-details-call-notes">
+								[% call.group_notes.split('\n').join('<br />') %]
+							</span>
+						</div><br>
+					[% END %]
+						<div>
+							<span class="dialog-input-label">Comments:</span><br>
+							<textarea data-id="[% call.id %]" class="input-default publising-details-call-comments">[% call.comments %]</textarea>
+						</div>
+					</div>
+				</div>
+				[% END %]
+			</fieldset>
+		</div>
+		[% END %]
+		<iframe name="downloadFrame" id="downloadFrame" class="super-secret-iframe" src=""></iframe>
+	</div>
+</div>

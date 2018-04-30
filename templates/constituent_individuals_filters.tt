@@ -1,0 +1,61 @@
+<div class="filter-block filter-block-separator">
+
+	<form id="form-constituent-individual-search">
+
+		<div class="block">
+			<label for="constituent-individual-filters-firstname">Firstname</label><br>
+			<input id="constituent-individual-filters-firstname" name="firstname" type="text" class="input-default">
+		</div>
+
+		<div class="block">
+			<label for="constituent-individual-filters-lastname">Lastname</label><br>
+			<input id="constituent-individual-filters-lastname" name="lastname" type="text" class="input-default">
+		</div>
+
+		<div class="block">
+			<label for="constituent-individual-filters-group">Constituent Group</label><br>
+			<select name="group" class="select-single" id="constituent-individual-filters-group">
+				<option value="">-any group-</option>
+   				[% FOREACH group IN groups %]
+   				<option value="[% group.id %]">[% group.name %]</option>
+   				[% END %]
+			</select>
+		</div>
+		
+		<div class="block">
+			<label for="constituent-individual-filters-role">Role</label><br>
+			<select name="role" class="select-single" id="constituent-individual-filters-role">
+				<option value="">-any role-</option>
+   				[% FOREACH role IN roles +%]
+   					<option value="[% role.id %]">[% role.role_name %]</option>
+   				[% END +%]
+			</select>
+		</div>
+
+		<div class="block">
+			<label for="constituent-individual-filters-status">Status</label><br>
+			<select name="status" class="select-single" id="constituent-individual-filters-status">
+				<option value="">-any status-</option>
+				<option value="0">Normal</option>
+				<option value="2">Temporarily disabled</option>					
+			</select>
+		</div>
+
+		<div class="block">
+			<span>&nbsp;</span>
+			<input type="button" id="btn-constituent-individual-search" class="button" value="Search!">		
+		</div>
+
+	</form>
+</div>
+
+<div class="action-block filter-block-separator">
+[% IF write_right +%]
+	<div class="block">
+		<input type="button" class="button" id="btn-add-constituent-individual" value="Add new constituent individual">
+	</div>
+[% END %]	
+	<div class="block align-block-right">
+		<span class="bold page-title">Constituent Individuals</span>
+	</div>
+</div>

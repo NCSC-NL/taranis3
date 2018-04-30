@@ -1,0 +1,93 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden[% END %] ui-state-error ui-corner-all">[% message %]</div>
+
+	[% IF softwareHardwareItem.id %]
+	<div class="dialog-title">
+		<span>[% softwareHardwareItem.producer _ ' ' _ softwareHardwareItem.name _ ' ' _ softwareHardwareItem.version %]</span> 	
+	</div>
+	[% END %]
+	
+	<form id="software-hardware-details-form" data-id="[% IF softwareHardwareItem.id; softwareHardwareItem.id; ELSE; 'NEW'; END %]">
+
+		<div id="software-hardware-details-tabs" class="dialog-tabs">
+			<ul>
+				<li><a href="#software-hardware-details-tabs-general">General</a></li>
+				[% IF softwareHardwareItem.id %]
+				<li><a href="#software-hardware-details-tabs-constituent-list">Constituent list</a></li>
+				[% END %]
+			</ul>
+
+<!-- TAB GENERAL -->
+			<div id="software-hardware-details-tabs-general">
+				<fieldset>
+					<div class="dialog-input-wrapper block">
+						<label for="software-hardware-details-producer" class="dialog-input-label">Producer *</label><br>
+						<input type="text" name="producer" id="software-hardware-details-producer" class="input-default dialog-input-text-wider" value="[% softwareHardwareItem.producer %]">
+					</div><br>
+					
+					<div class="dialog-input-wrapper block">
+						<label for="software-hardware-details-name" class="dialog-input-label">Name *</label><br>
+						<input type="text" name="name" id="software-hardware-details-name" class="input-default dialog-input-text-wider" value="[% softwareHardwareItem.name %]">
+					</div><br>
+					
+					<div class="dialog-input-wrapper block">
+						<label for="software-hardware-details-version" class="dialog-input-label">Version *</label><br>
+						<input type="text" name="version" id="software-hardware-details-version" class="input-default dialog-input-text-wider" value="[% softwareHardwareItem.version %]">
+					</div><br>
+
+					<div class="dialog-input-wrapper block">
+						<span class="dialog-input-label">CPE ID</span><br>
+						<span>[% softwareHardwareItem.cpe_id %]</span>
+					</div><br>
+					
+					<div class="dialog-input-wrapper block">
+						<label for="software-hardware-details-type" class="dialog-input-label">Type *</label><br>
+						<select name="type" id="software-hardware-details-type" class="select-single dialog-input-text">
+							[% FOREACH type IN base_types.keys +%]
+							<option value="[% type %]" [% IF softwareHardwareItem.type == type %]selected="selected"[% END %]>[% base_types.$type %]</option>
+							[% END +%]
+						</select>
+					</div><br>
+
+					<div class="dialog-input-wrapper block">
+						<span class="dialog-input-label">Monitored *</span><br>
+						<input type="radio" name="monitored" id="software-hardware-details-monitored-yes" value="1" [% IF softwareHardwareItem.monitored == '1' %]checked="checked"[% END %]> 
+						<label for="software-hardware-details-monitored-yes">Yes</label>
+						<input type="radio" name="monitored" id="software-hardware-details-monitored-no" value="0" [% IF softwareHardwareItem.monitored == '0' %]checked="checked"[% END %]>
+						<label for="software-hardware-details-monitored-no">No</label>
+					</div><br>
+					
+				</fieldset>
+			</div>
+[% IF softwareHardwareItem.id %]
+<!-- TAB CONSTITUENT LIST -->
+			<div id="software-hardware-details-tabs-constituent-list">
+				<fieldset>
+				[% IF constituentGroups.size > 0 %]
+					<table id="software-hardware-details-constituent-list">
+						<tr class="bold">
+							<td>Constituent name</td>
+							<td>Type</td>
+							<td>SH list in use</td>
+							<td>Call for H/H incident</td>
+							<td>Status</td>
+						</tr>
+					[% FOREACH constituent IN constituentGroups %]
+						<tr class="item-row" >
+							<td><span class="span-link constituent-group-details-link" data-id="[% constituent.id %]">[% constituent.name %]</span></td>
+							<td>[% constituent.type_description %]</td>
+							<td>[% IF constituent.use_sh == 1; 'Yes'; ELSE; 'No'; END %]</td>
+							<td>[% IF constituent.call_hh == 1; 'Yes'; ELSE; 'No'; END %]</td>
+							<td>[% IF constituent.status == 0; 'Normal'; ELSE; 'Temporarily disabled'; END %]</td>
+						</tr>
+					[% END %]
+					</table>
+				[% ELSE %]
+					<span>No groups found with this software/hardware item</span>
+				[% END %]
+				</fieldset>
+			</div>
+[% END %]
+		</div>
+	</form>
+</div>

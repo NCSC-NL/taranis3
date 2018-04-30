@@ -1,0 +1,29 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden[% END %] ui-state-error ui-corner-all">[% message %]</div>
+	
+	<div class="dialog-title">
+		<span>Contact Log</span>
+	</div>
+	
+	<form id="form-report-contact-log" data-id="[% IF contactLog.id; contactLog.id; ELSE; 'NEW'; END %]">
+		<fieldset>
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Type *</span><br>
+				<select name="type" id="report-contact-log-type" class="select-single dialog-input-text-narrow">
+					<option value="">-select type of contact-</option>
+					[% FOREACH contactType IN contactTypes.keys %]
+					<option value="[% contactType %]" [% IF contactType == contactLog.type %]selected[% END %]>[% contactTypes.$contactType %]</option>
+					[% END %]
+				</select>
+			</div>
+			<div class="dialog-input-wrapper block">
+				<label for="report-contact-log-contact-details" class="dialog-input-label">Contact details</label><br>
+				<textarea name="contact_details" id="report-contact-log-contact-details" class="input-default dialog-input-text-wide">[% contactLog.contact_details %]</textarea>
+			</div>
+			<div class="dialog-input-wrapper block">
+				<label for="report-contact-log-notes" class="dialog-input-label">Notes</label><br>
+				<textarea name="notes" id="report-contact-log-notes" class="input-default dialog-input-text-wide">[% contactLog.notes %]</textarea>
+			</div>
+		</fieldset>
+	</form>
+</div>

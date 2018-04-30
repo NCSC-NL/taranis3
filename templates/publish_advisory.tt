@@ -1,0 +1,52 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden[% END %] ui-state-error ui-corner-all">[% message %]</div>
+
+	<div class="dialog-title">
+		<span>[% advisory_heading %]</span>	
+	</div>
+	
+	<form method="post" id="advisory-publish-form" data-publicationid="[% publication_id %]">
+		<fieldset>
+			[% IF attachments && attachments.size > 0 %]
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Attachments</span><br>
+				[% FOREACH attachment IN attachments %]
+				<span class="span-link publish-attachment-link" data-fileid="[% attachment.id %]" title="[% attachment.filename %]">[% attachment.filename %]</span> 
+					([% IF attachment.file_size > 1000000 %]
+						[% attachment.file_size div 1000000 %]MB
+					[% ELSIF attachment.file_size > 1000 %]
+						[% attachment.file_size div 1000 %]KB
+					[% ELSE %]
+						[% attachment.file_size %]B
+					[% END %])
+				[% END %]
+			</div>
+			<hr>
+			[% END %]
+			<div class="dialog-input-wrapper block">
+				<div class="table">
+					<div class="cell">
+						<textarea class="scroll-y-always font-courier border-default" name="advisory_preview" id="advisory-preview-text">[% preview %]</textarea>
+					</div>
+					<div class="cell advisory-publish-preview-cell">
+						<fieldset>
+							<legend>Select constituents</legend>
+							<div class="block" id="advisory-publish-constituent-list">
+
+							[% IF groups && groups.size > 0 %]
+								[% FOREACH group IN groups +%]
+								<input type="checkbox" name="groups" id="group_[% group.id %]" value="[% group.id %]" [% IF group.selected == 1 %]checked="checked"[% END %]><label for="group_[% group.id %]">[% group.name %]</label><br>
+								[%+ END %]
+							[% ELSE %]
+								<span>There are no constituent groups configured for this type of publication.</span>
+							[% END %]
+
+							</div>
+						</fieldset><br>
+					</div>
+				</div>
+			</div>
+		</fieldset>	
+	</form>
+</div>
+<iframe name="downloadFrame" id="downloadFrame" src="" class="super-secret-iframe"></iframe>

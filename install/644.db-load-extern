@@ -1,0 +1,34 @@
+#!/usr/bin/env perl
+# Collect data from some external sources.  We like to start with as much
+# data as possible to give a good initial impression ;-)
+
+use warnings;
+use strict;
+
+use Term::ReadLine ();
+
+use Taranis::Install::Config qw(config_generic);
+use Taranis::Install::DB qw(connect_db);
+
+my $generic = config_generic;
+my $user    = $generic->{username};
+my $version = $generic->{version};
+
+my $db = connect_db;
+my $term = Term::ReadLine->new("Loading external datasets");
+
+my $nr_cve = $db->query("SELECT COUNT(*) FROM identifier_description")->list;
+if($nr_cve == 0) {
+	print <<'__EXPLAIN';
+You do not have CVE descriptions loaded yet.  They get updated automatically
+every night.  Do you need to configure a proxy first?  Then run by hand:
+   taranis cve descriptions
+__EXPLAIN
+
+	my $a = $term->readline('Try to load them now? [y] ');
+    if($a !~ /\S/ || $a =~ m/^\s*y/i) {
+		system "su - $user -c 'taranis cve descriptions'";
+	}
+}
+
+exit 0;

@@ -1,0 +1,173 @@
+[% USE date %]
+<div id="dossier-content-heading" class="content-heading">
+	<div id="dossier-content-heading-description" class="block">
+		<span>Dossier timeline</span>
+	</div>
+</div>
+
+[% MACRO date_block BLOCK %]
+  <div class="block dossier-timeline-date-block dossier-timeline-date-block-[% item.classification.displayTLPColor %] center">
+	<span class="dossier-item-timeline-time">[% event_time %]</span><br><br>
+   	<span class="dossier-item-timeline-date">[% event_date %]</span><br><br>
+   	<span class="dossier-item-timeline-year">[% event_year %]</span><br><br>
+   	<span class="bold">[% item_type %]</span>
+  </div>
+[% END %]
+
+[% IF dossierItems && dossierItems.size > 0 %]
+	[% FOREACH eventEpoch IN dossierItems.keys.sort.reverse %]
+
+		[%	item = dossierItems.$eventEpoch
+			timestamp  = item.event_timestamp.stripSeconds
+			event_ymd  = date.format(timestamp, format = '%Y%m%d')
+			event_time = date.format(timestamp, format = '%H:%M')
+			event_date = date.format(timestamp, format = '%e %h.')
+			event_year = date.format(timestamp, format = '%Y')
+ 		%]
+		
+		[% IF item.dossier_item_type == 'assess' %]
+		<div class="item-row-dossier" id="[% item.digest | uri %]"
+		 data-itemtype="assess" data-date="[% event_ymd %]">
+			[% date_block(item_type = 'ASSESS') %]
+			<div class="block dossier-item-timeline-description-block">
+				<div class="block dossier-item-timeline-description">
+				[% IF item.is_mail %]
+					<img src="[% webroot %]/images/bw_envelope_mail.png">&nbsp;<span data-id="[% item.digest | uri %]" data-link="[% item.link %]" class="span-link assess-email-item-link dossier-item-timeline-title bold">[% item.title %]</span>
+				[% ELSIF item.screenshot_object_id %]
+					<img src="[% webroot %]/images/bw_camera.png">&nbsp;<span data-id="[% item.digest | uri %]" data-link="[% item.link %]" class="span-link assess-screenshot-item-link dossier-item-timeline-title bold">[% item.title %]</span>
+				[% ELSE %]
+					<a data-id="[% item.digest | uri %]" href="[% item.link %]" target="_blank" class="dossier-item-timeline-title bold">[% item.title %]</a>
+				[% END %]
+					<br><br>
+					<span class="dossier-item-timeline-timestamp">Assess item collected on [% date.format( item.created.stripSeconds, format = '%d-%m-%Y at %H:%M' ) %]</span>
+				</div>
+				
+				[% INCLUDE dossier_timeline_item_part.tt %]
+			</div>
+		</div>
+		
+		[% ELSIF item.dossier_item_type == 'analyze' %]
+		<div class="item-row-dossier" id="[% item.id %]"
+		 data-itemtype="analyze" data-date="[% event_ymd %]">
+            [% date_block(item_type = 'ANALYSIS') %]
+			<div class="block dossier-item-timeline-description-block">
+				<div class="block dossier-item-timeline-description">
+					<span data-analysisid="[% item.id %]" class="span-link analyze-item-details-readonly-link dossier-item-timeline-title bold">AN-[% item.id.substr(0,4) _ '-' _ item.id.substr(4,4) %]&nbsp;[% item.title %]</span>
+					<br><br>
+					<span class="dossier-item-timeline-timestamp">Analysis created on [% date.format( item.orgdatetime.stripSeconds, format = '%d-%m-%Y at %H:%M' ) %]</span>
+				</div>
+				[% INCLUDE dossier_timeline_item_part.tt %]
+			</div>
+		</div>
+		
+		[% ELSIF item.dossier_item_type == 'advisory' || item.dossier_item_type == 'forward' %]
+		<div class="item-row-dossier" id="[% item.publication_id %]"
+		 data-itemtype="[% IF item.dossier_item_type == 'advisory' %]advisory[% ELSE %]forward[% END %]"
+		 data-date="[% event_ymd %]">
+			[% date_block(item_type = 'ADVISORY') %]
+			<div class="block dossier-item-timeline-description-block">
+				<div class="block dossier-item-timeline-description">
+					<span class="span-link publications-dossier-link dossier-item-timeline-title bold" data-publicationid="[% item.publication_id %]" data-pubtype="[% IF item.dossier_item_type == 'advisory' %]advisory[% ELSE %]forward[% END %]">
+						[% item.govcertid %]&nbsp;[v[% item.version %]]&nbsp;[% item.title %]
+					</span><br><br>
+					<span class="dossier-item-timeline-timestamp">
+					[% IF item.published_on %]
+					Advisory published on [% date.format( item.published_on.stripSeconds, format = '%d-%m-%Y at %H:%M' ) %]
+					[% ELSE %]
+					Advisory is not published yet
+					[% END %]
+					</span>
+				</div>
+				[% INCLUDE dossier_timeline_item_part.tt %]
+			</div>
+		</div>
+		
+		[% ELSIF item.dossier_item_type == 'eos' %]
+		<div class="item-row-dossier" id="[% item.publication_id %]"
+		 data-itemtype="eos" data-date="[% event_ymd %]">
+			[% date_block(item_type = 'END-OF-SHIFT') %]
+			<div class="block dossier-item-timeline-description-block">
+				<div class="block dossier-item-timeline-description">
+					<span class="span-link publications-dossier-link dossier-item-timeline-title bold" data-publicationid="[% item.publication_id %]" data-pubtype="eos">
+					End-Of-Shift [% date.format( item.timeframe_begin.stripSeconds, format = '%d-%m-%Y %H:%M' ) %] - [% date.format( item.timeframe_end.stripSeconds, format = '%d-%m-%Y %H:%M' ) %]
+					</span><br><br>
+					<span class="dossier-item-timeline-timestamp">
+					[% IF item.published_on %]
+					End-Of-Shift published on [% date.format( item.published_on.stripSeconds, format = '%d-%m-%Y at %H:%M' ) %]
+					[% ELSE %]
+					End-Of-Shift is not published yet
+					[% END %]
+					</span>
+				</div>
+				[% INCLUDE dossier_timeline_item_part.tt %]
+			</div>
+		</div>
+
+		[% ELSIF item.dossier_item_type == 'eod' %]
+		<div class="item-row-dossier" id="[% item.publication_id %]"
+		 data-itemtype="eod" data-date="[% event_ymd %]">
+			[% date_block(item_type = 'END-OF-DAY') %]
+			<div class="block dossier-item-timeline-description-block">
+				<div class="block dossier-item-timeline-description">
+					<span class="span-link publications-dossier-link dossier-item-timeline-title bold" data-publicationid="[% item.publication_id %]" data-pubtype="eod">
+					End-Of-Day [% date.format( item.timeframe_begin.stripSeconds, format = '%d-%m-%Y %H:%M' ) %] - [% date.format( item.timeframe_end.stripSeconds, format = '%d-%m-%Y %H:%M' ) %]
+					</span><br><br>
+					<span class="dossier-item-timeline-timestamp">
+					[% IF item.published_on %]
+					End-Of-Day published on [% date.format( item.published_on.stripSeconds, format = '%d-%m-%Y at %H:%M' ) %]
+					[% ELSE %]
+					End-Of-Day is not published yet
+					[% END %]
+					</span>
+				</div>
+				[% INCLUDE dossier_timeline_item_part.tt %]
+			</div>
+		</div>
+		
+		[% ELSIF item.dossier_item_type == 'eow' %]
+		<div class="item-row-dossier" id="[% item.publication_id %]"
+		 data-itemtype="eow" data-date="[% event_ymd %]">
+			[% date_block(item_type = 'END-OF-WEEK') %]
+			<div class="block dossier-item-timeline-description-block">
+				<div class="block dossier-item-timeline-description">
+					<span class="span-link publications-dossier-link dossier-item-timeline-title bold" data-publicationid="[% item.publication_id %]" data-pubtype="eow">
+					End-Of-Week published on [% date.format( item.published_on.stripSeconds, format = '%d-%m-%Y %H:%M' ) %]
+					</span><br><br>
+					<span class="dossier-item-timeline-timestamp">
+					[% IF item.published_on %]
+					End-Of-Week published on [% date.format( item.published_on.stripSeconds, format = '%d-%m-%Y at %H:%M' ) %]
+					[% ELSE %]
+					End-Of-Week is not published yet
+					[% END %]
+					</span>
+				</div>
+				[% INCLUDE dossier_timeline_item_part.tt %]
+			</div>
+		</div>
+		
+		[% ELSIF item.dossier_item_type == 'note' %]
+		<div class="item-row-dossier" id="[% item.note_id %]"
+		 data-itemtype="note" data-date="[% event_ymd %]">
+			[% date_block(item_type = 'NOTES') %]
+			<div class="block dossier-item-timeline-description-block">
+				<div class="block dossier-item-timeline-description">
+					<span class="dossier-item-timeline-title bold span-link dossier-note-details-link" data-itemid="[% item.dossier_item_id %]">[% item.text.replace( "^(?s)(.*?)\n.*$", '$1').stripTags || '[NO DESCRIPTION]' %]</span><br><br>
+					<span class="dossier-item-timeline-timestamp">Note added on [% date.format( item.created.stripSeconds, format = '%d-%m-%Y at %H:%M' ) %][% IF item.created_by; ' by ' _ item.created_by; END %]</span>
+				</div>
+				[% INCLUDE dossier_timeline_item_part.tt %]
+			</div>
+		</div>
+
+		[% END %]
+	[% END %]
+[% ELSE %]
+	<div class="item-row">No items (yet) in this dossier.</div>
+[% END %]
+
+<div class="action-block filter-block-separator">
+	<div class="center" id="number-of-results">&mdash;
+	 [% dossierItems.size %] dossier items,
+	 <span class="dossier-items-hidden">0</span> hidden &mdash;
+	</div>
+</div>
+<iframe name="downloadFrame" id="downloadFrame" class="super-secret-iframe" src=""></iframe>

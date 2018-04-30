@@ -1,0 +1,52 @@
+#!/usr/bin/env perl
+# Put the Taranis specific core perl modules on their spot.  This will
+# also create their man-pages.
+
+# We could have used the logic of ExtUtils::MakeMaker or Build::Install
+# here, however that would require the maintenance of MANIFEST and
+# Makefile.PL files... plus much more.  Usefull when we are releasing
+# Taranis as perl distribution, but we aren't ;-)
+
+use warnings;
+use strict;
+
+use Carp       qw(confess);
+use File::Find qw(find);
+
+use Taranis::Install::Bare   qw(clone_dir);
+use Taranis::Install::Config qw(config_release taranis_sources become_user_taranis);
+use Taranis::Install::Perl   qw(pod2man);
+
+become_user_taranis;
+
+my $release = config_release;
+my $version = $release->{version};
+if($version eq 'git') {
+	print "*   development sources in git are used without copy\n";
+	exit 0;
+}
+
+my $dest	= $release->{install};
+
+my $taranis = taranis_sources $version
+	or confess;
+
+my $source_lib = "$taranis/pm/";
+my $dest_lib   = "$dest/perl5";
+
+print "*   clone pm --> $dest_lib\n";
+clone_dir $source_lib, $dest_lib;
+
+print "*   creating manuals\n";
+
+find +{
+	wanted => sub {
+		s/\.pm$// or return;
+		s!^\Q$source_lib\E!!;
+		s!/!::!g;
+		pod2man('3pm', $File::Find::name, $_);
+	},
+	no_chdir => 1,
+}, $source_lib;
+
+exit 0;

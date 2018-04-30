@@ -1,0 +1,31 @@
+[% IF renderItemContainer %]
+<div class="access-token-item item-row" id="[% token.token %]">
+[% END %]
+
+	<div class="access-token-item-username block">
+		<span>[% token.username %]</span>
+	</div>
+
+	<div class="access-token-item-fullname block">
+		<span>[% token.fullname %]</span>
+	</div>
+
+	<div class="access-token-item-last-access block">
+		<span>[% token.last_access_str %]</span>
+	</div>
+
+	<div class="access-token-item-created block">
+		<span>[% token.created_str %]</span>
+	</div>
+
+	<div class="block align-block-right">
+	[% IF write_right %]
+		<img src="[% webroot %]/images/icon_modify.png" alt="edit" title="edit token" class="pointer btn-edit-token" data-token="[% token.token %]">
+		<img src="[% webroot %]/images/icon_delete.png" alt="delete" title="delete token" class="pointer btn-delete-token" data-token="[% token.token %]">
+	[% ELSE %]
+		<img src="[% webroot %]/images/icon_details.png" alt="view" title="view details" class="pointer btn-view-token" data-token="[% token.token %]">
+	[% END %]		
+	</div>
+[% IF renderItemContainer %]
+</div>
+[% END %]

@@ -1,0 +1,23 @@
+<div class="block configuration-block">
+	<fieldset>
+		<legend class="configuration-title bold">Taranis Statistics</legend>
+		<ul>
+			<li><a href="statistics/stats/displayStats/statstype=[% 'Taranis Statistics' | url %]">Statistics Created by Collector</a></li>
+			[% IF canCreateStatistics %]
+			<li><a href="statistics/custom_stats/displayCustomStats/">Create Taranis Statistics</a></li>
+			[% END %]
+		</ul>
+	</fieldset>
+</div>
+<div class="block configuration-block">
+	<fieldset>
+		<legend class="configuration-title bold">Downloaded Statistics</legend>
+		<ul>
+			[% FOR statisticCategory IN statsCategories %]
+				[% IF statisticCategory != 'Taranis Statistics' %]
+			<li><a href="statistics/stats/displayStats/statstype=[% statisticCategory | url %]">[% statisticCategory %]</a></li>
+				[% END %]
+			[% END %]
+		</ul>
+	</fieldset>
+</div>

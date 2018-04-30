@@ -1,0 +1,22 @@
+#!perl
+
+use warnings;
+use strict;
+
+sub {
+	my ($db, %args) = @_;
+
+	$db->query( <<'__RUN__');
+CREATE INDEX publication_advisory_consequences_trgm_idx on publication_advisory using GIN(consequences gin_trgm_ops);
+CREATE INDEX publication_advisory_description_trgm_idx on publication_advisory using GIN(description gin_trgm_ops);
+CREATE INDEX publication_advisory_govcertid_trgm_idx on publication_advisory using GIN(govcertid gin_trgm_ops);
+CREATE INDEX publication_advisory_hyperlinks_trgm_idx on publication_advisory using GIN(hyperlinks gin_trgm_ops);
+CREATE INDEX publication_advisory_ids_trgm_idx on publication_advisory using GIN(ids gin_trgm_ops);
+CREATE INDEX publication_advisory_solutions_trgm_idx on publication_advisory using GIN(solution gin_trgm_ops);
+CREATE INDEX publication_advisory_summary_trgm_idx on publication_advisory using GIN(summary gin_trgm_ops);
+CREATE INDEX publication_advisory_title_trgm_idx on publication_advisory using GIN(title gin_trgm_ops);
+CREATE INDEX publication_advisory_update_trgm_idx on publication_advisory using GIN(update gin_trgm_ops);
+CREATE INDEX publication_advisory_notes_trgm_idx on publication_advisory using GIN(notes gin_trgm_ops);
+CREATE INDEX publication_advisory_tlpamber_trgm_idx on publication_advisory using GIN(tlpamber gin_trgm_ops);
+__RUN__
+};

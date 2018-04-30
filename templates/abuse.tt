@@ -1,0 +1,31 @@
+To      : [% abuse.abuse_to %]
+
+Subject : Phishing activity at hXXp://[% whois_host %]
+
+
+Dear abuse,
+
+On behalf of NCSC, I would like to request your assistance. NCSC 
+is the Computer Emergency Response Team for the Dutch Government. 
+
+We have received a report of phishing activity against a large Dutch bank. The 
+phishing site is located at hXXp://[% whois_host %]. Details of the phishing website:
+
+URL:
+hXXp://[% whois_host %][% whois_page %]
+
+(link modified for security reasons)
+
+This web address resolves to [% whois_ip %], for which you are listed as the abuse contact.
+
+WHOIS:
+
+[% abuse.cymru %]
+
+We kindly ask you to investigate this matter and to take appropriate action. Any 
+feedback of your actions is highly appreciated. Many thanks in advance for your help.
+
+Kind regards,
+NCSC
+
+<a href="mailto:[% abuse.abuse_to %]?bcc=rt@tickets.ncsc.nl&subject=Phishing activity at hXXp://[% whois_host %]&body=Dear abuse,%0A%0AOn behalf of NCSC, I would like to request your assistance. NCSC is the Computer Emergency Response Team for the Dutch Government.%0A%0AWe have received a report of phishing activity against a large Dutch bank. The phishing site is located at hXXp://[% whois_host %]. Details of the phishing website:%0A%0AURL:%0AhXXp://[% whois_host %][% whois_page %]%0A(link modified for security reasons)%0A%0AThis web address resolves to [% whois_ip %], for which you are listed as the abuse contact.%0A%0AWHOIS: [% abuse.cymru %]%0A%0AWe kindly ask you to investigate this matter and to take appropriate action. Any feedback of your actions is highly appreciated. Many thanks in advance for your help.%0A%0AKind regards,%0ANCSC">Mail</a>

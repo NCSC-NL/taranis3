@@ -1,0 +1,69 @@
+#!/usr/bin/env perl
+# Initialize the database, may be outdated version.
+
+use warnings;
+use strict;
+
+use Carp           qw(confess);
+use File::Glob     qw(bsd_glob);
+use File::Basename qw(basename dirname);
+use Time::HiRes    qw(time);
+
+use Taranis::Install::Config qw(config_release taranis_sources
+	become_user_taranis);
+use Taranis::Install::DB     qw(connect_db schema_version);
+
+become_user_taranis;
+
+my $release = config_release;
+my $version = $release->{version};
+
+my $sources = taranis_sources $version;
+
+my $db      = connect_db;
+my $schema_version = schema_version $db;
+
+# Sometimes, during development, the last upgrade scripts needs to be
+# rerun to get fixed.  In that case, uncomment next line and change the
+# schema version accordingly (to the script number minus 1)
+# $schema_version = 3446;
+
+print "*   current database schema version is $schema_version\n";
+
+my $scripts = (dirname __FILE__) . '/db-upgrade-scripts';
+-d $scripts
+	or die "ERROR: cannot find db upgrade scripts";
+
+foreach my $script (bsd_glob "$scripts/[0-9]*") {
+	my $script_name = basename $script;
+
+	# Skip scripts which already were applied
+	(my $script_schema_version) = $script_name =~ m/^([0-9]+)/;
+	$script_schema_version > $schema_version
+		or next;
+
+	print "*   running db upgrade script $script_name\n";
+	my $start = time;
+	print "started at: ", scalar localtime($start), "\n";
+
+	$db->begin_work;
+
+	my $run = require $script;
+	ref $run eq 'CODE'
+		or die "ERROR: db upgrade script does not return a CODE\n";
+
+	eval { $run->($db) };
+	if($@) {
+		$db->rollback;
+		die "ERROR: db upgrade script failed:\n$@\n";
+	}
+
+	schema_version $db, $script_schema_version;
+	$db->commit;
+
+	my $end    = time;
+	my $elapse = sprintf "%.2f", $end - $start;
+	print "completed at: ", scalar localtime($end), " ($elapse seconds)\n";
+}
+
+exit 0;

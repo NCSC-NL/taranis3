@@ -1,0 +1,26 @@
+<div id="report-todo-content-heading" class="content-heading">
+	<div id="report-todo-content-heading-description" class="block configuration-heading-default">
+		<span>To-do</span>
+	</div>
+	<div id="report-todo-content-heading-due-date" class="block configuration-heading-default date-width-default">
+		<span>Due date</span>
+	</div>
+	<div id="report-todo-content-heading-done-status" class="block configuration-heading-default">
+		<span>Completion</span>
+	</div>
+</div>
+
+[% IF todoList.size > 0 %]
+	[% FOREACH todo IN todoList %]
+	
+		[% INCLUDE report_todo_item.tt %]
+	
+	[% END %]
+[% ELSE %]
+<div class="item-row" id="empty-row">No to-dos found...</div>
+
+[% END %]
+
+<div class="action-block filter-block-separator">
+	<div class="center" id="number-of-results">&mdash; [% numberOfResults %] results &mdash;</div>
+</div>

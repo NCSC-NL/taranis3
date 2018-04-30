@@ -1,0 +1,40 @@
+<div class="block dashboard-block">
+	<fieldset>
+		<legend class="bold">Collect</legend>
+		[% IF collectorStatus %]
+			[% IF collectorStatus.data == 0 %]
+		<img src="[% webroot %]/images/lamp_inactive.png" alt="off" title="Collector is not running" class="align-middle dashboard-icon">
+			[% ELSE %]
+		<img src="[% webroot %]/images/lamp_active.png" alt="on" title="Collector is running" class="align-middle dashboard-icon">
+			[% END %]
+		<div class="block">Collector is [% IF collectorStatus.data == 0 %]<span class="bold">not </span>[% END %]running at the moment.</div><br>
+			[% IF lastSuccessfulRun || graphDurationPerRun || graphNumberOfErrorsPerRun %]
+			<hr class="light">
+			[% END %]
+		[% END %]
+		[% IF lastSuccessfulRun %]
+		<img src="[% webroot %]/images/time_clock.png" alt="clock" title="[% lastSuccessfulRun.data %]" class="align-middle dashboard-icon">
+		<div class="block">Last successful run ended at <span class="bold">[% lastSuccessfulRun.data %]</span></div>
+			[% IF graphDurationPerRun || graphNumberOfErrorsPerRun %]
+			<hr class="light">
+			[% END %]
+		[% END %]
+		[% IF graphDurationPerRun %]
+		<div class="center">
+			<span class="bold">Duration in minutes per run</span>
+		</div>
+		<div id="graphDurationPerRun" class="dashboard-graph"></div>
+		<div id="graphDurationPerRun-legend" class="dashboard-legend"></div>
+			[% IF graphNumberOfErrorsPerRun %]
+			<hr class="light">
+			[% END %]
+		[% END %]
+		[% IF graphNumberOfErrorsPerRun %]
+		<div class="center">
+			<span class="bold">Number of errors per run</span>
+		</div>
+		<div id="graphNumberOfErrorsPerRun" class="dashboard-graph"></div>
+		<div id="graphErrorPerRun-legend" class="dashboard-legend"></div>
+		[% END %]
+	</fieldset>
+</div>

@@ -1,0 +1,45 @@
+<div class="dialog-form-wrapper">
+	<div id="dialog-error" class="hidden"></div>
+	<form id="form-assess-bulk-analysis">
+		<fieldset>
+			[% IF action == 'bulk' %]
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Title *</span><br>
+				<select id="bulk-analysis-title" class="select-single dialog-input-text-wider" name="bulk-analysis-title"></select><br><br>
+				or specify a new title:<br>
+				<input id="bulk-analysis-title-alt" type="text" class="input-default dialog-input-text-wider" name="bulk-analysis-title-alt"> 
+			</div><br>
+			[% END %]
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Select status *</span><br>
+				<select id="bulk-analysis-status" class="select-single dialog-input-text-normal" name="bulk-analysis-status">
+				[%- FOREACH option IN analysis_status_options +%]
+					<option value="[% option %]" [% IF option == 'pending'%]selected="selected"[% END %]>[% option %]</option>
+				[% END +%]
+				</select>
+			</div><br>
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Rating *</span><br>
+				<select id="bulk-analysis-rating" class="select-single dialog-input-text-normal" name="bulk-analysis-rating">
+					<option value="1" selected="selected">Low</option>
+					<option value="2">Medium</option>
+					<option value="3">High</option>
+					<option value="4">Undefined</option>
+				</select>
+			</div><br>
+			[% IF hasClusteredItems %]
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">At least one selected item is a cluster of items.<br> Select one of the following options:</span><br><br>
+				
+				<input type="radio" class="no-margin align-top" name="include-clustered-items" id="include-clustered-items-yes" value="1" checked="checked">
+				<label for="include-clustered-items-yes">Link all clustered items to analysis.</label><br><br>
+				
+				<input type="radio" class="no-margin" name="include-clustered-items" id="include-clustered-items-no" value="0">
+				<div class="block align-top">
+				<label for="include-clustered-items-no">Only link one item of cluster to analysis. <br>(rest of items in cluster will be set to &#39;read&#39; status)</label>
+				</div>
+			</div>
+			[% END %]
+		</fieldset>
+	</form>
+</div>

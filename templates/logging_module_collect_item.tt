@@ -1,0 +1,40 @@
+[% IF renderItemContainer %]
+<div class="collector-logging-item item-row" id="[% loggingItem.id %]">
+[% END %]
+	
+	<div class="collector-logging-item-date-time block">
+		<span>[% loggingItem.datetime %]</span>
+	</div>
+
+	<div class="collector-logging-item-source block">
+		<span>
+			<a href="[% loggingItem.fullurl %]" target="_blank"><img src="[% webroot %]/images/icons/[% loggingItem.sourcename %].gif" alt="[% loggingItem.sourcename %]" title="[% loggingItem.fullurl %]"></a>		
+		</span>
+	</div>
+
+	<div class="collector-logging-item-error block">
+		<span>
+			<img src="[% webroot %]/images/[% loggingItem.error_code %].png" alt="[% loggingItem.error_code %]">
+		</span>
+	</div>		
+
+	<div class="collector-logging-item-error-description block break-word">
+		<span>
+			[% IF loggingItem.error.length > 200 %]
+				[% loggingItem.error.substr( 200, loggingItem.error.length, '...')  %]
+			[% ELSE %]
+				[% loggingItem.error %]
+			[% END %]
+		</span>
+	</div>	
+
+	<div class="block align-block-right">
+		<img src="[% webroot %]/images/icon_details.png" alt="view" title="view details" class="pointer btn-view-collector-logging" data-id="[% loggingItem.id %]">
+	[% IF write_right %]
+		<img src="[% webroot %]/images/icon_delete.png" alt="delete" title="delete log entry" class="pointer btn-delete-collector-logging" data-id="[% loggingItem.id %]">
+	[% END %]
+	</div>
+	
+[% IF renderItemContainer %]
+</div>
+[% END %]

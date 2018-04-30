@@ -1,0 +1,31 @@
+[% USE date %]
+[% IF renderItemContainer %]
+<div class="report-contact-log-item item-row" id="[% contactLog.id %]">
+[% END %]
+	<div class="report-contact-log-item-created block date-width-default">
+		<span>[% date.format( contactLog.created.stripSeconds, format = '%d-%m-%Y %H:%M' ) %]</span>
+	</div>
+	<div class="report-contact-log-item-type block">
+		<span>[% contactLog.type.displayReportContactLogType %]</span>
+	</div>
+	<div class="report-contact-log-item-notes block">
+		<span>
+		[% IF contactLog.notes.length > 120  %]
+			[% contactLog.notes.substr( 120, contactLog.notes.length, '...') %]
+		[% ELSE %]
+			[% contactLog.notes %]
+		[% END %]
+		</span>
+	</div>
+
+	<div class="block align-block-right">
+	[% IF write_right %]
+		<img src="[% webroot %]/images/icon_modify.png" alt="edit" title="edit to-do" class="pointer btn-edit-report-contact-log" data-id="[% contactLog.id %]">
+		<img src="[% webroot %]/images/icon_delete.png" alt="delete" title="delete to-do" class="pointer btn-delete-report-contact-log" data-id="[% contactLog.id %]">
+	[% ELSE %]
+		<img src="[% webroot %]/images/icon_details.png" alt="view" title="view details" class="pointer btn-view-report-contact-log" data-id="[% contactLog.id %]">
+	[% END %]
+	</div>
+[% IF renderItemContainer %]
+</div>
+[% END %]

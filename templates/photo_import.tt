@@ -1,0 +1,55 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden[% END %] ui-state-error ui-corner-all">[% message %]</div>
+	
+	<form id="form-photo-issues-load-photo"  enctype="multipart/form-data">
+		<fieldset>
+			<legend>Select constituent</legend>
+			<div class="dialog-input-wrapper block" id="photo-issues-constituent-group-block">
+				<label for="photo-issues-constituent-group" class="dialog-input-label">Constituent group</label><br>
+				<select id="photo-issues-constituent-group" name="constituentGroup" class="select-single dialog-input-text">
+					<option value="">-select constituent-</option>
+					[% FOREACH constituent IN constituentGroups +%]
+					<option value="[% constituent.id %]">[% constituent.name %]</option>
+					[% END +%]
+				</select>
+			</div>
+		</fieldset>
+		<fieldset>
+			<legend>Submit new photo</legend>
+			<div class="dialog-input-wrapper block">
+				<label for="photo-issues-import-file" class="dialog-input-label">CSV file</label><br>
+				<input type="file" name="csv_file" id="photo-issues-import-file" class="input-default dialog-input-text">
+				<span id="photo-issues-import-file-loading" class="hidden">Processing import file...</span>
+			</div><br>
+			<div class="dialog-input-wrapper block">
+				<label for="photo-issues-csv-separator" class="dialog-input-label">CSV separator</label><br>
+				<input type="text" name="csv_separator" id="photo-issues-csv-separator" class="input-default" placeholder="defaults to comma">
+			</div>
+		</fieldset>
+	</form>
+	<table class="dialog-table" id="photo-issues-photo-list">
+		<thead>
+			<tr>
+				<th class="bold">Constituent group</th>
+				<th class="bold">Import created on</th>
+				<th class="bold" colspan="2">Imported on</th>
+			</tr>
+		</thead>
+		<tbody>
+			[% FOREACH import IN importList +%]
+			<tr class="item-row photo-issues-photo-item" data-id="[% import.photo_id %]" data-groupid="[% import.id %]">
+				<td>
+					<span class="pointer span-link link-photo-issues-photo-item" data-id="[% import.photo_id %]">[% import.name %]</span>
+				</td>
+				<td>[% import.created %]</td>
+				<td>[% import.imported %]</td>
+				<td align="right">
+					[% IF !import.imported %]
+					<img src="[% webroot %]/images/icon_delete.png" data-photoid="[% import.photo_id %]" data-groupid="[% import.id %]" title="Delete import and unlink issues." class="btn-delete-photo pointer">
+					[% END %]
+				</td>
+			</tr>
+			[% END +%]
+		</tbody>
+	</table>		
+</div>

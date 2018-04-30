@@ -1,0 +1,11 @@
+#!perl
+# enlarge notes field from varchar to text
+
+use warnings;
+use strict;
+
+sub {
+	my ($db, %args) = @_;
+	$db->query("ALTER TABLE publication_advisory ALTER COLUMN notes TYPE TEXT");
+	$db->query("ALTER TABLE publication_advisory ALTER COLUMN notes SET DEFAULT ''");
+};

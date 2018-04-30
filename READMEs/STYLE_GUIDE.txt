@@ -1,0 +1,36 @@
+
+
+style guide wip:
+- 2 blank lines surrounding toplevel functions/classes (pep8 style)
+- 119 chars line width, bij een tabsize van 4
+- sub names: camelCase, want is in de hele codebase al zo (al is het niet conform PBP/perlstyle)
+- var names: lowercase_under_score, conform PBP/perlstyle, want nu 50/50 under_score/camelCase, dus go with PBP
+- PODs incrementally vervangen door inline comments as we go; big bang wordt 'm niet en zoals nu (@eof) is de
+  documentatie nutteloos, en POD kan ok zijn voor deel vd documentatie maar heb geen zin om de copyright notice 2x per
+  file te hebben.
+- cuddled elses
+  // want vind ik tof, en is al zo
+- string concatenation: "a" . "b" (spatie v00r en achter '.')
+  // want is nu zo, en is best
+- geen trailing whitespace at EOL, geen lines met alleen whitespace
+- tabs not spaces (obviously)
+- comments: python style ('Hele zinnen.', 2 spaces before #)
+- normale spaties: if (foo(bar, baz) && quux(onevalue)) ...
+  dus niet sebas-style: if ( foo( bar, baz ) && quux(onevalue) ) ...
+- algemeen: perltidy defaults aanhouden
+- exceptions, not error returns
+  - met overtuiging, dus ook bij getUser() ofzo
+    (want als je geen zin in een exception hebt doe je gewoon eval{getUser()} )
+- american english
+- qw() not qw{}
+- imports:
+  - avoid implicit imports (with @EXPORT or %EXPORT_TAGS), prefer explicit imports ('use Module qw(foo bar baz);')
+  - always use these pragmas: use 5.010; use strict; use warnings; no warnings qw(uninitialized);
+  - import/use ordering (PEP8 style):
+    - pragmas (use 5.010, use strict, etc)
+    - empty line
+    - external libs (use CGI, use Term::ANSIColor, etc)
+    - empty line
+    - internal libs (use Taranis::Foo, use Taranis)
+    - 2 empty lines
+

@@ -1,0 +1,16 @@
+#!perl
+# Option to disable the sending of separate advisories.  The spec
+# changed, so the column needs a different name.
+
+use warnings;
+use strict;
+
+sub {
+	my ($db, %args) = @_;
+	$db->query( <<'__RUN__');
+
+ALTER TABLE constituent_group
+  RENAME COLUMN only_eod TO no_advisories;
+
+__RUN__
+};

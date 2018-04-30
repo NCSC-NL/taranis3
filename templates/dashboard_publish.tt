@@ -1,0 +1,11 @@
+<div class="block dashboard-block">
+	<fieldset>
+		<legend class="bold">Publish</legend>
+		[% IF numberOfApprovedPublications %]
+			<div>
+				<img src="[% webroot %]/images/mail_check.png" alt="[% numberOfApprovedPublications.data %]" class="align-middle">
+				<div class="block">There [% IF numberOfApprovedPublications.data == 1 %]is[% ELSE %]are[% END %] <span class="bold">[% numberOfApprovedPublications.data %]</span> approved publication[% IF numberOfApprovedPublications.data == 0 || numberOfApprovedPublications.data > 1 %]s[% END %].</div>
+			</div>
+		[% END %]
+	</fieldset>
+</div>

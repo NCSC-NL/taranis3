@@ -1,0 +1,44 @@
+#!/usr/bin/env perl
+# Upgrade changes from older release candidates into rc11
+# Excluded database upgrades; they have their own process.
+
+use warnings;
+use strict;
+
+use Carp   qw(confess);
+use File::Slurper qw/read_text write_text/;
+
+use Taranis::Install::Config qw(config_generic config_release
+	installed_versions sort_versions
+);
+
+my $generic   = config_generic;
+
+### add daily call to "taranis db close-opened" to installed "/var/cron"
+my $dailyfn   = "$generic->{var}/cron.daily";
+-f $dailyfn
+	or die "ERROR: $dailyfn should have been installed\n";
+
+my $daily     = read_text $dailyfn, 'utf-8';
+
+unless($daily =~ m/close-opened/) {
+	my $now  = localtime;
+	my $call = <<__CLOSE_OPENED;
+
+
+# Remove stalled locks on items, which got opened by users but never
+# cleanly released.
+# Automagically added via script $0
+# on $now
+
+\$TARANIS db close-opened
+
+__CLOSE_OPENED
+
+	$daily =~ s/(?=\n\#--- ADDITIONAL)/$call/;
+
+	write_text $dailyfn, $daily, 'utf-8';
+	print "*   added close-opened to $dailyfn\n";
+}
+
+exit 0;

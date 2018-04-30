@@ -1,0 +1,54 @@
+[% USE date %]
+<div class="block dashboard-block">
+	<fieldset>
+		<legend class="bold">Write</legend>
+		[% IF endOfShiftStatus %]
+			<div>
+				<img src="[% webroot %]/images/mail_plain_[% endOfShiftStatus.data.previous.status %].png" alt="[% endOfShiftStatus.data.previous.status FILTER upper %]" class="dashboard-icon">
+				<div class="block">End-of-Shift of previous shift <br>
+				[% IF endOfShiftStatus.data.previous.status != 'green' %]
+				has <span class="bold">not</span> been sent yet
+				[% ELSE %]
+				was sent on <span class="bold">[% date.format( endOfShiftStatus.data.previous.lastPublication.stripSeconds, format = '%H:%M %d-%m-%Y' ) %]</span>
+				[% END %]
+				</div>
+			</div>
+			<hr class="light">
+			<div>
+				<img src="[% webroot %]/images/mail_plain_[% endOfShiftStatus.data.current.status %].png" alt="[% endOfShiftStatus.data.current.status FILTER upper %]" class="dashboard-icon">
+				<div class="block">End-of-Shift of current shift<br>
+				[% IF endOfShiftStatus.data.current.status != 'green' || !endOfShiftStatus.data.current.lastPublication %]
+				has <span class="bold">not</span> been sent yet.
+				[% ELSE %]
+				was sent on <span class="bold">[% date.format( endOfShiftStatus.data.current.lastPublication.stripSeconds, format = '%H:%M %d-%m-%Y' ) %]</span>
+				[% END %]
+				</div>
+			</div>
+			[% IF endOfDayStatus || ( collectorNotifications && collectorNotifications.data.size > 0 ) %]
+			<hr class="light">
+			[% END %]
+		[% END %]
+		[% IF endOfDayStatus.data %]
+			<div>
+				<img src="[% webroot %]/images/mail_plain_[% endOfDayStatus.data.status %].png" alt="[% endOfDayStatus.data.status FILTER upper %]" class="align-middle dashboard-icon">
+				<div class="block">Last End-of-Day was sent on <span class="bold">[% endOfDayStatus.data.lastPublication %]</span>.</div>
+			</div>
+			[% IF collectorNotifications && collectorNotifications.data.size > 0 %]
+			<hr class="light">
+			[% END %]
+		[% END %]
+		[% IF collectorNotifications %]
+			[% IF collectorNotifications.data && collectorNotifications.data.size > 0 %]
+			<div class="center">
+				<span class="bold">Advisory import notifications of last 24 hours</span>
+			</div>
+			<ul class="small-font font-courier dashboard-collector-notifications">
+			[% FOREACH notification IN collectorNotifications.data %]
+				<li [% IF loop.odd %]class="odd"[% END %]>&gt; <span class="bold">[% notification.datetime %]</span> [% notification.error %]</li>
+			[% END %]
+			</ul>
+
+			[% END %]
+		[% END %]
+	</fieldset>
+</div>

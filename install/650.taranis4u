@@ -1,0 +1,32 @@
+#!/usr/bin/env perl
+# Put the Taranis4u specific components on their spot.
+
+use warnings;
+use strict;
+
+use Carp       qw(confess);
+
+use Taranis::Install::Bare   qw(clone_dir);
+use Taranis::Install::Config qw(config_release taranis_sources become_user_taranis);
+use Taranis::Install::Perl   qw(pod2man);
+
+become_user_taranis;
+
+my $release = config_release;
+my $version = $release->{version};
+if($version eq 'git') {
+	print "*   development sources in git are used without copy\n";
+	exit 0;
+}
+
+my $dest	= $release->{install4u};
+
+my $taranis = taranis_sources $version
+	or confess;
+
+my $source = "$taranis/taranis4u/";
+
+print "*   clone taranis4u --> $dest\n";
+clone_dir $source, $dest;
+
+exit 0;

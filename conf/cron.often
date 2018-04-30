@@ -1,0 +1,28 @@
+#!/bin/bash
+# Tasks to be run quite often (by default 5 minutes)
+# You may want to change settings for your instance.
+
+umask 022
+
+#XXX the pre-3.4 crontab line started with a 30 second sleep. Probably
+#XXX that does not really help with problem I guess is attempted to get
+#XXX solved.  But for now, let's keep it.  (Feel invited to remove it)
+
+sleep 30
+
+
+# We run this script with the last installed release, as defined in the
+# crontab.  Interactively used, we get the taranis version in our path
+
+[ -t 0 ] && TARANIS=taranis
+
+
+# Produces the HTML fragments for dashboard maxi and mini, which get
+# polled by the browser.  They get stored in the database.
+
+$TARANIS dashboard make-pages
+
+
+# WARNING: upgrades may add additional calls to the end of this script, so
+# do not end this script with 'exit'
+:  # force rc=0

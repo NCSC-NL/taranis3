@@ -1,0 +1,13 @@
+#!perl
+
+use warnings;
+use strict;
+
+sub {
+	my ($db, %args) = @_;
+
+	$db->query( <<'__RUN__');
+ALTER TABLE import_issue ALTER COLUMN description TYPE TEXT;
+ALTER TABLE import_issue ALTER COLUMN resolved_by TYPE TEXT;
+__RUN__
+};

@@ -1,0 +1,273 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="hidden ui-state-error ui-corner-all">[% message %]</div>
+	[% IF isLocked +%]
+	<div class="ui-state-highlight ui-corner-all dialog-highlight">
+		[% IF isLocked %]
+		This is End-of-day has been locked by [% openedByFullname %]
+		[% END %]
+	</div>
+	[% END %]
+
+	[% IF !isNewEod %]
+	<div class="dialog-title">
+		<span>[% eod_heading %]</span>	
+	</div>
+	[% END %]
+[% USE date %]	
+	<form id="eod-details-form" class="publication-details-form" data-publicationid="[% IF eod.publication_id; eod.publication_id; ELSE; 'NEW'; END %]">
+		<input type="hidden" class="include-in-form" value="[% IF eod.publication_id; eod.publication_id; ELSE; eod_publication_id; END %]" name="pub_id">
+		<input type="hidden" value="[% eod.id %]" name="eod_id" id="eod-details-eod-id" class="include-in-form">
+		<input type="hidden" value="[% publication_type_id %]" id="eod-details-publication-type-id">		
+		<div id="eod-details-tabs" class="dialog-tabs">
+			<ul>
+				<li><a href="#eod-details-tabs-general">General</a></li>
+				<li><a href="#eod-details-tabs-vulnerabilities-and-threats">Vuln & threats</a></li>
+				<li><a href="#eod-details-tabs-incident-information">Incidents</a></li>
+				<li><a href="#eod-details-tabs-tlp-amber">TLP:AMBER</a></li>
+				<li><a href="#eod-details-tabs-community-news">Community</a></li>
+				<li><a href="#eod-details-tabs-media-exposure">Media exposure</a></li>
+				<li><a href="#eod-details-tabs-published-advisories">Published adv</a></li>
+				<li><a href="#eod-details-tabs-linked-items">Linked</a></li>
+				[% IF !isNewEod %]
+				<li><a href="#eod-details-tabs-preview">Preview</a></li>
+				[% END %]
+			</ul>
+
+<!-- TAB GENERAL -->
+			<div id="eod-details-tabs-general">
+				<fieldset>
+					<div class="dialog-input-wrapper block">
+						<span class="dialog-input-label">Report timeframe*</span><br>
+
+						<span>from</span>
+						<input type="text" class="date-picker input-default include-in-form" id="eod-details-timeframe-start-date" name="timeframe_begin_date" value="[% date.format(eod.timeframe_begin.stripSeconds, '%d-%m-%Y') %]" placeholder="dd-mm-yyyy">
+						<input type="text" class="time start input-default include-in-form" id="eod-details-timeframe-begin-time" name="timeframe_begin_time" value="[% IF timeframe_initial; date.format(timeframe_initial.stripSeconds, '%H:%M'); ELSE; date.format(eod.timeframe_begin.stripSeconds, '%H:%M'); END %]" placeholder="HH:MM">
+						<span>to</span>
+						<input type="text" class="date-picker input-default include-in-form" id="eod-details-timeframe-end-date" name="timeframe_end_date" value="[% date.format(eod.timeframe_end.stripSeconds, '%d-%m-%Y') %]" placeholder="dd-mm-yyyy">
+						<input type="text" class="time end input-default include-in-form" id="eod-details-timeframe-end-time" name="timeframe_end_time" value="[% IF timeframe_initial; date.format(timeframe_initial.stripSeconds, '%H:%M'); ELSE; date.format(eod.timeframe_end.stripSeconds, '%H:%M'); END %]" placeholder="HH:MM">
+					</div><br>
+
+					<div class="dialog-input-wrapper block">
+						<span class="dialog-input-label">Handler*</span><span class="italic"> (eerste man)</span><br>
+						<select name="handler" id="eod-details-handler" class="select-single dialog-input-text include-in-form">
+							<option value="" [% IF !eod.handler %]selected="selected"[% END %]>-no handler-</option>						
+						[% FOREACH user IN users %]
+							<option value="[% user.username %]" [% IF eod.handler == user.username %]selected="selected"[% END %]>[% user.fullname %]</option>
+						[% END %] 
+						</select>
+					</div><br>
+
+					<div class="dialog-input-wrapper block">
+						<span class="dialog-input-label">First co-handler*</span><span class="italic"> (tweede man)</span><br>
+						<select name="first_co_handler" id="eod-details-first-co-handler" class="select-single dialog-input-text include-in-form">
+							<option value="" [% IF !eod.first_co_handler %]selected="selected"[% END %]>-no first co-handler-</option>
+						[% FOREACH user IN users %]
+							<option value="[% user.username %]" [% IF eod.first_co_handler == user.username %]selected="selected"[% END %]>[% user.fullname %]</option>
+						[% END %] 
+						</select>
+					</div><br>
+
+					<div class="dialog-input-wrapper block">
+						<span class="dialog-input-label">Second co-handler*</span><span class="italic"> (canis)</span><br>
+						<select name="second_co_handler" id="eod-details-second-co-handler" class="select-single dialog-input-text include-in-form">
+							<option value="" [% IF !eod.second_co_handler %]selected="selected"[% END %]>-no second co-handler-</option>
+						[% FOREACH user IN users %]
+							<option value="[% user.username %]" [% IF eod.second_co_handler == user.username %]selected="selected"[% END %]>[% user.fullname %]</option>
+						[% END %] 
+						</select>
+					</div><br>
+					
+					<div class="dialog-input-wrapper block">
+						<span class="dialog-input-label">General day information</span><br>
+						<textarea name="general_info" id="eod-details-general-info-text" class="input-default font-courier scroll-y-always include-in-form">[% eod.general_info %]</textarea>					
+					</div>
+				</fieldset>
+			</div>
+			
+<!-- TAB VULNERABILITIES AND THREATS -->
+			<div id="eod-details-tabs-vulnerabilities-and-threats">
+				<fieldset>
+					<div class="table">
+						<div class="cell dialog-input-wrapper">
+							<span class="dialog-input-label">Vulnerabilities and threats</span><br>
+							<textarea name="vulnerabilities_threats" id="eod-details-vulnerabilities-and-threats-text" class="input-default scroll-y-always include-in-form font-courier">[% eod.vulnerabilities_threats %]</textarea>
+						</div>
+						<div class="cell eod-details-publications-selection-cell">
+							<span class="dialog-input-label">Select time frame</span><br>
+							<div class="eod-publications border-default">
+								<span>Date from:</span><br>
+								<input id="eod-details-vulnerabilities-and-threats-start-date" name="vuln_threats_begin_date" type="text" value="[% vuln_threats_begin_date %]" class="input-default date-picker">
+								<input type="text" class="time start input-default" id="eod-details-vulnerabilities-and-threats-begin-time" name="vuln_threats_begin_time" value="">
+								<br><br>
+								<span>Date to:</span><br>
+								<input id="eod-details-vulnerabilities-and-threats-end-date" name="vuln_threats_end_date" type="text" value="[% vuln_threats_end_date %]" class="input-default date-picker">
+								<input type="text" class="time end input-default" id="eod-details-vulnerabilities-and-threats-end-time" name="vuln_threats_end_time" value="">
+								[% IF write_right %]
+								<br><br>
+								<div class="block">
+									<input type="button" class="button" id="btn-eod-details-apply-vulnerabilities-and-threats" value="&lt; Apply selection">
+								</div>
+								[% END %]
+							</div>
+						</div>
+					</div>
+				</fieldset>
+			</div>
+
+<!-- TAB PUBLISHED ADVISORIES -->
+			<div id="eod-details-tabs-published-advisories">
+				<fieldset>
+					<div class="table">
+						<div class="cell dialog-input-wrapper">
+							<span class="dialog-input-label">Published advisories</span><br>
+							<textarea name="published_advisories" id="eod-details-published-advisories-text" class="input-default scroll-y-always include-in-form font-courier">[% eod.published_advisories %]</textarea>
+						</div>
+						<div class="cell eod-details-publications-selection-cell">
+							<span class="dialog-input-label">Select time frame</span><br>
+							<div class="eod-publications border-default">
+								<span>Date from:</span><br>
+								<input id="eod-details-published-advisories-start-date" name="publ_advis_begin_date" type="text" value="[% publ_advis_begin_date %]" class="input-default date-picker">
+								<input type="text" class="time start input-default" id="eod-details-published-advisories-begin-time" name="publ_advis_begin_time" value="">
+								<br><br>
+								<span>Date to:</span><br>
+								<input id="eod-details-published-advisories-end-date" name="publ_advis_end_date" type="text" value="[% publ_advis_end_date %]" class="input-default date-picker">
+								<input type="text" class="time end input-default" id="eod-details-published-advisories-end-time" name="publ_advis_end_time" value="">
+								[% IF write_right %]
+								<br><br>
+								<div class="block">
+									<input type="button" class="button" id="btn-eod-details-apply-published-advisories" value="&lt; Apply selection">
+								</div>
+								[% END %]
+							</div>
+						</div>
+					</div>
+				</fieldset>
+			</div>
+
+
+<!-- TAB LINKED ADVISORIES -->
+			<div id="eod-details-tabs-linked-items">
+				<fieldset>
+					<div class="table">
+						<div class="cell dialog-input-wrapper">
+							<span class="dialog-input-label">Linked external advisories</span><br>
+							<textarea name="linked_items" id="eod-details-linked-items-text" class="input-default scroll-y-always include-in-form font-courier">[% eod.linked_items %]</textarea>
+						</div>
+						<div class="cell eod-details-publications-selection-cell">
+							<span class="dialog-input-label">Select time frame</span><br>
+							<div class="eod-publications border-default">
+								<span>Date from:</span><br>
+								<input id="eod-details-linked-items-start-date" name="linked_advis_begin_date" type="text" value="[% linked_advis_begin_date %]" class="input-default date-picker">
+								<input type="text" class="time start input-default" id="eod-details-linked-items-begin-time" name="linked_advis_begin_time" value="">
+								<br><br>
+								<span>Date to:</span><br>
+								<input id="eod-details-linked-items-end-date" name="linked_advis_end_date" type="text" value="[% linked_advis_end_date %]" class="input-default date-picker">
+								<input type="text" class="time end input-default" id="eod-details-linked-items-end-time" name="linked_advis_end_time" value="">
+								[% IF write_right %]
+								<br><br>
+								<div class="block">
+									<input type="button" class="button" id="btn-eod-details-apply-linked-items" value="&lt; Apply selection">
+								</div>
+								[% END %]
+							</div>
+						</div>
+					</div>
+				</fieldset>
+			</div>
+
+<!-- TAB INCIDENT INFORMATION -->			
+			<div id="eod-details-tabs-incident-information">
+				<fieldset>
+					<div class="dialog-input-wrapper block">
+						<span class="dialog-input-label">Incidents</span><br>
+						<textarea name="incident_info" id="eod-details-incident-info-text" class="input-default scroll-y-always include-in-form font-courier">[% eod.incident_info %]</textarea>
+					</div>
+				</fieldset>
+			</div>
+
+<!-- TAB TLP AMBER -->			
+			<div id="eod-details-tabs-tlp-amber">
+				<fieldset>
+					<div class="dialog-input-wrapper block">
+						<span class="dialog-input-label">TLP:AMBER</span><br>
+						<textarea name="tlp_amber" id="eod-details-tlp-amber-text" class="input-default scroll-y-always include-in-form font-courier">[% eod.tlp_amber %]</textarea>
+					</div>
+				</fieldset>
+			</div>
+
+<!-- TAB COMMUNITY NEWS -->
+			<div id="eod-details-tabs-community-news">
+				<fieldset>
+					<div class="table">
+						<div class="cell dialog-input-wrapper">
+							<span class="dialog-input-label">Community news</span><br>
+							<textarea name="community_news" id="eod-details-community-news-text" class="input-default scroll-y-always include-in-form font-courier">[% eod.community_news %]</textarea>
+						</div>
+						<div class="cell eod-details-publications-selection-cell">
+							<span class="dialog-input-label">Select time frame</span><br>
+							<div class="eod-publications border-default">
+								<span>Date from:</span><br>
+								<input id="eod-details-community-news-start-date" name="community_news_begin_date" type="text" value="[% community_news_begin_date %]" class="input-default date-picker">
+								<input type="text" class="time start input-default" id="eod-details-community-news-begin-time" name="community_news_begin_time" value="">
+								<br><br>
+								<span>Date to:</span><br>
+								<input id="eod-details-community-news-end-date" name="community_news_end_date" type="text" value="[% community_news_end_date %]" class="input-default date-picker">
+								<input type="text" class="time end input-default" id="eod-details-community-news-end-time" name="community_news_end_time" value="">
+
+								[% IF write_right %]
+								<br><br>
+								<div class="block">
+									<input type="button" class="button" id="btn-eod-details-apply-community-news" value="&lt; Apply selection">
+								</div>
+								[% END %]
+							</div>
+						</div>
+					</div>
+				</fieldset>
+			</div>
+
+<!-- TAB MEDIA EXPOSURE -->
+			<div id="eod-details-tabs-media-exposure">
+				<fieldset>
+					<div class="table">
+						<div class="cell dialog-input-wrapper">
+							<span class="dialog-input-label">[% organisation %] in the media</span><br>
+							<textarea name="media_exposure" id="eod-details-media-exposure-text" class="input-default scroll-y-always include-in-form font-courier">[% eod.media_exposure %]</textarea>
+						</div>
+						<div class="cell eod-details-publications-selection-cell">
+							<span class="dialog-input-label">Select time frame</span><br>
+							<div class="eod-publications border-default">
+								<span>Date from:</span><br>
+								<input id="eod-details-media-exposure-start-date" name="media_exposure_begin_date" type="text" value="[% media_exposure_begin_date %]" class="input-default date-picker">
+								<input type="text" class="time start input-default" id="eod-details-media-exposure-begin-time" name="media_exposure_begin_time" value="">
+								<br><br>
+								<span>Date to:</span><br>
+								<input id="eod-details-media-exposure-end-date" name="media_exposure_end_date" type="text" value="[% media_exposure_end_date %]" class="input-default date-picker">
+								<input type="text" class="time end input-default" id="eod-details-media-exposure-end-time" name="media_exposure_end_time" value="">
+
+								[% IF write_right %]
+								<br><br>
+								<div class="block">
+									<input type="button" class="button" id="btn-eod-details-apply-media-exposure" value="&lt; Apply selection">
+								</div>
+								[% END %]
+							</div>
+						</div>
+					</div>				
+				</fieldset>
+			</div>
+
+			[% IF !isNewEod %]
+<!-- TAB PREVIEW -->
+			<div id="eod-details-tabs-preview">
+				<fieldset>
+					<div class="dialog-input-wrapper block" data-printable="created by [% eod.created_by %]">
+						<span class="dialog-input-label">Preview</span><br>
+						<textarea name="preview_txt" id="eod-details-preview-text" class="input-default scroll-y-always font-courier publications-details-preview" readonly="readonly"></textarea>
+					</div>
+				</fieldset>			
+			</div>
+			[% END %]
+		</div>
+	</form>
+</div>

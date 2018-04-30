@@ -1,0 +1,103 @@
+==== Taranis 3.4 CHANGES
+
+Please see the Installation Guide for upgrade instructions.
+
+=== Version 3.4.1
+
+Changes:
+- drop support for apache httpd 2.2
+
+Fixes:
+- db name of photo_import_id_seq --> import_photo_id_seq during upgrade
+- install on openSUSE 42.3 and Tumbleweed
+- directory mode for cpe- and cve-import directories.
+- #139 change in advisory platform or product list influences the other
+- #143 CVE details popup on assess page
+- #148 stopping in taranis which is already stopped will not change a thing
+- #149 remove trailing white-spaces before signing
+- #153 not showing statistics
+- #164 improve "taranis install" from git
+- #167 showing custom searches for user 
+- fix REST and Taranis4u
+- restore assess shortcut 'v'
+- silence sparse warnings in phising checker
+
+Improvements:
+- support RedHat 7.4EL
+- #79 Upgrade license from EUPL 1.1 to EUPL 1.2
+- #79 Change the way that copyright and license is included in the code.
+- #79 Remove personal names from the code
+- allow home of taranis in other tree, f.i. /opt
+- accept missing / after br in sending templates
+- group-write on apache log directory
+- #163 prefer local in $PATH 
+- #168 source profile from (cron) script
+
+=== Version 3.4.0
+
+Security fixes
+- Fixed vulnerabilities reported by MilCERT Austria:
+   - Stored XSS vulnerability in the HTMLFeed parser.
+   - XSS vulnerability in the sources import dialog.
+   - XSS vulnerability in displaying email attachment filenames.
+
+Improvements:
+- The Taranis page adapts to two screen widths, FullHD and half-width FullHD.
+- Comments and actions in Analysis items are improved.
+- The menu shows unread items per Assess category.
+- Extracted CVE-IDs are now shown directly in Assess items.
+- Number of results is shown in Assess.
+- New Taranis logo.
+- Using postgres trigrams to search faster.
+- By default passwords are now hashed with bcrypt with cost factor 10. Old
+  passwords are updated transparently.
+- Sequence ids get separate ranges (optional).
+- Button copy assess item to clipboard (shortcut 'e').
+- Toggle to only show 'in use' platforms and products when writing an advisory.
+- Support for SELinux installation (experimental).
+- Much faster archiving of items.
+- Twitter retweets will not show up again.
+- The same assess items can be collected for different categories.
+- Mail::Message replaces Mail::Builder to create emails.
+- Separate scripts now function as sub-commands of the 'taranis' command,
+  which does not need root rights.
+
+Changed functionality:
+- CVE-IDs are show in natural order instead of numerical order.
+- Removed the 1000 items per page limit in Assess.
+- Importing a photo with products where the productname or producer is empty
+  are no longer silently dropped.
+- The submenu under Analysis in now alphabetically sorted.
+- Whitespace before and after search queries is now removed.
+- Default ports for http and https are added to sources are now omitted when
+  a source is fetched.
+- TLP:Amber message will automatically get the text "TLP:AMBER" prepended
+  to the subject.
+
+Bugfixes:
+- Fixed a bug where double newlines occured in XML advisories.
+- Fixed an XML advisory import bug.
+- TLP (Traffic Light Protocol) is written correctly now.
+- Fix collector crash due to not catching database errors.
+- Fixed several bugs in the Dossier export functionality.
+- Fixed broken UTF-8 encoding in email subjects.
+- Fixed visual bugs related to <pre> elements.
+- Error files written by the collector are now unique, fixing a race
+  condition.
+- Fixed a bug where advisory version 1.09 becomes 1.090.
+- The collector now prepends links which start with // with http:.
+- Removed many character length restrictions.
+- solved nearly all black backgrounds in website snapshots.
+
+Installation rewrite:
+- Automated installation.
+- Everything gets installed under username 'taranis' (configurable)
+- Merge migration document into installation document: both texts are
+  rewritten and much, much smaller.
+- Replaced configuration option 'ttroot' for flexible search path TEMPLATE_PATH
+- Replaced use of 'conf/' directory into APPCONF_PATH
+- Replaced clustering_settings_path option by CLUSTERING
+- Move temporary files default into TMPDIR
+- Move webinterface/stats/tmp/ to ~/var/stats
+- Remove conf/taranis.conf.clustering.xml (unused hence confusing)
+- Move webinterface/images/icons/ to ~/var/source-icons/

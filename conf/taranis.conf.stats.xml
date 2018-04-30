@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<stats>
+	<stat>
+		<description><![CDATA[ARAKIS Firewall Top 5 (#1)]]></description>
+		<mtbc><![CDATA[60]]></mtbc>
+		<link><![CDATA[http://arakis.cert.pl/en/rTop10fw.html]]></link>
+		<image><![CDATA[http://arakis.cert.pl/en/w1_0.png]]></image>
+		<source>Arakis</source>
+		<category>Port Statistics</category>
+	</stat>
+
+	<stat>
+		<description><![CDATA[ARAKIS Firewall Top 5 (#2)]]></description>
+		<mtbc><![CDATA[60]]></mtbc>
+		<link><![CDATA[http://arakis.cert.pl/en/rTop10fw.html]]></link>
+		<image><![CDATA[http://arakis.cert.pl/en/w1_1.png]]></image>
+		<source>Arakis</source>
+		<category>Port Statistics</category>
+	</stat>
+
+	<stat>
+		<description><![CDATA[ARAKIS Firewall Top 5 (#3)]]></description>
+		<mtbc><![CDATA[60]]></mtbc>
+		<link><![CDATA[http://arakis.cert.pl/en/rTop10fw.html]]></link>
+		<image><![CDATA[http://arakis.cert.pl/en/w1_2.png]]></image>
+		<source>Arakis</source>
+		<category>Port Statistics</category>
+	</stat>
+
+	<stat>
+		<description><![CDATA[ARAKIS Firewall Top 5 (#4)]]></description>
+		<mtbc><![CDATA[60]]></mtbc>
+		<link><![CDATA[http://arakis.cert.pl/en/rTop10fw.html]]></link>
+		<image><![CDATA[http://arakis.cert.pl/en/w1_3.png]]></image>
+		<source>Arakis</source>
+		<category>Port Statistics</category>
+	</stat>
+
+	<stat>
+		<description><![CDATA[ARAKIS Firewall Top 5 (#5)]]></description>
+		<mtbc><![CDATA[60]]></mtbc>
+		<link><![CDATA[http://arakis.cert.pl/en/rTop10fw.html]]></link>
+		<image><![CDATA[http://arakis.cert.pl/en/w1_4.png]]></image>
+		<source>Arakis</source>
+		<category>Port Statistics</category>
+	</stat>
+
+</stats>

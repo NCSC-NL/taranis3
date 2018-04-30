@@ -1,0 +1,6 @@
+<div class="center">
+	<div class="block error-message center">
+		<img src="[% webroot %]/images/smile_sad_48.png" alt="ERROR"><br>
+		<span>You do not have permission for this action!</span>
+	</div>
+</div>

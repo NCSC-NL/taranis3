@@ -1,0 +1,28 @@
+[% USE date %]
+[% IF renderItemContainer %]
+<div class="report-todo-item item-row" id="[% todo.id %]">
+[% END %]
+		
+	<div class="report-todo-item-description block">
+		<span>[% todo.description %]</span>
+	</div>
+
+	<div class="report-todo-item-due-date block date-width-default">
+		<span>[% date.format( todo.due_date.stripSeconds, format = '%d-%m-%Y' ) %]</span>
+	</div>
+
+	<div class="report-todo-item-done-status block">
+		<meter max="100" value="[% todo.done_status %]" optimum="100" title="[% todo.done_status %]% done"></meter>
+	</div>
+
+	<div class="block align-block-right">
+	[% IF write_right %]
+		<img src="[% webroot %]/images/icon_modify.png" alt="edit" title="edit to-do" class="pointer btn-edit-report-todo" data-id="[% todo.id %]">
+		<img src="[% webroot %]/images/icon_delete.png" alt="delete" title="delete to-do" class="pointer btn-delete-report-todo" data-id="[% todo.id %]">
+	[% ELSE %]
+		<img src="[% webroot %]/images/icon_details.png" alt="view" title="view details" class="pointer btn-view-report-todo" data-id="[% todo.id %]">
+	[% END %]		
+	</div>
+[% IF renderItemContainer %]
+</div>
+[% END %]

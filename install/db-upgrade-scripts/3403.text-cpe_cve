@@ -1,0 +1,12 @@
+#!perl
+
+use warnings;
+use strict;
+
+sub {
+	my ($db, %args) = @_;
+
+	$db->query( <<'__RUN__');
+ALTER TABLE cpe_cve ALTER COLUMN cve_id TYPE TEXT;
+__RUN__
+};

@@ -1,0 +1,27 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden[% END %] ui-state-error ui-corner-all">[% message %]</div>
+	
+	<div class="dialog-title">
+		<span>CVE Files configuration</span>
+	</div>
+	
+	<form id="form-cve-files">
+		<fieldset>
+			[% FOREACH cveFile IN cveFiles %]
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Download URL</span><br>
+				<input type="text" value="[% cveFile.file_url %]" name="file_url" class="input-default dialog-input-text">
+				<img src="[% webroot %]/images/icon_delete.png" alt="delete" title="delete" class="pointer btn-delete-cve-file align-middle">
+			</div>
+			[% END %]
+			
+			<div class="dialog-input-wrapper block hidden">
+				<span class="dialog-input-label">Download URL</span><br>
+				<input type="text" value="" name="file_url" class="input-default dialog-input-text">
+				<img src="[% webroot %]/images/icon_delete.png" alt="delete" title="delete" class="pointer btn-delete-cve-file align-middle">
+			</div>
+			<br>
+			<span class="span-link" id="cve-file-add">Add URL</span>
+		</fieldset>
+	</form>
+</div>

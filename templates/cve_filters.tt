@@ -1,0 +1,24 @@
+<div class="filter-block filter-block-separator">
+
+	<form id="form-cve-search">
+		<div class="block">
+			<label for="cve-filters-search">CVE ID Search</label><br>
+			<input id="cve-filters-search" name="search" type="text" class="input-default">
+		</div>
+		<div class="block">
+			<span>&nbsp;</span>
+			<input type="button" id="btn-cve-search" class="button" value="Search!">
+		</div>
+	</form>
+</div>
+
+<div class="action-block filter-block-separator">
+[% IF is_admin +%]
+	<div class="block">
+		<input type="button" class="button" id="btn-manage-cve-files" value="Manage CVE download files">
+	</div>
+[% END %]
+	<div class="block align-block-right">
+		<span class="bold page-title">CVE Descriptions</span>
+	</div>
+</div>

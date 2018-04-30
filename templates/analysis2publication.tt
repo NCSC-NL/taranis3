@@ -1,0 +1,87 @@
+<div class="dialog-form-wrapper">
+	<div id="dialog-error" class="hidden"></div>
+
+	[% IF linkedAdvisories && linkedAdvisories.size > 0 %]
+	<div class="ui-state-highlight ui-corner-all dialog-highlight">
+	    Warning:
+		[% IF linkedAdvisories.size == 1 %] there is an unsent advisory,
+		[% ELSE %]                          there are unsent advisories,
+		[% END %] created from this analysis.
+	</div>
+	[% END %]
+
+	<fieldset data-analysisid="[% analysis_id %]">
+
+		<div class="dialog-input-wrapper block">
+			<span class="dialog-input-label">Publication options</span><br>
+[%#
+			<select id="analysis-to-publication-type" class="select-single dialog-input-text-wide">
+ %]
+	[%- IF advisory_right +%]
+		[% items = linkedItemsContainingAdvisories %]
+		[% IF items && items.size > 0 %]
+			<input type="radio" name="analysis-to-publication-action"
+			 value="advisory_import">&nbsp;import an XML advisory<br>
+
+		    <div class="dialog-input-wrapper block" id="analysis-to-publication-import-settings">
+			<span class="dialog-input-label">Select an assess item as source for the XML advisory</span><br>
+			<select id="analysis-to-publication-import-source" class="select-single dialog-input-text-wide">
+			[% FOREACH item IN items %]
+				<option value="[% item.email_item_id %]">[% item.title %]</option>
+			[% END %]
+			</select>
+			</div>
+		[% END %]
+
+			<input type="radio" name="analysis-to-publication-action"
+			 id="analysis-to-publication-create" value="advisory"
+			 checked><label for="analysis-to-publication-create">create
+			 a new advisory</label><br>
+			<input type="radio" name="analysis-to-publication-action"
+			 id="analysis-to-publication-update" value="advisory_update"
+             ><label for="analysis-to-publication-update">update the
+			 text of a published advisory</label><br>
+			<input type="radio" name="analysis-to-publication-action"
+			 id="analysis-to-publication-forward" value="forward" checked
+			 ><label for="analysis-to-publication-forward">create a
+			 new FORWARD advisory</label><br>
+			<input type="radio" name="analysis-to-publication-action"
+			 id="analysis-to-publication-forwupd" value="forward_update"
+			 ><label for="analysis-to-publication-forwupd">update the
+			 text of a published FORWARD advisory</label><br>
+		[% IF accept_late_links %]
+			<input type="radio" name="analysis-to-publication-action"
+			 id="analysis-to-publication-links" value="advisory_link"
+			 ><label for="analysis-to-publication-links">link to an
+			 existing related advisory
+			([% advisories_id_match.size %] share CVE-id's)</label><br>
+
+			<div class="dialog-input-wrapper block" id="analysis-to-publication-link">
+				<span class="dialog-input-label">Select related from existing advisories:</span><br>
+				<select name="" id="link-analysis-to-advisory" size="14"
+				 class="dialog-input-text-wide select-single">
+				[% FOREACH advisory IN advisories_id_match %]
+				<option value="[% advisory.details_id %]" class="link-advisory-match">[% advisory.named_id _ ' [v' _ advisory.version _ '] ' _ advisory.publication_title.substr(0,100) %] <em>(shares CVE)</em></option>
+				[% END %]
+				</select>
+				<label for="link-to-publication-search" class="dialog-input-label">Search publications</label><br>
+				<input type="text" name="link-to-publication-search" id="link-to-publication-search" class="input-default dialog-input-text">
+				<input type="button" class="button" value="Search" id="btn-link-to-publication-search">
+				<br>&nbsp;<br>
+
+				<span class="dialog-input-label">Link these news items from analysis:</span><br>
+				<table class="table-generic">
+				[% FOREACH item IN linkedItems %]
+				<tr><td><input type="checkbox" name="link-item"
+					 	value="[% item.digest | uri %]" checked></td>
+					<td>[% item.source %]</td>
+					<td><a href="[% item.link %]">[% item.title %]</a></td></tr>
+				[% END %]
+				</table>
+			</div>
+		[% END %]
+	[% END +%]
+		</div>
+
+	</fieldset>
+</div>

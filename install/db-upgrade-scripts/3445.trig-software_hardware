@@ -1,0 +1,13 @@
+#!perl
+
+use warnings;
+use strict;
+
+sub {
+	my ($db, %args) = @_;
+
+	$db->query( <<'__RUN__');
+CREATE INDEX software_hardware_name_trgm_idx on software_hardware using GIN(name gin_trgm_ops);
+CREATE INDEX software_hardware_producer_trgm_idx on software_hardware using GIN(producer gin_trgm_ops);
+__RUN__
+};

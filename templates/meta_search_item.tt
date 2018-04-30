@@ -1,0 +1,45 @@
+[% SWITCH result.type %]
+	[% CASE 'assess' %]
+		[% extraAttributes = 'data-isArchived="' _ result.is_archived _ '"' %]	
+		[% typeClass = 'assess-details-link' %]
+	[% CASE 'analysis' %]
+		[% result.title = 'AN-' _ result.id.substr(0,4) _ '-' _ result.id.substr(4) _ ': ' _ result.title %]
+		[% typeClass = 'analyze-item-details-link' %]
+	[% CASE 'advisory' %]
+		[% result.title = result.govcertid _ ' [v' _ result.version _ ']: ' _ result.title %]
+		[% extraAttributes = 'data-pubtype="advisory"' %]
+		[% typeClass = 'publications-preview-link' %]
+	[% CASE 'forward' %]
+		[% result.title = result.govcertid _ ' [v' _ result.version _ ']: ' _ result.title %]
+		[% extraAttributes = 'data-pubtype="forward"' %]
+		[% typeClass = 'publications-preview-link' %]
+	[% CASE 'eow' %]
+		[% result.title = result.title _ ' [' _ result.created _ ']' %]
+		[% extraAttributes = 'data-pubtype="eow"' %]
+		[% typeClass = 'publications-preview-link' %]
+	[% CASE 'eos' %]
+		[% result.title = result.title _ ' [' _ result.created _ ']' %]
+		[% extraAttributes = 'data-pubtype="eos"' %]
+		[% typeClass = 'publications-preview-link' %]
+	[% CASE 'eod' %]
+		[% result.title = result.title _ ' [' _ result.created _ ']' %]
+		[% extraAttributes = 'data-pubtype="eod"' %]
+		[% typeClass = 'publications-preview-link' %]
+[% END %]
+
+<div class="meta-search-item item-row break-word">
+
+	<div class="meta-search-item-date block">
+		<span>[% IF result.date == ""; "not published"; ELSE; result.date.substr( 0, -4 ); END %]</span>
+	</div>		
+
+	<div class="meta-search-item-title-description block">
+		<span class="span-link metasearch-result-link [% typeClass %]" data-id="[% result.id | uri %]" [% extraAttributes %]>[% result.title %]</span><br>
+		<div>[% result.description %]</div>
+		[% IF result.tags != "" +%]
+		<br>
+		<span class="bold">Matched tags: [% result.tags %]</span>
+		[% END +%]
+	</div>
+	
+</div>

@@ -1,0 +1,146 @@
+#!/usr/bin/env perl
+# Install the binaries (may need to generate man-pages)
+
+use warnings;
+use strict;
+
+use Carp       qw(confess);
+use File::Find qw(find);
+use File::Copy qw(copy);
+
+umask 022;
+
+use Taranis::Install::Config qw(config_release taranis_sources config_generic
+	become_user_taranis appconfig_path);
+use Taranis::Install::Perl   qw(pod2man perl5lib);
+
+become_user_taranis;
+
+my $generic = config_generic;
+my $release = config_release;
+my $version = $release->{version};
+
+if($version eq 'git') {
+	print "*   binaries in git are used without copy\n";
+	exit 0;
+}
+
+my $dest	= $release->{install};
+my $taranis = taranis_sources $version
+	or confess;
+
+my $source_bin = "$taranis/bin/";
+my $dest_bin   = "$dest/bin";
+
+foreach my $unchanged ( qw/prompt git-prompt.sh create-patch collector.pl/ ) {
+	my $src  = "$source_bin/$unchanged";
+	my $dest = "$dest_bin/$unchanged";
+	next if -f $dest && -M $dest < -M $src;
+
+	print "* providing $dest\n";
+	copy $src, $dest
+		or die "ERROR: cannot copy from $src: $!\n";
+
+	chmod 0755, $dest;
+}
+
+
+=pod
+
+*** NO Manuals yet
+
+print "*   creating manuals\n";
+
+find +{
+	wanted => sub {
+		#XXX no manuals yet
+		s/\.pl$// or return;
+		pod2man(1, $File::Find::name, $_);
+	},
+	no_chdir => 1,
+}, $source_bin;
+
+
+=cut
+
+###
+### MODIFY THE MAIN 'taranis' SCRIPT
+###
+
+# This script is called via sudo, which makes it loose all environment
+# variables.  We need to hard-code them into the source.
+
+my $script_in  = "$source_bin/taranis";
+my $script_out = "$dest_bin/taranis";
+print "*   providing $script_out\n";
+
+open my $in, '<:encoding(utf8)', $script_in
+	or die "ERROR: cannot read $script_in: $!\n";
+
+open my $out, '>:encoding(utf8)', $script_out
+	or die "ERROR: cannot write $script_out: $!\n";
+
+while(my $line = $in->getline) {
+	if($line !~ m/^\#\*\*\*\s+BEGIN/) {
+		$out->print($line);
+		next;
+	}
+
+	# Skip rest of block
+	1 while +($line = $in->getline) && $line !~ m/^\#\*\*\*\s+END/;
+
+	my $perl5lib  = join "', '", perl5lib $version;
+	my $appconfig = join ':', appconfig_path;   # may not be needed (yet)
+
+	my $templates = join ':', grep -d,
+		"$release->{extension}/templates",
+		"$generic->{extension}/templates",
+		"$release->{install}/templates";
+
+	my $scl = '';
+	if($ENV{X_SCLS}) {
+		# RedHat's Software Collection
+		# It is not possible to load the environment variables from
+		# scl_config enable postgres* once we started this perl program.
+		# But we need them: this program may have been started via sudo
+		# without login procedure to enable it.  Hence: we have to take
+		# the environment variables from root during install.  That's bad.
+
+		$scl = <<__SCL_ENV;
+\$ENV{LD_LIBRARY_PATH} = '$ENV{LD_LIBRARY_PATH}';
+\$ENV{PATH}           .= ':$ENV{PATH}';
+\$ENV{MANPATH}        .= ':$ENV{MANPATH}';
+\$ENV{XDG_DATA_DIRS}   = '$ENV{XDG_DATA_DIRS}';
+\$ENV{PKG_CONFIG_PATH} = '$ENV{PKG_CONFIG_PATH}';
+\$ENV{X_SCLS}          = '$ENV{X_SCLS}';
+__SCL_ENV
+	}
+
+	$out->print(<<__HARDCODED);
+#*** BEGIN: Next lines get changed during install
+use lib '$perl5lib';
+our \$setup_generic    = '$generic->{filebase}';
+\$ENV{APPCONFIG_PATH}  = '$appconfig';
+\$ENV{TMPDIR}          = '$release->{tmp}';
+\$ENV{CLUSTERING}      = '$release->{clustering}';
+\$ENV{SOURCE_ICONS}    = '$generic->{source_icons}';
+\$ENV{TARANIS_VERSION} = my \$version = '$version';
+\$ENV{TEMPLATE_PATH}   = '$templates';
+\$ENV{PHANTOMJS}       = '$generic->{phantomjs}/bin/phantomjs';
+\$ENV{PHANTOMJS_LIB}   = '$release->{install}/PhantomJS';
+$scl
+#*** END
+__HARDCODED
+}
+
+$in->close
+	or die "ERROR while reading $script_in: $!\n";
+
+$out->close
+	or die "ERROR while writing $script_out: $!\n";
+
+chmod 0755, $script_out
+	or die "ERROR cannot add x to $script_out: $!\n";
+
+
+exit 0;

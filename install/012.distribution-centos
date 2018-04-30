@@ -1,0 +1,35 @@
+#!/usr/bin/env perl
+# Install common packages needed on CentOS.  We are in a very early
+# stage without knowledge of configuration.
+use warnings;
+use strict;
+
+use Taranis::Install::Bare   qw(is_centos);
+use Taranis::Install::CentOS qw(centos_packages);
+
+unless(is_centos) {
+	print "*   skipped: not running on CentOS.\n";
+	exit 0;
+}
+
+centos_packages
+	'epel-release',
+	'wget',              # to access CPAN
+	'sudo',              # to call bin/taranis as root
+	'lbzip2',            # used by tar with bzip2
+	'rsync',
+
+	# We need these before we get to install Perl modules
+	'expat-devel',       # SAX
+	'make',              # to install some Perl XS packages
+	'gcc',
+	'gcc-c++',
+	'perl-JSON',         # need it early for configuration setup
+	'perl-YAML',         # to speed-up perl module installation
+	'perl-version',
+	'perl-CPAN',
+	'perl-Data-Dumper',  # to be able to create the CPAN Config
+	'policycoreutils-python',
+	;
+
+exit 0;

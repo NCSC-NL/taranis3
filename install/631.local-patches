@@ -1,0 +1,99 @@
+#!/usr/bin/env perl
+# Create patched files
+
+use warnings;
+use strict;
+
+use File::Basename qw(basename dirname);
+
+use Data::Dumper;
+
+use Taranis::Install::Util qw(read_json);
+use Taranis::Install::Config qw(
+	config_generic config_release become_user_taranis
+);
+
+sub mkdirhier($);
+
+umask 022;
+
+my $patch_dir = 'local-patches';
+my $todo_fn    = "$patch_dir/00TODO.json";
+unless(-f $todo_fn) {
+	print "*   no patches\n";
+	exit 0;
+}
+
+become_user_taranis;
+
+my $version = $ENV{TARANIS_VERSION} or die "no version";
+
+my $generic  = config_generic;
+my $release  = config_release $version;
+
+# The destination files are always earlier in the search paths than the
+# source files which are are patching.
+my $dest_dir   = $release->{extension};
+
+my $todos      = read_json $todo_fn;
+print "**  found ".@$todos." patches\n";
+
+my $source_for;
+if($version eq 'git') {
+	# Until T4, the directory names in the distribution differ from the
+	# installed.  This only hinders uninstalled git use
+	$source_for = sub($) {
+		my $base = shift;
+		for($base) {
+			   s!^perl5/!pm/!
+			|| s!^modperl/!scripts/!
+			|| s!^web-static/!webinterface/!
+		}
+		"$release->{sources}/taranis-git/$base";
+	}
+} else {
+	$source_for = sub { "$release->{install}/$_[0]" };
+}
+
+PATCH:
+foreach my $todo (@$todos) {
+	my $fn    = $todo->{filename};
+	my $patch = $todo->{patch};
+
+	my $from  = $source_for->($fn);
+	-f $from or die "ERROR: cannot find $from\n";
+
+	my $to    = "$dest_dir/$fn";
+	my $patchfn = "$patch_dir/$patch";
+
+	next PATCH
+		if -f $to && -M $to < -M $patchfn && -M $to < -M $from;
+
+	print "*   apply $patch\n";
+
+	mkdirhier(dirname $to);
+
+	system 'patch',
+		'--quiet',
+		'--output' => $to,
+		$from, $patchfn
+		and die "ERROR: patching failed on $to: $!\n";
+
+	system 'chmod',
+		'--reference' => $from,
+		$to
+		and die "ERROR: chmod failed on $to: $!\n";
+}
+
+exit 0;
+
+### Helpers
+
+sub mkdirhier($) {
+	my $dir = shift;
+	return if -d $dir;
+
+	mkdirhier(dirname $dir);
+	mkdir $dir;
+}
+

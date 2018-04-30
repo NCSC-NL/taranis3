@@ -1,0 +1,25 @@
+<div id="publications-content-heading" class="content-heading">
+	<div id="publications-content-heading-id" class="block">
+		<span>[% page_columns.id_column_name %]</span>
+	</div>
+	<div id="publications-content-heading-title" class="block">
+		<span>[% page_columns.title_column_name %]</span>
+	</div>
+</div>
+
+[% IF publications.size > 0 %]
+	[% FOREACH publication IN publications %]
+	
+		[% INCLUDE publications_item.tt %]
+	
+	[% END %]
+[% ELSE %]
+<div class="item-row" id="empty-row">No publications found...</div>
+
+[% END %]
+
+<div class="action-block filter-block-separator">
+	<div class="center" id="number-of-results">&mdash; [% page_bar.number_results_text %] &mdash;</div>
+</div>
+
+[% PROCESS page_bar.tt %]

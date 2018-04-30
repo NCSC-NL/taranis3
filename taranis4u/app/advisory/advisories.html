@@ -1,0 +1,6 @@
+<ul>
+	<li ng-repeat="advisory in advisories.result">
+		<a ng-href="#/advisories/{{ advisory.id }}"><span class="font-monospace bold">{{ advisory.govcertid }} v{{ advisory.version }}</span> &mdash; <span class="marked">{{ advisory.title }}</span></a><br>
+		<hr class="thin" ng-if="!$last">
+	</li>
+</ul>

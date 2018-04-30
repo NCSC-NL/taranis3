@@ -1,0 +1,46 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden[% END %] ui-state-error ui-corner-all">[% message %]</div>
+
+	<div class="dialog-title">
+		<span>[% title %]</span>	
+	</div>
+	
+	<form id="form-assess-mail-item">
+		<input type="hidden" value="[% item_id | uri %]" id="assess-mail-item-id" name="item_id">
+		<input type="hidden" value="[% screenshot_id %]" id="assess-mail-item-screenshot-id" name="screenshot_id">
+		<input type="hidden" value="[% screenshot_size %]" id="assess-mail-item-screenshot-size" name="screenshot_size">
+		
+		<fieldset>
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Mail from</span><br>
+		        <span>[% mailfrom_sender %]&lt;[% mailfrom_email %]&gt;</span>				
+			</div><br>
+
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Mail to</span><br>
+				<select id="assess-mail-to" name="mailto" multiple="multiple" size="8" class="select-multiple">
+				[% FOREACH address IN mailto %]
+					<option value="[% address %]">[% address %]</option>
+				[% END %]
+				</select>
+			</div><br>
+
+			<div class="dialog-input-wrapper block">
+				<input type="text" name="extra" class="input-default dialog-input-text" id="assess-mail-extra-address">
+				<input type="button" class="button" id="btn-assess-mail-add-address" value="Add">
+			</div><br>
+
+			<div class="dialog-input-wrapper block">
+				<label for="assess-mail-subject" class="dialog-input-label">Subject</label><br>
+				<input type="text" name="subject" id="assess-mail-subject" class="input-default dialog-input-text" value="[% title %]">
+			</div><br>
+
+			<div class="dialog-input-wrapper block">
+				<label for="" class="dialog-input-label">Message</label><br>
+				<textarea name="description" id="assess-mail-description" class="textarea-preview">[% body %]
+[% IF link && is_mail == 0 ; "\n\nMore info: " _ link; END %]</textarea>
+			</div><br>
+		
+		</fieldset>
+	</form>
+</div>

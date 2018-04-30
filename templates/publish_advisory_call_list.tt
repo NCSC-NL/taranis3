@@ -1,0 +1,39 @@
+<style type="text/css">
+.tdGroupname {
+	border-top: 1px solid black;
+	border-bottom: 1px #DFDFDF solid;
+}
+
+.tdContact {
+	border-bottom: 1px #DFDFDF solid;
+	border-right: 1px #DFDFDF solid;
+}
+
+#t_call_list {
+	font-size: 10px; 
+	empty-cells: show; 
+	border-width: 0px 1px 1px;
+	border-style: solid;
+	border-color: black;
+}
+</style>
+
+<table id="t_call_list" cellspacing="0" cellpadding="3">
+  [%- FOREACH group IN calling_list +%]
+	[%- NEXT IF group.is_called -%]
+	<tr class="trGroupname">
+		<td colspan="4" class="tdGroupname"><b>[% group.groupname %]</b></td>
+	</tr>
+	[% FOREACH contact IN group.individuals %]
+	<tr>
+		<td class="tdContact">[% contact.firstname _ ' ' _ contact.lastname _ ' (' _ contact.role_name _ ')' %]</td>
+		<td class="tdContact">tel [% contact.tel_regular %]</td>
+		<td class="tdContact">mob [% contact.tel_mobile %]</td>
+		<td class="tdContact">informed / not informed</td>
+	</tr>
+	[% END %]
+	<tr>
+		<td colspan="4" class="tdNotes"><i>Notes:</i><br /><pre>[% group.group_notes %]</pre></td>
+	</tr>
+  [% END %]
+</table>

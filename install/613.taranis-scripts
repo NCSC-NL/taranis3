@@ -1,0 +1,40 @@
+#!/usr/bin/env perl
+# Install the scripts
+
+use warnings;
+use strict;
+
+use Carp           qw(confess);
+use File::Basename qw(basename);
+
+use Taranis::Install::Bare   qw(clone_dir);
+use Taranis::Install::Config qw(config_release taranis_sources
+	become_user_taranis);
+
+sub scriptdir_clone($$);
+
+become_user_taranis;
+
+my $release = config_release;
+
+my $version = $release->{version};
+if($version eq 'git') {
+	print "*   development scripts in git are used without copy\n";
+	exit 0;
+}
+
+my $dest	= $release->{install};
+my $taranis = taranis_sources $version
+	or confess;
+
+exit 0;
+
+sub scriptdir_clone($$) {
+	my ($from, $to) = @_;
+	my $name = basename $from;
+
+	print "**  clone $name -> $to\n";
+	clone_dir $from, $to;
+}
+
+exit 0;

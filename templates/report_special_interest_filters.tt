@@ -1,0 +1,23 @@
+<div class="filter-block filter-block-separator">
+	<form id="form-report-special-interest-search">
+		<div class="block">
+			<label for="report-special-interest-filters-search">Search</label><br>
+			<input id="report-special-interest-filters-search" name="search" type="text" class="input-default search-default">
+		</div>
+		<div class="block">
+			<span>&nbsp;</span>
+			<input type="button" id="btn-report-special-interest-search" class="button" value="Search!">
+		</div>
+	</form>
+</div>
+
+<div class="action-block filter-block-separator">
+	[% IF write_right %]
+	<div class="block">
+		<input type="button" id="btn-add-report-special-interest" class="button" value="Add new special interest">
+	</div>
+	[% END %]
+	<div class="block align-block-right">
+		<span class="bold page-title">Report Special Interest</span>
+	</div>
+</div>

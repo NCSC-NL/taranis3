@@ -1,0 +1,19 @@
+[% IF renderItemContainer %]
+<div class="cve-template-item item-row" id="[% cveTemplate.id %]">
+[% END %]
+		
+	<div class="cve-template-item-description block">
+		<span>[% cveTemplate.description %]</span>
+	</div>
+
+	<div class="block align-block-right">
+	[% IF write_right %]
+		<img src="[% webroot %]/images/icon_modify.png" alt="edit" title="edit cve template" class="pointer btn-edit-cve-template" data-id="[% cveTemplate.id %]">
+	[% ELSE %]
+		<img src="[% webroot %]/images/icon_details.png" alt="view" title="view cve template details" class="pointer btn-view-cve-template" data-id="[% cveTemplate.id %]">
+	[% END %]
+		<img src="[% webroot %]/images/icon_delete.png" alt="delete" title="delete cve template" class="pointer btn-delete-cve-template" data-id="[% cveTemplate.id %]">
+	</div>
+[% IF renderItemContainer %]
+</div>
+[% END %]

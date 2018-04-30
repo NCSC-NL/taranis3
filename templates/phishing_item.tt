@@ -1,0 +1,38 @@
+[% IF renderItemContainer %]
+<div class="phishing-item item-row" data-id="[% phishingItem.id %]">
+[% END %]
+
+	<div class="phishing-item-url block break-word" data-cell="url">
+		<span title="[% phishingItem.url %]">
+			[% phishingItem.url %]
+		</span>
+	</div>		
+
+	<div class="phishing-item-reference block" data-cell="reference">
+		[% phishingItem.reference %]
+	</div>
+
+	<div class="phishing-item-campaign block" data-cell="campaign">
+		[% phishingItem.campaign %]
+	</div>
+
+	<div class="phishing-item-date-time-added block" data-cell="added" data-sort="[% phishingItem.datetime_added %]" data-sorttype="number">
+		[% phishingItem.dt_added %]
+	</div>
+	
+	<div class="phishing-item-status block" data-cell="status" data-sort="[% phishingItem.status %]">
+		<img src="[% webroot %]/images/status_[% phishingItem.status %].gif" alt="[% phishingItem.status %]">
+	</div>
+	
+	<div class="phishing-item-date-time-last-status block" data-cell="last status" data-sorttype="number" data-sort="[% IF phishingItem.datetime_down; phishingItem.datetime_down; ELSIF phishingItem.datetime_hash_change; phishingItem.datetime_hash_change; ELSE; phishingItem.datetime_added; END %]">
+		[% phishingItem.dt_laststatus %]
+	</div>
+
+	<div class="phishing-item-actions block align-block-right">
+		<img src="[% webroot %]/images/icon_modify.png" alt="edit" title="edit reference" class="pointer btn-edit-reference" data-id="[% phishingItem.id %]">
+		<img src="[% webroot %]/images/icon_delete.png" class="pointer" alt="delete" title="Delete phishing website" id="btn-delete-phishing-item" data-id="[% phishingItem.id %]">
+		<img src="[% webroot %]/images/icon_questionmark_green.png" id="btn-whois-phishing-item" class="pointer" alt="Whois" title="Whois" data-phishingurl="[% phishingItem.url | url %]">
+	</div>
+[% IF renderItemContainer %]
+</div>
+[% END %]

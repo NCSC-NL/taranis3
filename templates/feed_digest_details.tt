@@ -1,0 +1,58 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden[% END %] ui-state-error ui-corner-all">[% message %]</div>
+	
+	<div class="dialog-title">
+		<span>[% feed.url %]</span>
+	</div>
+	
+	<form id="form-feeddigest-details" data-id="[% IF feed.id; feed.id; ELSE; 'NEW'; END %]">
+	
+		<fieldset>
+			<div class="dialog-input-wrapper block">
+				<label for="feeddigest-details-url" class="dialog-input-label">URL *</label><br>
+				<input type="text" name="url" id="feeddigest-details-url" class="input-default dialog-input-text-wide" value="[% feed.url %]">
+			</div><br>
+			<div class="dialog-input-wrapper block">
+				<label for="feeddigest-details-toaddress" class="dialog-input-label">Sending Address *</label><br>
+				<input type="text" name="to_address" id="feeddigest-details-toaddress" class="input-default dialog-input-text-wide" value="[% feed.to_address %]">
+			</div>
+			<br>
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Sending at (hour of day) *</span><br>
+				<select name="sending_hour" id="feeddigest-details-sendinghour" class="select-single dialog-input-text-narrow">
+					[% FOR hour IN [0..23] %]
+					[% NEXT IF notbefore.defined && hour <= notbefore %]
+					[% NEXT IF notafter.defined && hour >= notafter %]
+					<option value="[% hour %]" [% IF feed.sending_hour == hour %]selected="selected"[% END %]>[% IF hour.length == 1 %]0[% END %][% hour %]:00</option>
+					[% END %]
+				</select>
+			</div>
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Strip HTML *</span><br>
+				<input type="radio" name="strip_html" id="feeddigest-details-striphtml-yes" value="1" [% IF feed.strip_html == 1 || feed.strip_html == '' %] checked="checked"[% END %]>
+				<label for="feeddigest-details-striphtml-yes">Yes</label> 
+				<input type="radio" name="strip_html" id="feeddigest-details-striphtml-no" value="0" [% IF feed.strip_html == 0 %] checked="checked"[% END %]>
+				<label for="feeddigest-details-striphtml-no">No</label>
+			</div>
+			<br>
+
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Heading template</span><br>
+				<textarea name="template_header" id="feeddigest-details-template-header" class="input-default feeddigest-details-templates">[% feed.template_header %]</textarea><br>
+				<span class="italic">feed vars: __title__, __description__, __pubdate__, __link__, __language__, __copyright__, __itemcount__</span>
+			</div><br>
+
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Feed item template</span><br>
+				<textarea name="template_feed_item" id="feeddigest-details-template-feed-item" class="input-default feeddigest-details-templates">[% feed.template_feed_item %]</textarea><br>
+				<span class="italic">item vars: __title__, __description__, __pubdate__, __link__, __category__, __author__</span>
+			</div><br>
+
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Footer template</span><br>
+				<textarea name="template_footer" id="feeddigest-details-template-footer" class="input-default feeddigest-details-templates">[% feed.template_footer %]</textarea><br>
+				<span class="italic">feed vars: __title__, __description__, __pubdate__, __link__, __language__, __copyright__, __itemcount__</span>
+			</div><br>
+		</fieldset>
+	</form>
+</div>

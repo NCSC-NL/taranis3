@@ -1,0 +1,35 @@
+NAME
+    Document - A module for storing document information
+
+SYNOPSIS
+    use Document;
+
+    my $doc = new Document( * $record, 'ncsc' * );
+
+DESCRIPTION
+    See the section on "Public Methods" below for details.
+
+  Public Methods
+    *PACKAGE*->new(* record, format *):
+        Returns a newly created PACKAGE object. Accepts a hash reference
+        containing the clustering parameters. Expects two arguments:
+
+           record: an array reference containing the fields of the specified format
+           format: the record format (ncsc, ittt, raw)
+
+        the following input formats are currently supported:
+
+           1. ncsc: Digest Category Source Title URL Description Timestamp [ClusterID Score]
+           2. ittt: ID Timestamp Title Description [ClusterID Score]
+           3. raw:  ID Description [ClusterID Score]
+
+        ClusterID and Score are optional, but should be set to the empty
+        list if undefined
+
+AUTHORS
+
+    Copyright (c) 2012-2013, TNO. All rights reserved.
+
+VERSION
+    1.0
+

@@ -1,0 +1,32 @@
+#!/usr/bin/env perl
+# Install the template files on their place.
+
+use warnings;
+use strict;
+
+use Carp   qw(confess);
+
+use Taranis::Install::Bare   qw(clone_dir);
+use Taranis::Install::Config qw(taranis_sources config_release become_user_taranis);
+
+become_user_taranis;
+
+my $release = config_release;
+my $version = $release->{version};
+if($version eq 'git') {
+	print "*   development sources in git are used without copy\n";
+	exit 0;
+}
+
+my $dest	= $release->{install};
+
+my $taranis = taranis_sources $version
+	or confess;
+
+my $source_templ = "$taranis/templates/";
+my $dest_templ   = "$dest/templates/";
+
+print "*   clone templates --> $dest_templ\n";
+clone_dir $source_templ, $dest_templ;
+
+exit 0;

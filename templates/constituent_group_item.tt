@@ -1,0 +1,36 @@
+[% IF renderItemContainer %]
+<div class="constituent-group-item item-row" id="[% constituentGroup.id %]">
+[% END %]
+	
+	<div class="constituent-group-item-name block [% IF constituentGroup.status != 0 %] strikethrough[% END %]">
+		<span>[% constituentGroup.name %]</span>
+	</div>		
+
+	<div class="block align-block-right">
+	
+	[% IF constituentGroup.hasIssues %]
+		<img src="[% webroot %]/images/icon_exclamation.png" alt="issues" title="has unresolved photo import issue(s)">
+	[% END %]
+	[% IF constituentGroup.use_sh AND constituentGroup.call_hh +%]
+		<img src="[% webroot %]/images/icon_phone.png" alt="phone HH" title="wishes to be called in case of H/H incident">
+	[% ELSIF NOT constituentGroup.use_sh AND constituentGroup.any_hh +%]
+		<img src="[% webroot %]/images/icon_phone.png" alt="phone HH" title="wishes to be called on any H/H incident">
+	[% ELSE %]
+		<img src="[% webroot %]/images/icon_none.png">
+	[% END +%]
+	[% IF write_right %]
+		<img src="[% webroot %]/images/icon_modify.png" alt="edit" title="edit group" class="pointer btn-edit-constituent-group" data-id="[% constituentGroup.id %]">
+	[% ELSE %]
+		<img src="[% webroot %]/images/icon_details.png" alt="view" title="view details" class="pointer btn-view-constituent-group" data-id="[% constituentGroup.id %]">
+	[% END %]
+        		
+    	<img src="[% webroot %]/images/icon_advisory.png" alt="member overview" title="member overview" class="pointer btn-constituent-group-overview" data-id="[% constituentGroup.id %]">
+					
+	[% IF write_right %]					
+		<img src="[% webroot %]/images/icon_delete.png" alt="delete" title="delete group" class="pointer btn-delete-constituent-group" data-id="[% constituentGroup.id %]">
+	[% END %]
+	
+	</div>
+[% IF renderItemContainer %]
+</div>
+[% END %]

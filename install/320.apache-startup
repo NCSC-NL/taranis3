@@ -1,0 +1,33 @@
+#!/usr/bin/env perl
+# Install the mod_perl startup script into apache's modperl module.
+
+use warnings;
+use strict;
+
+use Taranis::Install::Bare   qw(copy_file);
+use Taranis::Install::Perl   qw(perl5lib);
+use Taranis::Install::Config qw(config_generic become_user_taranis
+	taranis_sources is_newest_version);
+
+become_user_taranis;
+
+my $generic = config_generic;
+my $version = $generic->{default_version};
+
+my $dest_startup = "$generic->{lib}/apache_startup.pl";
+
+if(is_newest_version $version) {
+	# only the newest release may provide this start-up script: do not
+	# downgrade that generic feature.
+	my $sources = taranis_sources $version;
+	my $source_startup = "$sources/apache_startup.pl";
+
+	if( ! -f $dest_startup || -M $dest_startup > -M $source_startup) {
+		print "*   Installing new apache startup file in $dest_startup\n";
+		copy_file $source_startup, $dest_startup, 0644;
+	}
+} else {
+	print "*   A newer version installed $dest_startup\n";
+}
+
+exit 0;

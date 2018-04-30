@@ -1,0 +1,29 @@
+<div id="access-token-content-heading" class="content-heading">
+	<div id="access-token-content-heading-username" class="block configuration-heading-default">
+		<span>Username</span>
+	</div>
+	<div id="access-token-content-heading-fullname" class="block configuration-heading-default">
+		<span>User</span>
+	</div>
+	<div id="access-token-content-heading-last-access" class="block configuration-heading-default">
+		<span>Last access</span>
+	</div>
+	<div id="access-token-content-heading-created" class="block configuration-heading-default">
+		<span>Created</span>
+	</div>
+</div>
+
+[% IF tokens && tokens.size > 0 %]
+	[% FOREACH token IN tokens %]
+	
+		[% INCLUDE access_token_item.tt %]
+	
+	[% END %]
+[% ELSE %]
+<div class="item-row" id="empty-row">No tokens found...</div>
+
+[% END %]
+
+<div class="action-block filter-block-separator">
+	<div class="center" id="number-of-results">&mdash; [% numberOfResults %] results &mdash;</div>
+</div>

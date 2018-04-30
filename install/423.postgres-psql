@@ -1,0 +1,72 @@
+#!/usr/bin/env perl
+# Create a psql script which wraps the original psql script,
+# adding the right username, password, and hostname 
+
+use warnings;
+use strict;
+use filetest 'access';
+
+use Carp           qw(confess);
+
+use Taranis::Install::Config qw(config_release config_generic
+	become_user_taranis);
+
+become_user_taranis;
+
+my $generic  = config_generic;
+my $username = $generic->{username};
+
+my $release  = config_release;
+my $dest_bin = "$release->{install}/bin";
+my $dest     = "$dest_bin/psql";
+my $home     = $generic->{home};
+
+my $database = $release->{database};
+my $dbuser   = $database->{user};
+my $dbname   = $database->{name};
+my $dbhost   = $database->{host};
+my $dbport   = $dbhost =~ s/:([0-9]+)$// ? $1 : 5432;
+
+my $shell    = $ENV{SHELL} or confess 'SHELL?';
+my @psql     = qx(which -a psql);
+my $psql     = (grep !/^\Q$home/, @psql)[0];
+
+defined $psql
+	or die "ERROR: cannot find command psql\n";
+
+chomp $psql;
+
+-x $psql
+	or die "ERROR: $username cannot execute $psql\n";
+
+my $user     = $dbuser eq $username ? '' : " --username '$dbuser'";
+my $name     = $dbname eq $username ? '' : " --dbname '$dbname'";
+my $host     = $dbhost eq 'peer'    ? '' : " --host '$dbhost'";
+my $port     = $dbport==5432        ? '' : " --port $dbport";
+
+unless($user || $name || $host || $port) {
+	if(-f $dest) {
+		print "*   no wrapper needed: removed $dest\n";
+		unlink $dest
+			or die "ERROR: cannot remove $dest\n";
+	}
+
+	exit 0;
+}
+
+print "*   create psql wrapper at $dest\n";
+open my $p, '>:encoding(utf8)', $dest
+	or die "ERROR: cannot create script: $!\n";
+
+$p->print( <<__SCRIPT );
+#!$shell
+exec $psql$user$host$port$name "\$@"
+__SCRIPT
+
+$p->close
+	or die "ERROR while writing $dest: $!\n";
+
+chmod 0755, $dest
+	or die "ERROR: cannot set execute rights on $dest: $!\n";
+
+exit 0

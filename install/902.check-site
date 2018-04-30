@@ -1,0 +1,53 @@
+#!/usr/bin/env perl
+# Check whether we can reload the website
+
+use warnings;
+use strict;
+
+use Fcntl    qw(SEEK_END SEEK_CUR);
+
+sub _simplify_error($);
+
+my $apache_start_logfn = (grep -f,
+	 '/var/log/apache2/error_log',
+	 '/var/log/httpd/error_log',
+)[0];
+
+$apache_start_logfn ||= '/dev/null';
+
+# We cannot use an IO::File object here, because that does not support
+# seek() in older perls.
+open LOG, '<:encoding(utf8)', $apache_start_logfn
+	or die "ERROR: cannot read apache log $apache_start_logfn: $!";
+
+sysseek LOG, 0, SEEK_END;
+
+# restart the webserver, and give it a little time to produce the errors
+system apachectl => 'restart'
+	and die "ERROR: cannot restart apache: $!\n";
+
+sleep 3;   # give apache a few seonds to restart
+
+# filter the lines which got added
+sysseek LOG, 0, SEEK_CUR;      # revalidate file cache
+my @errors = grep /\[perl:error\]/, <LOG>;
+close LOG;
+
+if(@errors) {
+	print "ERROR: ", _simplify_error $_
+		for @errors;
+	print "!! find the full errors in $apache_start_logfn\n";
+	exit 1;
+}
+
+print "*   webserver restarted\n";
+
+exit 0;
+
+### HELPERS
+
+sub _simplify_error($) {
+	my $line = shift;
+	$line    =~ s/ in \@INC.*//;
+	$line    =~ s/ for server//;
+}

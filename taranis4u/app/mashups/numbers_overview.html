@@ -1,0 +1,47 @@
+<div class="center">
+	<h3>ASSESS</h3><br>
+	<div ng-init="assessStatus='unread'" class="taranis4u-block block center numbers-overview">
+		<br><h2 class="marked font-monospace bold" ng-controller="AssessItemsCountCtrl">{{ assessCount.total }}</h2>
+		<span>unread items</span><br><br>
+	</div>
+	<div ng-init="assessCategory=['news']; assessStatus='unread'" class="taranis4u-block block center numbers-overview">
+		<br><h2 class="marked font-monospace bold" ng-controller="AssessItemsCountCtrl">{{ assessCount.total }}</h2>
+		<span>unread <br>&#39;News&#39; items</span><br>
+	</div>
+	<div ng-init="assessCategory=['security-vuln']; assessStatus='unread'" class="taranis4u-block block center numbers-overview">
+		<br><h2 class="marked font-monospace bold" ng-controller="AssessItemsCountCtrl">{{ assessCount.total }}</h2>
+		<span>unread <br>&#39;Security vuln&#39; items</span><br>
+	</div>
+	<br><br><br>
+	<h3>ANALYZE</h3><br>
+	<div ng-init="analysisStatus='pending'" class="taranis4u-block block center numbers-overview">
+		<br><h2 class="marked font-monospace bold" ng-controller="AnalysesCountCtrl">{{ analysesCount.total }}</h2>
+		<span>pending analyses</span><br><br>
+	</div>
+	<div ng-init="analysisStatus='pending'; hasOwner='false'" class="taranis4u-block block center numbers-overview">
+		<br><h2 class="marked font-monospace bold" ng-controller="AnalysesCountCtrl">{{ analysesCount.total }}</h2>
+		<span>pending analyses<br>without owner</span>
+	</div>
+	<div ng-init="analysisStatus='pending'; analysisRating='medium'" class="taranis4u-block block center numbers-overview">
+		<br><h2 class="marked font-monospace bold" ng-controller="AnalysesCountCtrl">{{ analysesCount.total }}</h2>
+		<span>pending analyses<br>with medium rating</span>
+	</div>
+	<div ng-init="analysisStatus='pending'; analysisRating='high'" class="taranis4u-block block center numbers-overview">
+		<br><h2 class="marked font-monospace bold" ng-controller="AnalysesCountCtrl">{{ analysesCount.total }}</h2>
+		<span>pending analyses<br>with high rating</span>
+	</div>
+	<br><br><br>
+	<h3>WRITE</h3><br>
+	<div ng-init="advisoryStatus='pending'" class="taranis4u-block block center numbers-overview">
+		<br><h2 class="marked font-monospace bold" ng-controller="AdvisoryCountCtrl">{{ advisoryCount.total }}</h2>
+		<span>pending advisories</span><br><br>
+	</div>
+	<div ng-init="advisoryStatus='ready4review'" class="taranis4u-block block center numbers-overview">
+		<br><h2 class="marked font-monospace bold" ng-controller="AdvisoryCountCtrl">{{ advisoryCount.total }}</h2>
+		<span>ready for review<br>advisories</span>
+	</div>
+	<div ng-init="advisoryStatus='approved'" class="taranis4u-block block center numbers-overview">
+		<br><h2 class="marked font-monospace bold" ng-controller="AdvisoryCountCtrl">{{ advisoryCount.total }}</h2>
+		<span>approved advisories</span><br><br>
+	</div>
+</div>

@@ -1,0 +1,32 @@
+#!/usr/bin/env perl
+# Install the mod_perl scripts on their place.
+
+use warnings;
+use strict;
+
+use Carp   qw(confess);
+
+use Taranis::Install::Bare   qw(clone_dir);
+use Taranis::Install::Config qw(config_release taranis_sources become_user_taranis);
+
+become_user_taranis;
+
+my $release = config_release;
+my $version = $release->{version};
+if($version eq 'git') {
+	print "*   development sources in git are used without copy\n";
+	exit 0;
+}
+
+my $dest	= $release->{install};
+
+my $taranis = taranis_sources $version
+	or confess;
+
+my $source_mod = "$taranis/scripts/";
+my $dest_mod   = "$dest/modperl/";
+
+print "*   clone scripts --> $dest_mod\n";
+clone_dir $source_mod, $dest_mod;
+
+exit 0;

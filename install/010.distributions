@@ -1,0 +1,48 @@
+#!/usr/bin/env perl
+# Generic check for supported Linux distributions
+use warnings;
+use strict;
+
+use Carp qw(confess);
+
+use Taranis::Install::Bare  qw(get_os_info :os_checks);
+
+# We probably need to check more thoroughly on the version of the
+# Linux distribution as well...
+
+my $os = get_os_info;
+my $dist_name    = $os->{ID};
+my $dist_version = $os->{VERSION};
+my $dist_pretty  = $os->{PRETTY_NAME} || "$dist_name $dist_version";
+
+print "*   running on $dist_pretty\n";
+
+#XXX we should add checks for os versions as well
+if($dist_name eq 'opensuse') {
+	# tested with Leap 42.2 and 13.2
+	is_opensuse or confess;  # self-test
+
+} elsif($dist_name eq 'centos') {
+	# tested with v7  2016-11-29
+	is_centos   or confess;
+
+} elsif($dist_name eq 'ubuntu') {
+	# untested
+	is_ubuntu   or confess;
+
+} elsif($dist_name eq 'redhat') {
+	# tested on RedHat EL 6
+	is_redhat   or confess;
+
+} elsif($dist_name eq 'rhel') {
+	# tested on RedHat EL 7.4
+	is_redhat   or confess;
+
+} else {
+	# If you want your distribution to be supported, please send us a patch ;-)
+	die "ERROR: distribution $dist_pretty not (yet) supported.\n";
+}
+
+print "*   distribution $dist_pretty is supported.\n";
+
+exit 0;

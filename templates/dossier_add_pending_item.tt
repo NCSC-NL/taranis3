@@ -1,0 +1,33 @@
+[% USE date %]
+<div class="dialog-form-wrapper block">
+	<fieldset>
+		<form id="form-dossier-add-pending-item" data-id="[% item_id | uri %]">
+			<div class="dialog-input-wrapper block">
+				[% IF dossiers.size > 1 %]
+				<span class="dialog-input-label">Add item to the following dossiers</span><br>
+					[% FOREACH dossier IN dossiers %]
+				<input type="checkbox" name="dossier" value="[% dossier.id %]" id="dossier-add-pending-item-dossiernr[% loop.count %]" checked>
+				<label for="dossier-add-pending-item-dossiernr[% loop.count %]">[% dossier.description %]</label><br>
+					[% END %]
+				[% ELSE %]
+				<span class="dialog-input-label">Add item to dossier</span><br>
+				<span>[% dossiers.0.description %]</span><br>
+				<input type="hidden" name="dossier" value="[% dossiers.0.id %]">
+				[% END %]
+			</div>
+			<div class="dialog-input-wrapper">
+				<span class="dialog-input-label">Item date/time</span><br>
+				<input type="text" class="date-picker input-default" id="dossier-pending-event-timestamp-date" name="event_timtestamp_date" value="[% date.format(item.item_timestamp.stripSeconds, '%d-%m-%Y') %]" placeholder="dd-mm-yyyy">
+				<input type="text" class="time input-default" id="dossier-pending-event-timestamp-time" name="event_timtestamp_time" value="[% date.format(item.item_timestamp.stripSeconds, '%H:%M') %]" placeholder="HH:MM">
+			</div>
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">TLP classification</span><br>
+				<select id="dossier-pending-tlp" class="select-single dialog-input-text-narrow block" name="tlp">
+					[% FOREACH tlp IN tlpMapping.keys.sort.reverse %]
+						<option value="[% tlp %]">[% tlpMapping.$tlp %]</option>
+					[% END %]
+				</select>
+			</div>
+		</form>
+	</fieldset>
+</div>

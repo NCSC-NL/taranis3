@@ -1,0 +1,19 @@
+#!/usr/bin/env perl
+# PhantomJS requirements
+
+use warnings;
+use strict;
+
+use Taranis::Install::Bare     qw(is_opensuse);
+use Taranis::Install::OpenSUSE qw(opensuse_packages);
+
+unless(is_opensuse) {
+	print "*   skipped: not running on OpenSUSE.\n";
+	exit 0;
+}
+
+opensuse_packages
+	'liberation2-fonts',
+	;
+
+exit 0;

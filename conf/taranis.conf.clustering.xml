@@ -1,0 +1,14 @@
+<languages>
+	<language>
+		<code>nl</code>
+		<bgmodel>./pm/Taranis/Clustering/BGNL.model</bgmodel>
+		<bgconfig>./pm/Taranis/Clustering/BGNL.model.cfg</bgconfig>
+		<commonwords>./pm/Taranis/Clustering/commonwords.nl</commonwords>
+	</language>
+	<language>
+		<code>en</code>
+		<bgmodel>./pm/Taranis/Clustering/BGEN.model</bgmodel>
+		<bgconfig>./pm/Taranis/Clustering/BGEN.model.cfg</bgconfig>
+		<commonwords>./pm/Taranis/Clustering/commonwords.en</commonwords>
+	</language>
+</languages>

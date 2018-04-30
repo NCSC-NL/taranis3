@@ -1,0 +1,16 @@
+<div class="block configuration-block">
+	<fieldset>
+		<legend class="configuration-title bold">Tools</legend>
+		<ul>
+		[% FOREACH tool IN tools %]
+			<li>
+				[% IF tool.webscript && tool.webscript != 'dummy' %]
+				<a href="[% tool.webscript %]">[% tool.toolname %]</a>
+				[% ELSE %]
+				<span>[% tool.toolname %]</span> <span class="italic">(backend script only)</span>
+				[% END %]
+			</li>
+		[% END %]
+		</ul>
+	</fieldset>
+</div>

@@ -1,0 +1,8 @@
+<div ng-init="analysisStatus='pending'" class="block center numbers-overview">
+	<br><h2 class="marked font-monospace bold" ng-controller="AnalysesCountCtrl">{{ analysesCount.total }}</h2>
+	<span>pending analyses</span><br><br>
+</div>
+<div ng-init="analysisStatus='pending'; hasOwner='false'" class="block center numbers-overview">
+	<br><h2 class="marked font-monospace bold" ng-controller="AnalysesCountCtrl">{{ analysesCount.total }}</h2>
+	<span>pending analyses<br>without owner</span>
+</div>

@@ -1,0 +1,128 @@
+#!/usr/bin/env perl
+# Create all directories
+
+# Many of the other installation scripts run under $username rights, so
+# are not able to create directories in system space.  Therefore, sometimes
+# we allow ourselves some abstraction violation...
+use warnings;
+use strict;
+
+use Taranis::Install::Bare   qw(create_dir :os_checks);
+use Taranis::Install::Config qw(
+	config_release save_config_release
+	config_generic save_config_generic
+);
+
+my $generic  = config_generic;
+my $home     = $generic->{home}     or die "no home";
+my $username = $generic->{username} or die "no username";
+
+my $release  = config_release;
+my $version  = $release->{version}  or die "no version";
+
+my ($userid, $groupid) = (getpwnam $username)[2,3];
+
+my ($www_user, $www_group, $www_groupid_default)
+	= is_opensuse ? qw(wwwrun    www        8)
+	: is_centos   ? qw(apache    apache    48)
+	: is_redhat   ? qw(apache    apache    48)
+	: is_ubuntu   ? qw(www-data  www-data  33)
+	: die "ERROR: needs porting";
+
+# The default is needed during bootstrap, when the apache modules are not yet
+# installed.  Simply rerun install when you have changed the default.
+#!!! the www_groupid should only be set on very specific directories, which are
+#!!! managed by the application under apache control.
+my $www_groupid = (getgrnam $www_group) || $www_groupid_default;
+
+print "*   create generic directories\n";
+
+my $logs     = $generic->{logs}   ||= "/var/log/$username";
+foreach my $dir ($logs) {
+	next if -d $dir;              # they may be part of the OS
+	create_dir $dir, 0755, $userid, $groupid;
+}
+
+# may need to be accessed by other processes running with a different
+# username.
+my $etc      = $generic->{etc}      ||= "$home/etc";
+foreach my $dir ($etc, $home) {
+	create_dir $dir, 0755, $userid, $groupid;
+}
+
+# Most directories are also accessed by the webserver, hence o+rx
+my $sources  = "$home/sources";
+my $bin      = $generic->{bin}      ||= "$home/bin";
+my $lib      = $generic->{lib}      ||= "$home/lib";
+my $man      = $generic->{man}      ||= "$home/man";
+my $var      = $generic->{var}      ||= "$home/var";
+my $runs     = $generic->{runs}     ||= "$home/run";
+my $perllib  = $generic->{perl_lib} ||= "$lib/perl5";
+my $charts   = $generic->{charts}   ||= "$home/ChartDirector";
+my $phantom  = $generic->{phantomjs}||= "$home/PhantomJS";
+
+foreach my $dir ($sources, $bin, $lib, $man, $perllib, $charts, $phantom,
+ 	$var, $runs){
+	create_dir $dir, 0755, $userid, $groupid;
+}
+
+my $icons    = $generic->{source_icons} ||= "$var/source-icons";
+my $stats    = $generic->{custom_stats} ||= "$var/custom-stats";
+my $cluster  = $release->{clustering}   ||= "$var/clustering";
+
+foreach my $dir ($icons, $stats, $cluster) {
+	create_dir $dir, 0770, $userid, $www_groupid;
+}
+
+my $tmps     = $generic->{tmp}      ||= "/tmp/$username";
+foreach my $dir ($tmps) {
+	create_dir $dir, 0750, $userid, $www_groupid;
+}
+
+my $cpantmp  = $generic->{cpan_tmp} ||= "$home/.cpan";
+# For unknown reason 'build" is not created then .cpan exists.  Other
+# subdirs do not suffer from that.
+foreach my $dir ($cpantmp, "$cpantmp/CPAN", "$cpantmp/build") {
+	create_dir $dir, 0700, $userid, $groupid;
+}
+
+print "*   create directories for release $version\n";
+
+# one release may be installed under different usernames
+my $tmp      = $release->{tmp}        ||= "$tmps/$username-$version";
+
+# various releases within this same username may share the database, so
+# they should (be default) share the locks as well.
+my $relrun   = $release->{run}        ||= $runs;
+foreach my $dir ($tmp, $relrun) {
+	create_dir $dir, 0775, $userid, $www_groupid;
+}
+
+my $rellogs  = $release->{logs}       ||= "$logs/$username-$version";
+foreach my $dir ($rellogs, "$rellogs/apache", "$rellogs/collector-errors") {
+	create_dir $dir, 0775, $userid, $www_groupid;
+}
+
+# install does not use the username, but refers to the name of the product
+my $install  = $release->{install}    ||= "$home/taranis-$version";
+my $install4u= $release->{install4u}  ||= "$home/taranis4u-$version";
+
+# The next directories are only created when we install a release: the
+# website we run directly from git does not clone the immutable sources.
+my @code_copies = $version eq 'git' ? qw[bin] :
+	qw[perl5 modperl bin man man/man1 man/man3 clustering conf];
+
+# Many applications need to be able to look here.  For instance, the
+# "man" command works non-root, hence need a+rx on many dir levels.
+foreach my $dir ($install4u, $install, map "$install/$_", @code_copies) {
+	create_dir $dir, 0755, $userid, $groupid;
+}
+
+# When install is called from an private source extension directory,
+# we may need to create the extension installation directory.
+if(-d 'local-additions' || -d 'local-patches') {
+	create_dir $release->{extension}, 0755, $userid, $groupid;
+}
+
+save_config_generic $generic;
+save_config_release $release;

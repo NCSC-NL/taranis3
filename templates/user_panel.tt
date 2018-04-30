@@ -1,0 +1,257 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden[% END %] ui-state-error ui-corner-all">[% message %]</div>
+	
+	<div class="dialog-title">
+		<span>User settings for user '[% username %]'</span>	
+	</div>
+	
+	<div id="user-panel-tabs" class="dialog-tabs">
+		<ul>
+			<li><a href="#user-panel-tabs-change-password">Change password</a></li>
+			<li><a href="#user-panel-tabs-custom-search-settings">Custom search settings</a></li>
+			<li><a href="#user-panel-tabs-assess-auto-refresh">Assess auto-refresh</a></li>
+		</ul>
+
+<!-- TAB CHANGE PASSWORD -->
+		<div id="user-panel-tabs-change-password">
+			<form id="user-panel-change-password-form">
+				<fieldset>
+					<div class="dialog-input-wrapper block">
+						<label for="user-panel-current-password" class="dialog-input-label">Current password*</label><br>
+						<input type="password" name="current_pwd" id="user-panel-current-password" class="input-default dialog-input-text-wider">
+					</div><br>
+					<div class="dialog-input-wrapper block">
+						<label for="user-panel-new-password" class="dialog-input-label">New password*</label><br>
+						<input type="password" name="new_pwd" id="user-panel-new-password" class="input-default dialog-input-text-wider">
+					</div><br>
+					<div class="dialog-input-wrapper block">
+						<label for="user-panel-confirm-password" class="dialog-input-label">Confirm new password*</label><br>
+						<input type="password" name="confirm_pwd" id="user-panel-confirm-password" class="input-default dialog-input-text-wider">
+					</div><br>
+					<div class="dialog-input-wrapper block">
+						<input type="button" class="button" value="Change password" id="btn-user-panel-change-password">
+					</div><br>
+					<div class="dialog-input-wrapper block">
+						<span class="hidden" id="user-panel-change-password-ok">Password successfully changed!</span>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+
+<!-- TAB CUSTOM SEARCH SETTINGS -->
+		<div id="user-panel-tabs-custom-search-settings">
+
+		  [% IF searches.size %]
+			[%- FOREACH search IN searches +%]
+			<fieldset class="user-panel-search-block" data-id="[% search.id %]">
+				<div>
+					<div class="block">
+						<span class="dialog-input-label">Search:</span> 
+						<span data-id="[% search.id %]" data-setting="description" class="span-link">[% IF search.description; search.description; ELSE; '[no description]'; END %]</span>
+					</div>
+					<div class="block align-block-right">
+						<input type="button" value="Save" class="button btn-save-custom-search" data-id="[% search.id %]">&nbsp;
+						<input type="button" value="Delete"class="button btn-delete-custom-search" data-id="[% search.id %]">
+					</div>
+				</div><br>
+			
+				<div>
+					<div class="user-panel-search-settings-summary" data-id="[% search.id %]">
+						<span class="bold">search keywords:</span> 
+						<span class="span-link" data-setting="keywords" data-id="[% search.id %]">[% IF search.keywords; search.keywords; ELSE; '[no keywords]'; END %]</span> |
+						<span class="bold">status:</span> 
+						<span class="span-link" data-setting="uriw" data-id="[% search.id %]">
+						[% uriw = '' %]
+						[% IF search.checku == 1; uriw = 'Unread, '; END %]
+						[% IF search.checkr == 1; uriw = uriw _ 'Read, '; END %]
+						[% IF search.checki == 1; uriw = uriw _ 'Important, '; END %]
+						[% IF search.checkw == 1; uriw = uriw _ 'Waitingroom, '; END %]
+						[% uriw.substr( 0, -2 ) %]
+						</span> | 
+						<span class="bold">start/end</span>
+						<span class="span-link" data-setting="startenddate" data-id="[% search.id %]">[% IF search.startdate_plainformat; search.startdate_plainformat; ELSE; 'None'; END %] / [% IF search.enddate_plainformat; search.enddate_plainformat; ELSE; 'None'; END %]</span> | 
+						<span class="bold">hits/page:</span> 
+						<span class="span-link" data-setting="hitsperpage" data-id="[% search.id %]">[% search.hitsperpage %]</span> |
+						<span class="bold">sort:</span> 
+						<span class="span-link" data-setting="sorting" data-id="[% search.id %]">
+						[% IF search.sortby == 'created_desc'; 'Timestamp newest'; END %]
+						[% IF search.sortby == 'created_asc'; 'Timestamp oldest'; END %]
+						[% IF search.sortby == 'source_asc'; 'Source A-Z'; END %]
+						[% IF search.sortby == 'source_desc'; 'Source Z-A'; END %]
+						[% IF search.sortby == 'title_asc'; 'Title A-Z'; END %]
+						[% IF search.sortby == 'title_desc'; 'Title Z-A'; END %]
+						</span> |
+						<span class="bold">sources:</span> 
+						<span class="span-link" data-setting="sources" data-id="[% search.id %]">
+						[% cnt = 0 %]
+						[% sourcesString = '' %]
+						[% FOREACH source IN search.sources %]
+							[% IF loop.count > 3; cnt = cnt + 1; ELSE; sourcesString = sourcesString _ source _ ', '; END %]
+						[% END %]
+						[% IF sourcesString != ''; sourcesString.substr( 0, -2 ); ELSE; 'ALL'; END %]
+						[% IF cnt != 0; ' +' _ cnt; END %]
+						</span> | 
+						<span class="bold">categories:</span> 
+						<span class="span-link" data-setting="categories" data-id="[% search.id %]">
+						[% categoriesString = '' %]
+						[% FOREACH category IN search.categories %]
+							[% categoriesString = categoriesString _ category.name _ ', '%]
+						[% END %]
+						[% IF categoriesString != ''; categoriesString.substr( 0, -2 ); ELSE; 'ALL'; END %]
+						</span> | 
+						<span class="bold">public:</span>
+						<span class="span-link" data-setting="public" data-id="[% search.id %]">
+						[% IF search.is_public; 'yes'; ELSE; 'no'; END %]
+						</span>
+					</div><br>
+	
+					<div data-id="[% search.id %]" class="dialog-input-wrapper user-panel-search-settings user-panel-search-settings-error">
+						<div class="block"><span class="bold">The following error occurred: </span><span id="span_error_[% search.id %]"></span></div>
+					</div>
+	
+					<div data-id="[% search.id %]" class="dialog-input-wrapper user-panel-search-settings user-panel-search-settings-description">
+						<label for="description_[% search.id %]" class="dialog-input-label">Description</label><br>
+						<input type="text" value="[% search.description %]" id="description_[% search.id %]" class="input-default dialog-input-text">
+					</div>
+					
+					<div data-id="[% search.id %]" class="dialog-input-wrapper user-panel-search-settings user-panel-search-settings-keywords">
+						<label for="keywords_[% search.id %]" class="dialog-input-label">Keywords</label><br>
+						<input type="text" value="[% search.keywords %]" id="keywords_[% search.id %]" class="input-default dialog-input-text">
+					</div>
+					
+					<div class="dialog-input-wrapper user-panel-search-settings user-panel-search-settings-uriw" data-id="[% search.id %]">
+						<span class="dialog-input-label">Unread / Read / Important / Waitingroom *</span><br>
+						<label for="unread_[% search.id %]" class="block assess-unread bold center">
+							<span>U</span><br>
+							<input type="checkbox" id="unread_[% search.id %]" title="unread" value="0" [% IF search.checku == 1 %] checked="checked" [% END %]>
+						</label>
+						<label for="read_[% search.id %]" class="block assess-read bold center">
+							<span>R</span><br>
+							<input type="checkbox" id="read_[% search.id %]" title="read" value="1" [% IF search.checkr == 1 %] checked="checked" [% END %]>
+						</label>
+					
+						<label for="important_[% search.id %]" class="block assess-important bold center">
+							<span>I</span><br>
+							<input type="checkbox" id="important_[% search.id %]" title="important" value="2" [% IF search.checki == 1 %] checked="checked" [% END %]>
+						</label>
+					
+						<label for="waitingroom_[% search.id %]" class="block assess-waitingroom bold center">
+							<span>W</span><br>
+							<input type="checkbox" id="waitingroom_[% search.id %]" title="waitingroom" value="3" [% IF search.checkw == 1 %] checked="checked" [% END %]>
+						</label>
+					</div>
+	
+					<div class="dialog-input-wrapper user-panel-search-settings user-panel-search-settings-startenddate" data-id="[% search.id %]">
+						<div class="block">					
+							<label class="dialog-input-label" for="startdate_[% search.id %]">Start date*</label><br>
+							<input id="startdate_[% search.id %]" type="text" value="[% search.startdate_plainformat %]" class="input-default date-picker">
+						</div>
+						<div class="block">
+							<label class="dialog-input-label" for="enddate_[% search.id %]">End date*</label><br>
+							<input id="enddate_[% search.id %]" type="text" value="[% search.enddate_plainformat %]" class="input-default date-picker">
+						</div> 
+					</div>
+	
+					<div data-id="[% search.id %]" class="user-panel-search-settings dialog-input-wrapper user-panel-search-settings-hitsperpage">
+						<label for="hitsperpage_[% search.id %]" class="dialog-input-label">Hits per page*</label><br>
+						<input type="text" size="3" id="hitsperpage_[% search.id %]" value="[% search.hitsperpage %]" class="input-default dialog-input-text">
+					</div>
+	
+					<div data-id="[% search.id %]" class="user-panel-search-settings dialog-input-wrapper user-panel-search-settings-sorting">
+						<label for="sorting_[% search.id %]" class="dialog-input-label">Sorting order</label><br>
+						<select id="sorting_[% search.id %]" class="select-single">
+							<option value="created_desc" [% IF search.sortby == 'created_desc' %] selected="selected"[% END %]>Timestamp newest</option>
+							<option value="created_asc" [% IF search.sortby == 'created_asc' %] selected="selected"[% END %]>Timestamp oldest</option>
+							<option value="source_asc" [% IF search.sortby == 'source_asc' %] selected="selected"[% END %]>Source A-Z</option>
+							<option value="source_desc" [% IF search.sortby == 'source_desc' %] selected="selected"[% END %]>Source Z-A</option>
+							<option value="title_asc" [% IF search.sortby == 'title_asc' %] selected="selected"[% END %]>Title A-Z</option>
+							<option value="title_desc" [% IF search.sortby == 'title_desc' %] selected="selected"[% END %]>Title Z-A</option>
+						</select>  				
+					</div>
+	
+					<div data-id="[% search.id %]" class="user-panel-search-settings dialog-input-wrapper user-panel-search-settings-sources">
+						<span class="dialog-input-label">Sources</span><br>
+						<div class="select-two-columns">
+							<div>
+								<select multiple="multiple" id="sources_left_column_[% search.id %]" size="8" class="select-multiple select-left select-multiple-narrow" data-id="[% search.id %]">
+								[% FOREACH source IN search.sources %]
+									<option value="[% source %]" id="[% source %]" title="[% source.capital() %]">[% source FILTER ucfirst %]</option>
+								[% END %]
+								</select>
+							</div>
+							<div class="option-left-right">	
+								<input type="button" class="button btn-option-to-left" value="&lt;"><br><br>
+								<input type="button" class="button btn-option-to-right" value="&gt;">
+							</div>
+							<div>
+								<select multiple="multiple" id="sources_right_column_[% search.id %]" size="8" class="select-multiple select-right select-multiple-narrow" data-setting="sources" data-id="[% search.id %]">
+									[% FOREACH source IN all_sources %]
+									<option value="[% source %]" id="[% source %]" title="[% source.capital() %]">[% source FILTER ucfirst %]</option>
+									[% END %]
+								</select>
+							</div>
+						</div>
+					</div>
+	
+					<div data-id="[% search.id %]" class="user-panel-search-settings dialog-input-wrapper user-panel-search-settings-categories">
+						<span class="dialog-input-label">Categories</span><br>
+						<div class="select-two-columns">
+							<div>
+								<select multiple="multiple" id="categories_left_column_[% search.id %]" size="8" class="select-multiple select-left select-multiple-narrow" data-id="[% search.id %]">
+								[% FOREACH category IN search.categories +%]
+									<option value="[% category.id %]" id="[% category.id %]" title="[% category.name %]">[% category.name %]</option>
+								[% END +%]
+								</select>
+							</div>
+							<div class="option-left-right">	
+								<input type="button" class="button btn-option-to-left" value="&lt;"><br><br>
+								<input type="button" class="button btn-option-to-right" value="&gt;">
+							</div>
+							<div>
+								<select multiple="multiple" id="categories_right_column_[% search.id %]" size="8" class="select-multiple select-right select-multiple-narrow" data-setting="categories" data-id="[% search.id %]">
+									[% FOREACH category IN all_categories +%]
+									<option value="[% category.id %]" id="[% category.id %]" title="[% category.name %]">[% category.name %]</option>
+									[% END +%]
+								</select>
+							</div>
+						</div>
+					</div>
+		
+					<div data-id="[% search.id %]" class="user-panel-search-settings dialog-input-wrapper user-panel-search-settings-public">
+						<span class="dialog-input-label">Make public</span><br>
+						<input type="radio" id="is_public_yes_[% search.id %]" name="is_public_[% search.id %]" value="1" [% IF search.is_public == 1 %] checked="checked"[% END %]>
+						<label for="is_public_yes_[% search.id %]">Yes</label> 
+						<input type="radio" id="is_public_no_[% search.id %]" name="is_public_[% search.id %]" value="0" [% IF search.is_public == 0 %] checked="checked"[% END %]>
+						<label for="is_public_no_[% search.id %]">No</label>
+					</div>
+				</div>
+			</fieldset>
+			[% END +%]
+		  [% ELSE %]
+			<p>You have no custom search settings (yet). Add them via the
+			assess menu.</p>
+		  [% END %]
+			
+		</div>
+
+<!-- TAB ASSESS AUTO-REFRESH -->
+		<div id="user-panel-tabs-assess-auto-refresh">
+			<fieldset>
+				<div class="dialog-input-wrapper block">
+					<span class="dialog-input-label">Assess auto-refresh*</span><br>
+					<input type="radio" name="assess_autorefresh" id="user-panel-assess-auto-refresh-yes" value="1" [% IF assess_autorefresh == 1 %] checked="checked"[% END %]>
+					<label for="user-panel-assess-auto-refresh-yes">Yes</label> 
+					<input type="radio" name="assess_autorefresh" id="user-panel-assess-auto-refresh-no" value="0" [% IF assess_autorefresh == 0 %] checked="checked"[% END %]>
+					<label for="user-panel-assess-auto-refresh-no">No</label>
+				</div><br>
+				<div class="dialog-input-wrapper block">
+					<input type="button" class="button" value="Save Assess seting" id="btn-user-panel-save-assess-setting">
+				</div><br>
+				<div class="dialog-input-wrapper block">
+					<span class="hidden" id="user-panel-save-assess-setting-ok">Save ok!</span>
+				</div>
+			</fieldset>
+		</div>
+
+	</div>
+</div>

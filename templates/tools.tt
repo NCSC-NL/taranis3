@@ -1,0 +1,20 @@
+<div id="tools-content-heading" class="content-heading">
+	<div id="tools-content-heading-toolname" class="block configuration-heading-default">
+		<span>Tool name</span>
+	</div>
+</div>
+
+[% IF tools.size > 0 %]
+	[% FOREACH tool IN tools %]
+	
+		[% INCLUDE tools_item.tt %]
+	
+	[% END %]
+[% ELSE %]
+<div class="item-row" id="empty-row">No tools found...</div>
+
+[% END %]
+
+<div class="action-block filter-block-separator">
+	<div class="center" id="number-of-results">&mdash; [% numberOfResults %] results &mdash;</div>
+</div>

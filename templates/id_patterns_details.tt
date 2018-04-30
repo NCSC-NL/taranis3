@@ -1,0 +1,31 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden[% END %] ui-state-error ui-corner-all">[% message %]</div>
+	
+	[% IF pattern.idname %]
+	<div class="dialog-title">
+		<span>[% pattern.idname %]</span>
+	</div>
+	[% END %]
+	
+	<form id="form-patterns" data-id="[% IF pattern.idname; pattern.idname; ELSE; 'NEW'; END %]">
+		<fieldset>
+			<div class="dialog-input-wrapper block">
+				<label for="patterns-details-idname" class="dialog-input-label">Name *</label><br>
+				<input type="text" name="idname" id="patterns-details-idname" class="input-default dialog-input-text" value="[% pattern.idname %]">
+			</div><br>
+
+			<div class="dialog-input-wrapper block">
+				<label for="patterns-details-pattern" class="dialog-input-label">Pattern *</label><br>
+				<input type="text" name="pattern" id="patterns-details-pattern" class="input-default dialog-input-text" value="[% pattern.pattern %]">
+				<input type="button" class="button" id="btn-patterns-details-validate-pattern" value="Validate">
+			</div><br>
+
+			<div class="dialog-input-wrapper block">
+				<label for="patterns-details-substitute" class="dialog-input-label">Substitute</label><br>
+				<input type="text" name="substitute" id="patterns-details-substitute" class="input-default dialog-input-text" value="[% pattern.substitute %]">
+				<input type="button" class="button" id="btn-patterns-details-validate-substitute" value="Validate">
+			</div><br>
+
+		</fieldset>
+	</form>
+</div>

@@ -1,0 +1,30 @@
+<div id="sources-content-heading" class="content-heading">
+	<div id="sources-content-heading-url" class="block">
+		<span>URL</span>
+	</div>
+
+	<div id="sources-content-heading-category" class="block">
+		<span>Category</span>
+	</div>
+
+	<div id="sources-content-heading-language" class="block">
+		<span>Lang.</span>
+	</div>
+</div>
+
+[% IF sources.size > 0 %]
+	[% FOREACH source IN sources %]
+	
+		[% INCLUDE sources_item.tt %]
+	
+	[% END %]
+[% ELSE %]
+<div class="item-row" id="empty-row">No sources found...</div>
+
+[% END %]
+
+<div class="action-block filter-block-separator">
+	<div class="center" id="number-of-results">&mdash; [%  page_bar.number_results_text %] &mdash;</div>
+</div>
+
+[% PROCESS page_bar.tt %]

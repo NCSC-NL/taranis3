@@ -1,0 +1,148 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden[% END %] ui-state-error ui-corner-all">[% message %]</div>
+	[% IF item.isArchived +%]
+	<div class="ui-state-highlight ui-corner-all dialog-highlight">This is item has been archived.</div>
+	[% END %]
+	
+	<div class="dialog-title">
+		<span>[% item.title %]</span>	
+	</div>
+
+	<div id="assess-details-tabs" class="dialog-tabs" data-digest="[% item.digest | uri %]">
+		<ul>
+			<li><a href="#assess-details-tabs-1">Item details</a></li>
+			<li><a href="#assess-details-tabs-2">Related items (ID match)</a></li>
+			<li><a href="#assess-details-tabs-3">Related items (keyword match)</a></li>
+		</ul>
+		
+		<div id="assess-details-tabs-1">
+			<input type="button" name="digest" id="assess-details-digest" value="[% item.digest | uri %]" class="hidden">
+			<input type="hidden" id="assess-details-analyze-right" value="[% analyze_right %]">
+			<fieldset>
+				<div class="dialog-input-wrapper block">
+					<span><img src="[% webroot %]/images/icons/[% item.source %].gif" alt="[% item.source %]" title="[% item.source %]"></span>
+				</div>
+
+				<div class="dialog-input-wrapper block">
+					<span class="dialog-input-label">Status</span><br>
+					<span class="assess-[% item.status FILTER lower %]">[% item.status %]</span>
+				</div>
+			
+				<div class="dialog-input-wrapper block">
+					<span class="dialog-input-label">Collected</span><br>
+					<span>[% item.item_date %]</span>
+				</div>
+	
+				<div class="dialog-input-wrapper block">
+					<span class="dialog-input-label">Category</span><br>
+					<span>[% item.category %]</span>
+				</div><br>
+
+				<div class="dialog-input-wrapper block">
+					<span class="dialog-input-label">URL</span><br>
+					<span>
+						[% IF item.is_mail %]
+						<img src="[% webroot %]/images/bw_envelope_mail.png">
+						<span class="span-link assess-email-item-link" data-link="[% item.link %]">view email</span>
+						[% ELSIF item.screenshot_object_id %]
+						<img src="[% webroot %]/images/bw_camera.png">
+						<span class="span-link assess-screenshot-item-link" data-id="[% item.digest | uri %]">view screenshot</span>
+						[% ELSE %]
+						<a href="[% item.link %]" target="_blank" title="[% item.link %]">
+							[% IF item.link.length > 90 %]
+								[% item.link.substr( 90, item.link.length, '...') %]
+							[% ELSE %]
+								[% item.link %]
+							[% END %]
+						</a>
+						[% END %]
+					</span>
+				</div><br>
+				
+				<div class="dialog-input-wrapper block">
+					<span class="dialog-input-label">Description</span><br>
+					<span>[% item.description %]</span>
+				</div><br>
+				
+				[% IF id_string_arr && id_string_arr.size > 0 %]
+				<div class="dialog-input-wrapper block" id="assess-details-related-ids">
+					<span class="dialog-input-label">Related ID's</span><br>
+					<span id="assess-details-related-ids-span">
+						[%- FOREACH string_id IN id_string_arr -%]
+							<span [% IF string_id.match('^CVE.*') %]class="assess-details-id pointer" id="[% string_id %]" title=""[% END %]>[%- string_id -%]</span>
+							[% IF string_id != id_string_arr.last %], [% END %]
+						[% END -%]</span>
+				</div><br>
+				[% END %]
+			</fieldset>
+		</div>
+
+		<div id="assess-details-tabs-2">
+			<div class="dialog-input-wrapper block">
+			[% IF id_match.0 != "" %]
+				<fieldset class="no-padding">
+				[% FOREACH item_idmatch IN id_match %]
+					<div class="assess-item item-row">
+						<div class="block assess-item-timestamp">
+						[% item_idmatch.date %]<br>
+						[% item_idmatch.time %]
+						</div>
+						<div class="block assess-item-source"><img src="[% webroot %]/images/icons/[% item_idmatch.source %].gif" alt="[% item_idmatch.source %]"></div>
+						<div class="block assess-item-title-description">
+							<div class="assess-item-title block bold assess-[% item_idmatch.status.displayAssessStatus %]">
+							[% IF item_idmatch.is_mail %]
+								<img src="[% webroot %]/images/bw_envelope_mail.png">
+								<span id="[% item_idmatch.digest | uri %]" data-link="[% item_idmatch.link %]" class="span-link assess-email-item-link">[% item_idmatch.title %]</span>
+							[% ELSIF item_idmatch.screenshot_object_id %]
+								<img src="[% webroot %]/images/bw_camera.png">
+								<span class="span-link assess-screenshot-item-link" data-id="[% item_idmatch.digest | uri %]">[% item_idmatch.title %]</span>
+							[% ELSE %]						
+								<a href="[% item_idmatch.link %]" class="[% item_idmatch.status %]" target="_blank">[% item_idmatch.title %]</a>
+							[% END %]
+							</div><br>
+							<span class="assess-item-description">[% item_idmatch.description %]</span>
+						</div>
+					</div>					
+				[% END %]
+				</fieldset>
+			[% ELSE %]
+				<div class="block">No matches were found.</div>
+			[% END %]
+			</div>	
+		</div>
+
+		<div id="assess-details-tabs-3">
+			<div class="dialog-input-wrapper block">
+			[% IF key_match.0 != "" %]
+				<fieldset class="no-padding">
+				[% FOREACH item_keymatch IN key_match %]
+					<div class="assess-item item-row">
+						<div class="block assess-item-timestamp">
+						[% item_keymatch.date %]<br>
+						[% item_keymatch.time %]
+						</div>
+						<div class="block assess-item-source"><img src="[% webroot %]/images/icons/[% item_keymatch.source %].gif" alt="[% item_keymatch.source %]"></div>
+						<div class="block assess-item-title-description">
+							<div class="assess-item-title block bold assess-[% item_keymatch.status.displayAssessStatus %]">					
+							[% IF item_keymatch.is_mail %]
+								<img src="[% webroot %]/images/bw_envelope_mail.png">
+								<span id="[% item_keymatch.digest | uri %]" data-link="[% item_keymatch.link %]" class="span-link assess-email-item-link">[% item_keymatch.title %]</span>
+							[% ELSIF item_keymatch.screenshot_object_id %]
+								<img src="[% webroot %]/images/bw_camera.png">
+								<span class="span-link assess-screenshot-item-link" data-id="[% item_keymatch.digest | uri %]">[% item_keymatch.title %]</span>
+							[% ELSE %]						
+								<a href="[% item_keymatch.link %]" target="_blank">[% item_keymatch.title %]</a>
+							[% END %]
+							</div><br>
+							<span class="assess-item-description">[% item_keymatch.description %]</span>
+						</div>
+					</div>
+				[% END %]
+				</fieldset>
+			[% ELSE %]
+				<div class="block">No matches were found.</div>
+			[% END %]			
+			</div>		
+		</div>
+	</div>
+</div>

@@ -1,0 +1,13 @@
+#!/usr/bin/env perl
+
+use warnings;
+use strict;
+
+use Taranis::Install::Bare   qw(has_internet);
+
+has_internet or print <<'__WARN';
+!! WARNING: install without internet: some external components may be
+!!          outdated or missing.
+__WARN
+
+exit 0;

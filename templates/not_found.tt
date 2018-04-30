@@ -1,0 +1,33 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Taranis -- NOT FOUND</title>
+	<link rel="stylesheet" type="text/css" href="[% webroot %]/include/css/reset.css?_=[% unixtime %]" />
+	<link rel="stylesheet" type="text/css" href="[% webroot %]/include/css/main.css?_=[% unixtime %]" />
+	<link rel="icon" type="image/x-icon" href="[% webroot %]/images/favicon.ico" />
+	<script type="text/javascript" src="[% webroot %]/include/js/jquery-1.9.1.min.js"></script>
+</head>
+
+<body>
+	<div id="main-wrapper">
+
+		<div id="content-wrapper">
+			<div id="banner">
+				[% banner_html %]
+			</div>
+			<div id="content">
+				<div class="center">
+					<div class="block">
+						The requested page was not found. 					
+					</div>
+				</div>
+			</div>
+		</div>
+	
+		<div id="footer-wrapper">
+			<footer>Taranis &mdash; NCSC-NL</footer>
+		</div>
+	
+	</div>
+</body>

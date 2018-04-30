@@ -1,0 +1,25 @@
+<div id="announcements-content-heading" class="content-heading">
+	<div id="announcements-content-heading-time-created" class="block">
+		<span>Time created</span>
+	</div>
+	<div id="announcements-content-heading-announcements" class="block">
+		<span>Announcement</span>
+	</div>
+	<div id="announcements-content-heading-type" class="block">
+		<span>Type</span>
+	</div>
+</div>
+
+[% IF announcements.size > 0 %]      
+	[% FOREACH announcement IN announcements %]
+	
+		[% INCLUDE announcements_item.tt %]
+	
+	[% END %]
+[% ELSE %]
+<div class="item-row" id="empty-row">No announcements found...</div>
+[% END %]	
+
+<div class="action-block filter-block-separator">
+	<div class="center" id="number-of-results">&mdash; [% announcements.size %] results &mdash;</div>
+</div>

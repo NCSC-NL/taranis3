@@ -1,0 +1,13 @@
+#!perl
+
+use warnings;
+use strict;
+
+sub {
+	my ($db, %args) = @_;
+
+	$db->query( <<'__RUN__');
+ALTER TABLE tag_item ALTER COLUMN item_id TYPE TEXT;
+ALTER TABLE tag_item ALTER COLUMN item_table_name TYPE TEXT;
+__RUN__
+};

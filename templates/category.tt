@@ -1,0 +1,20 @@
+<div id="category-content-heading" class="content-heading">
+	<div id="category-content-heading-name" class="block configuration-heading-default">
+		<span>Category name</span>
+	</div>
+</div>
+
+[% IF categories && categories.size > 0 %]
+	[% FOREACH category IN categories %]
+	
+		[% INCLUDE category_item.tt %]
+	
+	[% END %]
+[% ELSE %]
+<div class="item-row" id="empty-row">No categories found...</div>
+
+[% END %]
+
+<div class="action-block filter-block-separator">
+	<div class="center" id="number-of-results">&mdash; [% numberOfResults %] results &mdash;</div>
+</div>

@@ -1,0 +1,40 @@
+#!/usr/bin/env perl
+# This file is part of Taranis, Copyright NCSC-NL. See http://taranis.ncsc.nl
+# Licensed under EUPL v1.2 or newer, https://spdx.org/licenses/EUPL-1.2.html
+
+use warnings;
+use strict;
+
+use File::Basename qw/basename/;
+
+my $hostname = qx/hostname/;
+chomp $hostname;
+$hostname =~ s!\..*$!!;
+
+my $user     = getpwuid $<;
+
+my $path     = $ENV{PWD};
+if(my $top = $ARGV[0]) {
+	$path =~ s!^\Q$top\E/?!&!;
+}
+
+$path =~ s!^\Q$ENV{HOME}!~!;
+
+my ($total, $tail) = (35, 15);
+if(length($path) > $total) {
+	my $base = substr $path, -$tail;
+	$base =~ s!.*/!!    # has full base or create full base
+		or $base = basename $path;
+
+	my $dir = substr $path, 0, $total-length($base)-2;
+	$path = "$dir..$base";
+}
+
+my $version = $ENV{TARANIS_VERSION} ? "[$ENV{TARANIS_VERSION}]" : '';
+
+#XXX Some os'es use dash as /bin/sh, but git-prompt needs more
+my $git = qx(/bin/bash -c 'source git-prompt.sh; __git_ps1 " (%s)"');
+$git =~ s/release-//;
+
+print "$user$version\@$hostname:$path$git> ";
+

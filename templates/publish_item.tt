@@ -1,0 +1,28 @@
+<div class="publications-item colored-item-row publications-approved" id="[% publication.publish_id %]" data-pubtype="[% pub_type %]">
+
+	<div class="publications-item-id block">
+		<span>[% publication.specific_id %]</span>
+	</div>		
+
+	<div class="publications-item-title block">
+		<span>
+	[% IF publication.title_content.length > 100  %]
+		[% publication.title_content.substr( 100, publication.title_content.length, '...') %]
+	[% ELSE %]
+		[% publication.title_content %]
+	[% END %]
+		</span>
+	</div>
+
+	<div class="block publications-item-actions align-block-right">
+		[% IF publication.status == 4 %]
+		<img src="[% webroot %]/images/icon_lock.png" alt="locked" title="locked" class="[% IF is_admin %]pointer[% END %] img-publish-lock" data-publicationid="[% publication.publication_id %]" data-publicationtype="[% pub_type %]">
+		[% END %]
+		[%- IF execute_right && publication.status != 4 && !publication.advisory_forward_id +%]
+		<img src="[% webroot %]/images/icon_email.png" alt="send" title="send" class="pointer img-publish-send" data-publicationid="[% publication.publication_id %]" data-pubtype="[% pub_type %]">
+		[% END %]
+		[% IF publication.advisory_forward_id %]
+		<img src="[% webroot %]/images/icon_warning.png" alt="warning" title="This is an Advisory Forward which cannot be published to the web." style="cursor: help;">
+		[% END %]
+	</div>
+</div>

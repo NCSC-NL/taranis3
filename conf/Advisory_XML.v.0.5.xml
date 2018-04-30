@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml_advisory>
+	<rating>
+		<publisher_analysis>
+			<ques_pro_standard/>
+			<ques_pro_exploit/>
+			<ques_pro_details/>
+			<ques_pro_access/>
+			<ques_pro_credent/>
+			<ques_pro_complexity/>
+			<ques_pro_userint/>
+			<ques_pro_exploited/>
+			<ques_pro_expect/>
+			<ques_pro_solution/>
+			<ques_pro_deviation/>
+			<ques_dmg_dos/>
+			<ques_dmg_codeexec/>
+			<ques_dmg_remrights/>
+			<ques_dmg_privesc/>
+			<ques_dmg_infoleak/>
+			<ques_dmg_deviation/>
+		</publisher_analysis>
+		<constituent_analysis>
+		</constituent_analysis>
+	</rating>
+	<meta_info>
+		<title/>
+		<reference_number/>
+		<version_history>
+			<version_instance>
+				<date/>
+				<version/>
+				<change_descr/>
+			</version_instance>
+		</version_history>
+		<vulnerability_identifiers>
+			<cve>
+				<id/>
+			</cve>
+		</vulnerability_identifiers>
+		<probability/>
+		<damage/>
+		<vulnerability_effect>
+			<effect/>
+		</vulnerability_effect>
+		<issuer/>
+		<date/>
+		<system_information>
+			<systemdetail>
+				<affected_product>
+					<product>
+						<producer/>
+						<name/>
+						<version/>
+						<cpe_id/>
+					</product>
+				</affected_product>
+				<affected_platform>
+					<platform>
+						<producer/>
+						<name/>
+						<version/>
+						<cpe_id/>
+					</platform>
+				</affected_platform>
+				<affected_products_text/>
+				<affected_products_versions_text/>
+				<affected_platforms_text/>
+			</systemdetail>
+		</system_information>
+		<availability>https://kennisbank.ncsc.nl/</availability>
+		<taranis_version>3.0</taranis_version>
+	</meta_info>
+	<content>
+		<update_information/>
+		<tlp_amber/>
+		<abstract/>
+		<consequences/>
+		<description/>
+		<solution/>
+		<additional_resources>
+			<resource/>
+		</additional_resources>
+		<disclaimer>
+   Door gebruik van deze security advisory gaat u akkoord met de
+   navolgende voorwaarden. Ondanks dat NCSC de grootst mogelijke
+   zorg heeft betracht bij de samenstelling van dit beveiligingsadvies,
+   kan het NCSC niet instaan voor de volledigheid, juistheid of
+   (voortdurende) actualiteit van dit beveiligingsadvies. De informatie
+   in dit beveiligingsadvies is uitsluitend bedoeld als algemene
+   informatie voor professionele partijen. Aan de informatie in dit
+   beveiligingsadvies kunnen geen rechten worden ontleend. Het NCSC
+   en de Staat zijn niet aansprakelijk voor enige schade ten gevolge
+   van het gebruik of de onmogelijkheid van het gebruik van dit 
+   beveiligingsadvies, waaronder begrepen schade ten gevolge van de 
+   onjuistheid of onvolledigheid van de informatie in dit
+   beveiligingsadvies. Op dit beveiligingsadvies is Nederlands recht
+   van toepassing. Alle geschillen in verband met en/of voortvloeiend
+   uit dit beveiligingsadvies zullen worden voorgelegd aan de exclusief
+   bevoegde rechter te Den Haag. Deze rechtskeuze geldt tevens voor de
+   voorzieningenrechter in kort geding.</disclaimer>
+	</content>
+</xml_advisory>

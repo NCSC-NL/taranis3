@@ -1,0 +1,35 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden[% END %] ui-state-error ui-corner-all">[% message %]</div>
+	
+	<div class="dialog-title">
+		<span>[% eod_heading %]</span>	
+	</div>
+	
+	<form method="post" id="eod-publish-form" data-publicationid="[% publication_id %]">
+		<fieldset>
+			<div class="dialog-input-wrapper block">
+				<div class="table">
+					<div class="cell">
+						<textarea class="scroll-y-always font-courier border-default" name="eod_preview" id="eod-preview-text">[% preview %]</textarea>
+					</div>
+					<div class="cell eod-publish-preview-cell">
+						<fieldset>
+							<legend>Select constituents</legend>
+							<div class="block">
+
+							[% IF groups && groups.size > 0 %]
+								[% FOREACH group IN groups +%]
+								<input type="checkbox" name="groups" id="group_[% group.id %]" value="[% group.id %]" checked="checked"><label class="contentBlokjeTextOnly" for="group_[% group.id %]">[% group.name %]</label><br>
+								[%+ END %]
+							[% ELSE %]
+								<span>There are no constituent groups configured for this type of publication.</span>
+							[% END %]
+
+							</div>
+						</fieldset><br>
+					</div>
+				</div>
+			</div>
+		</fieldset>	
+	</form>
+</div>

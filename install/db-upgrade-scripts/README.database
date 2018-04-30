@@ -1,0 +1,22 @@
+
+== Upgrade scripts
+
+Each script must check whether it has already been applied.  It also
+must update the taranis_scheme_version.  Start with copying an exist
+script!
+
+Each script should be named:  XXYY.FEATURE
+where XXYY is the scheme version number which is created (see below)
+and FEATURE is an indication of the modification made.
+
+== Scheme version number
+
+Each database upgrade script should raise the taranis_scheme_version
+variable.  Only the strict order is important, but let's try to stick
+to a simple scheme:
+
+The version number is interpreted XXYY, where XX is the base taranis release
+version simplified, and the YY is a sequence number.  For instance, number
+3301 means: the first patch in the Taranis 3.3.* sequence (including its
+release candidates).  This is with respect to the last release made in the
+3.2 release sequence.

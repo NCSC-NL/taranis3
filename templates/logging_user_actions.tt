@@ -1,0 +1,38 @@
+<div id="user-actions-content-heading" class="content-heading">
+	<div id="user-actions-content-heading-date-time" class="block">
+		<span>Date/Time</span>
+	</div>
+
+	<div id="user-actions-content-heading-action" class="block">
+		<span>Action</span>
+	</div>
+
+	<div id="user-actions-content-heading-user" class="block">
+		<span>User</span>
+	</div>
+
+	<div id="user-actions-content-heading-description" class="block">
+		<span>Description</span>
+	</div>
+
+	<div id="user-actions-content-heading-entitlement" class="block">
+		<span>Entitlement</span>
+	</div>	
+</div>
+
+[% IF userActions.size > 0 %]
+	[% FOREACH userAction IN userActions %]
+	
+		[% INCLUDE logging_user_actions_item.tt %]
+	
+	[% END %]
+[% ELSE %]
+<div class="item-row" id="empty-row">No logs found...</div>
+
+[% END %]
+
+<div class="action-block filter-block-separator">
+	<div class="center" id="number-of-results">&mdash; [%  page_bar.number_results_text %] &mdash;</div>
+</div>
+
+[% PROCESS page_bar.tt %]

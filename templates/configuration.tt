@@ -1,0 +1,147 @@
+[% IF pageSettings.menuitem.category
+	|| pageSettings.menuitem.id_patterns
+	|| pageSettings.menuitem.parsers
+	|| pageSettings.menuitem.strips
+	|| pageSettings.menuitem.collector
+	|| pageSettings.menuitem.cluster
+	|| pageSettings.menuitem.sources %]
+<div class="block configuration-block">
+	<fieldset>
+		<legend class="configuration-title bold">Collector configuration</legend>
+		<ul>
+			[%- IF pageSettings.menuitem.collector -%]
+			<li><a href="configuration/collector/displayCollectors/">Collectors</a></li>
+			[% END %]
+			[%- IF pageSettings.menuitem.sources -%]
+			<li><a href="configuration/sources/displaySources/">Taranis Sources</a></li>
+			[% END %]
+			[% IF pageSettings.menuitem.category -%]
+			<li><a href="configuration/category/displayCategories/">Source Categories</a></li>
+			[% END %]
+			[% IF pageSettings.menuitem.wordlist -%]
+			<li><a href="configuration/wordlist/displayWordlists/">Source Wordlists</a></li>
+			[% END %]
+			[% IF pageSettings.menuitem.cluster -%]
+			<li><a href="configuration/cluster/displayClusters/">Assess Clusters</a></li>
+			[% END %]
+			[%- IF pageSettings.menuitem.parsers -%]
+			<li><a href="configuration/parsers/displayParsers/">Parsers</a></li>
+			[% END %]
+			[%- IF pageSettings.menuitem.strips -%]
+			<li><a href="configuration/strips/displayStrips/">Strips</a></li>
+			[% END %]
+			[%- IF pageSettings.menuitem.id_patterns -%]
+			<li><a href="configuration/id_patterns/displayIDPatterns/">ID Patterns</a></li>
+			[% END %]
+		</ul>
+	</fieldset>
+</div>
+[% END %]
+
+[% IF  pageSettings.menuitem.constituent_group
+	|| pageSettings.menuitem.photo_management	    
+	|| pageSettings.menuitem.constituent_individuals
+	|| pageSettings.menuitem.constituent_roles
+	|| pageSettings.menuitem.constituent_types %]
+<div class="block configuration-block">
+	<fieldset>
+		<legend class="configuration-title bold">Constituent configuration</legend>
+		<ul>
+			[%- IF pageSettings.menuitem.constituent_types -%]
+			<li><a href="configuration/constituent_types/displayConstituentTypes/">Constituent Types</a></li>
+			[% END %]
+			[%- IF pageSettings.menuitem.constituent_roles -%]
+			<li><a href="configuration/constituent_roles/displayConstituentRoles/">Constituent Roles</a></li>
+			[% END %]
+			[%- IF pageSettings.menuitem.constituent_group -%]
+			<li><a href="configuration/constituent_group/displayConstituentGroups/">Constituent Groups</a></li>
+			[% END %]
+			[%- IF pageSettings.menuitem.constituent_individuals -%]
+			<li><a href="configuration/constituent_individuals/displayConstituentIndividuals/">Constituent Individuals</a></li>
+			[% END %]
+			[%- IF pageSettings.menuitem.photo_management -%]		
+			<li><a href="configuration/photo_management/displayPhotoIssues/">Photo Management</a></li>
+			[% END %]
+		</ul>
+	</fieldset>
+</div>
+[% END %]
+
+[% IF pageSettings.menuitem.users || pageSettings.menuitem.roles %]
+<div class="block configuration-block">
+	<fieldset>
+		<legend class="configuration-title bold">User configuration</legend>
+		<ul>
+			[%- IF pageSettings.menuitem.users -%]
+			<li><a href="configuration/users/displayUsers/">Users</a></li>
+			[% END %]
+			[%- IF pageSettings.menuitem.roles -%]
+			<li><a href="configuration/roles/displayRoles/">User Roles</a></li>
+			[% END %]
+		</ul>
+	</fieldset>
+</div>
+[% END %]
+
+[% IF pageSettings.menuitem.damage_description
+	|| pageSettings.menuitem.soft_hard_type
+	|| pageSettings.menuitem.software_hardware
+	|| pageSettings.menuitem.publication_templates %]
+<div class="block configuration-block">
+	<fieldset>
+		<legend class="configuration-title bold">Publication configuration</legend>
+		<ul>
+			[%- IF pageSettings.menuitem.publication_templates -%]
+			<li><a href="configuration/publication_templates/displayPublicationTemplates/">Publication Templates</a></li>
+			[% END %]
+			[%- IF pageSettings.menuitem.damage_description -%]
+			<li><a href="configuration/damage_description/displayDamageDescriptions/">Damage Descriptions</a></li>
+			[% END %]
+			[%- IF pageSettings.menuitem.software_hardware -%]
+			<li><a href="configuration/software_hardware/displaySoftwareHardware/">Software / Hardware</a></li>
+			[% END %]
+			[%- IF pageSettings.menuitem.soft_hard_type -%]
+			<li><a href="configuration/soft_hard_type/displaySoftwareHardwareTypes/">Software / Hardware Types</a></li>
+			[% END %]
+		</ul>
+	</fieldset>
+</div>
+[% END %]
+
+[% IF pageSettings.menuitem.module_collect || pageSettings.menuitem.user_actions %]
+<div class="block configuration-block">
+	<fieldset>
+		<legend class="configuration-title bold">Logging</legend>
+		<ul>
+			[% IF pageSettings.menuitem.module_collect %]
+			<li><a href="logging/module_collect/displayCollectorLogging/">Collector Error Logging</a></li>
+			[% END %]
+			[% IF pageSettings.menuitem.user_actions %]
+			<li><a href="logging/user_actions/displayUserActions/">User Actions Logging</a></li>
+			[% END %]
+		</ul>
+	</fieldset>
+</div>
+[% END %]
+
+[%- IF pageSettings.menuitem.tools || pageSettings.menuitem.access_token || pageSettings.menuitem.cve -%]
+<div class="block configuration-block">
+	<fieldset>
+		<legend class="configuration-title bold">Other configuration</legend>
+		<ul>
+			[%- IF pageSettings.menuitem.tools -%]
+			<li><a href="configuration/tools/displayTools/">Tools</a></li>
+			[% END %]
+			[%- IF pageSettings.menuitem.access_token -%]
+			<li><a href="configuration/access_token/displayTokens/">Access Tokens</a></li>
+			[% END %]
+			[%- IF pageSettings.menuitem.cve -%]
+			<li><a href="configuration/cve/displayCVEs/">CVE Descriptions</a></li>
+			[% END %]
+			[%- IF pageSettings.menuitem.cve_template -%]
+			<li><a href="configuration/cve_template/displayCVETemplates/">CVE Templates</a></li>
+			[% END %]
+		</ul>
+	</fieldset>
+</div>
+[% END %]

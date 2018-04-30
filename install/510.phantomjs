@@ -1,0 +1,70 @@
+#!/usr/bin/env perl
+# Install PhantomJS sources
+
+use warnings;
+use strict;
+
+use Carp           qw(confess);
+use File::Basename qw(basename);
+use LWP::UserAgent ();
+
+use Taranis::Install::Bare   qw(has_internet);
+use Taranis::Install::Config qw(config_release config_generic taranis_sources
+	become_user_taranis);
+
+my $package = 'https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2';
+
+become_user_taranis;
+
+my $generic  = config_generic;
+my $release  = config_release;
+
+my $phantom  = "$generic->{phantomjs}";
+my $tar      = "$phantom/" . basename $package;
+(my $label   = basename $package) =~ s/\.tar.*$//;
+
+if(-f $tar && -d $phantom) {
+	print "*   reusing $tar\n";
+	print "    Change the install script to get a newer version.\n";
+
+} elsif( ! has_internet ) {
+	print "--> no internet acces, but we need to download PhantomJS.\n";
+	print "    You may put it by hand at $tar\n";
+	exit 0;
+
+} else {
+	print "*   downloading $package\n";
+	my $ua       = LWP::UserAgent->new;
+
+	# The url differs from the server name
+	$ua->ssl_opts(verify_hostname => 0);
+
+	my $response = $ua->get($package, ':content_file' => $tar);
+	unless($response->is_success) {
+		my $error = $response->message;
+		print "--> cannot fetch PhantomJS sources: $error.\n";
+		print "    You may put it by hand at $tar\n";
+		exit 0;
+	}
+}
+
+my $js_file = "$phantom/bin/phantomjs";
+if(-f $js_file && -C $js_file < -C $tar) {
+	print "*   already extracted\n";
+	exit 0;
+}
+
+print "*   extract code into $phantom/bin\n";
+
+# Most of the tar is documentation which we do not need.  So, only
+# the perl stuff is unpacked.
+
+system tar =>
+	'--extract',
+	'--file'             => $tar,
+	'--directory'        => $phantom,
+	'--strip-components' => 1,
+	"$label/bin/phantomjs"
+	and die "ERROR: cannot extract phantomjs: $!\n";
+
+exit 0;

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html ng-controller="MainCtrl">
+	<head>
+		<meta charset="utf-8">
+		<title>Taranis 4U</title>
+		<link rel="stylesheet" type="text/css" href="/assets/css/reset.css">
+		<link rel="stylesheet" type="text/css" href="/lib/font-awesome/css/font-awesome.min.css">
+		<link rel="stylesheet" type="text/css" href="/lib/jqcloud/jqcloud.css">
+		<link rel="stylesheet" type="text/css" href="/lib/loading-bar/loading-bar.css">
+		<link rel="stylesheet" type="text/css" href="/assets/css/taranis4u.css">
+		<link rel="stylesheet" type="text/css" ng-href="/app/ui/color-{{ selectedColorScheme }}.css">
+		<link rel="stylesheet" type="text/css" href="/assets/css/my-custom.css">
+		
+	</head>
+	<body class="main-color">
+		<div id="counter-wrapper">
+			<span class="counter-block">{{ counterBlock }}</span>
+		</div>
+		<div class="block" id="taranis4u-submenu" ng-switch on="hasToken">
+			<div ng-switch-when="true">
+				<a ng-href="#home" title="home">
+					<div class="fa fa-home"></div>
+				</a>
+			</div>
+			<div ng-switch-when="true">
+				<a ng-href="#logout" title="log out" >
+					<div class="fa fa-sign-out"></div>
+				</a>
+			</div>
+			<div ng-controller="ColorSchemesCtrl" ng-switch-when="true">
+				<span ng-repeat="scheme in schemes.list" class="pointer">
+					<div style="background-color:{{scheme.bgColor}}; color:{{scheme.fontColor}};" ng-click="setScheme(scheme.bgColorName, scheme.fontColorName)"><span class="fa fa-adjust"></span></div>
+				</span>
+			</div>
+		</div>
+		
+		<div id="taranis4-wrapper">
+		
+			<div id="taranis4u-header">
+				<div class="block" id="taranis4u-title">Taranis</div>
+				<div ui-view="page-title" id="taranis4u-page-title" class="block"></div>
+			</div>
+			
+			<hr>
+			<div id="taranis4u-content-wrapper">
+<!-- 				<div ui-view="error" class="center taranis4u-error"> -->
+<!-- 					<span ng-cloak>{{ errorMessage }}</span> -->
+<!-- 				</div>			 -->
+			
+				<div ui-view id="taranis4u-content"></div>
+			</div>
+		</div>
+
+		<div id="taranis4u-footer" class="center">
+			<hr>
+			<footer>
+				<span>Powered by Taranis &copy; 2018 NCSC-NL</span>
+			</footer>
+		</div>
+		
+		<script data-main="main" src="/lib/requirejs/require.js"></script>
+	</body>
+</html>

@@ -1,0 +1,23 @@
+<div id="about-content-heading" class="content-heading">&nbsp;</div>
+<div id="about-content" class="center">
+	<div class="align-text-left block bold" id="about-block"><br><br>
+		<h1>Taranis version 3.4.1</h1>
+
+		<p>For information, contact NCSC-NL on
+		<a href="mailto:taranis@ncsc.nl">taranis@ncsc.nl</a>, or via
+		the Taranis mailing list.<p>
+		<br><br><br>
+
+		<p><span class="italic">
+		Copyright NCSC-NL.
+		See the <a href="http://taranis.ncsc.nl">taranis website</a>
+		for documentation and newer releases.
+		<br><br>
+		Licensed under the EUPL, Version 1.2 or &mdash;&nbsp;as soon they
+		will be approved by the European Commission&nbsp;&mdash; subsequent
+		versions of the EUPL.
+		<a href="https://spdx.org/licenses/EUPL-1.2.html" target="_blank"
+		>License text</a>
+		</span></p>
+	</div>
+</div>
