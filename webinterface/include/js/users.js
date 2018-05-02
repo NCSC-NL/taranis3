@@ -187,12 +187,14 @@ function openDialogUserDetailsCallback ( params ) {
 		});
 
 		$('#btn-user-details-change-password', context).click( function () {
-			if ( $.trim( $('#users-details-change-password', context).val() ) != '' ) {
+			var passwd = $.trim( $('#users-details-change-password', context).val() );
+			if ( passwd != '' ) {
+				var enc_passwd = encodeURIComponent(passwd);
 				$.main.ajaxRequest({
 					modName: 'configuration',
 					pageName: 'users',
 					action: 'changeUserPassword',
-					queryString: 'id=' + params.id + '&new_password=' + $('#users-details-change-password', context).val(),
+					queryString: 'id=' + params.id + '&new_password=' + enc_passwd,
 					success: changeUserPasswordCallback
 				});
 			}

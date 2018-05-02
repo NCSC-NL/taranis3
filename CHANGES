@@ -18,6 +18,7 @@ Fixes:
 - #153 not showing statistics
 - #164 improve "taranis install" from git
 - #167 showing custom searches for user 
+- #192 Special characters in password not escaped
 - fix REST and Taranis4u
 - restore assess shortcut 'v'
 - silence sparse warnings in phising checker
