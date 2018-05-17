@@ -14,25 +14,30 @@ use Taranis::Install::Git    qw(git_checked_out git_checkout
 
 sub _git_init($);
 
-my $git_repo = 'git@github.com:NCSC-NL/taranis.git';
+my $repo_private = 'git@github.com:NCSC-NL/taranis.git';
+my $repo_public  = 'git@github.com:NCSC-NL/taranis3.git';
 
 Taranis::Commands->plugin(git => {
-    handler       => \&git_control,
+	handler       => \&git_control,
 	sub_commands  => [ qw/init release/ ],
-    getopt        => [
+	getopt        => [
+		'dest|d=s',
+		'private|p!',
 		'repo|r=s',
 		'version|v=s',
 		'version-base|b=s'
 	],
-    help          => <<'__HELP',
+	help          => <<'__HELP',
 SUBCOMMANDS:
-  init    [-brv]
+  init    [-bdprv]
   release [-v]
 
 OPTIONS:
+  -b --version-base STR  use newest compatible release, f.i  '3.3'
+  -d --dest DIRECTORY    where to start archive (default ~/source/taranis-git)
   -r --repo URL          where the git repository is
   -v --version STRING    overrule the tag found in git
-  -b --version-base STR  use newest compatible release, f.i  '3.3'
+  -p --private           use the private archive (branch develop)
 __HELP
 } );
 
@@ -49,8 +54,6 @@ sub git_control() {
 
 	my $subcmd = $args{sub_command} or confess;
 
-	$args{repo} ||= $git_repo;
-
 	my $handler = $handlers{$subcmd}
 		or confess $subcmd;
 
@@ -59,21 +62,28 @@ sub git_control() {
 
 sub _git_init($) {
 	my $args = shift;
-	my $repo     = $args->{repo} or confess;
+	my $repo     = $args->{repo};
 	my $version  = $args->{version};
 	my $versbase = $args->{'version-base'};
 
 	print "*** start-up developing Taranis code via github.\n";
 
 	my $generic  = config_generic $::setup_generic;
-	my $dest     = "$generic->{home}/sources/taranis-git";
+	my $dest     = $args->{dest} || "$generic->{home}/sources/taranis-git";
 
 	if(-d "$dest/.git") {
 		print "*   git already cloned into $dest\n";
-	} else {
-		print "*   cloning git into $dest\n";
+	} elsif($args->{private}) {
+		$repo ||= $repo_private;
+		print "*   cloning private git into $dest\n";
 		system git => clone =>
 			'--branch' => 'develop',
+			'--', $repo, $dest
+			and die "ERROR: could not git-clone into $dest: $!\n";
+	} else {
+		$repo ||= $repo_public;
+		print "*   cloning public git into $dest\n";
+		system git => clone =>
 			'--', $repo, $dest
 			and die "ERROR: could not git-clone into $dest: $!\n";
 	}
@@ -100,8 +110,9 @@ sub _git_init($) {
 
 	#XXX call install automatically once?
 	print "\n";
-	print "*** go to $dest for the sources\n";
-	print "*** and then run 'taranis install' after each change.\n";
+	print "*** For the sources go to $dest\n";
+	print "*** and then run 'bin/taranis install'\n";
+	print "*** run 'taranis restart' after each change in *.pm\n";
 }
 
 sub _git_release($) {
