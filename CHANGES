@@ -93,8 +93,7 @@ Bugfixes:
 Installation rewrite:
 - Automated installation.
 - Everything gets installed under username 'taranis' (configurable)
-- Merge migration document into installation document: both texts are
-  rewritten and much, much smaller.
+- Merge migration document into installation document: both texts are rewritten and much, much smaller.
 - Replaced configuration option 'ttroot' for flexible search path TEMPLATE_PATH
 - Replaced use of 'conf/' directory into APPCONF_PATH
 - Replaced clustering_settings_path option by CLUSTERING
