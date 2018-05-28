@@ -69,6 +69,7 @@ sub create_generic() {
 
 	$ENV{COLUMNS} = 80; $ENV{LINES} = 25;  # insane defaults for putty
 	my $term  = Term::ReadLine->new('Global configuration');
+	my $out   = $term->OUT || \$STDOUT;
 
 	my $email = $old_config->{mail_from_address}
 		|| $term->readline('administrator email: ');
@@ -83,6 +84,13 @@ sub create_generic() {
 		|| $term->readline('website uses https [yes]: ')
 		|| 'yes';
 	my $https = $use_https =~ m/^\s*y/i ? 1 : 0;
+
+	$out->print(<<__HELP) if $https;
+WARNING: you will need configure SSL in Apache before the install procedure
+   can be completed.  The 'WARNING-NEEDS-CONFIGURATION' error which you will
+   get later during the installation will tell you where to put it.
+
+__HELP
 
 	my $is_test   = $old_config->{testmode}
 		|| $term->readline('running test server [yes]: ')
