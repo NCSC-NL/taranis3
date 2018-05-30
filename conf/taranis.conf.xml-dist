@@ -33,6 +33,7 @@
   <!-- dbsslmode options: disable|allow|prefer|require -->
   <dbsslmode>prefer</dbsslmode>
   <entitlements>conf/taranis.conf.entitlements.xml</entitlements>
+  <glue_word>and</glue_word>
   <identifiersconfig>conf/taranis.conf.identifiers.xml</identifiersconfig>
   <logdirectory>collector/log</logdirectory>
   <maillist>taranis@example.taranis3</maillist>
