@@ -7,6 +7,9 @@ Please see the Installation Guide for upgrade instructions.
 Improvements:
 - warn for seconds step of https configuration during install
 
+Fixes:
+- enforce existence of workdir for mail parser during import xml-advisories
+
 === Version 3.4.1
 
 Changes:

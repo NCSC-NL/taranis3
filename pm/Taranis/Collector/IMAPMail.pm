@@ -85,6 +85,7 @@ sub collect {
 
 	my $mimeParser = MIME::Parser->new();
 	my $mimeParserOutPutDir = tmp_path($collectorConfig->{mimeparser_outputdir});
+	mkdir $mimeParserOutPutDir;
 
 		$mimeParser->output_dir( $mimeParserOutPutDir );
 		chmod 0777, $mimeParserOutPutDir;
