@@ -4,14 +4,15 @@
 use warnings;
 use strict;
 
-use Carp           qw(confess);
-use File::Glob     qw(bsd_glob);
-use File::Basename qw(basename dirname);
-use Time::HiRes    qw(time);
+use Carp                  qw(confess);
+use File::Glob            qw(bsd_glob);
+use File::Basename        qw(basename dirname);
+use File::Spec::Functions qw(rel2abs);
+use Time::HiRes           qw(time);
 
+use Taranis::Install::DB  qw(connect_db schema_version);
 use Taranis::Install::Config qw(config_release taranis_sources
 	become_user_taranis);
-use Taranis::Install::DB     qw(connect_db schema_version);
 
 become_user_taranis;
 
@@ -30,11 +31,11 @@ my $schema_version = schema_version $db;
 
 print "*   current database schema version is $schema_version\n";
 
-my $scripts = (dirname __FILE__) . '/db-upgrade-scripts';
+my $scripts = rel2abs((dirname __FILE__) . '/db-upgrade-scripts');
 -d $scripts
 	or die "ERROR: cannot find db upgrade scripts";
 
-foreach my $script (bsd_glob "$scripts/[0-9]*") {
+foreach my $script (bsd_glob "$scripts/[0-9][0-9][0-9][0-9].*") {
 	my $script_name = basename $script;
 
 	# Skip scripts which already were applied
