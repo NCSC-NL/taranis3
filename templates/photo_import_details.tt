@@ -86,7 +86,7 @@
 								[% classColor = 'green' %]
 								[% subTitle = 'A resolved issue exists.' %]
 							[% END %]
-					<div class="[% IF classColor == 'item-row' %]item-row[% ELSE %]colored-item-row photo-issues-status-color-[% classColor %][% END %] photo-issue-item" data-id="[% item.id %]">
+					<div class="[% IF classColor == 'item-row' %]item-row photo-issues-status-color-white[% ELSE %]colored-item-row photo-issues-status-color-[% classColor %][% END %] photo-issue-item" data-id="[% item.id %]">
 						<div class="block">
 							<span class="bold" id="span_import_item_[% item.id %]">[% item.producer _ ' ' _ item.name %]</span><br>
 							<span class="italic" id="span_import_item_type_[% item.id %]">[% item.type %]</span><br>
