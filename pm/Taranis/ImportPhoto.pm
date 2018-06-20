@@ -416,18 +416,22 @@ sub deleteFromImport {
 	undef $self->{errmsg};
 	
 	my ( $stmnt, @bind ) = $self->{sql}->delete( $table, $delete );
-	
 	$self->{dbh}->prepare( $stmnt );
  
-	if ( $self->{dbh}->executeWithBinds( @bind) > 0 ) {
+	if ( $self->{dbh}->executeWithBinds(@bind) > 0 ) {
 		return 1;
-	} elsif ( defined( $self->{dbh}->{db_error_msg} ) ) {
-		$self->{errmsg} = $self->{dbh}->{db_error_msg};
-		return 0;
-	} else {
-		$self->{errmsg} = "Delete failed, corresponding id not found in database.";
+	}
+
+	if ( my $msg = $self->{dbh}->{db_error_msg} ) {
+		$self->{errmsg} = $msg;
 		return 0;
 	}
+
+	# In rare cases, the same line appears twice in the import.  When removed,
+	# the first call to this method will return both... so there is nothing
+	# to be removed the second time.  Not a fatal flaw.  Issue#196
+	warn "WARNING: Import item to be deleted not found: ", join(';', %$delete);
+	return 1;
 } 
 
 sub isOkToImport {
@@ -1140,7 +1144,7 @@ Generic method for adding new items to database.
 
     $obj->deleteFromImport( 'import_photo', { id => 34 } );
 
-If successful returns TRUE. If unsuccessful returns FALSE and sets C<< $obj->{errmsg} >> to C<< Taranis::Database->{db_error_msg} >>.
+If successful returns TRUE. If unsuccessful returns FALSE and sets C<< $obj->{errmsg} >>.
 
 =head2 deleteImportPhoto( %where )
 

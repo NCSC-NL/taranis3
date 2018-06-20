@@ -10,6 +10,7 @@ Improvements:
 Fixes:
 - enforce existence of workdir for mail parser during import xml-advisories
 - dot is not in @INC-path anymore for new Perls.
+- #196 don't die on removal of double used soft_hard_usage
 
 === Version 3.4.1
 
