@@ -12,6 +12,7 @@ Fixes:
 - dot is not in @INC-path anymore for new Perls.
 - #196 don't die on removal of double used soft_hard_usage
 - #195 Photo Import white toggle did not work
+- cpe import should remove version into '' (blank), not '-'
 
 === Version 3.4.1
 

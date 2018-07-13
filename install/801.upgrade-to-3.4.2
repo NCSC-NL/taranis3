@@ -1,0 +1,21 @@
+#!/usr/bin/env perl
+
+use warnings;
+use strict;
+
+use Taranis::Database;
+
+my $db = Taranis::Database->new->{simple};
+
+# We cannot run a subset of database changes: upgrading the schema versions
+# is a linear process.  So, we need to reimplement some changes here outside
+# the usual upgrade process.
+
+$db->query(<<'__FIX');
+UPDATE software_hardware
+   SET version = ''
+ WHERE version = '-';
+__FIX
+
+
+exit 0;
