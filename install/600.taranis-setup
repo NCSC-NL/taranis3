@@ -116,6 +116,9 @@ sub copy_file($$) {
 
 	chown $userid, $groupid, $to
 		or die "ERROR: cannot re-own file $to: $!\n";
+
+	# At least the taranis user and apache may attempt to write them
+	chmod 0666, $to;
 }
 
 # Remove options which were not used in 3.3, or victimized by

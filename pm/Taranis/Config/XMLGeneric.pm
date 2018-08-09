@@ -17,17 +17,17 @@ BEGIN {
 }
 
 sub new {
-	my ( $class, $configFile, $primaryKey, $rootName, $normaliseSpace ) = @_;
+	my ( $class, $fn, $primaryKey, $rootName, $normaliseSpace ) = @_;
+	my $configFile = find_config $fn;
 	
 	my $self = {
 		primary_key => $primaryKey,
 		root_name => $rootName,
-		config_file => $configFile
+		config_file => $configFile,
 	};
 
 	$normaliseSpace = ( $normaliseSpace =~ /(0|1|2)/) ? $normaliseSpace : 2;
 
-	$configFile = find_config $configFile;
 	my $xml = $xs->XMLin( $configFile, ForceArray => qr/anon/ , NormaliseSpace => $normaliseSpace);
 	$self->{elements} = $xml;
 

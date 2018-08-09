@@ -55,22 +55,23 @@ my $sources  = "$home/sources";
 my $bin      = $generic->{bin}      ||= "$home/bin";
 my $lib      = $generic->{lib}      ||= "$home/lib";
 my $man      = $generic->{man}      ||= "$home/man";
-my $var      = $generic->{var}      ||= "$home/var";
-my $runs     = $generic->{runs}     ||= "$home/run";
 my $perllib  = $generic->{perl_lib} ||= "$lib/perl5";
 my $charts   = $generic->{charts}   ||= "$home/ChartDirector";
 my $phantom  = $generic->{phantomjs}||= "$home/PhantomJS";
 
-foreach my $dir ($sources, $bin, $lib, $man, $perllib, $charts, $phantom,
- 	$var, $runs){
+foreach my $dir ($sources, $bin, $lib, $man, $perllib, $charts, $phantom) {
 	create_dir $dir, 0755, $userid, $groupid;
 }
 
+# These directories contain writable files, shared by the taranis user and
+# the webserver (user apache)
+my $var      = $generic->{var}          ||= "$home/var";
+my $runs     = $generic->{runs}         ||= "$home/run";
 my $icons    = $generic->{source_icons} ||= "$var/source-icons";
 my $stats    = $generic->{custom_stats} ||= "$var/custom-stats";
 my $cluster  = $release->{clustering}   ||= "$var/clustering";
 
-foreach my $dir ($icons, $stats, $cluster) {
+foreach my $dir ($var, $runs, $icons, $stats, $cluster) {
 	create_dir $dir, 0770, $userid, $www_groupid;
 }
 
