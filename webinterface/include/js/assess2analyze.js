@@ -248,7 +248,7 @@ function createOrLinkAssessAnalysisCallback ( params ) {
 function searchAssessAnalysisCallback ( params ) {
 
 	$.each( params.analysis, function (i, a) {
-		var optionText = 'AN-' + a.id.substr(0,4) + '-' + a.id.substr(4,4) + ': ' + a.title + ' (' + a.status.toLowerCase() + ')';
+		var optionText = 'AN-' + String(a.id).substr(0,4) + '-' + String(a.id).substr(4,4) + ': ' + a.title + ' (' + a.status.toLowerCase() + ')';
 		
 		$('<option>')
 			.html(optionText)

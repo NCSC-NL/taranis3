@@ -14,6 +14,7 @@ Fixes:
 - #195 Photo Import white toggle did not work
 - cpe import should remove version into '' (blank), not '-'
 - #220 (E#5) write rights for webserver on config files
+- #221 (E#6) Analysis search in Assess not working
 
 === Version 3.4.1
 
