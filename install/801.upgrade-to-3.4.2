@@ -4,6 +4,9 @@ use warnings;
 use strict;
 
 use Taranis::Database;
+use Taranis::Install::Config qw(config_generic);
+
+use File::Find    qw/find/;
 
 my $db = Taranis::Database->new->{simple};
 
@@ -16,6 +19,13 @@ UPDATE software_hardware
    SET version = ''
  WHERE version = '-';
 __FIX
+
+
+### Fix write access by website to configuration files
+# issue internal=210, external=5
+
+my $generic = config_generic;
+find sub { chmod 0666, $_ if -f && m/\.xml$/ }, $generic->{var};
 
 
 exit 0;

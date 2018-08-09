@@ -13,6 +13,7 @@ Fixes:
 - #196 don't die on removal of double used soft_hard_usage
 - #195 Photo Import white toggle did not work
 - cpe import should remove version into '' (blank), not '-'
+- #220 (E#5) write rights for webserver on config files
 
 === Version 3.4.1
 
