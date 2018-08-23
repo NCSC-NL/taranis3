@@ -51,10 +51,10 @@ Beschikbaarheid : https://kennisbank.ncsc.nl/
     <tbl type="select" column="tlpamber">publication_advisory_forward</tbl>
   </fld_tlpamber>
   <fld_tlpamber type="settings">
-    <setting type="heading">= TLP:AMBER =</setting>
+    <setting type="heading">------------ TLP:AMBER ------------</setting>
   </fld_tlpamber>
   <fld_tlpamber type="settings">
-    <setting type="footer">=============</setting>
+    <setting type="footer">------------ TLP:AMBER ------------</setting>
   </fld_tlpamber>
   <fld_source type="database">
     <tbl type="key" column="id">publication_advisory_forward</tbl>

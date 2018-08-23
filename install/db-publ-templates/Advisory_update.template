@@ -27,6 +27,8 @@ Platform(s)      : _fld_platforms_
 
    _fld_description_
 
+   _fld_tlpamber_
+
    _fld_solution_
 
    _fld_links_
@@ -56,6 +58,16 @@ Platform(s)      : _fld_platforms_
   <fld_description type="settings">
     <setting type="heading">Description</setting>
   </fld_description>
+  <fld_tlpamber type="database">
+    <tbl type="key" column="id">publication_advisory_forward</tbl>
+    <tbl type="select" column="tlpamber">publication_advisory_forward</tbl>
+  </fld_tlpamber>
+  <fld_tlpamber type="settings">
+    <setting type="heading">------------ TLP:AMBER ------------</setting>
+  </fld_tlpamber>
+  <fld_tlpamber type="settings">
+    <setting type="footer">------------ TLP:AMBER ------------</setting>
+  </fld_tlpamber>
   <fld_solution type="database">
     <tbl type="key" column="id">publication_advisory</tbl>
     <tbl type="select" column="solution">publication_advisory</tbl>
