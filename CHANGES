@@ -15,6 +15,7 @@ Fixes:
 - cpe import should remove version into '' (blank), not '-'
 - #220 (E#5) write rights for webserver on config files
 - #221 (E#6) Analysis search in Assess not working
+- #215 TLP:Amber missing from default templates
 
 === Version 3.4.1
 
