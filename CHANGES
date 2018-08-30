@@ -16,6 +16,7 @@ Fixes:
 - #220 (E#5) write rights for webserver on config files
 - #221 (E#6) Analysis search in Assess not working
 - #215 TLP:Amber missing from default templates
+- #218 Unable to import xml-advisories
 
 === Version 3.4.1
 

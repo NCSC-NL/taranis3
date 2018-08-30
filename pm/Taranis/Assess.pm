@@ -531,6 +531,7 @@ sub setAssessItem {
 
 sub getAttachmentInfo {
 	my ( $self, $entity, $info ) = @_;
+	$info ||= {};
 	
 	if ( $entity->parts() ) {
 		foreach my $part ( $entity->parts() ) {
@@ -542,21 +543,16 @@ sub getAttachmentInfo {
 		
 		my $head = $entity->head();
 		my $contentType = $head->mime_type();
-		my $contentDisposition = $head->mime_attr( 'content-disposition' );
-		
-		$contentDisposition = "" if ( !$contentDisposition );
-		
-		my $fileName = $head->recommended_filename;
-		$fileName = "noname" if ( !$fileName );
-		
-		return 0 if $contentType !~ /^(?:application|image|audio|video)/i;
-		my $fileType = $contentType =~ m!.*?/(.*)! ? $1 : '';
-		
-		my $attachment;
-		$attachment->{filename} = $fileName if ( $fileName );
-		$attachment->{filetype} = $fileType if ( $fileType );
+		my $contentDisposition = $head->mime_attr( 'content-disposition' ) || '';
+		my $fileName = $head->recommended_filename || 'noname';
 
-		$info->{ $fileName } = $attachment if ( $attachment );
+		return 0 if lc($contentDisposition) ne 'attachment';
+		my $fileType = $contentType =~ m!.*?/(.*)! ? $1 : '';
+
+		$info->{ $fileName } = {
+			filename => $fileName,
+			filetype => $fileType,
+		};
 	}
 
 	return $info;
@@ -578,17 +574,10 @@ sub getAttachment {
 		my $head = $entity->head();
 		my $rawText = $entity->stringify();
 		my $contentType = $head->mime_type();
-		my $contentDisposition = $head->mime_attr( 'content-disposition' );
-		
-		$contentDisposition = "" if ( !$contentDisposition );
-		
-		my $fileName = $head->recommended_filename;
-		$fileName = "noname" if ( !$fileName );
-		
-		return 0 if $contentType !~ /^(?:application|image|audio|video)/i ;
-		return 0 if ( $fileName !~ /$name/i);
+		my $contentDisposition = $head->mime_attr( 'content-disposition' ) || '';
+		my $fileName = $head->recommended_filename || 'noname';
 
-		$attachment = $rawText;
+		$attachment = $fileName =~ /$name/i ? $rawText : 0;
 	}
 
 	return $attachment;

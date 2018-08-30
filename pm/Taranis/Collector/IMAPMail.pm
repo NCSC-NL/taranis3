@@ -199,6 +199,7 @@ sub collect {
 							my $attachment = $as->getAttachment($mimeEntity, $attachmentName)
 								or next;
 ;
+
 							my $attachmentEntity = $mimeParser->parse_data($attachment);
 							my $attachmentDecoded = decodeMimeEntity( $attachmentEntity, 1, 0 );
 							$attachmentDecoded =~ s/\r//g;
