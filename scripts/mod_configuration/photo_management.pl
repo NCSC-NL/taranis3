@@ -1021,26 +1021,38 @@ sub importPhoto {
 			$csv->clear_csv();
 			$csv->addLine( "Producer", "Product", "CPE", "Type" );
 			
-			my $checkString = "";
-			foreach my $softwareHardware ( @$dontImportList ) {
-				$csv->addLine( $softwareHardware->{producer}, $softwareHardware->{name}, $softwareHardware->{cpe_id}, $softwareHardware->{type} );
-				$checkString .= $softwareHardware->{producer} . $softwareHardware->{name} . $softwareHardware->{cpe_id} . $softwareHardware->{type};
+			my %seen;
+			foreach my $swhw ( @$dontImportList ) {
+				$csv->addLine( $swhw->{producer}, $swhw->{name}, $swhw->{cpe_id}, $swhw->{type} );
+				$seen{"$swhw->{producer}$swhw->{name}$swhw->{cpe_id}$swhw->{type}"};
 			}
-				
-			foreach my $softwareHardware ( @$softwareHardwareWithOpenIssues ) {
-				
-				if ( $checkString !~ /$softwareHardware->{producer}$softwareHardware->{name}$softwareHardware->{cpe_id}$softwareHardware->{type}/ ) {
-					$csv->addLine( $softwareHardware->{producer}, $softwareHardware->{name}, $softwareHardware->{cpe_id}, $softwareHardware->{type} );
-				}
+
+			foreach my $swhw ( @$softwareHardwareWithOpenIssues ) {
+				$csv->addLine( $swhw->{producer}, $swhw->{name}, $swhw->{cpe_id}, $swhw->{type} )
+					unless $seen{"$swhw->{producer}$swhw->{name}$swhw->{cpe_id}$swhw->{type}"};
 			}
-				
+
 			my $cvsDontImportList = $csv->print_csv();
 			my $dateTimeNow = substr( nowstring(7), 0, -3 );
 			my $issueDescription = "Photo import for $photoDetails->{name} done on $dateTimeNow.";
-			
-			my $issueComments = "Deleted items from old photo in CSV: \n\n== BEGIN ==\n\n" . $csvDeleteList . "\n== END ==\n\n"
-				. "Items that are not imported in Taranis: \n\n== BEGIN ==\n\n" . $cvsDontImportList . "\n== END ==\n\n";
-				
+
+			my $issueComments    = <<__DELETE_MESSAGE;
+Deleted items from old photo in CSV:
+
+== BEGIN ==
+
+$csvDeleteList
+== END ==
+
+Items that are not imported in Taranis:
+
+== BEGIN ==
+
+$cvsDontImportList
+== END ==
+
+__DELETE_MESSAGE
+
 			if ( !( $issueNr = $ip->createIssue( $issueDescription, 4, $issueComments )	) ) {
 				$message .= "Cannot import photo. Could not create 'Inform constiuent' issue: " . $ip->{errmsg};
 				$doRollBack = 1;		

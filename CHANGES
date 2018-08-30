@@ -17,6 +17,7 @@ Fixes:
 - #221 (E#6) Analysis search in Assess not working
 - #215 TLP:Amber missing from default templates
 - #218 Unable to import xml-advisories
+- #222 Photo import uses unsafe regex
 
 === Version 3.4.1
 
