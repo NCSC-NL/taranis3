@@ -14,7 +14,7 @@ use Taranis::Install::Bare   qw(has_internet);
 use Taranis::Install::Config qw(config_generic taranis_sources
 	become_user_taranis);
 
-my $package = 'http://download2.advsofteng.com/chartdir_perl_linux_64.tar.gz';
+my $package = 'http://www.advsofteng.net/chartdir_perl_linux_64.tar.gz';
 
 become_user_taranis;
 

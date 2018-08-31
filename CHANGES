@@ -18,6 +18,8 @@ Fixes:
 - #215 TLP:Amber missing from default templates
 - #218 Unable to import xml-advisories
 - #222 Photo import uses unsafe regex
+- #224 (E#8) Download location for ChartDirectory changed
+
 
 === Version 3.4.1
 
