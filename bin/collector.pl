@@ -208,8 +208,8 @@ sub collect_source {
 		### MAIL SOURCES IMAP & POP3 ###
 
 		my $mailCollector = $source->{protocol} =~ /^(pop3|pop3s)$/i
-			? Taranis::Collector::POP3Mail->new( $config, $debugSource )
-			: Taranis::Collector::IMAPMail->new( $config, $debugSource );
+			? Taranis::Collector::POP3Mail->new( $configObj, $debugSource )
+			: Taranis::Collector::IMAPMail->new( $configObj, $debugSource );
 
 		my $sourceStatus;
 
@@ -266,9 +266,9 @@ sub collect_source {
 			}
 
 		} elsif ( $source->{parser} =~ /^xml$/ ) {
-			$httpCollector = Taranis::Collector::XMLFeed->new( $config, $debugSource );
+			$httpCollector = Taranis::Collector::XMLFeed->new( $configObj, $debugSource );
 		} else {
-			$httpCollector = Taranis::Collector::HTMLFeed->new( $config, $debugSource );
+			$httpCollector = Taranis::Collector::HTMLFeed->new( $configObj, $debugSource );
 		}
 
 		if ( ref( $httpCollector ) !~ /^Taranis::Collector/ ) {
