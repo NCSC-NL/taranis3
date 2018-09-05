@@ -8,7 +8,7 @@ Please see the Installation Guide for upgrade instructions.
 = released on Wed Sep  5 09:17:49 CEST 2018
 
 Improvements:
-- warn for seconds step of https configuration during install
+- warn for need of second step of https configuration during install
 
 Fixes:
 - enforce existence of workdir for mail parser during import xml-advisories
