@@ -9,8 +9,8 @@ use strict;
 use Carp        qw(confess);
 
 use Taranis::Install::Config qw(config_generic);
-use Taranis::Install::Git    qw(git_checked_out git_checkout
-	git_releases git_init_config git_last_tag);
+use Taranis::Install::Git    qw(git_checked_out git_checkout git_archive
+	git_releases git_init_config git_last_tag git_taranis_version);
 
 sub _git_init($);
 
@@ -121,46 +121,23 @@ sub _git_release($) {
 	my $generic = config_generic $::setup_generic;
 	my $git_src = "$generic->{home}/sources/taranis-git";
 
-	my $version = $args->{version};
-	unless($version) {
+	my ($version, $tag);
+	if($version    = $args->{version}) {
+		$tag       = git_last_tag $git_src;
+	} else {
 		my $branch = git_checked_out $git_src;
 		$branch =~ m/^release-/
 			or die "ERROR: specify version or switch to release branch\n";
 
-		my $tag    = git_last_tag $git_src;
+		$tag       = git_last_tag $git_src;
 		$tag =~ /^(?:release-|v)(.*)/i
 			or die "ERROR: last tag '$tag' is does not contain a version\n";
 
 		$version = $1;
 	}
 
-	# To get the top directory inside our package, we use a trick with
-	# a symlink.
-	my $tmpdir  = $generic->{tmp};
-	-d $tmpdir or mkdir $tmpdir
-		or die "ERROR: cannot create $tmpdir: $!\n";
-
-	chdir $tmpdir     #!!!
-		or die "ERROR: cannot chdir to $tmpdir: $!\n";
-
-	my $tardir  = "taranis-$version";
-	my $tarbase = "$tmpdir/$tardir";
-	unlink $tarbase;
-
-	symlink $git_src, $tarbase
-		or die "ERROR: cannot create symlink $tarbase: $!\n";
-
-	my $tarball = "$tarbase.tar.gz";
-	system tar => '--create', '--gzip',
-		'--file' => $tarball,
-		'--exclude'  => '*.old',
-		'--dereference',           # follow symlinks
-		'--exclude-vcs',
-		'--exclude-backups',
-		'--owner'    => 'taranis', # force this owner name in the tar
-		'--group'    => 'taranis',
-		$tardir
-		and die "ERROR: could not create tarball in $tarball: $!\n";
+	my $tarball = "/tmp/taranis-$version.tar.gz";
+	git_archive $git_src, $tag, $tarball;
 
 	print "Produced release in $tarball\n";
 }

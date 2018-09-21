@@ -7,7 +7,8 @@ use base 'Exporter';
 use warnings;
 use strict;
 
-use Carp       qw(confess);
+use Carp           qw(confess);
+use File::Basename qw(basename);
 
 use Taranis::Install::Config  qw(config_generic sort_versions);
 
@@ -19,6 +20,8 @@ our @EXPORT = qw(
 	git_last_tag
 	git_init_config
 	git_releases
+	git_taranis_version
+	git_archive
 );
 
 sub git_checked_out($) {
@@ -51,6 +54,8 @@ sub git_checkout($$) {
 
 	system "cd '$dir' && git checkout '$git_tag' 2>/dev/null"
 		and die "ERROR: cannot not checkout '$git_tag'.\n";
+
+	git_last_tag $dir;
 }
 
 sub git_init_config($) {
@@ -76,6 +81,26 @@ sub git_releases($;$) {
 	}
 
 	sort_versions keys %releases;
+}
+
+# Returns the last tag (with commit number) as taranis version indicator
+sub git_taranis_version($) {
+	my ($dir) = @_;
+	my ($version) = qx(cd '$dir' && git describe HEAD);
+	$version;
+}
+
+# Create a git archive
+sub git_archive($$$) {
+	my ($dir, $tag, $fn) = @_;
+
+	# For formats, see "git archive --list"
+	my $base = basename $fn;
+	my ($prefix, $format) = $base =~ m/^(.*?)\.(tar|tgz|tar\.gz|zip)$/
+		or die "ERROR: unsupported filename extension for archive in $fn\n";
+
+	system "cd '$dir' && git archive --format=$format --output='$fn' --prefix='$prefix/' $tag"
+		and die "ERROR: could not create archive for $tag";
 }
 
 1;

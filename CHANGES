@@ -3,6 +3,13 @@
 Please see the Installation Guide for upgrade instructions.
 
 === version 3.4.3
+= released on Fri Sep 21 16:12:52 CEST 2018
+
+Fixes:
+- release 3.4.2 contained a single file install/1.* which broke clean
+  installation.  Now used 'git archive' to avoid the inclusion of incommited
+  work.
+- mistake in default publication templates
 
 === version 3.4.2
 = released on Wed Sep  5 09:17:49 CEST 2018
