@@ -3,12 +3,12 @@
 use warnings;
 use strict;
 
-use Taranis::Database;
 use Taranis::Install::Config qw(config_generic);
+use Taranis::Install::DB     qw(connect_db);
 
 use File::Find    qw/find/;
 
-my $db = Taranis::Database->new->{simple};
+my $db = connect_db;
 
 # We cannot run a subset of database changes: upgrading the schema versions
 # is a linear process.  So, we need to reimplement some changes here outside
