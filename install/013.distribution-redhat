@@ -21,6 +21,8 @@ redhat_packages
 	'wget',              # to access CPAN
 	'patch',             # needed for installing local extensions
 	'policycoreutils-python',  # semanage
+	'lbzip2',            # used by tar with bzip2
+	'rsync',
 
 	# We need these before we get to install Perl modules
 	'make',              # to install some Perl XS packages
