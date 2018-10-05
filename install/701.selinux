@@ -88,20 +88,38 @@ system chcon =>
 	and die "ERROR: cannot change context of $home/lib/perl5/\n";
 
 print "*   Apache gets execute rights on PhantomJS\n";
-system chcon =>
-	'--recursive',
-	'--no-dereference',
-	'--type' => 'httpd_sys_script_exec_t',
-	"$home/PhantomJS/bin/phantomjs"
-	and die "ERROR: cannot change context of $home/PhantomJS/bin/phantomjs\n";
+my $phantomjs = "$home/PhantomJS/bin/phantomjs";
+if(-f $phantomjs) {
+	system chcon =>
+		'--recursive',
+		'--no-dereference',
+		'--type' => 'httpd_sys_script_exec_t',
+		$phantomjs,
+		and die "ERROR: cannot change context of $phantomjs\n";
+} else {
+	warn <<__PHANTOMJS;
+WARNING: phantomjs binary not installed at $phantomjs
+    You have to rerun "taranis install" after installing PhantomJS by hand,
+    so access rights can be granted for Apache to allow using the library.
+__PHANTOMJS
+}
 
 print "*   Apache gets execute rights on ChartDirector\n";
-system chcon =>
-	'--recursive',
-	'--no-dereference',
-	'--type' => 'httpd_sys_script_exec_t',
-	"$home/ChartDirector"
-	and die "ERROR: cannot change context of $home/ChartDirector\n";
+my $chartdir = "$home/ChartDirector";
+if(-d $chartdir) {
+	system chcon =>
+		'--recursive',
+		'--no-dereference',
+		'--type' => 'httpd_sys_script_exec_t',
+		$chartdir
+		and die "ERROR: cannot change context of $chartdir\n";
+} else {
+	warn <<__CHARTDIR;
+WARNING: ChartDirectory is not installed at $chartdir
+    You have to rerun "taranis install" after installing ChartDirector by hand,
+    so access rights can be granted for Apache to allow using the library.
+__CHARTDIR
+}
 
 print "*   Apache get write right on source-icons dir-n\n";
 system chcon =>

@@ -87,8 +87,8 @@ sub create_generic() {
 
 	$out->print(<<__HELP) if $https;
 WARNING: you will need configure SSL in Apache before the install procedure
-   can be completed.  The 'WARNING-NEEDS-CONFIGURATION' error which you will
-   get later during the installation will tell you where to put it.
+    can be completed.  The 'WARNING-NEEDS-CONFIGURATION' error which you will
+    get later during the installation will tell you where to put it.
 
 __HELP
 
