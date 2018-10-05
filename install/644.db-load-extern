@@ -27,6 +27,7 @@ __EXPLAIN
 
 	my $a = $term->readline('Try to load them now? [y] ');
     if($a !~ /\S/ || $a =~ m/^\s*y/i) {
+		print "!!! Simply press enter and wait a few minutes...\n";
 		system "su - $user -c 'taranis cve descriptions'";
 	}
 }

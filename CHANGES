@@ -7,6 +7,8 @@ Please see the Installation Guide for upgrade instructions.
 Fixes:
 - upgrade-to-3.4.2 used wrong db connection software.
 - missing OS packages for RedHat
+- #242 SELinux on phantomjs when download failed
+- #243 Install/644.db-load-extern procedure of CVE load unclear
 
 === version 3.4.3
 = released on Fri Sep 21 16:12:52 CEST 2018
