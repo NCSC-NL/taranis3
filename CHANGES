@@ -3,6 +3,7 @@
 Please see the Installation Guide for upgrade instructions.
 
 === version 3.4.4
+= released on Tue Oct 16 10:50:24 CEST 2018
 
 Fixes:
 - upgrade-to-3.4.2 used wrong db connection software.
