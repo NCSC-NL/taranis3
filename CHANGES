@@ -1,43 +1,21 @@
-= release 3.5.0-rc4
-
-Fixes:
-  - Minor bug fixes
 
 = release 3.5.0
+  Fri Jan 18 13:29:24 CET 2019
 
-Fixes:
-  - #260 race condition while collecting in parallel.
-
-= release 3.5.0-rc3
-
-Fixes:
-  - work-around to make sort buttons work.
-  - running phantomjs to take pictures.
-  - install do not unpack sources again.
-
-= release 3.5.0-rc2
-
-Fixes:
-  - path for taranis command, to prefer local templates
-  - matching keywords in IMAP/POP sources
-  - parsing email attachments in display assess
-  - #255 emailing assess item fails
-
-= release 3.5.0
-
-Please see the website for upgrade instructions.
+Please see the wiki for more details and upgrade instructions.
+https://github.com/NCSC-NL/taranis3/wiki
 
 Bugfixes are discussed in the issues in GitHUB.  This file only lists
 substantial changes.  The public wiki provides more details on the
 changes and fixes.
 
-Changes:
+Changes (since 3.4.0)
   - Upgrade license from EUPL 1.1 to EUPL 1.2
   - Change the way that copyright and license is included in the code.
   - Remove personal names from the code.
   - Rename 'taranis specint send-reminders' to 'taranis send specint-reminders'
 
-Improvements:
+Improvements: (since 3.4.x)
   - add 'taranis send year-stats'
   - add 'taranis db remove-items'
   - add 'taranis db schema-version'
@@ -45,3 +23,5 @@ Improvements:
   - add reply-to header to publications
   - add assess page short-cut '!'
   - advisory print preview contains advisory matrix
+  - full rewrite of search
+  - many, many small bugfixes and small features

@@ -30,7 +30,7 @@ use File::Path  qw(make_path);
 use Taranis::FunctionalWrapper qw(CGI);
 
 our @ISA = qw(Exporter);
-our $VERSION = '3.5.0_06';
+our $VERSION = '3.5.0';
 
 our %EXPORT_TAGS = ();
 $EXPORT_TAGS{util} = [
