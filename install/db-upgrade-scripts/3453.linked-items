@@ -1,0 +1,17 @@
+#!perl
+# late link_items in EOD publication stored as processed text
+
+use warnings;
+use strict;
+
+sub {
+	my ($db, %args) = @_;
+
+	$db->query( <<'__RUN__');
+
+ALTER TABLE publication_endofday
+    ADD COLUMN linked_items text;
+
+__RUN__
+
+};

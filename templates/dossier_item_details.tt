@@ -1,0 +1,20 @@
+[% USE date %]
+<div class="dialog-form-wrapper block">
+	<fieldset>
+		<form id="form-dossier-item-details" data-id="[% dossierItem.id %]" data-dossierid="[% dossierItem.dossier_id %]">
+			<div class="dialog-input-wrapper">
+				<span class="dialog-input-label">Item date/time</span><br>
+				<input type="text" class="date-picker input-default" id="dossier-item-event-timestamp-date" name="event_timtestamp_date" value="[% date.format( dossierItem.event_timestamp.stripSeconds, '%d-%m-%Y') %]" placeholder="dd-mm-yyyy">
+				<input type="text" class="time input-default" id="dossier-item-event-timestamp-time" name="event_timtestamp_time" value="[% date.format(dossierItem.event_timestamp.stripSeconds, '%H:%M') %]" placeholder="HH:MM">
+			</div>
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">TLP classification</span><br>
+				<select id="dossier-details-contributor-username" class="select-single dialog-input-text-narrow block" name="tlp">
+					[% FOREACH tlp IN tlpMapping.keys.sort.reverse %]
+						<option value="[% tlp %]" [% IF tlp == dossierItem.classification %]selected[% END %]>[% tlpMapping.$tlp %]</option>
+					[% END %]
+				</select>
+			</div>
+		</form>
+	</fieldset>
+</div>

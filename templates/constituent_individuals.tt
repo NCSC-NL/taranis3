@@ -1,0 +1,28 @@
+<div id="constituent-individual-content-heading" class="content-heading">
+	<div id="constituent-individual-content-heading-individual" class="block">
+		<span>Constituent individual</span>
+	</div>
+
+	<div id="constituent-individual-content-heading-role" class="block">
+		<span>Role</span>
+	</div>
+
+	<div id="constituent-individual-content-heading-group" class="block">
+		<span>Constituent group</span>
+	</div>
+</div>
+
+[% IF constituentIndividuals.size > 0 %]
+	[% FOREACH constituentIndividual IN constituentIndividuals %]
+	
+		[% INCLUDE constituent_individuals_item.tt %]
+	
+	[% END %]
+[% ELSE %]
+<div class="item-row" id="empty-row">No constituent individuals found...</div>
+
+[% END %]
+
+<div class="action-block filter-block-separator">
+	<div class="center" id="number-of-results">&mdash; [% numberOfResults %] results &mdash;</div>
+</div>

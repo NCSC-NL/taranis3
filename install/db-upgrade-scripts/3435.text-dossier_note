@@ -1,0 +1,12 @@
+#!perl
+
+use warnings;
+use strict;
+
+sub {
+	my ($db, %args) = @_;
+
+	$db->query( <<'__RUN__');
+ALTER TABLE dossier_note ALTER COLUMN created_by TYPE TEXT;
+__RUN__
+};

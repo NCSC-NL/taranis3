@@ -1,0 +1,42 @@
+<div class="dialog-form-wrapper">
+	<div id="dialog-error" class="hidden ui-state-error ui-corner-all">[% message %]</div>
+	[% IF isLocked && openedByFullname +%]
+	<div class="ui-state-highlight ui-corner-all dialog-highlight">This End-Of-Shift has been locked by [% openedByFullname %]</div>
+	[% END %]
+
+	<div class="dialog-title">
+		<span>[% eos_heading %]</span>	
+	</div>
+
+	<form id="form-eos-preview" data-publicationid="[% publication_id %]">
+		<input type="hidden" value="[% eos_id %]" name="eos_id" id="eos-preview-eos-id">
+		<fieldset>
+			<div class="dialog-input-wrapper block">
+				<div class="table">
+					<div class="cell">
+						<textarea class="scroll-y-always font-courier border-default" name="preview_txt" id="eos-preview-text" readonly="readonly">[% preview %]</textarea>
+					</div>
+					<div class="cell eos-preview-info-cell">
+						<fieldset>
+							<legend>Publication details</legend>
+							<div class="block">
+								[% IF created_by_name %]
+							     <span class="" data-printable="created by [% eos.created_by %]">Created by: </span><br>
+							     <span class="tpl-heading">[% created_by_name %]</span><br><br>
+								[% END %]
+								[% IF approved_by_name %]
+                                 <span class="" data-printable="approved by [% eos.approved_by %]">Approved by: </span><br>
+                                 <span class="tpl-heading">[% approved_by_name %]</span><br><br>
+	                            [% END %]
+	                            [% IF published_by_name %]
+                                 <span class="" data-printable="published by [% eos.published_by %]">Published by: </span><br>
+                                 <span class="tpl-heading">[% published_by_name %]</span><br><br>
+								[% END %]
+							</div>
+						</fieldset>
+					</div>
+				</div>
+			</div>
+		</fieldset>
+	</form>
+</div>

@@ -1,0 +1,14 @@
+<div class="filter-block filter-block-separator">
+	<br>
+	
+	<div class="block">
+	[% IF write_right %]
+		<input type="button" id="btn-add-token" class="button" value="Add new tokens">&nbsp;
+	[% END %]
+		<input type="button" id="btn-refresh-token-list" class="button" value="Refresh list">
+	</div>
+	
+	<div class="block align-block-right">
+		<span class="bold page-title">Access Tokens</span>
+	</div>
+</div>

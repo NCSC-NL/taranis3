@@ -1,0 +1,15 @@
+#!perl
+# index on errors
+
+use warnings;
+use strict;
+
+sub {
+	my ($db, %args) = @_;
+	$db->query( <<'__RUN__');
+
+CREATE INDEX errors_time_of_error_idx
+    ON errors (time_of_error);
+
+__RUN__
+}

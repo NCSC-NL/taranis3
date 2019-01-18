@@ -1,0 +1,11 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden[% END %] ui-state-error ui-corner-all">[% message %]</div>
+	
+	<div class="dialog-title">
+		<span>Imported photo details</span>
+	</div>
+	
+	<fieldset>
+		<span>Photo has been imported by </span><span class="bold">[% photoDetails.fullname %]</span> on <span class="bold">[% photoDetails.imported %]</span>	
+	</fieldset>
+</div>

@@ -1,0 +1,51 @@
+<div class="filter-block filter-block-separator">
+
+	<form id="form-sources-search">
+
+		<div class="block">
+			<label for="sources-filters-search">Search</label><br>
+			<input id="sources-filters-search" name="search" type="text" class="input-default">
+		</div>
+
+		<div class="block">
+			<label for="sources-filters-collector">Collector</label><br>
+			<select name="collector" class="select-single" id="sources-filters-collector">
+				<option value="">-any collector-</option>
+   				[% FOREACH collector IN collectors %]
+   				<option value="[% collector.id %]">[% collector.description %]</option>
+   				[% END %]
+			</select>
+		</div>
+
+		<div class="block">
+			<label for="sources-filters-category">Category</label><br>
+			<select name="category" class="select-single" id="sources-filters-category">
+				<option value="">-any category-</option>
+   				[% FOREACH category IN categories %]
+   				<option value="[% category.id %]">[% category.name %]</option>
+   				[% END %]
+			</select>
+		</div>
+
+		<div class="block">
+			<span>&nbsp;</span>
+			<input type="button" id="btn-sources-search" class="button" value="Search!">		
+		</div>
+
+	</form>
+</div>
+
+<div class="action-block filter-block-separator">
+[% IF write_right +%]
+	<div class="block">
+		<input type="button" class="button" id="btn-add-source" value="Add new source">
+	</div>&nbsp;
+
+	<div class="block">
+		<input type="button" class="button" id="btn-import-export-sources" value="Import/Export sources">
+	</div>
+[% END %]	
+	<div class="block align-block-right">
+		<span class="bold page-title">Sources</span>
+	</div>
+</div>

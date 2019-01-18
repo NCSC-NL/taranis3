@@ -1,0 +1,151 @@
+<div class="filter-block filter-block-separator">
+	<div class="block">
+		<label for="custom-statistics-selection">Statistics type</label><br>
+		<select name="role" class="select-single" id="custom-statistics-selection">
+       		<option value="selectStatistics">- select custom statistics -</option>
+       		<optgroup label="- ASSESS -">
+	       		<option value="itemsCollectedCategory">Items collected by category</option>
+	       		<option value="itemsCollectedStatus">Items collected by current status</option>
+	       		<option value="itemsSources">Sources of items that have been mailed</option>
+       		</optgroup>
+       		<optgroup label="- ANALYZE -">
+	       		<option value="analysesTotal">Number of analyses created</option>
+	       		<option value="analysesStatus">Analyses by current status</option>
+	       		<option value="analysesCreatedClosed">Hours analysis is created till closed</option>
+	       		<option value="analysesSourcesUsed">Sources used in analyses</option>
+       		</optgroup>
+       		<optgroup label="- ADVISORIES -">
+	       		<option value="advisoriesClassification">Advisories by classification</option>
+	       		<option value="advisoriesSentToCount">Advisories sent to nr addressess</option>
+	       		<option value="advisoriesAuthor">Advisories by author</option>
+	       		<option value="advisoriesDate">Advisories by date</option>
+	       		<option value="advisoriesPlatform">Advisories (1.00) by platform</option>
+	       		<option value="advisoriesShType">Advisories (1.00) by software/hardware type</option>
+	       		<option value="advisoriesConstituentType">Advisories by constituent type</option>
+	       		<option value="advisoriesDamage">Advisories by damage description</option>
+       		</optgroup>
+       		<optgroup label="- OTHER -">
+	       		<option value="otherPublicationCreatedPublished">Hours publication is created till published</option>
+	       		<option value="otherSentToConstituentsPhotoUsage">&#37; of constituents&#39; photo usage per advisory</option>
+	       		<option value="otherTop10ShConstituents">Constituent software/hardware top 10</option>
+       		</optgroup>
+		</select>			
+	</div>
+</div>
+
+<div class="filter-block filter-block-separator">
+	<form id="form-custom-statistics">No statistics selected...</form>
+</div>
+
+<div class="action-block filter-block-separator">
+	<div class="block align-block-right">
+		<span class="bold page-title">User generated Taranis Statistics</span>
+	</div>
+</div>
+
+<!-- NOTE: html below is not visible, but cloned in jQuery -->
+<div id="custom-statistics-elements-container">
+	<div id="fromUntillWrapper">
+		<table id="tableFromUntill" class="">
+			<tr>
+				<td id="tdStartDateTitle" class="left-right-padding">Start date</td>
+				<td id="tdEndDateTitle" class="left-right-padding"><span class="">End date</span></td>
+				<td id="tdClusteringTitle" class="left-right-padding"><span class="">Clustering</span></td>
+				<td id="tdPresentationStyleTitle" class="left-right-padding" colspan="2"><span class="">Presentation style</span></td>
+			</tr>
+			<tr>
+				<td id="tdStartDateInput" class="left-right-padding">
+					<input id="startDateOrg" name="startDate" type="text" value="[% todaysDate %]" class="date-pickers input-default"> 
+				</td>
+				<td id="tdEndDateInput" class="left-right-padding">
+					<input id="endDateOrg" name="endDate" type="text" value="[% todaysDate %]" class="date-pickers input-default"> 
+				</td>
+				<td id="tdSClusteringInput" class="left-right-padding">
+					<select id="clustering" class="input-default select-tiny">
+						<option value="day">Per day</option>
+						<option value="week">Per week</option>
+						<option value="month">Per month</option>
+					</select>
+				</td>
+				<td id="tdPresentationStyleInput" class="left-right-padding">
+					<select id="presentation" class="input-default select-tiny">
+						<option value="text">Text</option>
+						<option value="pie">Pie chart</option>
+						<option value="bar">Bar chart</option>
+					</select>
+				</td>
+				<td id="tdGetStatisticsButton" class="left-right-padding" align="right">
+					<input type="button" class="button" id="btn-get-custom-statistics" value="Get statistics">
+				</td>				
+			</tr>
+		</table>
+	</div>
+
+	<div id="statusSelectionWrapper">
+		<div class="select-two-columns">
+			<div class="block">
+				<span class="bold" id="statusSelectionTitleLeft">Selected statuses</span><br>
+				<select multiple="multiple" name="selectedStatusLeft" id="selectedStatusLeft" size="7" class="select-multiple select-left select-multiple-narrow"></select>
+			</div>
+			<div class="option-left-right">	
+				<input type="button" class="button btn-option-to-left" value="&lt;"><br><br>
+				<input type="button" class="button btn-option-to-right" value="&gt;">
+			</div>
+			<div class="block">
+				<span class="bold" id="selectedStatusRight">Available statuses</span><br>
+				<select multiple="multiple" name="selectedStatusRight" id="selectedStatusRight" size="7" class="select-multiple select-right select-multiple-narrow">
+					[% FOREACH status IN analysisStatus %]
+						<option value="[% status %]">[% status %]</option>
+					[% END %]
+				</select>
+				<div id="statusSelectionHelpText" class="block custom-statistics-help-text">Add the statuses which are <br>considered as &#39;closed status&#39; to the<br><i>Selected statuses</i> field.</div>
+			</div>
+		</div>
+		<br>				
+	</div>
+
+	<div id="platformSelectionWrapper">
+		<div class="select-two-columns">
+			<div class="block">
+				<span class="bold" id="statusSelectionTitleLeft">Selected platforms</span><br>
+				<select multiple="multiple" name="selectedPlatforms" id="selectedPlatforms" size="7" class="select-multiple select-left select-multiple-narrow"></select>
+			</div>
+			<div class="option-left-right">	
+				<input type="button" class="button btn-option-to-left" value="&lt;"><br><br>
+				<input type="button" class="button btn-option-to-right" value="&gt;">
+			</div>
+			<div class="block">
+				<span class="bold" id="availablePlatforms">Available platforms</span><br>
+				<select multiple="multiple" name="availablePlatforms" id="availablePlatforms" size="7" class="select-multiple select-right select-multiple-narrow">
+					[% FOREACH platform IN platforms.keys %]
+						<option value="[% platform %]" title="[% platforms.$platform %]">[% platforms.$platform %]</option>
+					[% END %]
+				</select>
+				<div class="block custom-statistics-help-text">Add platforms to the<br><i>Selected platforms</i> field.<br>Or leave empty for top 3 <br>of platforms in advisories.</div>
+			</div>
+		</div>
+		<br>
+	</div>
+
+	<div id="weekSelectionWrapper">
+		<table id="weekSelectionTable" class="">
+			<tr>
+				<td class="left-right-padding"></td>
+				<td class="left-right-padding" colspan="2" id="tdWeekSelectionTitle">Select a week</td>
+			</tr>
+			<tr>
+				<td class="left-right-padding">
+					<input type="button" class="button" id="btnPreviousWeek" value="- 1 week">
+				</td>
+				<td class="left-right-padding">
+					<input type="text" readonly="readonly" id="selectedWeek" class="input-default">
+				</td>
+				<td class="left-right-padding" id="tdNextWeek">
+					<input type="button" class="button" id="btnNextWeek" value="+ 1 week">
+				</td>
+			</tr>
+		</table>
+	</div>
+	
+</div>
+<!-- end NOTE-->

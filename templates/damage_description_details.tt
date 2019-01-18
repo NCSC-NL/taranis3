@@ -1,0 +1,18 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden[% END %] ui-state-error ui-corner-all">[% message %]</div>
+	
+	[% IF description %]
+	<div class="dialog-title">
+		<span>[% description %]</span>
+	</div>
+	[% END %]
+	
+	<form id="form-damage-description" data-id="[% IF id; id; ELSE; 'NEW'; END %]">
+		<fieldset>
+			<div class="dialog-input-wrapper block">
+				<label for="damage-description-description" class="dialog-input-label">Description *</label><br>
+				<input type="text" name="description" id="damage-description-description" class="input-default dialog-input-text" value="[% description %]">
+			</div>
+		</fieldset>
+	</form>
+</div>

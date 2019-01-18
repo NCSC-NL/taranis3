@@ -1,0 +1,54 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden[% END %] ui-state-error ui-corner-all">[% message %]</div>
+
+	<div class="dialog-title">
+		<span>Mail multiple items</span>	
+	</div>
+	
+	<form id="form-assess-mail-multiple-items">
+		<fieldset>
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Mail from</span><br>
+		        <span>[% mailfrom_sender %]&lt;[% mailfrom_email %]&gt;</span>				
+			</div><br>
+
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Mail to</span><span class="italic"><br>
+				<select id="assess-multiple-mail-to" name="mailto" multiple="multiple" size="4" class="select-multiple">
+				[% FOREACH address IN mailto %]
+					<option value="[% address %]">[% address %]</option>
+				[% END %]
+				</select>
+			</div><br>
+
+			<div class="dialog-input-wrapper block">
+				<input type="text" name="extra" class="input-default dialog-input-text" id="assess-multiple-mail-extra-address">
+				<input type="button" class="button" id="btn-assess-multiple-mail-add-address" value="Add">
+			</div><br>
+		</fieldset>
+		
+			[% FOREACH item IN items %]
+		<fieldset data-id="[% item.digest | uri %]" class="assess-multiple-mail-item">
+			<legend class="italic">
+				[% IF item.title.decodeEntity.length > 100 %]
+					[% item.title.substr( 100, item.title.length, '...') %]
+				[% ELSE %]
+					[% item.title %]
+				[% END %]
+			</legend>
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Subject</span><br>
+				<input type="text" name="subject" class="input-default dialog-input-text assess-multiple-mail-subject" value="[% item.title %]" data-id="[% item.digest | uri %]"><br>
+				<br>
+				<span class="span-link assess-multiple-mail-toggle-message" data-id="[% item.digest | uri %]">show / hide message</span>
+			</div><br>
+
+			<div class="dialog-input-wrapper block hidden assess-multiple-mail-description-block">
+				<span class="dialog-input-label">Message</span><br>
+				<textarea name="description" class="textarea-preview assess-multiple-mail-description" data-id="[% item.digest | uri %]">[% item.description %]
+[% IF item.link && item.is_mail == 0 ; "\n\nMore info: " _ item.link; END %]</textarea>
+			</div>
+		</fieldset>
+			[% END %]
+	</form>
+</div>

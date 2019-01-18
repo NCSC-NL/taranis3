@@ -1,0 +1,124 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden[% END %] ui-state-error ui-corner-all">[% message %]</div>
+
+	[% IF user.fullname || user.username %]
+	<div class="dialog-title">
+		<span>[% user.username _ ' (' _  user.fullname _ ')' %]</span>	
+	</div>
+	[% END %]
+	
+	<form id="users-details-form" data-id="[% IF user.username; user.username; ELSE; 'NEW'; END %]">
+
+		<div id="users-details-tabs" class="dialog-tabs">
+			<ul>
+				<li><a href="#users-details-tabs-general">General</a></li>
+				<li><a href="#users-details-tabs-roles">Roles</a></li>
+				[% IF user.username %]
+				<li><a href="#users-details-tabs-actions">Actions</a></li>
+				<li><a href="#users-details-tabs-change-password">Change password</a></li>
+				[% END %]
+			</ul>
+
+<!-- TAB GENERAL -->
+			<div id="users-details-tabs-general">
+				<fieldset>
+
+					<div class="dialog-input-wrapper block">
+						[% IF !user.username %]
+						<label for="users-details-username" class="dialog-input-label">Username *</label><br>
+						<input type="text" value="" name="username" id="users-details-username" class="input-default dialog-input-text">
+						[% ELSE %]
+						<span class="dialog-input-label">Username</span><br>
+						<span>[% user.username %]</span>
+						[% END %]
+					</div><br>
+					
+					[% IF !user.username %]
+					<div class="dialog-input-wrapper block">
+						<label for="users-details-password" class="dialog-input-label">Password *</label><br>
+						<input type="password" value="" name="password" id="users-details-password" class="input-default dialog-input-text">
+					</div><br>
+					[% END %]
+					
+					<div class="dialog-input-wrapper block">
+						<label for="users-details-fullname" class="dialog-input-label">Full name *</label><br>
+						<input type="text" value="[% user.fullname %]" name="fullname" id="users-details-fullname" class="input-default dialog-input-text">
+					</div><br>
+					
+					<div class="dialog-input-wrapper block">
+						<label for="users-details-mail-from-sender" class="dialog-input-label">Email (Name) *</label><br>
+						<input type="text" value="[% user.mailfrom_sender %]" name="mailfrom_sender" id="users-details-mail-from-sender" class="input-default dialog-input-text">
+					</div><br>
+
+					<div class="dialog-input-wrapper block">
+						<label for="users-details-mail-from-email" class="dialog-input-label">Email (Address) *</label><br>
+						<input type="text" value="[% user.mailfrom_email %]" name="mailfrom_email" id="users-details-mail-from-email" class="input-default dialog-input-text">
+					</div><br>
+
+<!-- 					<div class="dialog-input-wrapper block"> -->
+<!-- 						<span class="dialog-input-label">Status *</span><br> -->
+<!-- 						<input type="radio" name="disabled" id="users-details-disabled-no" value="0" [% IF user.disabled == 0 %] checked="checked"[% END %]>  -->
+<!-- 						<label for="users-details-disabled-no">Enabled</label> -->
+<!-- 						<input type="radio" name="disabled" id="users-details-disabled-yes" value="1" [% IF user.disabled == 1 %] checked="checked"[% END %]> -->
+<!-- 						<label for="users-details-disabled-yes">No</label> -->
+<!-- 					</div><br> -->
+				</fieldset>
+			</div>
+			
+<!-- TAB ROLES -->
+			<div id="users-details-tabs-roles">
+				<fieldset>
+					<div class="select-two-columns dialog-input-wrapper">
+						<div class="inline">
+							<span class="dialog-input-label">User has the following roles</span><br>
+							<select multiple="multiple" name="membership_roles" id="users-details-membership-roles" size="20" class="select-multiple select-left select-multiple-wide">
+								[% FOREACH memberRole IN membershipRoles.keys +%]
+								<option value="[% memberRole %]">[%+ membershipRoles.$memberRole.name +%]</option>
+								[% END +%]
+							</select>
+						</div>
+						<div class="option-left-right">	
+							<input type="button" class="button btn-option-to-left" value="&lt;"><br><br>
+							<input type="button" class="button btn-option-to-right" value="&gt;">
+						</div>
+						<div class="inline">
+							<span class="dialog-input-label">All roles</span><br>
+							<select multiple="multiple" name="all_roles" id="users-details-all-roles" size="20" class="select-multiple select-right select-multiple-wide">
+								[% FOREACH role IN roles +%]
+								<option value="[% role.id %]">[% role.name +%]</option>
+								[% END +%]
+							</select>
+						</div>
+					</div>
+				</fieldset>
+			</div>
+[% IF user.username %]
+<!-- TAB ACTIONS -->
+			<div id="users-details-tabs-actions">
+				<fieldset>
+					<div class="dialog-input-wrapper block">
+						<span class="dialog-input-label">User actions going back 1 month</span><br>
+						<textarea class="input-default" readonly="readonly" id="users-details-user-actions">
+[%- FOREACH userAction IN userActions -%]
+[%- userAction.logging_timestamp  ; " &mdash; " ; userAction.action ; " &mdash; " ; userAction.comment ; "\n" -%]
+[%- END -%]</textarea>
+					</div><br>
+				</fieldset>
+			</div>
+
+<!-- TAB CHANGE PASSWORD -->
+			<div id="users-details-tabs-change-password">
+				<fieldset>
+					<div class="dialog-input-wrapper block">
+						<label for="users-details-change-password" class="dialog-input-label">New password *</label><br>
+						<input type="password" value="" id="users-details-change-password" class="input-default dialog-input-text">&nbsp;
+						<input type="button" class="button" value="change password" id="btn-user-details-change-password">
+						
+					</div><br>
+				</fieldset>
+			</div>
+[% END %]
+
+		</div>
+	</form>
+</div>

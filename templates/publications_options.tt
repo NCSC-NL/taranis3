@@ -1,0 +1,25 @@
+<div class="block configuration-block">
+	<fieldset>
+		<legend class="configuration-title bold">Publications</legend>
+		<ul>
+	[% menuOptionAdded = 0 %]
+	[% FOREACH publication_opt IN pageSettings.publication_options +%]
+		[% IF publication_opt  == "advisory (email)" -%]
+			<li><a href="write/publications/displayPublications/pub_type=advisory/" data-pubtype="advisory">Write [% pageSettings.organisation %] Advisory</a></li>
+		[%- END -%]
+		[% IF publication_opt  == "advisory (forward)" -%]
+			<li><a href="write/publications/displayPublications/pub_type=forward/" data-pubtype="forward">Write [% pageSettings.organisation %] Advisory Forward</a></li>
+		[%- END -%]
+		[%- IF publication_opt == "end-of-shift (email)" -%]
+			<li><a href="write/publications/displayPublications/pub_type=eos/" data-pubtype="eos">Write End-of-Shift</a></li>
+		[%- END -%]
+		[%- IF publication_opt == "end-of-day (email)" -%]
+			<li><a href="write/publications/displayPublications/pub_type=eod/" data-pubtype="eod">Write End-of-Day</a></li>
+		[%- END -%]
+		[%- IF publication_opt == "end-of-week (email)" -%]
+			<li><a href="write/publications/displayPublications/pub_type=eow/" data-pubtype="eow">Write End-of-Week</a></li>
+		[%- END -%]
+	[% END +%]
+		</ul>
+	</fieldset>
+</div>

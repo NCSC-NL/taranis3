@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:annotation>
+        <xs:documentation>Version 3</xs:documentation>
+    </xs:annotation>
+    <xs:element name="xml_advisory" type="advisory_type">
+        <xs:annotation>
+            <xs:documentation>This is the Taranis Advisory Schema.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:complexType name="advisory_type">
+        <xs:all>
+            <xs:element name="content" type="content_type"/>
+            <xs:element name="meta_info" type="meta_info_type"/>
+            <xs:element name="rating" type="rating_type"/>
+        </xs:all>
+    </xs:complexType>
+    <xs:complexType name="content_type">
+        <xs:all>
+            <xs:element name="solution" type="xs:string" minOccurs="0"/>
+            <xs:element name="additional_resources" type="additional_resources_type" minOccurs="0"/>
+            <xs:element name="disclaimer" type="xs:string"/>
+            <xs:element name="abstract" type="xs:string" minOccurs="0"/>
+            <xs:element name="description" type="xs:string" minOccurs="0"/>
+            <xs:element name="update_information" type="xs:string" minOccurs="0"/>
+            <xs:element name="consequences" type="xs:string" minOccurs="0"/>
+            <xs:element name="tlp_amber" type="xs:string" minOccurs="0"/>
+        </xs:all>
+    </xs:complexType>
+    <xs:complexType name="additional_resources_type">
+        <xs:sequence>
+            <xs:element name="resource" type="xs:string" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="meta_info_type">
+        <xs:all>
+            <xs:element name="title" type="xs:string"/>
+            <xs:element name="reference_number" type="xs:string"/>
+            <xs:element name="version_history">
+                <xs:complexType>
+                    <xs:sequence maxOccurs="unbounded">
+                        <xs:element name="version_instance">
+                            <xs:complexType>
+                                <xs:all>
+                                    <xs:element name="date" type="xs:string" />
+                                    <xs:element name="version" type="xs:string" />
+                                    <xs:element name="change_descr" type="xs:string" />
+                                </xs:all>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="vulnerability_identifiers">
+                <xs:complexType>
+                    <xs:all>
+                        <xs:element name="cve" nillable="true" type="cve_id_type"/>
+                    </xs:all>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="probability">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="low" />
+                        <xs:enumeration value="medium" />
+                        <xs:enumeration value="high" />
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="damage">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="low" />
+                        <xs:enumeration value="medium" />
+                        <xs:enumeration value="high" />
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="vulnerability_effect" type="vulnerability_effect_type" />
+            <xs:element name="issuer" type="xs:string" />
+            <xs:element name="date" type="xs:string" />
+            <xs:element name="system_information">
+                <xs:complexType>
+                    <xs:all>
+                        <xs:element name="systemdetail">
+                            <xs:complexType>
+                                <xs:all>
+                                    <xs:element name="affected_product" type="affected_product_type" />
+                                    <xs:element name="affected_platform" type="affected_platform_type" />
+                                    <xs:element name="affected_products_text" type="xs:string" minOccurs="0"/>
+                                    <xs:element name="affected_products_versions_text" type="xs:string" minOccurs="0"/>
+                                    <xs:element name="affected_platforms_text" type="xs:string" minOccurs="0"/>
+                                </xs:all>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:all>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="availability">
+                <xs:simpleType>
+                    <xs:restriction base="xs:anyURI"/>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="taranis_version" type="xs:string"/>
+        </xs:all>
+    </xs:complexType>
+    <xs:complexType name="vulnerability_effect_type">
+        <xs:sequence>
+            <xs:element name="effect" type="xs:string" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="rating_type">
+        <xs:all>
+            <xs:element name="publisher_analysis">
+                <xs:complexType>
+                    <xs:all>
+                        <xs:element name="ques_pro_standard">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:enumeration value="1"/>
+                                    <xs:enumeration value="3"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:element>
+                        <xs:element name="ques_pro_exploit">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:enumeration value="1"/>
+                                    <xs:enumeration value="4"/>
+                                    <xs:enumeration value="6"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:element>
+                        <xs:element name="ques_pro_details">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:enumeration value="1"/>
+                                    <xs:enumeration value="2"/>
+                                    <xs:enumeration value="3"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:element>
+                        <xs:element name="ques_pro_access">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:enumeration value="1"/>
+                                    <xs:enumeration value="4"/>
+                                    <xs:enumeration value="6"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:element>
+                        <xs:element name="ques_pro_credent">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:enumeration value="1"/>
+                                    <xs:enumeration value="2"/>
+                                    <xs:enumeration value="4"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:element>
+                        <xs:element name="ques_pro_complexity">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:enumeration value="1"/>
+                                    <xs:enumeration value="2"/>
+                                    <xs:enumeration value="3"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:element>
+                        <xs:element name="ques_pro_userint">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:enumeration value="1"/>
+                                    <xs:enumeration value="3"/>
+                                    <xs:enumeration value="4"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:element>
+                        <xs:element name="ques_pro_exploited">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:enumeration value="1"/>
+                                    <xs:enumeration value="2"/>
+                                    <xs:enumeration value="3"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:element>
+                        <xs:element name="ques_pro_expect">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:enumeration value="1"/>
+                                    <xs:enumeration value="3"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:element>
+                        <xs:element name="ques_pro_solution">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:enumeration value="1"/>
+                                    <xs:enumeration value="2"/>
+                                    <xs:enumeration value="3"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:element>                        
+                        <xs:element name="ques_pro_deviation" type="xs:string"/>
+                        <xs:element name="ques_dmg_deviation" type="xs:string"/>
+                        <xs:element name="ques_dmg_dos">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:enumeration value="0"/>
+                                    <xs:enumeration value="1"/>
+                                    <xs:enumeration value="2"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:element>
+                        <xs:element name="ques_dmg_codeexec">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:enumeration value="0"/>
+                                    <xs:enumeration value="1"/>
+                                    <xs:enumeration value="2"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:element>
+                        <xs:element name="ques_dmg_remrights">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:enumeration value="0"/>
+                                    <xs:enumeration value="1"/>
+                                    <xs:enumeration value="2"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:element>
+                        <xs:element name="ques_dmg_privesc">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:enumeration value="0"/>
+                                    <xs:enumeration value="1"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:element>
+                        <xs:element name="ques_dmg_infoleak">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:enumeration value="0"/>
+                                    <xs:enumeration value="1"/>
+                                    <xs:enumeration value="2"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:element>
+                    </xs:all>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="constituent_analysis" type="xs:string" />
+        </xs:all>
+    </xs:complexType>
+    <xs:complexType name="affected_product_type">
+        <xs:sequence>
+            <xs:element name="product" type="product_type" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="affected_platform_type">
+        <xs:sequence>
+            <xs:element name="platform" type="product_type" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="product_type">
+    	<xs:all>
+    		<xs:element name="producer" type="xs:string"/>
+    		<xs:element name="name" type="xs:string"/>
+    		<xs:element name="version" type="xs:string"/>
+    		<xs:element name="cpe_id" type="xs:string"/>
+    	</xs:all>
+    </xs:complexType>
+    <xs:complexType name="cve_id_type">
+        <xs:sequence>
+            <xs:element name="id" maxOccurs="unbounded">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:pattern value="(CVE-[1-2][0-9][0-9][0-9]-[0-9]{4,10})?"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

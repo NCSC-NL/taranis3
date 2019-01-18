@@ -1,0 +1,217 @@
+<ids>
+  <anon>
+    <idname><![CDATA[CVE-ID]]></idname>
+    <pattern><![CDATA[CVE-\d\d\d\d-\d{4,10}]]></pattern>
+    <substitute><![CDATA[]]></substitute>
+  </anon>
+  <anon>
+    <idname><![CDATA[CVE-ID old style]]></idname>
+    <pattern><![CDATA[CAN-\d\d\d\d-\d\d\d\d]]></pattern>
+    <substitute><![CDATA[]]></substitute>
+  </anon>
+  <anon>
+    <idname><![CDATA[Microsoft advisory number]]></idname>
+    <pattern><![CDATA[MS\d\d-\d\d\d]]></pattern>
+    <substitute><![CDATA[]]></substitute>
+  </anon>
+  <anon>
+    <idname><![CDATA[Secunia advisory number]]></idname>
+    <pattern><![CDATA[SA\d\d\d\d\d]]></pattern>
+    <substitute><![CDATA[]]></substitute>
+  </anon>
+  <anon>
+    <idname><![CDATA[US-CERT vulnerability note VU]]></idname>
+    <pattern><![CDATA[VU#\d\d\d\d\d\d]]></pattern>
+    <substitute><![CDATA[]]></substitute>
+  </anon>
+  <anon>
+    <idname><![CDATA[US-CERT vulnerability note TA]]></idname>
+    <pattern><![CDATA[TA\d\d-\d\d\d\D]]></pattern>
+    <substitute><![CDATA[]]></substitute>
+  </anon>
+  <anon>
+    <idname><![CDATA[Mandriva advisory MDKSA]]></idname>
+    <pattern><![CDATA[MDKSA-\d\d\d\d:\d\d\d]]></pattern>
+    <substitute><![CDATA[]]></substitute>
+  </anon>
+  <anon>
+    <idname><![CDATA[Mandriva advisory MDKA]]></idname>
+    <pattern><![CDATA[MDKA-\d\d\d\d:\d\d\d]]></pattern>
+    <substitute><![CDATA[]]></substitute>
+  </anon>
+  <anon>
+    <idname><![CDATA[Mandriva advisory MDVSA]]></idname>
+    <pattern><![CDATA[MDVSA-\d\d\d\d:(\d+)]]></pattern>
+    <substitute><![CDATA[]]></substitute>
+  </anon>
+  <anon>
+    <idname><![CDATA[Mandriva advisory MDVSA 2]]></idname>
+    <pattern><![CDATA[MDVSA-\d\d\d\d-(\d+)]]></pattern>
+    <substitute><![CDATA[[^-]-/:]]></substitute>
+  </anon>
+  <anon>
+    <idname><![CDATA[Mandriva advisory MDVA]]></idname>
+    <pattern><![CDATA[MDVA-\d\d\d\d:(\d+)]]></pattern>
+    <substitute><![CDATA[]]></substitute>
+  </anon>
+  <anon>
+    <idname><![CDATA[Fedora advisory]]></idname>
+    <pattern><![CDATA[FEDORA-\d\d\d\d-\d\d\d\d]]></pattern>
+    <substitute><![CDATA[]]></substitute>
+  </anon>
+  <anon>
+    <idname><![CDATA[FrSIRT advisory]]></idname>
+    <pattern><![CDATA[FRSIRT\/ADV-\d\d\d\d-\d\d\d\d]]></pattern>
+    <substitute><![CDATA[]]></substitute>
+  </anon>
+  <anon>
+    <idname><![CDATA[SecurityFocus BID]]></idname>
+    <pattern><![CDATA[BID\/\d\d\d\d\d]]></pattern>
+    <substitute><![CDATA[]]></substitute>
+  </anon>
+  <anon>
+    <idname><![CDATA[Mozilla vulnerability]]></idname>
+    <pattern><![CDATA[MFSA \d\d\d\d-\d\d]]></pattern>
+    <substitute><![CDATA[]]></substitute>
+  </anon>
+  <anon>
+    <idname><![CDATA[SUSE vulnerability]]></idname>
+    <pattern><![CDATA[SUSE-SA:\d\d\d\d:\d\d\d]]></pattern>
+    <substitute><![CDATA[]]></substitute>
+  </anon>
+  <anon>
+    <idname><![CDATA[Debian vulnerability]]></idname>
+    <pattern><![CDATA[DSA \d\d\d\d]]></pattern>
+    <substitute><![CDATA[\ /-]]></substitute>
+  </anon>
+  <anon>
+    <idname><![CDATA[Debian vulnerability 2]]></idname>
+    <pattern><![CDATA[DSA-\d\d\d\d]]></pattern>
+    <substitute><![CDATA[]]></substitute>
+  </anon>
+  <anon>
+    <idname><![CDATA[Red Hat vulnerability RHSA]]></idname>
+    <pattern><![CDATA[RHSA-\d\d\d\d:\d\d\d\d-(\d+)]]></pattern>
+    <substitute><![CDATA[]]></substitute>
+  </anon>
+  <anon>
+    <idname><![CDATA[Red Hat vulnerability RHSA 2]]></idname>
+    <pattern><![CDATA[RHSA-\d\d\d\d-\d\d\d\d]]></pattern>
+    <substitute><![CDATA[]]></substitute>
+  </anon>
+  <anon>
+    <idname><![CDATA[Red Hat vulnerability RHBA]]></idname>
+    <pattern><![CDATA[RHBA-\d\d\d\d-\d\d\d\d]]></pattern>
+    <substitute><![CDATA[]]></substitute>
+  </anon>
+  <anon>
+    <idname><![CDATA[Red Hat vulnerability RHEA]]></idname>
+    <pattern><![CDATA[RHEA-\d\d\d\d-\d\d\d\d]]></pattern>
+    <substitute><![CDATA[]]></substitute>
+  </anon>
+  <anon>
+    <idname><![CDATA[Apple vulnerability]]></idname>
+    <pattern><![CDATA[APPLE-SA-\d\d\d\d-\d\d-\d\d]]></pattern>
+    <substitute><![CDATA[]]></substitute>
+  </anon>
+  <anon>
+    <idname><![CDATA[CERTA advisory]]></idname>
+    <pattern><![CDATA[CERTA-\d\d\d\d-AVI-\d\d\d]]></pattern>
+    <substitute><![CDATA[]]></substitute>
+  </anon>
+  <anon>
+    <idname><![CDATA[Avaya advisory]]></idname>
+    <pattern><![CDATA[ASA-\d\d\d\d-\d\d\d]]></pattern>
+    <substitute><![CDATA[]]></substitute>
+  </anon>
+  <anon>
+    <idname><![CDATA[AusCERT advisory ESB]]></idname>
+    <pattern><![CDATA[ESB-\d\d\d\d.\d\d\d\d]]></pattern>
+    <substitute><![CDATA[]]></substitute>
+  </anon>
+  <anon>
+    <idname><![CDATA[AusCERT advisory AA]]></idname>
+    <pattern><![CDATA[AA-\d\d\d\d.\d\d\d\d]]></pattern>
+    <substitute><![CDATA[]]></substitute>
+  </anon>
+  <anon>
+    <idname><![CDATA[AusCERT advisory AL]]></idname>
+    <pattern><![CDATA[AL-\d\d\d\d.\d\d\d\d]]></pattern>
+    <substitute><![CDATA[]]></substitute>
+  </anon>
+  <anon>
+    <idname><![CDATA[TippingPoint advisory]]></idname>
+    <pattern><![CDATA[TPTI-\d\d-\d\d]]></pattern>
+    <substitute><![CDATA[]]></substitute>
+  </anon>
+  <anon>
+    <idname><![CDATA[Ubuntu advisory]]></idname>
+    <pattern><![CDATA[USN-\d\d\d-\d]]></pattern>
+    <substitute><![CDATA[]]></substitute>
+  </anon>
+  <anon>
+    <idname><![CDATA[CERTin advisory]]></idname>
+    <pattern><![CDATA[CIAD-\d\d\d\d-\d\d]]></pattern>
+    <substitute><![CDATA[]]></substitute>
+  </anon>
+  <anon>
+    <idname><![CDATA[HP advisory SSRT]]></idname>
+    <pattern><![CDATA[SSRT\d\d\d\d\d\d]]></pattern>
+    <substitute><![CDATA[]]></substitute>
+  </anon>
+  <anon>
+    <idname><![CDATA[HP advisory HPS]]></idname>
+    <pattern><![CDATA[HPS\D\D\D(\d+)]]></pattern>
+    <substitute><![CDATA[]]></substitute>
+  </anon>
+  <anon>
+    <idname><![CDATA[Gentoo advisory]]></idname>
+    <pattern><![CDATA[GLSA\ \d\d\d\d\d\d-\d\d]]></pattern>
+    <substitute><![CDATA[]]></substitute>
+  </anon>
+  <anon>
+    <idname><![CDATA[Gentoo advisory 2]]></idname>
+    <pattern><![CDATA[GLSA-\d\d\d\d\d\d-\d\d]]></pattern>
+    <substitute><![CDATA[GLSA-/GLSA]]></substitute>
+  </anon>
+  <anon>
+    <idname><![CDATA[VMWare ESX]]></idname>
+    <pattern><![CDATA[ESX-\d\d\d\d\d\d\d]]></pattern>
+    <substitute><![CDATA[]]></substitute>
+  </anon>
+  <anon>
+    <idname><![CDATA[VMWare VMSA]]></idname>
+    <pattern><![CDATA[VMSA-\d\d\d\d-\d\d\d\d]]></pattern>
+    <substitute><![CDATA[]]></substitute>
+  </anon>
+  <anon>
+    <idname><![CDATA[Asterisk]]></idname>
+    <pattern><![CDATA[AST-\d\d\d\d-\d\d\d]]></pattern>
+    <substitute><![CDATA[]]></substitute>
+  </anon>
+  <anon>
+    <idname><![CDATA[Adobe]]></idname>
+    <pattern><![CDATA[APS\D\d\d-\d\d]]></pattern>
+    <substitute><![CDATA[]]></substitute>
+  </anon>
+  <anon>
+    <idname><![CDATA[Milw0rm]]></idname>
+    <pattern><![CDATA[EXPLOITS\/\d\d\d\d]]></pattern>
+    <substitute><![CDATA[EXPLOITS/Milw0rm]]></substitute>
+  </anon>
+  <anon>
+    <idname><![CDATA[BEA]]></idname>
+    <pattern><![CDATA[BEA\d\d-\d\d\d.\d\d]]></pattern>
+    <substitute><![CDATA[]]></substitute>
+  </anon>
+  <anon>
+    <idname><![CDATA[FreeBSD]]></idname>
+    <pattern><![CDATA[FREEBSD-SA-\d\d:\d\d]]></pattern>
+    <substitute><![CDATA[]]></substitute>
+  </anon>
+  <anon>
+    <idname><![CDATA[Zero Day Initiative]]></idname>
+    <pattern><![CDATA[ZDI-(\d+)-(\d+)]]></pattern>
+    <substitute><![CDATA[]]></substitute>
+  </anon>
+</ids>

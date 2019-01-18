@@ -1,0 +1,22 @@
+#!/usr/bin/env perl
+# Check that there are already swhw definitions
+
+use warnings;
+use strict;
+
+use Taranis::Install::DB qw(connect_db);
+use File::Basename qw(dirname);
+
+my $db = connect_db;
+
+my $nr_swhw = $db->query('SELECT COUNT(*) FROM software_hardware')->list;
+exit 0 if $nr_swhw;
+
+print <<__HINT;
+!! HINT: you do not have software/hardware definitions.  You can load them
+!!    via "taranis cpe dictionary" (takes a few minutes the first time) or
+!!    define them by hand via "taranis configuration" (top bar) -->
+!!    "publication configuration" --> Software/Hardware" & Types
+__HINT
+
+exit 0;

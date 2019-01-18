@@ -1,0 +1,210 @@
+#!/usr/bin/env perl
+# This file is part of Taranis, Copyright NCSC-NL. See http://taranis.ncsc.nl
+# Licensed under EUPL v1.2 or newer, https://spdx.org/licenses/EUPL-1.2.html
+
+# Dispatcher of many command-line (maintenance) instructions for the
+# taranis instance.  Components (Taranis::Command::*) will get loaded
+# automatically.   See "$0 --help" for an overview.
+#
+# Most calls to this script are configurable in ~/var/cron.*   Those
+# scripts are started via cron.
+
+# WARNING: the path set-up is quite complex: minor changes may have big impact
+# on bootstrapping the installation, the run of this command via cron, or
+# from the command-line.  Be careful!
+
+use warnings;
+use strict;
+
+# Be aware that the next modules are loaded from the global Perl setup,
+# because the library path is not yet available... chicken-egg situation:
+# we need these module to get that done in the uninstalled use of this
+# script.
+
+use File::Basename  qw(basename dirname);
+use Config          qw(%Config);    # Perl's setup
+use File::Spec      ();
+
+#*** BEGIN:  Next lines get replaced during install
+our $setup_generic      = "$ENV{HOME}/etc/setup-generic";
+$ENV{TMPDIR}          ||= '/tmp';
+my $version = $ENV{TARANIS_VERSION} ||= 'git';
+
+BEGIN {
+	# Try to be smart, detecting some directories because we may be in an
+	# unknown situation running as root during bootstrap.
+	my $dir  = dirname __FILE__;
+	my @news;
+	while($dir ne '/' && $dir ne '.') {
+		push @news, grep -d,
+			"$dir/pm",
+			"$dir/lib/perl5",
+			"$dir/lib/perl5/$Config{archname}",
+			"$dir/ChartDirector/lib";
+		$dir = dirname $dir;
+	}
+	unshift @INC, @news;
+
+	$ENV{PHANTOMJS} = '/home/taranis/PhantomJS/bin/phantomjs';
+	($ENV{PHANTOMJS_LIB}) = grep -d $_,
+		'phantomjs', '../phantomjs', '../../phantomjs',
+		"$ENV{HOME}/sources/taranis-git/phantomjs";
+}
+
+#*** END
+
+# The next required module should have the right library path, so locally
+# installed modules will be used.
+use Getopt::Long             qw(GetOptions :config bundling gnu_compat);
+
+use Taranis::Install::Config qw(config_generic);
+use Taranis::Commands        qw(commands_load_plugins commands_find_plugin
+	commands_plugin_use);
+
+sub usage($);
+
+my $program  = basename $0;
+my $ask_help = qr/^(?: --help | -h | -? )$/x;
+
+# global help
+if(@ARGV && $ARGV[0] =~ $ask_help) {
+	usage 0;
+}
+
+# Ugly bootstrapping for sudo started script
+if(@ARGV >= 2 && $ARGV[0] eq '--config') {
+	# No-one should use this (publicly not documented) option: it is for
+	# internal use only!
+	$setup_generic = $ARGV[1];
+	splice @ARGV, 0, 2;
+}
+
+# The sub-command is always the first argument (unless --help or --config)
+my $command  = shift @ARGV;
+$command or usage 1;
+
+# Fix some login version-choice dependent things from the pre-installed
+# configuration settings.  It's trickery, mainly because we want to be
+# able to run this taranis script also directly from git, in the develop
+# tree.
+my $generic    = config_generic $setup_generic;
+my $home       = $generic->{home};
+my $p5lib      = $generic->{perl_lib};
+
+my %seen_lib;
+$ENV{PERL5LIB} = join ':', grep -d $_ && !$seen_lib{$_}++,
+	"$home/local-$version/perl5",
+	"$home/local/perl5",
+	dirname(dirname __FILE__).'/pm',
+	'pm',
+	$p5lib,
+	"$p5lib/$Config{archname}",
+	"$home/ChartDirector/lib",
+	(grep m!^\Q$home/\E!, @INC);
+
+$ENV{APPCONFIG_PATH}   = $home;           # installed
+$ENV{TEMPLATE_PATH}  ||= "$home/sources/taranis-git/templates";
+
+# Path processing is needed to avoid recursively adding the same
+# directories.  Only absolute paths.
+my %seen_path;
+my @path       = grep m!^/! && -d $_ && !$seen_path{$_}++,
+	"$home/local-$version/bin",
+	"$home/local/bin",
+	"$home/taranis-$version/bin",
+	"$home/bin",
+	(split /\:/, $ENV{PATH}),
+    File::Spec->rel2abs(dirname $0);
+$ENV{PATH}     = join ':', @path;
+
+if($command && $command eq 'install') {
+	# When installing new code, some plugings may require additional
+	# perl modules.  So we should not load them all.  We know where to
+	# find the 'install' subcommand, so load it immediately.  We could
+	# do that for other plugins as well, but that reduces flexibility.
+	eval "require Taranis::Command::Install";
+    die $@ if $@;
+} else {
+	commands_load_plugins;
+}
+
+if($command eq 'specint' && $ARGV[0] eq 'send-reminders') {
+	# Rename before 3.4.2/3.5.0
+	$command = 'send';
+	$ARGV[0] = 'specint-reminders';
+}
+
+my $cmdconfig = $command ? commands_find_plugin($command) : undef;
+
+unless($cmdconfig) {
+	warn "Sub-command '$command' not available.\n";
+	usage 1;
+}
+
+if(@ARGV && $ARGV[0] =~ $ask_help) {
+	my $subcmds = join '|', @{$cmdconfig->{sub_commands} || []};
+	warn "\nUsage: $program $command $subcmds\n\n$cmdconfig->{help}\n";
+	exit 0;
+}
+
+if($cmdconfig->{requires_root} && ! -w '/etc/passwd') {
+	# Restart this command with root rights
+
+	exec 'sudo',
+		'-u' => 'root',         # long options not supported on CentOS7
+		'--',
+			$0,                             # this script
+			'--config' => $setup_generic,   # in this setup
+			$command,                       # sub-command of this script
+			@ARGV;                          # user parameters
+
+	die "ERROR: count not exec $0: $!\n";
+}
+
+my $sub_command;
+if(my $s = $cmdconfig->{sub_commands}) {
+	if(!@ARGV || $ARGV[0] =~ /^-/) {
+		my $subs = join ', ', sort @$s;
+		die <<__REQ_SUBS;
+ERROR: command 'taranis $command' has sub-commands.  Please pick from
+       $subs.
+__REQ_SUBS
+	}
+
+	$sub_command = shift @ARGV;
+	grep $sub_command eq $_, @$s
+		or die "ERROR: taranis $command has no sub-command '$sub_command'\n";
+}
+
+# Get the options of the subcommand
+
+my %sub_options;
+GetOptions \%sub_options, @{$cmdconfig->{getopt} || []}
+	or die "Cancelled.\n";
+
+$sub_options{sub_command} = $sub_command;
+$sub_options{files} = \@ARGV;
+$cmdconfig->{handler}->(%sub_options);
+
+exit 0;
+
+### Helpers
+
+sub usage($) {
+	my $rc   = shift;
+	commands_load_plugins;
+	my $cmds = join "\n", map "    ~ $_", commands_plugin_use;
+
+	# Show the git version, not simply what is derived from the environment.
+	warn <<__USAGE;
+  Taranis version $Taranis::VERSION
+  Usage:
+    $program [--help]
+    $program <COMMAND> [--help] <SUB-COMMAND>? [OPTIONS]
+
+      COMMAND=     SUB-COMMAND=
+$cmds
+__USAGE
+
+	exit $rc;
+}

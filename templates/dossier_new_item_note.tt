@@ -1,0 +1,62 @@
+[% USE date %]
+<div class="dialog-form-wrapper block">
+	<fieldset>
+		<form id="form-dossier-timeline-note" data-id="NEW" enctype="multipart/form-data">
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Comment</span><br>
+				[% IF constituentGroups %]
+				<select class="select-single dialog-input-text-narrow block" id="dossier-note-constituent-group">
+					<option value="">-select group-</option>
+					[% FOREACH group IN constituentGroups %]
+					<option value="[% group.memberIds %]">[% group.name %]</option>
+					[% END %]
+				</select>
+				<input type="button" class="button" id="btn-dossier-note-insert-group" value="add group">&nbsp;&nbsp;
+				[% END %]
+				[% IF constituentIndividuals %]
+				<select class="select-single dialog-input-text-narrow block" id="dossier-note-constituent-individual">
+					<option value="">-select individual-</option>
+					[% FOREACH individual IN constituentIndividuals %]
+					<option value="[% individual.id %]">[% individual.firstname _ ' '  _ individual.lastname %]</option>
+					[% END %]
+				</select>
+				<input type="button" class="button" id="btn-dossier-note-insert-individual" value="add individual">
+				[% END %]
+				
+				<textarea class="input-default dialog-input-text" name="note-text" id="note-comment-text"></textarea>
+			</div><br>
+			
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">URLs</span><br>
+				<div class="hidden">
+					<input type="text" name="note-url" class="input-default dialog-input-text-narrow" placeholder="http://" />
+					<input type="text" name="note-url-description" class="input-default dialog-input-text-narrow" placeholder="URL description"/>
+					<img src="[% webroot %]/images/icon_delete.png" alt="delete" title="delete" class="pointer btn-delete-note-url align-middle"/>
+					<br><br>
+				</div>
+				<span class="span-link" id="note-add-url">Add URL</span>
+			</div><br>
+
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">RT Tickets</span><br>
+				<div class="hidden">
+					<input type="text" name="note-ticket" class="input-default dialog-input-text-narrow" />
+					<img src="[% webroot %]/images/icon_delete.png" alt="delete" title="delete" class="pointer btn-delete-note-ticket align-middle"/>
+					<br><br>
+				</div>
+				<span class="span-link" id="note-add-ticket">Add ticket number</span>
+			</div><br>
+
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Files</span><br>
+				<div class="hidden">
+					<input type="file" name="note-file" class="input-default dialog-input-text-narrow dossier-item-note-files">
+					<img src="[% webroot %]/images/icon_delete.png" alt="delete" title="delete" class="pointer btn-delete-note-file align-middle"/>
+					<br><br>
+				</div>
+				<span class="span-link" id="note-add-file">Add file</span>
+			</div><br>
+			
+		</form>
+	</fieldset>
+</div>

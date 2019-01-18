@@ -1,0 +1,41 @@
+[% USE date %]
+<div class="dialog-form-wrapper block">
+	<fieldset>
+		<form id="form-dossier-add-pending-item">
+			<div class="dialog-input-wrapper block">
+
+	[% FOREACH dossier IN dossiers %]
+				<span class="dialog-input-label">Add items to dossier</span>
+				 "[% dossier.description %]"<br>
+				<table id="table-generic">
+		[% FOREACH item IN items_per_dossier.${dossier.id} %]
+			[% ts = item.item_timestamp.stripSeconds %]
+				<tr class="item-row"
+					data-tagid="[% dossier.tagid %]"
+					data-itemid="[% item.ref %]"
+					data-itemtype="[% item.type %]"
+					data-dossier="[% dossier.id %]">
+				<td><input type="checkbox" name="item" checked
+					class="pending-item-take"></td>
+				<td>[% item.typeText %]</td>
+				<td>[% item.title %]</td>
+				<td class="event_date">[% date.format(ts, '%d-%m-%Y') %]</td>
+				<td class="event_time">[% date.format(ts, '%H:%M') %]</td>
+				</tr>
+		[% END %]
+				</table>
+				<br>
+	[% END %]
+			</div><br>
+
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">TLP classification</span><br>
+				<select id="dossier-pending-tlp" class="select-single dialog-input-text-narrow block" name="tlp">
+					[% FOREACH tlp IN tlpMapping.keys.sort.reverse %]
+						<option value="[% tlp %]">[% tlpMapping.$tlp %]</option>
+					[% END %]
+				</select>
+			</div>
+		</form>
+	</fieldset>
+</div>

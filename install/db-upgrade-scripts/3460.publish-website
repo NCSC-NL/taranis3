@@ -1,0 +1,14 @@
+use warnings;
+use strict;
+
+use Taranis::Install::DB     qw(database_load_sql);
+
+use File::Basename qw(dirname);
+
+sub {
+	my ($db, %args) = @_;
+
+	my $loadfn = dirname(__FILE__) . '/3460-website.sql';
+	database_load_sql $db, $loadfn;
+
+};

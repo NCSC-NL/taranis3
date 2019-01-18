@@ -1,0 +1,21 @@
+[% IF renderItemContainer %]
+<div class="role-item item-row" id="[% role.id %]">
+[% END %]
+	
+	<div class="role-item-name block">
+		<span>[% role.name %]</span>
+	</div>		
+
+	<div class="block align-block-right">
+	
+	[% IF write_right %]
+		<img src="[% webroot %]/images/icon_modify.png" alt="edit this item" title="edit this item" class="pointer btn-edit-role" data-id="[% role.id %]">
+		<img src="[% webroot %]/images/icon_delete.png" alt="delete this item" title="delete this item" class="pointer btn-delete-role" data-id="[% role.id %]">
+	[% ELSE %]
+		<img src="[% webroot %]/images/icon_details.png" alt="view details" title="view details" class="pointer btn-view-role" data-id="[% role.id %]">
+	[% END %]
+	
+	</div>
+[% IF renderItemContainer %]
+</div>
+[% END %]

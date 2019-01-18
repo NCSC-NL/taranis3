@@ -1,0 +1,131 @@
+#!/usr/bin/env perl
+# Rotate logfiles
+
+use warnings;
+use strict;
+
+use Carp           qw(confess);
+use Term::ReadLine ();
+use File::Basename qw(basename dirname);
+use File::Glob     qw(bsd_glob);
+use File::Copy     qw(move);
+
+use Taranis::Install::Config qw(config_release config_generic
+	become_user_taranis taranis_sources);
+use Taranis::Install::Bare   qw(copy_file);
+
+my $generic = config_generic;
+my $release = config_release;
+
+my $user    = $generic->{username};
+my ($groupid) = (getpwnam $user)[3];
+my $group   = getgrgid $groupid;
+
+my $version = $release->{version};
+my $ownrot  = "$generic->{etc}/logrotate.d";
+
+sub template($$);
+
+### link to global infrastructure
+my $logconf = '/etc/logrotate.d';     #XXX may need to be ported
+-d $logconf or die "ERROR: cannot find logrotate configuration at $logconf\n";
+
+my $logincl = "$logconf/$user";
+unless(-f $logincl) {
+	open my $incl, '>:encoding(utf8)', $logincl
+		or die "ERROR: cannot write $logincl: $!\n";
+	$incl->print("include $ownrot");
+	$incl->close
+		or die "ERROR: while writing $logincl: $!\n";
+
+	print "*   enable logrotate configurations in $ownrot\n";
+}
+
+### copy pre-delivered logrotate files
+
+unless(-d $ownrot) {
+	mkdir $ownrot, 0755
+		or die "ERROR: could not create $ownrot: $!\n";
+	print "*   created empty $ownrot\n";
+}
+
+my $preconfig = dirname(__FILE__).'/logrotate';
+-d $preconfig or die;
+
+my $replace_all = 0;
+my $term;
+my $now = time;
+
+SOURCE:
+foreach my $source (bsd_glob "$preconfig/*") {
+	my $dest = "$ownrot/".basename($source);
+	my $temp = "$dest.new";
+
+	template $source, $temp;
+
+	if(-f $dest) {
+		if(-M $dest < -M $source) {
+			unlink $temp;
+			next SOURCE;
+		}
+
+		my $diff = qx(diff $dest $temp);
+		if(length $diff == 0) {
+
+#			print "*   default rotate unchanged for $dest\n";
+			utime $now, $now, $source
+				or die "ERROR: cannot change timestamps on $source\n";
+			unlink $temp;
+			next SOURCE;
+		}
+
+		my $replace = 'yes';
+		unless($replace_all) {
+			print "$source is newer than $dest. Changes:\n$diff\n";
+
+			$ENV{COLUMNS} = 80; $ENV{LINES} = 25;  # insane defaults for putty
+			$term ||= Term::ReadLine->new('configure logrotate');
+
+			$replace = $term->readline('replace? (yes|no|all)[no] ') || 'no';
+			$replace_all = 1 if $replace =~ /^a/i;
+		}
+
+		if($replace =~ /^s*n/i) {
+			print "*   keeping $dest\n";
+			utime $now, $now, $dest
+				or die "ERROR: cannot change timestamps on $dest\n";
+			next SOURCE;
+		}
+
+		# overwrite changed logrotate file
+	}
+
+	move $temp, $dest
+		or die "ERROR: cannot move $temp to $dest: $!\n";
+
+	# logrotate protection: only files owned by root are accepted
+	chown 'root', $dest;
+
+	print "*   installed new $dest\n";
+}
+
+sub template($$) {
+	my ($infn, $outfn) = @_;
+	open my $out, '>:encoding(utf8)', $outfn or die "OUT: $outfn: $!";
+	open my $in, '<:encoding(utf8)', $infn   or die "IN: $infn: $!";
+
+	my $sources = taranis_sources $version;
+	my $install = $release->{install};
+	my $taranis = ($version eq 'git' ? "$sources/bin" : "$install/bin") .
+		'/taranis';
+
+	while(my $line = $in->getline) {
+		$line =~ s/\$USER\b/$user/g;
+		$line =~ s/\$GROUP\b/$group/g;
+		$line =~ s/\$LOGDIR\b/$release->{logs}/g;
+		$line =~ s/\$TARANIS\b/$taranis/g;
+		$out->print($line);
+	}
+}
+
+exit 0;

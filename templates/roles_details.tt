@@ -1,0 +1,121 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden[% END %] ui-state-error ui-corner-all">[% message %]</div>
+
+	[% IF role.name %]
+	<div class="dialog-title">
+		<span>[% role.name %]</span>	
+	</div>
+	[% END %]
+	
+	<form id="role-details-form" data-id="[% IF role.id; role.id; ELSE; 'NEW'; END %]">
+
+		<div id="role-details-tabs" class="dialog-tabs">
+			<ul>
+				<li><a href="#role-details-tabs-general">General</a></li>
+				<li><a href="#role-details-tabs-rights">Rights</a></li>
+			</ul>
+
+<!-- TAB GENERAL -->
+			<div id="role-details-tabs-general">
+				<fieldset>
+					<div class="dialog-input-wrapper block">
+						<label for="role-details-name" class="dialog-input-label">Role Name *</label><br>
+						<input type="text" name="name" id="role-details-name" class="input-default dialog-input-text-wide" value="[% role.name %]">
+					</div><br>
+					
+					<div class="dialog-input-wrapper block">
+						<label for="role-details-description" class="dialog-input-label">Description *</label><br>
+						<input type="text" name="description" id="role-details-description" class="input-default dialog-input-text-wide" value="[% role.description %]">
+					</div><br>
+					
+				</fieldset>
+			</div>
+			
+<!-- TAB RIGHTS -->
+			<div id="role-details-tabs-rights">
+				<fieldset>
+					<div class="dialog-input-wrapper block">
+						<table id="role-details-entitlements-table">
+							<thead>
+								<tr>
+									<th class="bold">Entitlement</th>
+									<th class="bold" colspan="4">Particularization</th>
+								</tr>
+							</thead>
+							<tbody>
+							[% FOREACH entitlement IN entitlements +%]
+								[% entitlement_id = entitlement.id %]
+								<tr class="item-row">
+									<td>
+										[% entitlement.name %]&nbsp;
+<!-- 										<span class="italic">([% entitlement.description %])</span> -->
+									</td>
+									<td class="role-details-entitlements-particularization-cell">
+										<input type="hidden" name="entitlementId" value="[% entitlement_id %]">
+									[%- IF entitlement.particularization +%]
+										[% IF entitlement.all_particularizations && entitlement.all_particularizations.size > 0 %]
+										
+										<div class="selected-particularizations" data-id="[% entitlement.id %]">
+											[% IF entitlement.particularizations && entitlement.particularizations.size > 0 %]
+												[% FOREACH particularization IN entitlement.particularizations %]
+												<span data-id="[% entitlement.id %]" data-particularization="[% particularization %]" class="selected-particularization">[% particularization %]<div class="btn-remove-particularization pointer">X</div></span>
+												[% END %]
+											[% ELSE %]
+												<span data-id="[% entitlement.id %]" class="all-particularizations">All particularizations</span>
+											[% END %]
+										</div>
+										<div>
+											<select class="select-particularizations select-single dialog-input-text-narrow" name="particularization-[% entitlement.id %]" data-id="[% entitlement.id %]">
+												<option value="">-select a particularization-</option>
+												[%- FOREACH particularization IN entitlement.all_particularizations.sort +%]
+													[% IF !entitlement.particularizations || entitlement.particularizations.grep('^' _ particularization _ '$').size() == 0 %]
+												<option value="[% particularization %]">[% particularization %]</option>
+													[% ELSE %]
+												<option value="[% particularization %]" class="hidden">[% particularization %]</option>
+													[% END %]
+												[% END +%]
+											</select>
+											<input type="button" value="Add" class="button btn-add-particularization" data-id="[% entitlement.id %]">
+										</div>	
+											[% END %]
+										[%- END +%]
+									</td>
+									<td>
+										[% IF role_rights.$entitlement_id.read_right == 1 +%]
+										<input type="checkbox" name="[%+ entitlement.id %]" value="R" checked="checked" id="R[%+ entitlement.id +%]" class="hidden">
+										<label for="R[%+ entitlement.id +%]" class="role-details-rwx-right role-details-rwx-right-checked pointer"><span>R</span></label>
+										[% ELSE %]
+										<input type="checkbox" name="[%+ entitlement.id %]" value="R" id="R[%+ entitlement.id +%]" class="hidden">
+										<label for="R[%+ entitlement.id +%]" class="role-details-rwx-right pointer"><span>R</span></label>
+										[% END %]											
+											
+									</td>
+									<td>
+										[% IF role_rights.$entitlement_id.write_right == 1 +%]
+										<input type="checkbox" name="[%+ entitlement.id %]" value="W" checked="checked" id="W[%+ entitlement.id +%]" class="hidden">
+										<label for="W[%+ entitlement.id +%]" class="role-details-rwx-right role-details-rwx-right-checked pointer"><span>W</span></label>
+										[% ELSE %]
+										<input type="checkbox" name="[%+ entitlement.id %]" value="W" id="W[%+ entitlement.id +%]" class="hidden">
+										<label for="W[%+ entitlement.id +%]" class="role-details-rwx-right pointer"><span>W</span></label>
+										[% END %]											
+									</td>
+									<td>
+										[% IF role_rights.$entitlement_id.execute_right == 1 +%]
+										<input type="checkbox" name="[%+ entitlement.id %]" value="X" checked="checked" id="X[%+ entitlement.id +%]" class="hidden">
+										<label for="X[%+ entitlement.id +%]" class="role-details-rwx-right role-details-rwx-right-checked pointer"><span>X</span></label>
+										[% ELSE %]
+										<input type="checkbox" name="[%+ entitlement.id %]" value="X" id="X[%+ entitlement.id +%]" class="hidden">
+										<label for="X[%+ entitlement.id +%]" class="role-details-rwx-right pointer"><span>X</span></label>
+										[% END %]
+									</td>
+								</tr>
+						 		[% END +%]
+							</tbody>
+						</table>
+					</div>
+				</fieldset>
+			</div>
+			
+		</div>
+	</form>
+</div>

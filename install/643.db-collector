@@ -1,0 +1,29 @@
+#!/usr/bin/env perl
+# Be sure that we have initially a collector
+
+use warnings;
+use strict;
+
+use Taranis::Install::DB     qw(connect_db);
+use Taranis::Install::Config qw(taranis_config);
+
+my $db        = connect_db;
+
+my $config    = taranis_config;
+
+my $secret    = $config->{collector_secret};
+my $collector = $db->query(<<'__COLLECTOR', $secret)->hash;
+SELECT * FROM collector WHERE secret = ?
+__COLLECTOR
+
+exit 0 if $collector;
+
+
+$db->insert(collector => {
+	description => 'taranis server',
+	secret      => $secret,
+});
+
+print "*   added default collector\n";
+
+exit 0;

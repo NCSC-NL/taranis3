@@ -1,0 +1,284 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden[% END %] ui-state-error ui-corner-all">[% message %]</div>
+	<div class="ui-state-highlight ui-corner-all dialog-highlight">Note that <span class="italic">advisory import settings</span> are NOT exported!</div>	
+	<div class="dialog-title">
+		<span>Import/Export Sources</span>	
+	</div>
+
+	<div id="sources-import-export-tabs" class="dialog-tabs">
+		<ul>
+			<li><a href="#sources-import-export-tabs-import">Import</a></li>
+			<li><a href="#sources-import-export-tabs-export">Export</a></li>
+		</ul>
+
+<!-- TAB IMPORT -->
+		<div id="sources-import-export-tabs-import">
+			<form id="sources-import-export-form-import" enctype="multipart/form-data">		
+				<div class="dialog-input-wrapper block">
+					<span class="dialog-input-label">Sources import file</span><br>
+					<input type="file" name="import_file" id="sources-import-file" class="input-default dialog-input-text">
+				</div><br>
+			</form>
+			<div class="dialog-input-wrapper block hidden" id="sources-import-export-processing-import">Processing import...</div>
+		</div>
+
+<!-- TAB EXPORT -->		
+		<div id="sources-import-export-tabs-export">
+			<form id="sources-import-export-form-export">
+				<fieldset>
+					<legend>Filter by protocol</legend>
+					<div class="dialog-input-wrapper block">
+						<div class="select-two-columns">
+							<div class="inline">
+								<span class="dialog-input-label">Selected protocols</span><br>
+								<select multiple="multiple" name="protocols_left_column" id="sources-export-selected-protocols" size="8" class="select-multiple select-left select-multiple-wide"></select>
+								<span class="italic">(none selected means all)</span>								
+							</div>
+							<div class="option-left-right">	
+								<input type="button" class="button btn-option-to-left " value="<"><br><br>
+								<input type="button" class="button btn-option-to-right" value=">">
+							</div>
+							<div class="inline">
+								<span class="dialog-input-label">Available protocols</span><br>
+								<select multiple="multiple" name="protocols_right_column" id="sources-export-available-protocols" size="8" class="select-multiple select-right select-multiple-wide">
+									<option value="http://" title="http://">http://</option>
+									<option value="https://" title="http://">https://</option>
+									<option value="imap" title="imap">imap</option>
+									<option value="imaps" title="imaps">imaps</option>
+									<option value="pop3" title="pop3">pop3</option>
+									<option value="pop3s" title="pop3s">pop3s</option>
+								</select>
+							</div>
+						</div>				
+					</div><br>
+				</fieldset>
+				
+				<fieldset>
+					<legend>Filter by category</legend>
+					<div class="dialog-input-wrapper block">
+						<div class="select-two-columns">
+							<div class="inline">
+								<span class="dialog-input-label">Selected categories</span><br>
+								<select multiple="multiple" name="categories_left_column" id="sources-export-selected-categories" size="8" class="select-multiple select-left select-multiple-wide"></select>
+								<span class="italic">(none selected means all)</span>								
+							</div>
+							<div class="option-left-right">	
+								<input type="button" class="button btn-option-to-left " value="<"><br><br>
+								<input type="button" class="button btn-option-to-right" value=">">
+							</div>
+							<div class="inline">
+								<span class="dialog-input-label">Available categories</span><br>
+								<select multiple="multiple" name="categories_right_column" id="sources-export-available-categories" size="8" class="select-multiple select-right select-multiple-wide">
+									[% FOREACH category IN categories +%]
+									<option value="[% category.id %]" title="[% category.name %]">[% category.name %]</option>
+									[% END +%]
+								</select>
+							</div>
+						</div>				
+					</div><br>
+				</fieldset>				
+
+				<fieldset>
+					<legend>Filter by language</legend>
+					<div class="dialog-input-wrapper block">
+						<div class="select-two-columns">
+							<div class="inline">
+								<span class="dialog-input-label">Selected languages</span><br>
+								<select multiple="multiple" name="languages_left_column" id="sources-export-selected-languages" size="8" class="select-multiple select-left select-multiple-wide"></select>
+								<span class="italic">(none selected means all)</span>								
+							</div>
+							<div class="option-left-right">	
+								<input type="button" class="button btn-option-to-left " value="<"><br><br>
+								<input type="button" class="button btn-option-to-right" value=">">
+							</div>
+							<div class="inline">
+								<span class="dialog-input-label">Available languages</span><br>
+								<select multiple="multiple" name="languages_right_column" id="sources-export-available-languages" size="8" class="select-multiple select-right select-multiple-wide">
+				                    <option value="ab" title="Abkhazian">Abkhazian</option>
+				                    <option value="aa" title="Afar">Afar</option>
+				                    <option value="af" title="Afrikaans">Afrikaans</option>
+				                    <option value="sq" title="Albanian">Albanian</option>
+				                    <option value="am" title="Amharic">Amharic</option>
+				                    <option value="ar" title="Arabic">Arabic</option>
+				                    <option value="an" title="Aragonese">Aragonese</option>
+				                    <option value="hy" title="Armenian">Armenian</option>
+				                    <option value="as" title="Assamese">Assamese</option>
+				                    <option value="ay" title="Aymara">Aymara</option>
+				                    <option value="az" title="Azerbaijani">Azerbaijani</option>
+				                    <option value="ba" title="Bashkir">Bashkir</option>
+				                    <option value="eu" title="Basque">Basque</option>
+				                    <option value="bn" title="Bengali (Bangla)">Bengali (Bangla)</option>
+				                    <option value="dz" title="Bhutani">Bhutani</option>
+				                    <option value="bh" title="Bihari">Bihari</option>
+				                    <option value="bi" title="Bislama">Bislama</option>
+				                    <option value="br" title="Breton">Breton</option>
+				                    <option value="bg" title="Bulgarian">Bulgarian</option>
+				                    <option value="my" title="Burmese">Burmese</option>
+				                    <option value="be" title="Byelorussian (Belarusian)">Byelorussian (Belarusian)</option>
+				                    <option value="km" title="Cambodian">Cambodian</option>
+				                    <option value="ca" title="Catalan">Catalan</option>
+				                    <option value="ny" title="Chewa">Chewa</option>
+				                    <option value="zh" title="Chinese (Simplified)">Chinese (Simplified)</option>
+				                    <option value="zh" title="Chinese (Traditional)">Chinese (Traditional)</option>
+				                    <option value="co" title="Corsican">Corsican</option>
+				                    <option value="hr" title="Croatian">Croatian</option>
+				                    <option value="cs" title="Czech">Czech</option>
+				                    <option value="da" title="Danish">Danish</option>
+				                    <option value="dv" title="Divehi">Divehi</option>
+				                    <option value="nl" title="Dutch">Dutch</option>
+				                    <option value="en" title="English">English</option>
+				                    <option value="eo" title="Esperanto">Esperanto</option>
+				                    <option value="et" title="Estonian">Estonian</option>
+				                    <option value="fo" title="Faeroese">Faeroese</option>
+				                    <option value="fa" title="Farsi">Farsi</option>
+				                    <option value="fj" title="Fiji">Fiji</option>
+				                    <option value="fi" title="Finnish">Finnish</option>
+				                    <option value="fr" title="French">French</option>
+				                    <option value="fy" title="Frisian">Frisian</option>
+				                    <option value="ff" title="Fulfulde">Fulfulde</option>
+				                    <option value="gl" title="Galician">Galician</option>
+				                    <option value="gd" title="Gaelic (Scottish)">Gaelic (Scottish)</option>
+				                    <option value="gv" title="Gaelic (Manx)">Gaelic (Manx)</option>
+				                    <option value="ka" title="Georgian">Georgian</option>
+				                    <option value="de" title="German">German</option>
+				                    <option value="el" title="Greek">Greek</option>
+				                    <option value="kl" title="Greenlandic">Greenlandic</option>
+				                    <option value="gn" title="Guarani">Guarani</option>
+				                    <option value="gu" title="Gujarati">Gujarati</option>
+				                    <option value="ht" title="Haitian Creole">Haitian Creole</option>
+				                    <option value="ha" title="Hausa">Hausa</option>
+				                    <option value="he" title="Hebrew">Hebrew</option>
+				                    <option value="hi" title="Hindi">Hindi</option>
+				                    <option value="hu" title="Hungarian">Hungarian</option>
+				                    <option value="is" title="Icelandic">Icelandic</option>
+				                    <option value="io" title="Ido">Ido</option>
+				                    <option value="ig" title="Igbo">Igbo</option>
+				                    <option value="id" title="Indonesian">Indonesian</option>
+				                    <option value="ia" title="Interlingua">Interlingua</option>
+				                    <option value="ie" title="Interlingue">Interlingue</option>
+				                    <option value="iu" title="Inuktitut">Inuktitut</option>
+				                    <option value="ik" title="Inupiak">Inupiak</option>
+				                    <option value="ga" title="Irish">Irish</option>
+				                    <option value="it" title="Italian">Italian</option>
+				                    <option value="ja" title="Japanese">Japanese</option>
+				                    <option value="jv" title="Javanese">Javanese</option>
+				                    <option value="kn" title="Kannada">Kannada</option>
+				                    <option value="kr" title="Kanuri">Kanuri</option>
+				                    <option value="ks" title="Kashmiri">Kashmiri</option>
+				                    <option value="kk" title="Kazakh">Kazakh</option>
+				                    <option value="rw" title="Kinyarwanda (Ruanda)">Kinyarwanda (Ruanda)</option>
+				                    <option value="ky" title="Kirghiz">Kirghiz</option>
+				                    <option value="rn" title="Kirundi (Rundi)">Kirundi (Rundi)</option>
+				                    <option value="ko" title="Korean">Korean</option>
+				                    <option value="ku" title="Kurdish">Kurdish</option>
+				                    <option value="lo" title="Laothian">Laothian</option>
+				                    <option value="la" title="Latin">Latin</option>
+				                    <option value="lv" title="Latvian (Lettish)">Latvian (Lettish)</option>
+				                    <option value="li" title="Limburgish (Limburger)">Limburgish (Limburger)</option>
+				                    <option value="ln" title="Lingala">Lingala</option>
+				                    <option value="lt" title="Lithuanian">Lithuanian</option>
+				                    <option value="mk" title="Macedonian">Macedonian</option>
+				                    <option value="mg" title="Malagasy">Malagasy</option>
+				                    <option value="ms" title="Malay">Malay</option>
+				                    <option value="ml" title="Malayalam">Malayalam</option>
+				                    <option value="mt" title="Maltese">Maltese</option>
+				                    <option value="mi" title="Maori">Maori</option>
+				                    <option value="mr" title="Marathi">Marathi</option>
+				                    <option value="mo" title="Moldavian">Moldavian</option>
+				                    <option value="mn" title="Mongolian">Mongolian</option>
+				                    <option value="na" title="Nauru">Nauru</option>
+				                    <option value="ne" title="Nepali">Nepali</option>
+				                    <option value="no" title="Norwegian">Norwegian</option>
+				                    <option value="oc" title="Occitan">Occitan</option>
+				                    <option value="or" title="Oriya">Oriya</option>
+				                    <option value="om" title="Oromo (Afan, Galla)">Oromo (Afan, Galla)</option>
+				                    <option value="ps" title="Pashto (Pushto)">Pashto (Pushto)</option>
+				                    <option value="pl" title="Polish">Polish</option>
+				                    <option value="pt" title="Portuguese">Portuguese</option>
+				                    <option value="pa" title="Punjabi">Punjabi</option>
+				                    <option value="qu" title="Quechua">Quechua</option>
+				                    <option value="rm" title="Rhaeto-Romance">Rhaeto-Romance</option>
+				                    <option value="ro" title="Romanian">Romanian</option>
+				                    <option value="ru" title="Russian">Russian</option>
+				                    <option value="sm" title="Samoan">Samoan</option>
+				                    <option value="sg" title="Sangro">Sangro</option>
+				                    <option value="sa" title="Sanskrit">Sanskrit</option>
+				                    <option value="sr" title="Serbian">Serbian</option>
+				                    <option value="sh" title="Serbo-Croatian">Serbo-Croatian</option>
+				                    <option value="st" title="Sesotho">Sesotho</option>
+				                    <option value="tn" title="Setswana">Setswana</option>
+				                    <option value="sn" title="Shona">Shona</option>
+				                    <option value="ii" title="Sichuan Yi">Sichuan Yi</option>
+				                    <option value="sd" title="Sindhi">Sindhi</option>
+				                    <option value="si" title="Sinhalese">Sinhalese</option>
+				                    <option value="ss" title="Siswati">Siswati</option>
+				                    <option value="sk" title="Slovak">Slovak</option>
+				                    <option value="sl" title="Slovenian">Slovenian</option>
+				                    <option value="so" title="Somali">Somali</option>
+				                    <option value="es" title="Spanish">Spanish</option>
+				                    <option value="su" title="Sundanese">Sundanese</option>
+				                    <option value="sw" title="Swahili (Kiswahili)">Swahili (Kiswahili)</option>
+				                    <option value="sv" title="Swedish">Swedish</option>
+				                    <option value="tl" title="Tagalog">Tagalog</option>
+				                    <option value="tg" title="Tajik">Tajik</option>
+				                    <option value="ta" title="Tamil">Tamil</option>
+				                    <option value="tt" title="Tatar">Tatar</option>
+				                    <option value="te" title="Telugu">Telugu</option>
+				                    <option value="th" title="Thai">Thai</option>
+				                    <option value="bo" title="Tibetan">Tibetan</option>
+				                    <option value="ti" title="Tigrinya">Tigrinya</option>
+				                    <option value="to" title="Tonga">Tonga</option>
+				                    <option value="ts" title="Tsonga">Tsonga</option>
+				                    <option value="tr" title="Turkish">Turkish</option>
+				                    <option value="tk" title="Turkmen">Turkmen</option>
+				                    <option value="tw" title="Twi">Twi</option>
+				                    <option value="ug" title="Uighur">Uighur</option>
+				                    <option value="uk" title="Ukrainian">Ukrainian</option>
+				                    <option value="ur" title="Urdu">Urdu</option>
+				                    <option value="uz" title="Uzbek">Uzbek</option>
+				                    <option value="ve" title="Venda">Venda</option>
+				                    <option value="vi" title="Vietnamese">Vietnamese</option>
+				                    <option value="vo" title="Volap&uuml;k">Volap&uuml;k</option>
+				                    <option value="wa" title="Wallon">Wallon</option>
+				                    <option value="cy" title="Welsh">Welsh</option>
+				                    <option value="wo" title="Wolof">Wolof</option>
+				                    <option value="xh" title="Xhosa">Xhosa</option>
+				                    <option value="yi" title="Yiddish">Yiddish</option>
+				                    <option value="yo" title="Yoruba">Yoruba</option>
+				                    <option value="zu" title="Zulu">Zulu</option>                    
+								</select>
+							</div>
+						</div>				
+					</div><br>
+				</fieldset>				
+
+				<fieldset>
+					<legend>Filter by parsers</legend>
+					<div class="dialog-input-wrapper block">
+						<div class="select-two-columns">
+							<div class="inline">
+								<span class="dialog-input-label">Selected parsers</span><br>
+								<select multiple="multiple" name="parsers_left_column" id="sources-export-selected-parsers" size="8" class="select-multiple select-left select-multiple-wide"></select>
+								<span class="italic">(none selected means all)</span>
+							</div>
+							<div class="option-left-right">	
+								<input type="button" class="button btn-option-to-left " value="<"><br><br>
+								<input type="button" class="button btn-option-to-right" value=">">
+							</div>
+							<div class="inline">
+								<span class="dialog-input-label">Available parsers</span><br>
+								<select multiple="multiple" name="parsers_right_column" id="sources-export-available-parsers" size="8" class="select-multiple select-right select-multiple-wide">
+									[% FOREACH parser IN parsers +%]
+									<option value="[% parser %]" title="[% parser %]">[% parser %]</option>
+									[% END +%]
+								</select>
+							</div>
+						</div>
+					</div><br>
+				</fieldset>				
+			</form>
+			<iframe name="downloadFrame" id="downloadFrame" src="" class="super-secret-iframe"></iframe>
+		</div>
+	
+	</div>
+</div>

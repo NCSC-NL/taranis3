@@ -1,0 +1,13 @@
+<div id="login-view">
+	<span ng-cloak>{{ loginErrorMessage }}</span><br>
+
+	<form novalidate>
+		<input type="text" placeholder="username" ng-model="username" id="login-username"><br>
+		<input type="password" placeholder="password" ng-model="password"><br><br>
+		<button ng-click="login(username,password)">LOG IN</button>
+		<br><br>
+		<span>OR</span>
+		<br><br>
+		<button ng-click="loginAsGuest()">LOG IN AS GUEST</button><br>
+	</form>
+</div>

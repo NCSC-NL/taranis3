@@ -1,0 +1,42 @@
+<div class="dialog-form-wrapper">
+	<div id="dialog-error" class="hidden ui-state-error ui-corner-all">[% message %]</div>
+	[% IF isLocked && openedByFullname +%]
+	<div class="ui-state-highlight ui-corner-all dialog-highlight">This End-Of-Day has been locked by [% openedByFullname %]</div>
+	[% END %]
+
+	<div class="dialog-title">
+		<span>[% eod_heading %]</span>	
+	</div>
+
+	<form id="form-eod-preview" data-publicationid="[% publication_id %]">
+		<input type="hidden" value="[% eod_id %]" name="eod_id" id="eod-preview-eod-id">
+		<fieldset>
+			<div class="dialog-input-wrapper block">
+				<div class="table">
+					<div class="cell">
+						<textarea class="scroll-y-always font-courier border-default" name="preview_txt" id="eod-preview-text" readonly="readonly">[% preview %]</textarea>
+					</div>
+					<div class="cell eod-preview-info-cell">
+						<fieldset>
+							<legend>Publication details</legend>
+							<div class="block">
+								[% IF created_by_name %]
+							     <span class="" data-printable="created by [% eod.created_by %]">Created by: </span><br>
+							     <span class="tpl-heading">[% created_by_name %]</span><br><br>
+								[% END %]
+								[% IF approved_by_name %]
+                                 <span class="" data-printable="approved by [% eod.approved_by %]">Approved by: </span><br>
+                                 <span class="tpl-heading">[% approved_by_name %]</span><br><br>
+	                            [% END %]
+	                            [% IF published_by_name %]
+                                 <span class="" data-printable="published by [% eod.published_by %]">Published by: </span><br>
+                                 <span class="tpl-heading">[% published_by_name %]</span><br><br>
+								[% END %]
+							</div>
+						</fieldset>
+					</div>
+				</div>
+			</div>
+		</fieldset>
+	</form>
+</div>

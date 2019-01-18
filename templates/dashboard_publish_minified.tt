@@ -1,0 +1,10 @@
+<div class="block">
+	[% IF numberOfApprovedPublications && numberOfApprovedPublications.showMinified && numberOfApprovedPublications.data %]
+		<div title="[% numberOfApprovedPublications.data %] approved publication[% IF numberOfApprovedPublications.data == 0 || numberOfApprovedPublications.data > 1 %]s[% END %] waiting to be published">
+			<a href="publish/publish/displayPublishOptions/" data-callback="setMenu">
+				<span class="dashboard-minified-icons-with-text">[% numberOfApprovedPublications.data %]</span>
+				<img src="[% webroot %]/images/mail_check.png" alt="[% numberOfApprovedPublications.data %]" class="dashboard-icon">
+			</a>
+		</div>
+	[% END %]
+</div>

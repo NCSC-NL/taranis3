@@ -1,0 +1,42 @@
+#!/usr/bin/env perl
+# Install common packages needed on openSUSE.  We are in a very early
+# stage without knowledge of configuration.
+use warnings;
+use strict;
+
+use Taranis::Install::Bare     qw(is_opensuse get_os_info);
+use Taranis::Install::OpenSUSE qw(opensuse_packages);
+
+unless(is_opensuse) {
+	print "*   skipped: not running on openSUSE.\n";
+	exit 0;
+}
+
+my $os_info = get_os_info;
+
+my @packages = (
+	'sudo',              # to call bin/taranis as root
+	'perl-doc',          # need this so often
+
+	# We need these before we get to install Perl modules
+	'make',              # to install some Perl XS packages
+	'gcc',
+	'gcc-c++',           # only needed for Encode::Detect
+    'libnsl-devel',      # required for XML::LibXML
+	'wget',              # to access CPAN
+	'perl-JSON',         # need it early for configuration setup
+	'perl-YAML',         # to speed-up perl module installation
+);
+
+# gcc development headers are required to compile XS, f.i. XML::LibXML
+# gcc-devel is missing from 42.3, apparently repackaged.  No idea whether
+# that is a mistake or planned.
+push @packages,
+	'gcc-devel',
+	if $os_info->{NAME} =~ /Tumbleweed/i
+	|| $os_info->{VERSION_ID} =~ /^42\.[12]$/;
+
+
+opensuse_packages @packages;
+
+exit 0;

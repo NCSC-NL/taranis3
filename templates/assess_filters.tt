@@ -1,0 +1,136 @@
+<mousetrap></mousetrap>
+<div class="filter-block filter-block-separator">
+	<div id="assess-search-types">
+		<input type="button" class="button" value="Reset filters and search" id="btn-default-search">&nbsp;
+		<input type="button" class="button" value="Switch to custom searches" id="btn_toggleSearchMode">
+	</div>
+</div>
+
+<div class="filter-block filter-block-separator" id="assess-standard-search-wrapper">
+	<form id="form-assess-standard-search">
+		<div class="block">
+			<span>Search</span><br>
+			<input type="search" id="assess-search" name="searchkeywords" class="input-default" value="[% search %]">
+		</div>
+	
+		<div class="block">
+			<span>From date</span><br>
+			<input id="assess-start-date" name="startdate" type="text" value="[% standardSearchSettings.dateStart %]" class="input-default date-picker">
+		</div>	
+	
+		<div class="block">
+			<span>To date</span><br>
+			<input id="assess-end-date" name="enddate" type="text" value="[% standardSearchSettings.dateEnd %]" class="input-default date-picker">
+		</div>
+		<br>
+
+		<div class="block">
+			<span>Category</span><br>
+			<select name="category" class="select-single" id="assess-category">
+				<option value="">-all categories-</option>
+				[% FOREACH category IN pageSettings.assess_categories +%]
+				<option value="[% category.id %]" [% IF category.id == standardSearchSettings.category %] selected="selected"[% END %]>[% category.name %]</option>
+				[% END +%]
+			</select>
+		</div>
+
+		<div class="block">
+			<span>Source</span><br>
+			<select name="source" id="assess-source" class="select-single">
+				<option value="">-all sources-</option>
+				[% FOREACH source IN sources +%]
+				<option value="[% source %]" [% IF source == standardSearchSettings.source %] selected="selected"[% END %]>[% source %]</option>
+				[% END +%]
+			</select>      				
+		</div>
+	
+		<div class="block">
+			<span>Sorting order</span><br>
+			<select name="sorting" id="assess-sorting" class="select-single">
+				<option value="created_desc" [% IF standardSearchSettings.sorting == 'created_desc' %] selected="selected"[% END %]>Date/Time newest (default)</option>
+				<option value="created_asc" [% IF standardSearchSettings.sorting == 'created_asc' %] selected="selected"[% END %]>Date/Time oldest</option>
+				<option value="source_asc" [% IF standardSearchSettings.sorting == 'source_asc' %] selected="selected"[% END %]>Source A-Z</option>
+				<option value="source_desc" [% IF standardSearchSettings.sorting == 'source_desc' %] selected="selected"[% END %]>Source Z-A</option>
+				<option value="title_asc" [% IF standardSearchSettings.sorting == 'title_asc' %] selected="selected"[% END %]>Title A-Z</option>
+				<option value="title_desc" [% IF standardSearchSettings.sorting == 'title_desc' %] selected="selected"[% END %]>Title Z-A</option>
+			</select>      				
+		</div>
+	
+		<div class="block">
+			<span>Hits/pg</span><br>
+			<input type="number" size="3" name="hitsperpage" id="assess-hitsperpage" value="[% standardSearchSettings.hitsperpage %]" class="input-default">
+		</div>
+	
+		<div class="block assess-statuses bold">
+			<label for="unread" class="block assess-unread" title="unread">
+				<span>U</span><br>
+				<input type="checkbox" id="unread" name="item_status" value="0" [% IF standardSearchSettings.uriw.substr(0,1) %]checked="checked"[% END %]>
+			</label>
+			<label for="read" class="block assess-read" title="read">
+				<span>R</span><br>
+				<input type="checkbox" id="read" name="item_status" value="1" [% IF standardSearchSettings.uriw.substr(1,1) %]checked="checked"[% END %]>
+			</label>
+	
+			<label for="important" class="block assess-important" title="important" >
+				<span>I</span><br>
+				<input type="checkbox" id="important" name="item_status" value="2" [% IF standardSearchSettings.uriw.substr(2,1) %]checked="checked"[% END %]>
+			</label>
+	
+			<label for="waitingroom" class="block assess-waitingroom" title="waitingroom">
+				<span>W</span><br>
+				<input type="checkbox" id="waitingroom" name="item_status" value="3" [% IF standardSearchSettings.uriw.substr(3,1) %]checked="checked"[% END %]>
+			</label>
+		</div>
+	
+		<div class="block">
+			<span>&nbsp;</span>
+			<input type="button" id="btn-assess-search" class="button mousetrap" value="Search!">
+		</div>
+	</form>	
+</div>
+
+<div class="filter-block filter-block-separator" id="assess-custom-search-wrapper">
+	<form id="form-assess-custom-search" class="block">
+		<div class="block">
+			<span>Custom searches</span><br>
+			<select name="custom-search-id" id="assess-custom-search" class="select-single">
+				<option value="">-select a custom search-</option>
+				[%+ FOREACH searchItem IN searches +%]
+					[% NEXT IF !searchItem %]
+					[% IF searchItem.is_public && searchItem.created_by != pageSettings.info_username; public_or_personal = ' (public)' ; ELSE ; public_or_personal = ' (personal)'; END -%]
+				<option value="[% searchItem.id %]" [% IF customSearchID == searchItem.id %] selected[% END %]>[% searchItem.description _ public_or_personal %]</option>
+				[% END +%]
+			</select> 
+			<input type="button" id="btn-custom-search" class="button" value="Search!">
+		</div>
+	</form>		
+	<div class="block align-block-right">
+		<br>
+		<input type="button" id="btn_addSearch" class="button" name="btn_addSearch" value="Add new custom search">
+	</div>
+</div>
+
+[% IF write_right +%]
+<div class="action-block filter-block-separator">
+	<div class="block">
+		<label title="select all listed items" for="checkAllTop">
+			<input type="button" class="button-blue mousetrap"
+			 name="checkbutton1" id="checkAllTop" value="C"></label>&nbsp;
+		<label title="uncheck all items" for="unCheckAllTop">
+			<input type="button" class="button-blue mousetrap"
+			 name="checkbutton2" id="unCheckAllTop" value="U"></label>
+	</div>
+	<div class="block"> 
+		<input type="button" class="button btns_markRead mousetrap" value="Mark as read" id="btn_markRead">&nbsp; 
+		<input type="button" class="button btns_markImportant mousetrap" value="Mark as important" id="btn_markImportant">
+	</div>
+
+    <div class="center block assess-number-of-results" id="number-of-results">&mdash; <span id="assess-count">[% IF resultCount != items.size %][% items.size %] of [%END%][% resultCount %]</span> results &mdash;</div>
+
+	<div class="block assess-analysis">
+		<input type="button" class="button mousetrap" value="Mail items" id="btn-mail-assess-items">&nbsp;
+		<input type="button" class="button mousetrap" value="Bulk analysis" id="btn_bulkAnalysis">&nbsp;
+		<input type="button" class="button mousetrap" value="Multiple analyses" id="btn_multipleAnalyses">
+	</div>
+</div>
+[% END %]

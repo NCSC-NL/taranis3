@@ -1,0 +1,87 @@
+.main-color {
+  color: #0099ff;
+  background-color: #2a2a2a;
+}
+hr {
+  background-color: #0099ff;
+}
+.nav-item,
+.nav-list-item {
+  color: inherit;
+}
+.nav-item:hover,
+.nav-list-item:hover {
+  color: #2a2a2a;
+  background-color: #0099ff;
+}
+.marked {
+  color: #f8e61d;
+}
+h4 {
+  color: #33adff;
+}
+h3 {
+  color: #66c2ff;
+}
+h2 {
+  color: #99d6ff;
+}
+h1 {
+  color: #ccebff;
+}
+#loading-bar {
+  background: #0099ff !important;
+}
+.default-table,
+.compact-table {
+  border: 1px solid #373737;
+}
+.default-table th,
+.compact-table th {
+  color: #2a2a2a;
+  background-color: #0099ff;
+}
+.default-table .oneven,
+.compact-table .oneven {
+  background-color: #373737;
+}
+/* tagcloud */
+div.jqcloud {
+  color: #0099ff;
+}
+div.jqcloud a {
+  color: #33adff;
+}
+div.jqcloud a:hover {
+  color: #66c2ff;
+}
+div.jqcloud span.w10 {
+  color: #ffffff;
+}
+div.jqcloud span.w9 {
+  color: #e5f5ff;
+}
+div.jqcloud span.w8 {
+  color: #ccebff;
+}
+div.jqcloud span.w7 {
+  color: #b3e0ff;
+}
+div.jqcloud span.w6 {
+  color: #99d6ff;
+}
+div.jqcloud span.w5 {
+  color: #80ccff;
+}
+div.jqcloud span.w4 {
+  color: #66c2ff;
+}
+div.jqcloud span.w3 {
+  color: #4db8ff;
+}
+div.jqcloud span.w2 {
+  color: #33adff;
+}
+div.jqcloud span.w1 {
+  color: #1aa3ff;
+}

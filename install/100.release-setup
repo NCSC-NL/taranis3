@@ -1,0 +1,169 @@
+#!/usr/bin/env perl
+# Help the initial setup of configurable parameters.
+# If not yet available, create/update a generic  $home/lib/setup-generic
+# Also, create/update a release specific config  $home/lib/setup-$version
+
+# Chicken' egg situation: the parameters may have been passed to the
+# install script, but we may not have the required module installed to
+# process it.  The values were passed via environment variables.
+
+use warnings;
+use strict;
+
+use Carp            qw(confess);
+use Term::ReadLine  ();
+
+use Taranis::Install::Bare   qw(sloppy_parse_xml);
+use Taranis::Install::Config qw(set_default_release save_config_release
+	config_generic save_config_generic become_user_taranis);
+
+sub update_generic();
+sub create_generic();
+sub create_release();
+
+my $username = $ENV{TARANIS_USERNAME} or die "USERNAME?";
+my $version  = $ENV{TARANIS_VERSION}  or die "VERSION?";
+my $home     = $ENV{TARANIS_HOME}     or die "HOME?";
+my $migrate  = $ENV{TARANIS_MIGRATE} || '';
+
+my ($userid, $groupid) = (getpwnam $username)[2, 3];
+defined $userid
+	or die "ERROR: cannot find taranis user '$username'.\n";
+
+my $etc         = "$home/etc";
+
+# When we bootstrap a new release, we need this dir too early.  One of the
+# next scripts take care of the permissions.
+-d $etc || mkdir $etc or die "cannot create $etc: $!\n";
+chown $userid, $groupid, $etc;
+
+my $old_configfn = "$migrate/conf/taranis.conf.xml";
+my $old_config   = sloppy_parse_xml $old_configfn || {};
+
+my $generic_fn   = "$etc/setup-generic";
+my $release_fn   = "$etc/setup-$version";
+
+-f "$generic_fn.json" ? update_generic : create_generic;
+
+-f "$release_fn.json" or create_release;
+
+exit 0;
+
+# Settings already exist
+sub update_generic() {
+	become_user_taranis;
+	$version or return;
+
+	my $generic = config_generic $generic_fn;
+	$generic->{default_version} ne $version
+		or return;
+
+	print "Change default version to $version.\n";
+	$generic->{default_version} = $version;
+	save_config_generic $generic;
+}
+
+# First write
+sub create_generic() {
+	print "Creating initial generic configuration\n";
+
+	$ENV{COLUMNS} = 80; $ENV{LINES} = 25;  # insane defaults for putty
+	my $term  = Term::ReadLine->new('Global configuration');
+	my $out   = $term->OUT || \$STDOUT;
+
+	my $email = $old_config->{mail_from_address}
+		|| $term->readline('administrator email: ');
+	$email    =~ s/\s//g;
+	length $email or exit 1;
+
+	my $vhost = $term->readline('taranis vhost name: ');
+	$vhost    =~ s/\s//g;
+	length $vhost or exit 1;
+
+	my $use_https = $old_config->{session_secure_cookie}
+		|| $term->readline('website uses https [yes]: ')
+		|| 'yes';
+	my $https = $use_https =~ m/^\s*y/i ? 1 : 0;
+
+	$out->print(<<__HELP) if $https;
+WARNING: you will need configure SSL in Apache before the install procedure
+    can be completed.  The 'WARNING-NEEDS-CONFIGURATION' error which you will
+    get later during the installation will tell you where to put it.
+
+__HELP
+
+	my $is_test   = $old_config->{testmode}
+		|| $term->readline('running test server [yes]: ')
+		|| 'yes';
+	my $testmode  = $is_test ne 'off' || $is_test =~ m/^\s*y/i ? 'on' : 'off';
+
+	# The generic port is used as port for the last installed version
+	my $port  = $vhost =~ s/:([0-9]+)// ? $1 : $https ? 443 : 80;
+
+	my $filename = set_default_release
+		username        => $username,
+		home            => $home,
+		release_version => $version,
+		filebase        => $generic_fn;
+	chown $userid, $groupid, $filename;
+
+	become_user_taranis;  # only possible after generic config is written
+
+	my $generic = config_generic;
+	$generic->{admin_email} = $email;
+	$generic->{extension}   = "$home/local";    # organization's own
+
+	# each setup needs a unique port number.  Base this on the version
+	# number.  3.4.1-rc6  will become  8340.  All 3.4 installed releases
+	# will get a higher number.
+	my $free_port = $version =~ m/^([0-9]+)\.([0-9]+)/ ? "8$1$20" : 8000;
+
+	$generic->{apache}      = {
+		vhost_name   => $vhost, # default vhostname
+		primary_port => $port,  # portnumber for last installed ('default') version
+		use_https    => $https,
+		procs_start  => 3,      # perl threads used for the default version
+		procs_max    => 5,
+		free_port    => $free_port,
+		testmode     => $testmode,
+	};
+
+	save_config_generic $generic;
+	$generic;
+}
+
+sub create_release() {
+	print "*   creating initial release configuration for '$version'\n";
+
+	my $generic   = config_generic;
+	my $genapache = $generic->{apache};
+	my $genvhost  = $genapache->{vhost_name} or confess;
+	my $port      = $genapache->{free_port}++;
+
+	# default to same host, added 4u
+	my ($host, $domain) = split /\./, $genvhost, 2;
+	my $host4u    = $host . ($host =~ m/[0-9]$/ ? '-4u' : '4u');
+	my $vhost4u   = $domain ? "$host4u.$domain" : $host4u;
+
+	print "*   website will be available on port $port (and maybe the default port)\n";
+
+	my %release   = (
+		version   => $version,
+		filebase  => $release_fn,
+		sources   => "$home/sources",
+		extension => "$home/local-$version",    # organization's owen
+		apache    => {
+			vhost_name   => $genvhost,
+			vhost_port   => $port,
+			vhost4u_name => $vhost4u,
+			vhost4u_port => $port,
+			# procs_start => 3,    will overrule generic and default
+			# procs_max   => 5,
+		},
+	);
+
+	save_config_generic $generic;
+	save_config_release \%release;
+}
+
+exit 0;

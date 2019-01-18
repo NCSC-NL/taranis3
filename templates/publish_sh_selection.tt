@@ -1,0 +1,91 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden[% END %] ui-state-error ui-corner-all">[% message %]</div>
+	[% IF warning %]
+	<div class="ui-state-highlight ui-corner-all dialog-highlight">[% warning %]</div>
+	[% END %]
+	
+	<div class="dialog-title">
+		<span>[% advisory_heading %] Software/Hardware selection</span>	
+	</div>
+	
+	[% IF update_text %]
+	<div>
+		<br>
+		<span class="dialog-input-label">Update text</span><br>
+		<textarea class="scroll-y-always font-courier border-default" readonly="readonly" id="advisory-publish-update-text">[% update_text %]</textarea>
+	</div>
+	[% END %]
+	<form method="post" id="advisory-publish-sh-selection-form" data-publicationid="[% publication_id %]">
+		<fieldset class="publish-advisory-or-selection">
+			<legend>Platforms selection</legend>
+			<div class="dialog-input-wrapper block">
+
+				[% IF platforms && platforms.size > 0 %]
+				Select: <span id="span-select-all-platforms" class="span-link">All</span> | <span id="span-select-none-platforms" class="span-link">None</span><br>
+
+					[% FOREACH platform IN platforms %]
+				<input type="checkbox" id="[% platform.id %]" value="[% platform.id %]" name="sh" [% IF check_products == 0 %]checked="checked"[% END %]>
+				<label for="[% platform.id %]">[% platform.producer _ ' ' _ platform.name _ ' ' _ platform.version %]</label><br>
+					[% END %]			
+				[% ELSE %]
+				<span class="dialog-input-label">There are no platforms selected in this advisory.</span><br>
+				[% END %]
+			</div>
+		</fieldset>
+		
+		<span class="publish-advisory-or-selection dialog-input-label">OR</span>
+		
+		<fieldset class="publish-advisory-or-selection">
+			<legend>Products selection</legend>
+			<div class="dialog-input-wrapper block">
+		
+				[% IF products && products.size > 0 %]
+				Select: <span id="span-select-all-products" class="span-link">All</span> | <span id="span-select-none-products" class="span-link">None</span><br>
+					[% FOREACH product IN products %]
+				<input type="checkbox" id="[% product.id %]" value="[% product.id %]" name="sh" [% IF check_products == 1 %]checked="checked"[% END %]>
+				<label for="[% product.id %]">[% product.producer _ ' ' _ product.name _ ' ' _ product.version %]</label><br>
+					[% END %]
+				[% ELSE %]
+				<span class="dialog-input-label">There are no products selected in this advisory.</span><br>
+				[% END %]			
+			</div>
+		</fieldset>
+		
+		<fieldset class="publish-advisory-and-selection hidden">
+			<div class="dialog-input-wrapper block">
+				<div class="select-two-columns">
+					<div>
+						<span class="dialog-input-label">Platforms</span><br>
+						<select name="pf_column" id="publish-sh-platforms" size="15" class="select-multiple">
+							<option value="X">* (ALL PLATFORMS)</option>
+						[% FOREACH pf IN platforms +%]
+							[% USE String(pf.producer) %]
+							[% pf_fulltext = String.capital _ ' ' _ pf.name _ ' ' _ pf.version %]
+							<option value="[% pf.id %]" title="[% pf_fulltext %]">[% pf_fulltext %]</option>
+						[% END +%]
+						</select>
+					</div>
+					<div class="option-left-right">	
+						<input class="button" type="button" id="btn-publish-platform-and-product" value="AND">
+					</div>
+					<div>
+						<span class="dialog-input-label">Products</span><br>
+	
+						<select name="pd_column" id="publish-sh-products" size="15" class="select-multiple">
+							<option value="X">* (ALL PRODUCTS)</option>
+						[% FOREACH pd IN products +%]
+							[% USE String(pd.producer) +%]
+							[% pd_fulltext = String.capital _ ' ' _ pd.name _ ' ' _ pd.version %]
+							<option value="[% pd.id %]" title="[% pd_fulltext %]">[% pd_fulltext %]</option>
+						[% END +%]
+						</select>
+					</div>
+				</div>
+				<div>
+					<table id="publish-sh-and-selection-result" class="border-default"></table>
+				</div>
+			</div>
+		</fieldset>
+	</form>
+</div>
+	

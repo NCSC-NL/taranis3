@@ -1,0 +1,43 @@
+<?xml version='1.0' standalone='yes'?>
+<tools>
+  <anon>
+    <backend></backend>
+    <toolname><![CDATA[Phishing checker]]></toolname>
+    <webscript><![CDATA[tools/phishing_overview/displayPhishingOverview/tool=phishing_checker/]]></webscript>
+  </anon>
+  <anon>
+    <backend><![CDATA[]]></backend>
+    <toolname><![CDATA[Whois]]></toolname>
+    <webscript><![CDATA[tools/whois/displayWhois/tool=whois/]]></webscript>
+  </anon>
+  <anon>
+    <backend><![CDATA[]]></backend>
+    <toolname><![CDATA[Announcements]]></toolname>
+    <webscript><![CDATA[tools/announcements/displayAnnouncements/tool=announcements/]]></webscript>
+  </anon>
+  <anon>
+    <backend></backend>
+    <toolname><![CDATA[Dossier Reminders]]></toolname>
+    <webscript><![CDATA[dummy]]></webscript>
+  </anon>
+  <anon>
+    <backend></backend>
+    <toolname><![CDATA[Feed Digests]]></toolname>
+    <webscript><![CDATA[tools/feed_digest/displayFeedDigests/tool=feed_digest/]]></webscript>
+  </anon>
+  <anon>
+    <backend></backend>
+    <toolname><![CDATA[Access Tokens Cleanup]]></toolname>
+    <webscript><![CDATA[dummy]]></webscript>
+  </anon>
+  <anon>
+    <backend><![CDATA[]]></backend>
+    <toolname><![CDATA[Taranis Stream]]></toolname>
+    <webscript><![CDATA[tools/stream/displayStreams/tool=streams/]]></webscript>
+  </anon>
+  <anon>
+    <backend></backend>
+    <toolname><![CDATA[Report Reminders]]></toolname>
+    <webscript><![CDATA[dummy]]></webscript>
+  </anon>
+</tools>

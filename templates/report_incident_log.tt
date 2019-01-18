@@ -1,0 +1,32 @@
+<div id="report-incident-log-content-heading" class="content-heading">
+	<div id="report-incident-log-content-heading-status" class="block configuration-heading-default">
+		<span>Status</span>
+	</div>
+	<div id="report-incident-log-content-heading-created" class="block configuration-heading-default date-width-default">
+		<span>Date/Time</span>
+	</div>
+	<div id="report-incident-log-content-heading-ticket-number" class="block configuration-heading-default">
+		<span>Ticket Number</span>
+	</div>
+	<div id="report-incident-log-content-heading-owner" class="block configuration-heading-default">
+		<span>Owner</span>
+	</div>
+	<div id="report-incident-log-content-heading-description" class="block configuration-heading-default">
+		<span>Description</span>
+	</div>
+</div>
+
+[% IF incidentLogList.size > 0 %]
+	[% FOREACH incidentLog IN incidentLogList %]
+	
+		[% INCLUDE report_incident_log_item.tt %]
+	
+	[% END %]
+[% ELSE %]
+<div class="item-row" id="empty-row">No logs found...</div>
+
+[% END %]
+
+<div class="action-block filter-block-separator">
+	<div class="center" id="number-of-results">&mdash; [% numberOfResults %] results &mdash;</div>
+</div>

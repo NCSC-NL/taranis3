@@ -1,0 +1,46 @@
+[% IF renderItemContainer %]
+<div class="sources-item item-row" id="[% source.id %]">
+[% END %]
+	
+	<div class="sources-item-icon block">
+		<a target="blank" href="http://[% source.host _ source.url %]"><img src="[% webroot %]/images/icons/[% source.sourcename %].gif" alt="[% source.sourcename %]" title="[% source.sourcename %]"></a>
+	</div>		
+
+	<div class="sources-item-url block break-word">
+		<span title="[% source.host _ source.url %]">
+		[% IF ( source.host.length + source.url.length ) > 105 %]
+			[% shortUrl = source.host _ source.url; shortUrl.substr( 105, shortUrl.length, '...' ) %]
+		[% ELSE %]
+			[% source.host _ source.url %]
+		[% END %]
+		</span>
+	</div>		
+
+	<div class="sources-item-category block">
+		<span>[% source.category %]</span>
+	</div>		
+
+	<div class="sources-item-language block">
+		<span>[% source.language FILTER upper %]</span>
+	</div>		
+
+	<div class="block align-block-right">
+
+	[% IF write_right %]
+		<input type="checkbox" id="sources-item-enabled-[% source.id %]" class="hidden sources-item-enabled" [% IF source.enabled %]checked="checked"[% END %]>
+		<label for="sources-item-enabled-[% source.id %]" class="pointer sources-item-enabled-label [% IF source.enabled %]sources-item-enabled-label-checked[% END %]" data-id="[% source.id %]">
+			<span>[% IF source.enabled; 'enabled'; ELSE; 'disabled'; END %]</span>
+		</label>
+		<img src="[% webroot %]/images/icon_modify.png" alt="edit" title="edit source" class="pointer btn-edit-source" data-id="[% source.id %]">
+		<img src="[% webroot %]/images/icon_delete.png" alt="delete" title="delete source" class="pointer btn-delete-source" data-id="[% source.id %]">
+	[% ELSE %]
+		<span class="sources-item-enabled-label [% IF source.enabled %]sources-item-enabled-label-checked[% END %]">
+			<span>[% IF source.enabled; 'enabled'; ELSE; 'disabled'; END %]</span>
+		</span>
+		<img src="[% webroot %]/images/icon_details.png" alt="view" title="view details" class="pointer btn-view-source" data-id="[% source.id %]">
+	[% END %]
+
+	</div>
+[% IF renderItemContainer %]
+</div>
+[% END %]

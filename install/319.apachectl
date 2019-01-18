@@ -1,0 +1,45 @@
+#!/usr/bin/env perl
+# Some distributions use apachectl, other apache2ctl, other both.  We use
+# the 'apachectl' command: add a wrapper to apache2ctl if it is missing.
+
+use warnings;
+use strict;
+
+use Taranis::Install::Config qw(config_generic become_user_taranis);
+
+# Attempt to find apachectl
+if(my $where = qx(which apachectl 2>/dev/null)) {
+	print "*   found $where\n";
+	exit 0;
+}
+
+my $where2 = qx(which apache2ctl 2>/dev/null);
+$where2
+	or die "ERROR: cannot not find apachectl neither apache2ctl\n";
+chomp $where2;
+
+become_user_taranis;
+
+my $generic = config_generic;
+my $wrapper = "$generic->{bin}/apachectl";
+open my $out, '>:raw', $wrapper
+	or die "ERROR: cannot create apachectl wrapper: $!\n";
+
+my $file    = $0;
+$out->print(<<__SCRIPT);
+#!/bin/bash
+# This wrapper was installed by $file
+# We need it on the few platforms which only provide apache2ctl, because
+# on spots the call to apachectl (without '2') is hard-coded.
+exec $where2 "\$@"
+__SCRIPT
+
+$out->close
+	or die "ERROR while writing $wrapper\n";
+
+chmod 0755, $wrapper
+	or die "ERROR: cannot set execute rights on $wrapper: $!\n";
+
+print "*   created apache2ctl wrapper in $wrapper\n";
+
+exit 0;

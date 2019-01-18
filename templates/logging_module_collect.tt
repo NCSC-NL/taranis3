@@ -1,0 +1,35 @@
+<div id="collector-logging-content-heading" class="content-heading">
+	<div id="collector-logging-content-heading-date-time" class="block">
+		<span>Date/Time</span>
+	</div>
+
+	<div id="collector-logging-content-heading-source" class="block">
+		<span>Source</span>
+	</div>
+
+	<div id="collector-logging-content-heading-error" class="block">
+		<span>Error</span>
+	</div>
+
+	<div id="collector-logging-content-heading-error-description" class="block">
+		<span>Error description</span>
+	</div>
+	
+</div>
+
+[% IF loggingItems.size > 0 %]
+	[% FOREACH loggingItem IN loggingItems %]
+	
+		[% INCLUDE logging_module_collect_item.tt %]
+	
+	[% END %]
+[% ELSE %]
+<div class="item-row" id="empty-row">No logs found...</div>
+
+[% END %]
+
+<div class="action-block filter-block-separator">
+	<div class="center" id="number-of-results">&mdash; [%  page_bar.number_results_text %] &mdash;</div>
+</div>
+
+[% PROCESS page_bar.tt %]

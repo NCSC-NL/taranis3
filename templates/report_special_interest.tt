@@ -1,0 +1,29 @@
+<div id="report-special-interest-content-heading" class="content-heading">
+	<div id="report-special-interest-content-heading-date-start" class="block configuration-heading-default date-width-default">
+		<span>From</span>
+	</div>
+	<div id="report-special-interest-content-heading-date-end" class="block configuration-heading-default date-width-default">
+		<span>Until</span>
+	</div>
+	<div id="report-special-interest-content-heading-requestor" class="block configuration-heading-default">
+		<span>Requestor</span>
+	</div>
+	<div id="report-special-interest-content-heading-topic" class="block configuration-heading-default">
+		<span>Topic</span>
+	</div>
+</div>
+
+[% IF specialInterestList.size > 0 %]
+	[% FOREACH specialInterest IN specialInterestList %]
+	
+		[% INCLUDE report_special_interest_item.tt %]
+	
+	[% END %]
+[% ELSE %]
+<div class="item-row" id="empty-row">No special interests found...</div>
+
+[% END %]
+
+<div class="action-block filter-block-separator">
+	<div class="center" id="number-of-results">&mdash; [% numberOfResults %] results &mdash;</div>
+</div>

@@ -1,0 +1,19 @@
+<table class="default-table align-left">
+	<thead>
+		<tr>
+			<th>opened by</th>
+			<th>advisory ID</th>
+			<th>title</th>
+		</tr>
+	</thead>
+	<tbody ng-repeat="advisory in advisories.result" ng-class-odd="'oneven'">
+		<tr ng-if="$index < 10">
+			<td>{{ advisory.opened_by }}</td>
+			<td class="font-monospace bold">{{ advisory.govcertid }} v{{ advisory.version }}</td>
+			<td class="marked"><a ng-href="#/advisories/{{ advisory.id }}"">{{ advisory.title }}</a></td>
+		</tr>
+		<tr ng-if="$index >= 10 && $last" class="oneven">
+			<td colspan="4">(plus {{ $index - 9 }} more advisories)</td>
+		</tr>		
+	</tbody>
+</table>

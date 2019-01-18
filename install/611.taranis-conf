@@ -1,0 +1,78 @@
+#!/usr/bin/env perl
+# Modify the main config file, to follow the ~/etc/setup-* files.  This
+# happens on every 'install' again.
+
+use warnings;
+use strict;
+
+use Carp           qw(confess);
+use File::Find     qw(find);
+use File::Glob     qw(bsd_glob);
+use File::Basename qw(basename);
+use File::Copy     qw(copy);
+use HTML::Entities qw(encode_entities);
+
+use Taranis::Install::Config qw(config_release taranis_sources config_generic
+	become_user_taranis taranis_config_fn);
+
+sub change($$);
+
+become_user_taranis;
+
+my $generic = config_generic;
+my $home    = $generic->{home};
+
+my $release = config_release;
+my $version = $release->{version};
+my $dest	= $release->{install};
+
+my $taranis = taranis_sources $version
+	or confess;
+
+my $dest_main = taranis_config_fn;
+
+# Update the installed configuration file if some fact have changed.
+#XXX The database configuration should not be in two files, in the first place.
+my $changes = 0;
+my $db = $release->{database};
+
+open my $main, '<:encoding(utf8)', $dest_main
+	or die "ERROR: cannot read $dest_main: $!\n";
+
+my $text = join '', $main->getlines;
+$main->close
+	or die "ERROR while writing $dest_main: $!\n";
+
+my $host = $db->{host};
+my $port = $host =~ s/\:([0-9]+)\s*$// ? $1 : 5432;
+
+change dbhost   => $host;
+change dbport   => $port;
+change dbuser   => $db->{user};
+change dbpasswd => $db->{password};
+change dbname   => $db->{name};
+
+change session_secure_cookie => $generic->{apache}{use_https} ? 'yes' : 'no';
+
+if($changes) {
+	print "*   database settings updated\n";
+	open $main, '>:encoding(utf8)', $dest_main
+		or die "ERROR: cannot update $dest_main: $!\n";
+
+	$main->print($text);
+	$main->close
+		or die "ERROR while writing $dest_main: $!\n";
+}
+
+exit 0;
+
+### HELPERS
+
+sub change($$) {
+	my ($field, $value) = @_;
+	my $xml = encode_entities $value;
+	$text =~ s!<$field>(.*?)</$field>!<$field>$xml</$field>!
+		or die "ERROR: unknown field '$field' for $dest_main\n";
+
+	$changes++ if $1 ne $xml;
+}

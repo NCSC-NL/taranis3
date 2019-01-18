@@ -1,0 +1,17 @@
+[% IF removeWrapper != 1 %]
+<div class="no-padding tags-wrapper [%+ IF !tags OR tags.size==0 %]block[% END %]">
+[% END %]
+	<div class="tags-view">
+		<ul class="tags-list block no-padding">
+			[% IF tags %]
+				[% FOREACH tag IN tags %]
+					[% IF tag %]
+			<li class="tags-list-item block" title="tag: [% tag %]">[% tag %]</li>
+					[% END %]
+				[% END %]
+			[% END %]
+		</ul>
+	</div>
+[% IF removeWrapper != 1 %]
+</div>
+[% END %]

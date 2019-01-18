@@ -1,0 +1,6 @@
+<ul>
+	<li ng-repeat="analysis in analyses.result">
+		<a ng-href="#/analyses/{{ analysis.id }}"><span class="font-monospace bold">AN-{{ analysis.id|substring:0:4 }}-{{ analysis.id|substring:4}}</span> &mdash; <span class="marked">{{ analysis.title }}</span></a><br>
+		<hr class="thin" ng-if="!$last">
+	</li>
+</ul>

@@ -1,0 +1,167 @@
+#!/usr/bin/env perl
+# This file is part of Taranis, Copyright NCSC-NL. See http://taranis.ncsc.nl
+# Licensed under EUPL v1.2 or newer, https://spdx.org/licenses/EUPL-1.2.html
+
+use warnings;
+use strict;
+
+use Getopt::Long  qw(GetOptions :config gnu_compat bundling);
+use Config        qw(%Config);
+
+sub create_user();
+sub unpack_code($);
+sub version_from_filename($);
+sub get_os_info();
+
+-w '/etc/passwd'
+	or die "ERROR: you need to be root to run this script.\n";
+
+umask 022;
+
+GetOptions
+	'd|home-dir=s' => \(my $homedir),
+	'g|group=s'    => \(my $groupname = 'taranis'),
+	'm|migrate=s'  => \(my $migrate   = '/opt/taranis'),
+	'os|osinfo=s'  => \(my $osinfo_fn),
+	's|shell=s'    => \(my $shell     = '/bin/bash'),
+	'u|user=s'     => \(my $username  = 'taranis'),
+  or exit 1;
+
+@ARGV==1
+	or die "Usage: $0 [<options>] <tarball>\n";
+
+my $tarball = $ARGV[0];
+
+print "*** bootstrap installation of $tarball\n";
+
+my ($userid, $groupid);
+create_user;
+my $userhome  = (getpwnam $username)[7];
+
+my $version   = version_from_filename $tarball
+	or die "ERROR: cannot find the version number in the filename '$tarball'\n";
+
+my $unpacked  = unpack_code $tarball;
+my $sources   = "$unpacked/taranis-$version";
+
+my @add_lib   = (
+	"$sources/pm",
+	"$userhome/lib/perl5",
+	"$userhome/lib/perl5/$Config{archname}",
+);
+
+unshift @INC, @add_lib;
+$ENV{PERL5LIB} = join ":", @add_lib, $ENV{PERL5LIB} || ();
+$ENV{APPCONFIG_PATH} = $userhome;
+
+eval "require Taranis::Command::_Install";
+$@ and die <<__CANNOT_LOAD;
+ERROR: unable to load the install bootstrap.  Probably your tarball
+       is too old: bootstrap is only supported from release 3.4.0
+       onwards.  See Installation Guide for older versions.
+$@
+__CANNOT_LOAD
+
+Taranis::Command::_Install::run_install(
+	home     => $userhome,
+	internet => 1,           # must have internet
+	migrate  => $migrate,
+	scripts  => [ "$sources/install" ],
+	username => $username,
+	version  => $version,
+);
+
+print <<__EXPLAIN;
+
+  HINT: When you need to rerun installation:
+          su -l $username -c "taranis install"
+
+__EXPLAIN
+
+exit 0;
+
+#
+### HELPERS / DO-ERS
+#
+
+sub create_user() {
+
+	# Group name is added separately, to be able to recover
+	$groupid = getgrnam $groupname;
+	if(defined $groupid) {
+		print "group $groupname already exists (gid=$groupid)\n";
+	} else {
+		system groupadd => $groupname
+			and die "ERROR: failed to add group $groupname: $!\n";
+		$groupid = getgrnam $groupname;
+		print "Added group $groupname (gid=$groupid)\n";
+	}
+
+	$userid = getpwnam $username;
+	if(defined $userid) {
+		print "user $username already exists (uid=$userid)\n";
+	} else {
+		my @opts = (
+			'--comment'        => "Taranis environment",
+			'--no-user-group',                           # use explicit group
+			'--group'          => $groupname,
+			'--shell'          => $shell,
+			'--create-home',
+		);
+
+		push @opts, '--home-dir' => $homedir
+			if $homedir;
+
+		system 'useradd', @opts, $username
+			and die "ERROR: cannot add user $username: $!\n";
+
+		$userid = getpwnam $username;
+		print "Added user $username (uid=$userid)\n";
+	    print "HINT: give yourself login-access to $username via ssh or sudo.\n";
+	}
+
+	# The user may exist, but the home (accidentally?) (re)moved
+	my $home = (getpwnam $username)[7];
+	unless( -d $home ) {
+		print "*   create homedir at $home\n";
+
+		mkdir $home
+			or die "ERROR: cannot create home at $home: $!\n";
+
+		chown $userid, $groupid, $home
+			or die "ERROR: cannot chown home at $home: $!\n";
+	}
+}
+ 
+sub unpack_code($) {
+	my ($tarball) = @_;
+
+	my $unpacked = "$userhome/sources";
+	if(-d "$unpacked/taranis-$version") {
+		print "*   reusing sources version $version in $unpacked.\n";
+		return $unpacked;
+	}
+
+	print "*   unpacking sources into $unpacked\n";
+	-d $unpacked or mkdir $unpacked, 0755
+		or die "ERROR: cannot create $unpacked: $!\n";
+
+	system tar => '--extract',
+		'--auto-compress',
+		'--file'      => $tarball,
+		'--directory' => $unpacked
+		and die "ERROR: failed to extract tar from $tarball: $!\n";
+
+	system 'chown', '--recursive', "$username:$groupname", $unpacked
+		and die "ERROR: cannot reown sources to $username: $!\n";
+
+	$unpacked;
+}
+
+# same as in Taranis::Install::Bar
+sub version_from_filename($) {
+    my $fn = shift;
+    $fn =~ m! \b taranis-([0-9]+\.[0-9]\.[0-9]*(?:\-(rc|alpha|beta)[0-9]+)?) !x;
+    $1;
+}
+

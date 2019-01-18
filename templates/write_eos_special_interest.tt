@@ -1,0 +1,10 @@
+[% USE date %]
+[% IF specialInterests.size > 0 %]
+[% FOREACH specialInterest IN specialInterests %]
+topic: [%+ specialInterest.topic +%] 
+from [%+ date.format( specialInterest.date_start.stripSeconds, format = '%d-%m-%Y' ) +%] to [%+ date.format( specialInterest.date_end.stripSeconds, format = '%d-%m-%Y' ) +%]
+requestor: [%+ specialInterest.requestor +%]
+[%+ specialInterest.action +%]
+######################################################################
+[%+ END %]
+[% END %]

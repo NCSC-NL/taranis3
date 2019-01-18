@@ -1,0 +1,16 @@
+#!perl
+
+use warnings;
+use strict;
+
+sub {
+	my ($db, %args) = @_;
+
+	$db->query( <<'__RUN__');
+ALTER TABLE constituent_individual ALTER COLUMN emailaddress TYPE TEXT;
+ALTER TABLE constituent_individual ALTER COLUMN firstname TYPE TEXT;
+ALTER TABLE constituent_individual ALTER COLUMN lastname TYPE TEXT;
+ALTER TABLE constituent_individual ALTER COLUMN tel_mobile TYPE TEXT;
+ALTER TABLE constituent_individual ALTER COLUMN tel_regular TYPE TEXT;
+__RUN__
+};

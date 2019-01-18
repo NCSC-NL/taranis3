@@ -1,0 +1,11 @@
+<div class="filter-block filter-block-separator">
+	<br>
+	[% IF write_right %]
+	<div class="block">
+		<input type="button" id="btn-add-cluster" class="button" value="Add new cluster">		
+	</div>
+	[% END %]
+	<div class="block align-block-right">
+		<span class="bold page-title">Clusters</span>
+	</div>
+</div>

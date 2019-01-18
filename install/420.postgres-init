@@ -1,0 +1,43 @@
+#!/usr/bin/env perl
+# initialize postgres.
+#
+# Some linux distributions need this.  OpenSUSE, for instance, runs installs
+# already initialized, but CentOS doesn't.  Let's just autodect.
+
+use warnings;
+use strict;
+
+use File::Glob   qw(bsd_glob);
+
+use Taranis::Install::Bare qw(is_ubuntu);
+
+my $postgres_data = "/var/lib/pgsql/data";
+
+if(is_ubuntu && ! -d $postgres_data) {
+	$postgres_data = (bsd_glob "/var/lib/postgresql/*/main")[-1];
+	$postgres_data
+		or die "ERROR: cannot find postgres installation\n";
+}
+
+if($ENV{X_SCLS} && $ENV{X_SCLS} =~ /postgres/) {
+	($postgres_data) = grep /postgres/, split ':', $ENV{LD_LIBRARY_PATH};
+	$postgres_data =~ s!/root.*!/lib/pgsql/data!;
+	$postgres_data = "/var$postgres_data";
+	-d $postgres_data
+		or die "ERROR: cannot find your postgres data under SCL\n";
+}
+
+if( -f "$postgres_data/PG_VERSION" ) {
+	print "*   Postgresql already initialized.\n";
+	exit 0;
+}
+
+system 'postgresql-setup', 'initdb'
+	or exit 0;
+
+system 'su -l postgres -c initdb'
+	or exit 0;
+
+die "ERROR: cannot setup postgresql: $!\n";
+
+exit 0;

@@ -1,0 +1,107 @@
+#!/usr/bin/env perl
+# This file is part of Taranis, Copyright NCSC-NL. See http://taranis.ncsc.nl
+# Licensed under EUPL v1.2 or newer, https://spdx.org/licenses/EUPL-1.2.html
+
+# Create a patch file
+
+=pod
+
+ Usage:
+   # Go to your Taranis extension repo directory first.
+   # The $base is a file which exists in ~taranis/taranis-$version/$base
+   # and also in ~taranis/local-$version/$base
+   tara$   create-patch $base >local-patches/$somename.patch
+
+ Options:
+   -p --patches DIR    if you do not want to move to your repo first
+       create-patch -p $repo $base >$repo/$somename.patch
+
+=cut
+
+use warnings;
+use strict;
+
+use File::Basename qw(dirname);
+use Getopt::Long   qw(GetOptions :config bundling gnu_compat);
+
+use Data::Dumper;
+
+use Taranis::Install::Util qw(read_json);
+use Taranis::Install::Config qw(
+	config_generic config_release
+);
+
+GetOptions
+	'patches|p=s' => \(my $patch_dir  = 'local-patches');
+
+@ARGV or die "ERROR: no filename(s) specified to extract patch from\n";
+my @basenames = @ARGV;
+
+-d $patch_dir
+	or die "ERROR: cannot find patch directory $patch_dir\n";
+
+my $todo_fn    = "$patch_dir/00TODO.json";
+my $todos      = -f $todo_fn ? read_json $todo_fn : [];
+
+my $version    = $ENV{TARANIS_VERSION} or die "no version";
+
+my $generic    = config_generic;
+my $release    = config_release $version;
+
+my $local_dir  = $release->{extension};
+
+my $source_for;
+if($version eq 'git') {
+	$source_for = sub ($) {
+		my $base = shift;
+		for($base) {
+			s!^perl5/!pm/!
+		 or s!^web-static/!webinterface/!
+		 or s!^modperl/!scripts/!
+		}
+		"$release->{sources}/taranis-$version/$base";
+	};
+
+	# In T4, git directories will get the same name as their installed
+	# directories.  For now, however, we have to repair things.
+} else {
+	$source_for = sub ($) { "$release->{install}/$_[0]" };
+}
+
+foreach my $basename (@basenames) {
+	my $local  = "$local_dir/$basename";
+	-f $local or die "ERROR: cannot find your patched version in $local\n";
+
+	my $source = $source_for->($basename);
+	-f $source or die "ERROR: cannot find the released version in $source\n";
+
+	system 'diff',
+		'--unified',
+		'--ignore-all-space',
+		'--to-file' => $local, $source;
+
+	grep $basename eq $_->{filename}, @$todos
+		or warn "WARNING: $basename is not yet in $todo_fn, please add it.\n";
+}
+
+__END__
+my $todos      = read_json $todo_fn;
+print "*   applying ".@$todos." patches\n";
+
+foreach my $todo (@$todos) {
+	my $from  = "$source_dir/$todo->{filename}";
+#	-f $from or die "ERROR: cannot find $from";
+
+    my $to    = "$dest_dir/$todo->{filename}";
+	my $patch = "$patch_dir/$todo->{patch}";
+
+	-f $patch
+		or die "ERROR: cannot find patch-file $patch\n";
+
+	print "Patch $from into $dest_dir with $patch\n";
+
+	die "ERROR: your patch in $patch is outdated\n"
+		if -f $to && -f $patch && -M $to < -M $patch;
+}
+
+exit 1;

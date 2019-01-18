@@ -1,0 +1,7 @@
+<div ng-init="advisoryCount=5; advisoryStatus='published'">
+	<ul ng-controller="AdvisoryListCtrl">
+		<li ng-repeat="advisory in advisories.result">
+			<span class="bold">{{ advisory.govcertid }}</span> &mdash; <a ng-href="#/advisories/{{ advisory.id }}">{{ advisory.title }}</a><br>
+		</li>
+	</ul>
+</div>

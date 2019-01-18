@@ -1,0 +1,87 @@
+.main-color {
+  color: #f8e61d;
+  background-color: #d52b1e;
+}
+hr {
+  background-color: #f8e61d;
+}
+.nav-item,
+.nav-list-item {
+  color: inherit;
+}
+.nav-item:hover,
+.nav-list-item:hover {
+  color: #d52b1e;
+  background-color: #f8e61d;
+}
+.marked {
+  color: #f8e61d;
+}
+h4 {
+  color: #faeb4e;
+}
+h3 {
+  color: #fbf180;
+}
+h2 {
+  color: #fdf6b1;
+}
+h1 {
+  color: #fefce3;
+}
+#loading-bar {
+  background: #f8e61d !important;
+}
+.default-table,
+.compact-table {
+  border: 1px solid #e1382b;
+}
+.default-table th,
+.compact-table th {
+  color: #d52b1e;
+  background-color: #f8e61d;
+}
+.default-table .oneven,
+.compact-table .oneven {
+  background-color: #e1382b;
+}
+/* tagcloud */
+div.jqcloud {
+  color: #f8e61d;
+}
+div.jqcloud a {
+  color: #faeb4e;
+}
+div.jqcloud a:hover {
+  color: #fbf180;
+}
+div.jqcloud span.w10 {
+  color: #ffffff;
+}
+div.jqcloud span.w9 {
+  color: #fffffc;
+}
+div.jqcloud span.w8 {
+  color: #fefce3;
+}
+div.jqcloud span.w7 {
+  color: #fdf9ca;
+}
+div.jqcloud span.w6 {
+  color: #fdf6b1;
+}
+div.jqcloud span.w5 {
+  color: #fcf499;
+}
+div.jqcloud span.w4 {
+  color: #fbf180;
+}
+div.jqcloud span.w3 {
+  color: #faee67;
+}
+div.jqcloud span.w2 {
+  color: #faeb4e;
+}
+div.jqcloud span.w1 {
+  color: #f9e936;
+}

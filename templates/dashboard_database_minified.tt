@@ -1,0 +1,14 @@
+<div class="block">
+	[% IF numberOfLiveItems && numberOfLiveItems.showMinified %]
+		[% IF numberOfLiveItems.data > 1000 %]
+			[% count = numberOfLiveItems.data / 1000 %]
+			[% count = count.remove('\.\d+$') _ 'k' %]
+		[% ELSE %]
+			[% count = numberOfLiveItems.data %]
+		[% END %]
+		<div title="[% numberOfLiveItems.data %] of live items">
+			<span class="dashboard-minified-icons-with-text">[% count %]</span>
+			<img src="[% webroot %]/images/base.png" alt="[% numberOfLiveItems.data %]">
+		</div>
+	[% END %]
+</div>

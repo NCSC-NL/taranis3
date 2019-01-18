@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates>
+	<advisory>
+		<email>Advisory (email)</email>
+		<taranis_xml>Advisory (XML)</taranis_xml>
+		<update>Advisory (update)</update>
+		<forward>Advisory (forward)</forward>
+		<forward_update>Advisory (forward update)</forward_update>
+	</advisory>
+	<eos>
+		<email>End-of-Shift (email)</email>
+	</eos>
+	<eod>
+		<email>End-of-Day (email)</email>
+		<email_public>End-of-Day (email public)</email_public>
+		<email_white>End-of-Day (email white)</email_white>
+	</eod>	
+	<eow>
+		<email>End-of-Week (email)</email>
+	</eow>
+</templates>

@@ -1,0 +1,42 @@
+"$LOGDIR/apache/access_log" \
+"$LOGDIR/apache/access4u_log" {
+	maxage 60
+	rotate 60
+	daily
+	su $USER $GROUP   # avoid complains about about mode g+w
+
+	compress
+	delaycompress
+	notifempty
+	missingok
+	create 0664 $USER $GROUP
+	dateext
+	sharedscripts
+
+	postrotate
+		$TARANIS apache restart
+		sleep 10
+	endscript
+}
+
+"$LOGDIR/apache/error_log" \
+"$LOGDIR/apache/error4u_log" {
+	maxage 365
+	rotate 99
+	weekly
+	su $USER $GROUP
+
+	compress
+	delaycompress
+	notifempty
+	missingok
+	create 0664 $USER $GROUP
+	dateext
+	sharedscripts
+
+	postrotate
+		$TARANIS apache restart
+		sleep 10
+	endscript
+}
+

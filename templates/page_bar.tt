@@ -1,0 +1,24 @@
+<div id="page-bar-wrapper">
+	[% IF page_bar.number_results != 0 +%]
+	<div id="pagination" data-filterbutton="[% filterButton %]">
+
+		[% IF (page_bar.last_page) AND (page_bar.last_page > 10) AND page_bar.my_page > 1 +%]
+			<input type="button" class="button-blue btn-pagebar" name="page1" value="&lt;&lt;" data-pagenumber="1">
+			<input type="button" class="button-blue btn-pagebar" name="page[% page_bar.my_page %]" value="&lt;" data-pagenumber="[% page_bar.my_page - 1 %]">
+		[% END +%]
+
+		[% FOREACH page IN page_bar.button_row +%]
+			[% IF page == page_bar.my_page +%]
+			<input type="button" class="button btn-current-page" name="page[% page %]" value="[% page %]" data-pagenumber="[% page %]">
+			[% ELSE %]
+			<input type="button" class="button-blue btn-pagebar" name="page[% page %]" value="[% page %]" data-pagenumber="[% page %]">
+			[% END %]
+	  	[% END +%]
+
+		[% IF (page_bar.last_page) AND (page_bar.last_page > 10) AND page_bar.my_page != page_bar.page AND (page_bar.last_page > page_bar.my_page) +%]
+			<input type="button" class="button-blue btn-pagebar" name="page[% page %]" value="&gt;" data-pagenumber="[% page_bar.next_page %]">
+			<input type="button" class="button-blue btn-pagebar" name="page" value="&gt;&gt;" data-pagenumber="[% page_bar.last_page %]">
+		[% END +%]
+	</div>
+	[% END +%]
+</div>

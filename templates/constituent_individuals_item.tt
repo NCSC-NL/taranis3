@@ -1,0 +1,56 @@
+[% IF renderItemContainer %]
+<div class="constituent-individual-item item-row" id="[% constituentIndividual.id %]">
+[% END %]
+	
+	<div class="constituent-individual-item-name block [% IF constituentIndividual.status != 0 %] strikethrough[% END %]">
+		<span>[% constituentIndividual.lastname _ ', ' _ constituentIndividual.firstname %]</span>
+	</div>		
+
+	<div class="constituent-individual-item-role block">
+		<span>[% constituentIndividual.role_name %]</span>
+	</div>		
+
+	<div class="constituent-individual-item-groups block">
+		<span>[% constituentIndividual.groups %][% IF constituentIndividual.groups && constituentIndividual.groups_temp_disabled %], [% END %]</span>
+		<span class="strikethrough">[% constituentIndividual.groups_temp_disabled %]</span>
+	</div>		
+
+
+	<div class="block align-block-right">
+	
+	[% IF constituentIndividual.call_hh +%]
+		<img src="[% webroot %]/images/icon_phone.png" alt="phone HH" title="wishes to be called in case of H/H incident">
+	[% END +%]
+	[% IF write_right %]
+		<img src="[% webroot %]/images/icon_modify.png" alt="edit" title="edit constituent" class="pointer btn-edit-constituent-individual" data-id="[% constituentIndividual.id %]">
+		<img src="[% webroot %]/images/icon_delete.png" alt="delete" title="delete constituent" class="pointer btn-delete-constituent-individual" data-id="[% constituentIndividual.id %]">
+	[% ELSE %]
+		<img src="[% webroot %]/images/icon_details.png" alt="view" title="view details" class="pointer btn-view-constituent-individual" data-id="[% constituentIndividual.id %]">
+	[% END %]
+		
+		<div class="constituent-individual-contact-info hover-block">
+			<img src="[% webroot %]/images/information.png" alt="info" class="help">
+			<div class="constituent-individual-contact-info-wrapper hover-block-wrapper">
+				<div class="hover-block-content">
+					<table class="constituent-individual-contact-info-table">
+						<tr>
+							<td>tel:</td>
+							<td>[% constituentIndividual.tel_regular %]</td>
+						</tr>
+						<tr>
+							<td>mob:</td>
+							<td>[% constituentIndividual.tel_mobile %]</td>
+						</tr>
+						<tr>
+							<td>email:</td>
+							<td>[% constituentIndividual.emailaddress %]</td>
+						</tr>		
+					</table>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+[% IF renderItemContainer %]
+</div>
+[% END %]

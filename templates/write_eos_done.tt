@@ -1,0 +1,9 @@
+[% USE date %]
+[% IF actions.size > 0 %]
+[%+ FOREACH action IN actions %]
+[%+ date.format( action.date.stripSeconds, format = '%H:%M %d-%m-%Y' ) +%] -- [%+ action.action +%]
+by [%+ action.fullname +%]
+[%+ action.comment +%]
+######################################################################
+[%+ END %]
+[% END %]

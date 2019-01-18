@@ -1,0 +1,156 @@
+[% USE date %]
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden[% END %] ui-state-error ui-corner-all">[% message %]</div>
+
+	<form id="form-dossier-mail-item">
+		
+		<fieldset class="block" id="dossier-mail-item-block1">
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Mail from</span><br>
+				<span>[% mailfrom_sender %]&lt;[% mailfrom_email %]&gt;</span>
+			</div><br>
+			<hr>
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Recipients</span><br>
+				<input type="text" class="input-default dialog-input-text-narrow" id="dossier-search-mail-to">
+				<span class="italic">(case sensitive filter)</span>
+				<br>
+				<select id="dossier-mail-to" multiple="multiple" size="10" class="select-multiple">
+				[% IF nonConstituents %]
+					<optgroup label="non constituents" title="[% recipient %]">
+					[% FOREACH recipient IN nonConstituents %]
+						<option value="[% recipient %]" id="nonconstituent_[% loop.count %]">[% recipient %]</option>
+					[% END %]
+					</optgroup>
+				[% END %]
+				[% IF constituentIndividuals %]
+					<optgroup label="constituents">
+					[% FOREACH recipient IN constituentIndividuals %]
+						<option value="[% recipient.emailaddress %]" title="[% recipient.emailaddress %]" id="constituent_[% loop.count %]">
+							[%- recipient.lastname _ ', ' _ recipient.firstname -%] (
+							[%- FOREACH group IN recipient.groups -%]
+								[%- IF loop.last -%]
+									[%- group -%]
+								[%- ELSE -%]
+									[%- group _ ', ' -%]
+								[%- END -%]
+							[%- END -%] ) &lt;[%- recipient.emailaddress %]&gt;
+						</option>
+					[% END %]
+					</optgroup>
+				[% END %]
+				</select><br>
+				<span class="italic">double-click to select recipient</span>
+			</div><br>
+
+			<div class="dialog-input-wrapper block">
+				<label class="dialog-input-label" for="dossier-mail-item-extra-address">Add recipient</label><br>
+				<input type="text" class="input-default dialog-input-text-narrow" id="dossier-mail-item-extra-address">
+				<input type="button" class="button" id="btn-dossier-mail-item-add-address" value="Add">
+			</div><br>
+			
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Selected recipients</span><br>
+				<div id="dossier-mail-to-recipient-list"></div>
+			</div><br>
+			<hr>
+			<div class="dialog-input-wrapper block">
+				<label for="dossier-mail-subject" class="dialog-input-label">Subject</label><br>
+				[% IF dossierItemType == 'assess' %]
+					[% title = dossierItemContent.title %]
+				[% ELSIF dossierItemType == 'analyze' %]
+					[% title = 'AN-' _ dossierItemContent.id.substr(0,4) _ '-' _ dossierItemContent.id.substr(4,4) _ ' ' _ dossierItemContent.title %]
+				[% ELSIF dossierItemType == 'advisory' || dossierItemType == 'forward' %]
+					[% title = dossierItemContent.govcertid _ ' [v' _ dossierItemContent.version _ '] ' _ dossierItemContent.title %]
+				[% ELSIF dossierItemType == 'eos' %]
+					[% title = 'End-Of-Shift ' _ date.format( dossierItemContent.timeframe_begin.stripSeconds, format = '%d-%m-%Y %H:%M' ) _ ' - ' _ date.format( dossierItemContent.timeframe_end.stripSeconds, format = '%d-%m-%Y %H:%M' ) %]
+				[% ELSIF dossierItemType == 'eod' %]
+					[% title = 'End-Of-Day ' _ date.format( dossierItemContent.timeframe_begin.stripSeconds, format = '%d-%m-%Y %H:%M' ) _ ' - ' _ date.format( dossierItemContent.timeframe_end.stripSeconds, format = '%d-%m-%Y %H:%M' ) %]
+				[% ELSIF dossierItemType == 'eow' %]
+					[% title = 'End-Of-Week published on ' _ date.format( item.published_on.stripSeconds, format = '%d-%m-%Y %H:%M' ) %]
+				[% ELSIF dossierItemType == 'note' %]
+					[% title = dossierItemContent.text.replace( "^(?s)(.*?)\n.*$", '$1').stripTags %]
+				[% END %]
+				<input type="text" name="subject" id="dossier-mail-subject" class="input-default dialog-input-text" value="[% IF dossierItem.classification != 4; '-TLP ' _ dossierItem.classification.displayTLPColor _ '- '; END %][% title %]">
+			</div><br>
+			[% IF ( files && files.size > 0 ) || ( dossierItemType == 'assess' && dossierItemContent.screenshot_object_id ) || notesHaveAttachments %]
+			<hr>
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Attachments</span><br>
+				[% IF files && files.size > 0 %]
+					[% FOREACH attachment IN files %]
+				<input type="checkbox" class="align-middle" name="dossier_attachment" id="dossier-attachment-[% loop.count %]" value='{"a":[% attachment.object_id %], "b":[% dossierItem.note_id %]}' checked>
+				<label class="dialog-input-label" for="dossier-attachment-[% loop.count %]">[% attachment.name %]</label><br>
+					[% END %]
+				[% END %]
+				[% IF dossierItemType == 'assess' && dossierItemContent.screenshot_object_id %]
+				<label class="dialog-input-label" for="dossier-attachment">
+					<input type="checkbox" class="align-middle" name="dossier_attachment_assess" id="dossier-attachment" value="[% dossierItemContent.digest | uri %]" checked>
+					[% dossierItemContent.link %].png
+				</label><br>
+				[% END %]
+				[% IF notesHaveAttachments %]
+					[% FOREACH note IN notes %]
+						[% IF note.files %]
+							[% FOREACH attachment IN note.files %]
+				<input type="checkbox" class="align-middle" name="dossier_attachment_note" id="dossier-note-attachment-[% loop.count %]" value='{"a":[% attachment.object_id %], "b":[% note.id %]}' checked>
+				<label class="dialog-input-label" for="dossier-note-attachment-[% loop.count %]">[% attachment.name %]</label> (added to comment of [% date.format( note.created.stripSeconds, format = '%d-%m-%Y %H:%M' ) %])<br>
+							[% END %]
+						[% END %]
+					[% END %]
+				[% END %]
+			</div>
+			[% END %]
+		</fieldset>
+		<fieldset class="block align-top" id="dossier-mail-item-block2">
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Message</span><br>
+				[% IF dossierItemType == 'assess' %]
+					[% mailBody = dossierItemContent.description _ "\n\n" _ dossierItemContent.link %]
+				[% ELSIF dossierItemType == 'analyze' %]
+					[% mailBody = '' %]
+				[% ELSIF dossierItemType == 'advisory' || dossierItemType == 'forward' %]
+					[% mailBody = dossierItemContent.contents %]
+				[% ELSIF dossierItemType == 'eos' %]
+					[% mailBody = dossierItemContent.contents %]
+				[% ELSIF dossierItemType == 'eod' %]
+					[% mailBody = dossierItemContent.contents %]
+				[% ELSIF dossierItemType == 'eow' %]
+					[% mailBody = dossierItemContent.contents %]
+				[% ELSIF dossierItemType == 'note' %]
+					[% mailBody = dossierItemContent.text.stripTags %]
+					[% IF urls %]
+						[% FOREACH url IN urls %]
+							[% mailBody = mailBody _ "\n\nURL: " _ url.description _ " " _ url.url %]
+						[% END %]
+					[% END %]
+					[% IF tickets %]
+						[% FOREACH ticket IN tickets %]
+							[% mailBody = mailBody _ "\nTICKET: #" _ ticket.reference _ " " _ ticketURL _ ticket.reference +%]
+						[% END %]
+					[% END %]
+				[% END %]
+				<textarea name="description" id="dossier-mail-description" class="textarea-preview font-courier">[% mailBody %]</textarea>
+				[% IF notes.size > 0 %]<br>
+				<input type="checkbox" class="align-middle" name="dossier_comments" id="dossier-comments" value="1" checked>
+				<label for="dossier-comments" class="dialog-input-label">Append comments to end of message</label><br>
+				<textarea name="comments" id="dossier-mail-description-comments" class="textarea-preview font-courier">
+					[%- FOREACH note IN notes +%]
+comment on [%+ date.format( note.created.stripSeconds, format = '%d-%m-%Y at %H:%M' ) %][% IF note.created_by; ' by ' _ note.created_by; END +%]
+> [%+ note.text.stripTags +%]
+						[%- FOREACH url IN note.urls +%]
+URL: [%+ url.description +%] [%+ url.url +%]
+						[%- END +%]
+						[%- FOREACH file IN note.files +%]
+FILE: [%+ file.name +%]
+						[%- END +%]
+						[%- FOREACH ticket IN note.tickets +%]
+TICKET: #[%+ ticket.reference %] [%+ ticketURL _ ticket.reference +%]
+						[%- END +%]
+
+					[%- END +%]</textarea>
+				[% END %]
+			</div><br>
+		</fieldset>
+	</form>
+</div>

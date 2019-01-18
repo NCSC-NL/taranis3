@@ -1,0 +1,23 @@
+[% template_toolkit_is_admin_begin %]
+<div class="block dashboard-block">
+	<fieldset>
+		<legend class="bold">Admin</legend>
+		[% IF latestUserActions %]
+			[% IF latestUserActions.data && latestUserActions.data.size > 0 %]
+			<div class="center">
+				<span class="bold">User activity</span>
+			</div>
+			<ul class="small-font font-courier dashboard-collector-notifications">
+			[% FOREACH userAction IN latestUserActions.data %]
+				<li [% IF loop.odd %]class="odd"[% END %]>&gt; <span class="bold">[% userAction.datetime %]</span> [% IF userAction.fullname; userAction.fullname _ ' &mdash; '; END %]<div class="break-word block dashboard-collector-notifications-text">[% userAction.comment %]</div></li>
+			[% END %]
+			</ul>
+			<br>
+			<span class="small-font align-block-right">
+				<a href="logging/user_actions/displayUserActions/">more user actions</a>
+			</span>
+			[% END %]
+		[% END %]
+	</fieldset>
+</div>
+[% template_toolkit_is_admin_end %]

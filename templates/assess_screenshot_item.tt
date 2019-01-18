@@ -1,0 +1,16 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="hidden">[% message %]</div>
+	
+	<div class="dialog-title">
+		<span>[% item.title %]</span>	
+	</div><br>
+	<div>
+		<div class="block italic break-word" id="screenshot-link">
+			[% item.link %]
+			&nbsp;&nbsp;
+			<a href="[% item.link %]" target="_blank"><img src="[% webroot %]/images/external_link.png"></a>
+		</div>
+	</div>
+	<br>
+	<img src='loadfile/assess/download_attachment/loadImage?params=[% screenshot_details %]' class="screenshot-img">
+</div>

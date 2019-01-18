@@ -1,0 +1,46 @@
+#!perl
+# It is useless to insert/maintain CVE-descriptions which are more than
+# a year old.
+
+# This script is run only once (and upgrades the schema number), so not
+# a component of a yearly maintenance cicle.  Therefore, values can be
+# hardcoded.
+
+use warnings;
+use strict;
+
+my $this_year = 2017;
+my $mitre = 'http://cve.mitre.org/data/downloads';
+
+sub {
+	my ($db, %args) = @_;
+
+	my @descr = $db->query( <<'__ALL_DESCR' )->hashes;
+SELECT * FROM download_files WHERE name = 'cve_description'
+__ALL_DESCR
+
+	foreach my $descr (@descr) {
+		my $url = $descr->{file_url};
+
+		$url =~ m/\.mitre\./ or next;
+		my $year = $url =~ /year-([0-9]+)/ ? $1 : die $url;
+
+		# CVE's of the previous year may still get updates??
+		next if $year >= $this_year - 1;
+
+		print "*   removing cve description updates from $year, $url\n";
+		$db->query('DELETE FROM download_files WHERE file_url = ?', $url);
+	}
+
+	unless(grep $_->{file_url} =~ /mitre.*year-$this_year/, @descr) {
+		print "*   add cve resource from mitre for $this_year\n";
+
+		my $filename = "allitems-cvrf-year-$this_year.xml";
+		my $url      = "$mitre/$filename";
+
+		$db->query( <<'__INSERT', $url, $filename);
+ INSERT INTO download_files (file_url, name, filename)
+ VALUES (?, 'cve_description' ,?)
+__INSERT
+	}
+};

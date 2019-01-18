@@ -1,0 +1,13 @@
+# Don't export Git stuff.
+.gitattributes export-ignore
+.gitignore export-ignore
+
+# Don't export developer stuff.
+Vagrantfile export-ignore
+.vagrant/puppet export-ignore
+devel export-ignore
+
+# Don't export documentation source files. Docs should be distributed as PDF, not doc.
+# (The docs/ directory is scrubbed by our packaging script anyway, but better safe than sorry.)
+*.doc export-ignore
+*.docx export-ignore

@@ -1,0 +1,29 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden[% END %] ui-state-error ui-corner-all">[% message %]</div>
+	
+	[% IF tool.toolname %]
+	<div class="dialog-title">
+		<span>[% tool.toolname %]</span>
+	</div>
+	[% END %]
+	
+	<form id="form-tools" data-toolname="[% IF tool.toolname; tool.toolname; ELSE; 'NEW'; END %]">
+		<fieldset>
+			<div class="dialog-input-wrapper block">
+				<label for="tool-toolname" class="dialog-input-label">Name *</label><br>
+				<input type="text" name="toolname" id="tool-toolname" class="input-default dialog-input-text-wide" value="[% tool.toolname %]">
+			</div><br>
+
+			<div class="dialog-input-wrapper block">
+				<label for="tool-webscript" class="dialog-input-label">Webscript *</label><br>
+				<input type="text" name="webscript" id="tool-webscript" class="input-default dialog-input-text-wide" value="[% tool.webscript %]"><br>
+				<span class="italic">example: tools/my_script_filename/my_tool_method_name_to_execute/tool=my_foldername_in_tools_folder/</span>
+			</div><br>
+			
+			<div class="dialog-input-wrapper block">
+				<label for="tool-backend" class="dialog-input-label">Backend script</label><br>
+				<input type="text" name="backend" id="tool-backend" class="input-default dialog-input-text-wide" value="[% tool.backend %]">
+			</div><br>
+		</fieldset>
+	</form>
+</div>

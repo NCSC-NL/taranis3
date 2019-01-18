@@ -1,0 +1,42 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden[% END %] ui-state-error ui-corner-all">[% message %]</div>
+	
+	<div class="dialog-title">
+		<span>Incident Log</span>
+	</div>
+	
+	<form id="form-report-incident-log" data-id="[% IF incidentLog.id; incidentLog.id; ELSE; 'NEW'; END %]">
+		<fieldset>
+			<div class="dialog-input-wrapper block">
+				<label for="report-incident-log-description" class="dialog-input-label">Description *</label><br>
+				<input type="text" name="description" id="report-incident-log-description" class="input-default dialog-input-text" value="[% incidentLog.description %]">
+			</div>
+			<div class="dialog-input-wrapper block">
+				<label for="report-incident-log-ticket-number" class="dialog-input-label">Ticket number *</label><br>
+				<input type="text" name="ticket_number" id="report-incident-log-ticket-number" class="input-default dialog-input-text" value="[% incidentLog.ticket_number %]">
+			</div>
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Status *</span><br>
+				<select name="status" id="report-incident-log-status" class="select-single dialog-input-text">
+					<option value="">-select status-</option>
+					[% FOREACH statusNumber IN statuses.keys %]
+					<option value="[% statusNumber %]" [% IF statusNumber == incidentLog.status %]selected[% END %]>[% statuses.$statusNumber %]</option>
+					[% END %]
+				</select>
+			</div>
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Owner *</span><br>
+				<select name="owner" id="report-incident-log-owner" class="select-single dialog-input-text">
+					<option value="">-select owner-</option>
+					[% FOREACH user IN users %]
+					<option value="[% user.username %]" [% IF user.username == incidentLog.owner %]selected[% END %]>[% user.fullname %]</option>
+					[% END %]
+				</select>
+			</div>
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Constituent details</span><br>
+				<textarea name="constituent" id="report-incident-log-constituent" class="input-default dialog-input-text-wide">[% incidentLog.constituent %]</textarea>
+			</div>
+		</fieldset>
+	</form>
+</div>

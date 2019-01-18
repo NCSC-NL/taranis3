@@ -1,0 +1,3 @@
+<div class="empty-item item-row">
+	<div class="block">[% message %]</div>
+</div>

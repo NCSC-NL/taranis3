@@ -1,0 +1,120 @@
+<parameters>
+  <!-- access_token_default_expiry defaults to 60 minutes if left blank -->
+  <access_token_default_expiry>5</access_token_default_expiry>
+  <advisory_xml_template>conf/Advisory_XML.v.0.5.xml</advisory_xml_template>
+  <advisory_xsd>conf/taranis.3.0.advisory.nl.xsd</advisory_xsd>
+  <advisory_prefix>Taranis</advisory_prefix>
+  <advisory_id_length>4</advisory_id_length>
+  <analyze_status_options>pending,done,eow,eow done,skipped,waiting,joined</analyze_status_options>
+  <analyze_published_status>pending:done, eow:eow done, skipped:done, waiting:done</analyze_published_status>
+  <backend_tools>./backend_tools/</backend_tools>
+  <banner_html>
+    <![CDATA[
+      <!-- put your logo in ~/local/web-static/images/mylogo.png, remove
+           the comments from this block, then rerun "taranis install"
+      <div style="text-align: center;">
+        <img src="/images/mylogo.png">
+      </div> -->
+    ]]>
+  </banner_html>
+  <collector_alerter_to_address>info@taranis3</collector_alerter_to_address>
+  <collector_secret></collector_secret>
+  <collector_threads>0</collector_threads>
+  <cookie_jar>conf/cookie_jar.txt</cookie_jar>
+  <custom_stats>var/custom-stats</custom_stats>
+  <!-- db* also in /etc/setup-$version, keep in sync to be able to rerun install -->
+  <dbhost>peer</dbhost>
+  <dbname>taranis</dbname>
+  <dbpasswd>taranis</dbpasswd>
+  <dbi>dbi</dbi>
+  <dbdriver>Pg</dbdriver>
+  <dbuser>taranis</dbuser>
+  <dbport>5432</dbport>
+  <!-- dbsslmode options: disable|allow|prefer|require -->
+  <dbsslmode>prefer</dbsslmode>
+  <entitlements>conf/taranis.conf.entitlements.xml</entitlements>
+  <glue_word>and</glue_word>
+  <identifiersconfig>conf/taranis.conf.identifiers.xml</identifiersconfig>
+  <maillist>taranis@example.taranis3</maillist>
+  <mail_from_address>taranis@example.taranis3</mail_from_address>
+  <mail_reply_to></mail_reply_to>
+  <mimeparser_outputdir>mimeparser</mimeparser_outputdir>
+  <no_proxy>localhost</no_proxy>
+  <organisation>Taranis</organisation>
+  <phishdownkeysfile>conf/phishdownkeys.txt</phishdownkeysfile>
+  <phishfrom></phishfrom>
+  <phishto></phishto>
+  <phishreferencemandatory>ON</phishreferencemandatory>
+  <phishreferencepattern>\d{4,5}</phishreferencepattern>
+  <proxy>OFF</proxy>
+  <proxy_host></proxy_host>
+  <sso>ON</sso>
+  <pgp_signing_advisory>OFF</pgp_signing_advisory>
+  <pgp_signing_endofday>OFF</pgp_signing_endofday>
+  <pgp_signing_endofday_public>OFF</pgp_signing_endofday_public>
+  <pgp_signing_endofday_white>OFF</pgp_signing_endofday_white>
+  <pgp_signing_endofshift>OFF</pgp_signing_endofshift>
+  <pgp_signing_endofweek>OFF</pgp_signing_endofweek>
+  <publication_templates>conf/taranis.conf.publication.templates.xml</publication_templates>
+  <publication_eod_orange>1400</publication_eod_orange> <!-- time expected in format: 1400 -->
+  <publication_eod_red>1600</publication_eod_red> <!-- time expected in format: 1800 -->
+  <publish_LL_advisory>no</publish_LL_advisory>
+  <publish_advisory_from_address></publish_advisory_from_address>
+  <publish_advisory_from_name></publish_advisory_from_name>
+  <publish_advisory_to>taranis_test1@taranis3</publish_advisory_to>
+  <publish_xml_advisory_to>taranis_test2@taranis3</publish_xml_advisory_to>
+  <publish_eod_from>info@taranis3</publish_eod_from>
+  <publish_eod_to>info@taranis3</publish_eod_to>
+  <publish_eod_to_public>info@taranis3</publish_eod_to_public>
+  <publish_eod_white>OFF</publish_eod_white>
+  <publish_eod_white_from>info@taranis3</publish_eod_white_from>
+  <publish_eod_white_to>info@taranis3</publish_eod_white_to>
+  <publish_eos_from>info@taranis3</publish_eos_from>
+  <publish_eos_to>info@taranis3</publish_eos_to>
+  <publish_eos_user>admin</publish_eos_user>
+  <publish_eow_from>info@taranis3</publish_eow_from>
+  <publish_eow_to>info@taranis3</publish_eow_to>
+  <publish_testing_to>info@taranis3</publish_testing_to>
+  <rt_ticket_url>http://taranis3/someurl?id=</rt_ticket_url>
+  <screenshot_module>Taranis::Screenshot::Phantomjs</screenshot_module>
+  <scriptroot>/taranis</scriptroot>
+  <session_expire>30m</session_expire>
+  <session_secure_cookie>no</session_secure_cookie>
+  <shifts>
+    <shift>
+      <start>0700</start>
+      <end>1400</end>
+      <orange>1300</orange>
+      <red>1400</red>
+    </shift>
+    <shift>
+      <start>1400</start>
+      <end>2200</end>
+      <orange>2100</orange>
+      <red>2200</red>
+    </shift>
+  </shifts>
+  <smtppass></smtppass>
+  <smtpport></smtpport>
+  <smtpserver></smtpserver>
+  <smtpuser></smtpuser>
+  <shortcutsconfig>conf/taranis.conf.shortcuts.xml</shortcutsconfig>
+  <statsconfig>conf/taranis.conf.stats.xml</statsconfig>
+  <stripsconfig>conf/taranis.conf.strips.xml</stripsconfig>
+  <!-- syslog_facility: [local0-local7] -->
+  <syslog>on</syslog>
+  <syslog_facility>local0</syslog_facility>
+  <syslog_pid>on</syslog_pid>
+  <syslog_priority>err</syslog_priority>
+  <tagcloud_blacklist>conf/tag_blacklist.txt</tagcloud_blacklist>
+  <testmode></testmode>
+  <timeout>30</timeout>
+  <toolsconfig>conf/taranis.conf.tools.xml</toolsconfig>
+  <twitter_consumer_key></twitter_consumer_key>
+  <twitter_consumer_secret></twitter_consumer_secret>
+  <twitter_access_token></twitter_access_token>
+  <twitter_access_token_secret></twitter_access_token_secret>
+  <useragent_string>Mozilla/5.0 (Windows NT 6.1; rv:52.0) Gecko/20100101 Firefox/52.0</useragent_string>
+  <webroot></webroot>
+  <auto_send_eos>yes</auto_send_eos>
+</parameters>

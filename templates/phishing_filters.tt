@@ -1,0 +1,34 @@
+<div class="filter-block filter-block-separator">
+
+	<form id="form-phishing-add">
+		<div class="block">
+			<label for="phishing-add-url">Add new:</label><br>
+			<input type="text" id="phishing-add-url" name="url" class="input-default" value="http://">
+		</div>
+
+		<div class="block">
+			<label for="phishing-add-reference">Reference:</label><br>
+			<input type="text" id="phishing-add-reference" name="reference" class="input-default" value="" [% IF referenceIsMandatory %]mandatory[% END %]>
+		</div>
+
+		<div class="block">
+			<label for="phishing-add-campaign">Campaign:</label><br>
+			<input type="text" id="phishing-add-campaign" name="campaign" class="input-default" value="">
+		</div>
+
+		<div class="block">
+			<span>&nbsp;</span>
+			<input type="button" id="btn-phishing-add" class="button" value="Add">		
+		</div>
+	</form>
+</div>
+
+<div class="action-block filter-block-separator">
+	<div class="block">
+		<input type="button" id="btn-phishing-autorefresh" class="button" value="Turn Autorefresh ON">
+	</div>
+
+	<div class="block align-block-right">
+		<span class="bold page-title">Phishing Checker</span>
+	</div>	
+</div>

@@ -1,0 +1,11 @@
+<div class="action-block filter-block-separator">
+	<br>
+[% IF write_right +%]
+	<div class="block">
+		<input type="button" class="button" id="btn-add-feeddigest" value="Create a feed digest">
+	</div>
+[% END %]	
+	<div class="block align-block-right">
+		<span class="bold page-title">Feed Digest Settings</span>
+	</div>
+</div>

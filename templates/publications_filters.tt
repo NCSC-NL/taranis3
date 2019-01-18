@@ -1,0 +1,92 @@
+<div class="filter-block filter-block-separator">
+
+	<form id="form-publications-search">
+		<input type="hidden" name="pub_type" value="[% pub_type %]">
+		
+		[% IF pub_type == 'advisory' %]
+		<div class="block">
+			<label for="publications-search">Search</label><br>
+			<input type="search" id="publications-search" name="searchkeywords" class="input-default publications-search-advisory">
+		</div>
+
+		<div class="block">
+			<span>Probability</span><br>
+			<select name="probability" class="select-single" id="publications-probability">
+				<option value="">-any probability-</option>
+				<option value="1">High</option>
+				<option value="2">Medium</option>
+				<option value="3">Low</option>
+			</select>
+		</div>
+
+		<div class="block">
+			<span>Damage</span><br>
+			<select name="damage" class="select-single" id="publications-damage">
+				<option value="">-any damage-</option>
+				<option value="1">High</option>
+				<option value="2">Medium</option>
+				<option value="3">Low</option>
+			</select>
+		</div>
+		
+		[% ELSE %]
+		<div class="block">
+			<label for="publications-search">Search</label><br>
+			<input type="search" id="publications-search" name="searchkeywords" class="input-default">
+		</div>
+		[% END %]
+		<div class="block">
+			<label for="publications-start-date">From date</label><br>
+			<input id="publications-start-date" name="startdate" type="text" class="input-default date-picker">
+		</div>	
+	
+		<div class="block">
+			<label for="publications-end-date">To date</label><br>
+			<input id="publications-end-date" name="enddate" type="text" class="input-default date-picker">
+		</div>
+
+		<div class="block publications-statuses bold">
+			<label for="pending" class="block publications-pending" title="pending">
+				<span>P</span><br>
+				<input type="checkbox" id="pending" name="status" value="0" checked="checked">
+			</label>
+			<label for="ready4review" class="block publications-ready4review" title="ready for review">
+				<span>R</span><br>
+				<input type="checkbox" id="ready4review" name="status" value="1" checked="checked">
+			</label>
+	
+			<label for="approved" class="block publications-approved" title="approved" >
+				<span>A</span><br>
+				<input type="checkbox" id="approved" name="status" value="2" checked="checked">
+			</label>
+	
+			<label for="published" class="block publications-published" title="published">
+				<span>P</span><br>
+				<input type="checkbox" id="published" name="status" value="3" checked="checked">
+			</label>
+		</div>
+
+		<div class="block">
+			<label for="publications-hitsperpage">Hits/pg</label><br>
+			<input type="number" name="hitsperpage" id="publications-hitsperpage" value="100" class="input-default">
+		</div>
+
+		<div class="block">
+			<span>&nbsp;</span>
+			<input type="button" id="btn-publications-search" class="button" value="Search!">		
+		</div>
+
+	</form>
+</div>
+
+
+<div class="action-block filter-block-separator">
+[% IF write_right +%]
+	<div class="block">
+		<input type="button" class="button btn-publications-new" data-pubtype="[% pub_type %]" value="Add new [% page_title %]">
+	</div>
+[% END %]	
+	<div class="block align-block-right">
+		<span class="bold page-title">Write [% page_title %]</span>
+	</div>	
+</div>

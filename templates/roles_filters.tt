@@ -1,0 +1,37 @@
+<div class="filter-block filter-block-separator">
+
+	<form id="form-roles-search">
+
+		<div class="block">
+			<label for="roles-filters-name">Role name search</label><br>
+			<input id="roles-filters-name" name="search" type="text" class="input-default">
+		</div>
+
+		<div class="block">
+			<label for="roles-filters-entitlement">Entitlement</label><br>
+			<select name="entitlement" class="select-single" id="roles-filters-entitlement">
+				<option value="" >-Search All Entitlements-</option>
+			[% FOREACH entitlement IN entitlements +%]
+				<option value="[% entitlement.id %]">[% entitlement.name %]</option>
+			[% END +%]
+			</select>
+		</div>
+
+		<div class="block">
+			<span>&nbsp;</span>
+			<input type="button" id="btn-roles-search" class="button" value="Search!">		
+		</div>
+
+	</form>
+</div>
+
+<div class="action-block filter-block-separator">
+[% IF write_right +%]
+	<div class="block">
+		<input type="button" class="button" id="btn-add-role" value="Add new role">
+	</div>
+[% END %]	
+	<div class="block align-block-right">
+		<span class="bold page-title">User Roles</span>
+	</div>	
+</div>

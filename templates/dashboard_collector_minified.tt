@@ -1,0 +1,10 @@
+<div class="block">
+	<span class="dashboard-minified-icons-with-text"><br></span>
+	[% IF collectorStatus && collectorStatus.showMinified %]
+		[% IF collectorStatus.data == 0 %]
+	<img src="[% webroot %]/images/lamp_inactive.png" alt="off" title="Collector is not running">
+		[% ELSE %]
+	<img src="[% webroot %]/images/lamp_active.png" alt="on" title="Collector is running">
+		[% END %]
+	[% END %]
+</div>

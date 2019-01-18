@@ -1,0 +1,28 @@
+[% IF renderItemContainer %]
+<div class="software-hardware-type-item item-row" id="[% softwareHardwareType.base %]">
+[% END %]
+		
+	<div class="software-hardware-type-item-name block">
+		<span>[% softwareHardwareType.description %]</span>
+	</div>		
+
+	<div class="software-hardware-type-item-subtype block">
+		<span>[% softwareHardwareType.sub_type_description %]</span>
+	</div>
+
+	<div class="block align-block-right">
+	[% IF write_right %]
+		<img src="[% webroot %]/images/icon_modify.png" alt="edit" title="edit this item" class="pointer btn-edit-software-hardware-type" data-id="[% softwareHardwareType.base %]">
+		[%  IF softwareHardwareType.base.length > 1 && !softwareHardwareType.in_use %]
+		<img src="[% webroot %]/images/icon_delete.png" alt="delete" title="delete this item" class="pointer btn-delete-software-hardware-type" data-id="[% softwareHardwareType.base %]">
+		[% ELSE %]
+		<img src="[% webroot %]/images/icon_delete_disabled.png" alt="no delete" title="Base type cannot be deleted.">
+		[% END %]
+	[% ELSE %]
+		<img src="[% webroot %]/images/icon_details.png" alt="view" title="view details" class="pointer btn-view-software-hardware-type" data-id="[% softwareHardwareType.base %]">
+	[% END %]
+		
+	</div>
+[% IF renderItemContainer %]
+</div>
+[% END %]

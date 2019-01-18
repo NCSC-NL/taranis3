@@ -1,0 +1,95 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden[% END %] ui-state-error ui-corner-all">[% message %]</div>
+
+	<div class="dialog-title">
+		<span>Import</span>	
+	</div>
+
+	<div id="sources-import-tabs" class="dialog-tabs">
+		<ul>
+			<li><a href="#sources-import-tabs-sources">Imported sources</a></li>
+			<li><a href="#sources-import-tabs-parsers">Imported parsers</a></li>
+			<li><a href="#sources-import-tabs-categories">Imported categories</a></li>
+		</ul>
+
+<!-- TAB IMPORTED SOURCES -->
+		<div id="sources-import-tabs-sources">
+			[% IF failedSourceImports.size > 0 %]
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Sources failed to import</span>
+				<ul class="sources-import-list border-default">
+				[% FOR source IN failedSourceImports %]
+					<li class="item-row">
+						<span class="bold">[% source.sourcename | html %]</span> &mdash;
+						<span>[% source.fullurl | html %]</span> &mdash;
+						<span class="italic red-font">[% source.failReason %]</span>
+				[% END %]
+				</ul>
+			</div><br>
+			[% END %]
+			
+			<div class="dialog-input-wrapper block">
+			[% IF successfulSourceImports.size > 0 %]
+				<span class="dialog-input-label">Sources successfuly imported</span>
+				<ul class="sources-import-list border-default">
+				[% FOR source IN successfulSourceImports %]
+					<li class="item-row">
+						<span class="bold">[% source.sourcename | html %]</span> &mdash;
+						<span>[% source.fullurl | html %]</span>
+					</li>
+				[% END %]
+				</ul>
+			[% ELSE %]
+				<span>No successful imports</span>
+			[% END %]
+			</div>
+		</div>
+
+<!-- TAB IMPORTED PARSERS -->
+		<div id="sources-import-tabs-parsers">
+			[% IF failedParserImports.size > 0 %]
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Parsers failed to import</span><br>
+				<ul class="sources-import-list border-default">
+				[% FOR parser IN failedParserImports %]
+					<li class="item-row">
+						<span class="bold">[% parser.parsername | html %]</span> &mdash;
+						<span class="italic red-font">[% parser.failReason %]</span>
+					</li>
+				[% END %]
+				</ul>
+			</div><br>
+			[% END %]
+			
+			<div class="dialog-input-wrapper block">
+			[% IF successfulParserImports.size > 0 %]
+				<span class="dialog-input-label">Parsers successfuly imported</span>
+				<ul class="sources-import-list border-default">
+				[% FOR parser IN successfulParserImports %]
+					<li class="item-row bold">[% parser.parsername | html %]</li>
+				[% END %]
+				</ul>
+			[% ELSE %]
+				<span>No successful imports</span>
+			[% END %]
+			</div>
+		</div>
+
+<!-- TAB IMPORTED CATEGORIES -->
+		<div id="sources-import-tabs-categories">
+			<div class="dialog-input-wrapper block">
+			[% IF categories.size > 0 %]
+				<span class="dialog-input-label">Categories added</span><br>
+				<ul class="sources-import-list border-default">
+				[% FOR category IN categories %]
+					<li class="item-row bold">[% category | html %]</li>
+				[% END %]
+				</ul>
+			[% ELSE %]
+				<span>No categories added</span>
+			[% END %]
+			</div>
+		</div>
+		
+	</div>
+</div>

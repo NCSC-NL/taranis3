@@ -1,0 +1,39 @@
+<publication>
+<template>
+--- TLP:GREEN ---
+(https://first.org/tlp/)
+
+_fld_introduction_
+
+Verstuurde beveiligingsadviezen
+===============================
+_fld_sent_advisories_
+
+Wat was er nog meer in het nieuws
+=================================
+_fld_newsitem_
+
+_fld_closing_
+
+--- TLP:GREEN ---
+</template>
+
+<fields>
+  <fld_introduction type="database">
+    <tbl type="key" column="id">publication_endofweek</tbl>
+    <tbl type="select" column="introduction">publication_endofweek</tbl>
+  </fld_introduction>
+  <fld_sent_advisories type="database">
+    <tbl type="key" column="id">publication_endofweek</tbl>
+    <tbl type="select" column="sent_advisories">publication_endofweek</tbl>
+  </fld_sent_advisories>
+  <fld_newsitem type="database">
+    <tbl type="key" column="id">publication_endofweek</tbl>
+    <tbl type="select" column="newsitem">publication_endofweek</tbl>
+  </fld_newsitem>
+  <fld_closing type="database">
+    <tbl type="key" column="id">publication_endofweek</tbl>
+    <tbl type="select" column="closing">publication_endofweek</tbl>
+  </fld_closing>
+</fields>
+</publication>

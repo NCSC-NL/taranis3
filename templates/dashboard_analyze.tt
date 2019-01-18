@@ -1,0 +1,29 @@
+<div class="block dashboard-block">
+	<fieldset>
+		<legend class="bold">Analyze</legend>
+		[% IF numberOfPendingAnalyses %]
+			<div>
+				<img src="[% webroot %]/images/user.png" alt="[% numberOfPendingAnalyses.data %]" class="align-middle dashboard-icon">
+				<div class="block">There are <span class="bold">[% numberOfPendingAnalyses.data %]</span> pending analyses.</div>
+			</div>
+			[% IF numberOfPendingAnalysesWithoutOwner || graphNumberOfPendingAnalysesPerHour %]
+			<hr class="light">
+			[% END %]
+		[% END %]
+		[% IF numberOfPendingAnalysesWithoutOwner %]
+			<div>
+				<img src="[% webroot %]/images/user_new.png" alt="[% numberOfPendingAnalysesWithoutOwner.data %]" class="align-middle dashboard-icon">
+				<div class="block">There are <span class="bold">[% numberOfPendingAnalysesWithoutOwner.data %]</span> pending analyses without owner.</div>
+			</div>
+			[% IF graphNumberOfPendingAnalysesPerHour %]
+			<hr class="light">
+			[% END %]
+		[% END %]
+		[% IF graphNumberOfPendingAnalysesPerHour %]
+		<div class="center">
+			<span class="bold">Number of pending analyses per hour</span>
+		</div>
+		<div id="graphNumberOfPendingAnalysesPerHour" class="dashboard-graph"></div>
+		[% END %]		
+	</fieldset>
+</div>

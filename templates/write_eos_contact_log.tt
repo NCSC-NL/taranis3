@@ -1,0 +1,9 @@
+[% USE date %]
+[% FOREACH entry IN contactLogEntries %]
+[% date.format( entry.created.stripSeconds, format = '%d-%m-%Y %H:%M' ) %] -- [%+ entry.type.displayReportContactLogType +%]
+[%+ entry.contact_details +%]
+
+-NOTES / MESSAGE-
+[%+ entry.notes +%]
+######################################################################
+[%+ END %]

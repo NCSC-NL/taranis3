@@ -1,0 +1,14 @@
+"$LOGDIR/check-eos-sent.log" {
+	maxage 365
+	rotate 99
+	size=5M
+	monthly
+
+	compress
+	delaycompress
+	notifempty
+	missingok
+	create 0644 $USER $GROUP
+	su $USER $GROUP
+	dateext
+}

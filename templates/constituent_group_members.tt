@@ -1,0 +1,46 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="hidden"></div>
+
+	<div class="dialog-title">
+		<span>[% constituentGroup.name %]</span>	
+	</div>	
+	
+	<fieldset>
+		<div class="dialog-input-wrapper block">
+			<span class="dialog-input-label">Constituent group summary</span><br>
+<textarea readonly="readonly" class="textarea-preview scroll-y-always" id="constituent-group-summary">GROUP NAME: [% group.name %]
+
+CALL FOR HIGH/HIGH: [% IF (group.use_sh && group.call_hh) || (!group.use_sh && group.any_hh) ; 'YES' ; ELSE ; 'NO' ; END +%]
+SOFTWARE/HARDWARE LIST IN USE: [% IF group.use_sh ; 'YES' ; ELSE ; 'NO' ; END +%]
+
+CONSTITUENT MEMBERS:
+[% FOR member IN members +%]
+- [% member.firstname _ ' ' _ member.lastname +%]
+  EMAIL: [% member.emailaddress +%]
+  TEL: [% member.tel_regular %], MOB: [% member.tel_mobile +%]
+  ROLE: [% member.role_description +%]
+  CALL FOR HIGH/HIGH: [% IF member.call_hh ; 'YES' ; ELSE ; 'NO' ; END +%]
+  CALL 24/7: [% IF member.call247 ; 'YES' ; ELSE ; 'NO' ; END +%]
+  SUBSCRIBED TO:
+  [% FOR publication IN member.publication_types +%]
+    - [% publication.title +%]
+  [% END %]
+
+[% END %]
+
+
+[%+ IF group.notes %]
+NOTES:
+[%+ group.notes %]
+[% END %]</textarea><br><br>
+<span class="dialog-input-label">Constituent group software/hardware list</span><br>
+<textarea readonly="readonly" class="textarea-preview scroll-y-always" id="constituent-group-photo">
+SOFTWARE/HARDWARE LIST:
+[%+ FOR sh IN softwareHardware %]
+[%+ sh.producer _ ',' _ sh.name _ ',' _ sh.cpe_id _ ',' _ sh.description +%]
+[%+ END +%]
+</textarea> 
+		</div>
+	
+	</fieldset>
+</div>

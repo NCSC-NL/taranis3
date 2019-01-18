@@ -1,0 +1,42 @@
+#!/usr/bin/env perl
+# Install common packages needed on RedHat.  We are in a very early
+# stage without knowledge of configuration.
+
+# Tested configurations:
+# 2018-03-29 MO   RedHat 7.4EL on Azure cloud
+
+use warnings;
+use strict;
+
+use Taranis::Install::Bare   qw(is_redhat);
+use Taranis::Install::RedHat qw(redhat_packages redhat_init_epel);
+
+unless(is_redhat) {
+	print "*   skipped: not running on RedHat.\n";
+	exit 0;
+}
+
+redhat_packages
+	'sudo',              # to call bin/taranis as root
+	'wget',              # to access CPAN
+	'patch',             # needed for installing local extensions
+	'policycoreutils-python',  # semanage
+	'lbzip2',            # used by tar with bzip2
+	'rsync',
+
+	# We need these before we get to install Perl modules
+	'make',              # to install some Perl XS packages
+	'gcc',
+	'gcc-c++',           # For Encode::Detect
+	'perl-core',         # RedHat does not install all core modules
+	'perl-JSON',         # need it early for configuration setup
+	'perl-YAML',         # to speed-up perl module installation
+	'perl-version',
+	'perl-CPAN',
+	'libxml2-devel',     # for XML::LibXML
+	'expat-devel',       # for XML::Parser
+	;
+
+redhat_init_epel;
+
+exit 0;

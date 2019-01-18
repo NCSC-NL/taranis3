@@ -1,0 +1,35 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden[% END %] ui-state-error ui-corner-all">[% message %]</div>
+	
+	<div class="dialog-title">
+		<span>[% cve.identifier %]</span>
+	</div>
+	
+	<form id="form-cve-description" data-id="[% cve.identifier %]">
+		<fieldset>
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Published</span><br>
+				<span>[% cve.published_date %]</span>
+			</div>
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Modified</span><br>
+				<span>[% cve.modified_date %]</span>
+			</div><br>
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Description</span><br>
+				<textarea readonly="readonly" class="scroll-y-always font-courier border-default" id="cve-details-description">[% cve.description %]</textarea>
+			</div><br>
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Translation/Custom description</span><br>
+				<select id="cve-details-template" class="select-single dialog-input-text block">
+					<option value="">-select template to use in text below-</option>
+					[% FOREACH cveTemplate IN cveTemplates %]
+					<option value="[% cveTemplate.id %]">[% cveTemplate.description %]</option>
+					[% END %]
+				</select>
+				<input type="button" class="button" id="btn-cve-details-apply-template" value="Apply template"><br>
+				<textarea name="custom_description" class="scroll-y-always font-courier border-default" id="cve-details-custom-description">[% cve.custom_description %]</textarea>
+			</div>
+		</fieldset>
+	</form>
+</div>

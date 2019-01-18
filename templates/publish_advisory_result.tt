@@ -1,0 +1,25 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden[% END %] ui-state-error ui-corner-all">[% message %]</div>
+	
+	<div class="dialog-title">
+		<span>[% advisory_heading %]</span>	
+	</div>
+	
+	<fieldset>
+		<div class="dialog-input-wrapper block">
+			[% IF analysisUpdateError %]
+			<span>An error occurred while updating the status of linked analysis: [% analysisUpdateError %]</span>
+			[% ELSE %]
+			<span>Updated <b>[% analysisUpdated %]</b> analysis.</span>
+			[% END %]
+			[% IF callingListError %]
+			<span>An error occurred while creating a calling list: [% callingListError %]</span>
+			[% END %]		
+		</div><br>
+	
+		<div class="dialog-input-wrapper block">
+			<textarea class="scroll-y-always font-courier border-default" id="advisory-publish-result-text" readonly="readonly">[% results %]</textarea>
+		</div>
+		<iframe name="downloadFrame" id="downloadFrame" class="super-secret-iframe" src=""></iframe>
+	</fieldset>	
+</div>

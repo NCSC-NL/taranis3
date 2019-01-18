@@ -1,0 +1,117 @@
+[% IF renderItemContainer %]
+<div class="analyze-item item-row" id="[% analysis.orgid %]">
+[% END %]
+
+	<div class="item-arrow">
+		<div class="selected-row-left"></div>
+		<div class="selected-row-right"></div>
+	</div>
+
+<div class="item-row-inner">
+	<div class="analyze-item-select block">
+		[% IF write_right %]
+		<input class="analyze-item-select-input" type="checkbox" value="[% analysis.orgid %]">
+		[% END %]
+	</div>
+		
+	<div class="analyze-item-id-status block">
+		<span data-analysisid="[% analysis.orgid %]" class="span-link analyze-item-details-link">[% analysis.id %]</span><br>
+		<span class="span-analyze-item-status">([% analysis.status %])</span>
+	</div>		
+
+	<div class="analyze-item-date-time block">
+		[% analysis.created.substr(0, 10) %]<br>
+		[% analysis.created.substr(11, 8) %]
+	</div>		
+
+	<div class="analyze-item-details block break-word">
+		<div class="analyze-[% analysis.rating %] bold block">
+			<span data-analysisid="[% analysis.orgid %]" class="span-link analyze-item-details-link">[% analysis.title %]</span>
+		</div>
+		[% INCLUDE tags.tt %]
+		<div>
+			<span class="span-link btn-toggle-description" data-analysisid="[% analysis.orgid %]">show comments</span>
+		</div>
+		<div id="analyze-description-[% analysis.orgid %]" class="analyze-item-details-description">
+		<br>
+		[% IF analysis.comments == '' && !analysis.links %]
+			<span>no description</span>
+		[% ELSE %]
+			[% annumbers = analysis.comments.match( '(AN-\d\d\d\d-\d\d\d\d)', 1 ) %]
+			[% FOREACH nr IN annumbers %]
+				[% numeric = nr.substr(3, 4) _ nr.substr(8,4) %]
+				[% analysis.comments  = analysis.comments.replace( nr , '<span class="links-on-black-bg span-link analyze-item-details-link" data-analysisid="' _ numeric _ '">' _ nr _ '</span>' ) %]
+			[% END %]
+	
+			[% analysis.comments = analysis.comments.replace( '(?i)(' _ pageSettings.advisory_prefix _ '-\d{4}-\d{' _ pageSettings.advisory_id_length _ '})\[(\d+)\]\[(.*?)\]' , '<span class="publications-preview-link span-link" data-id="$2" data-pubtype="$3">$1</span>' ) %]
+	
+			[% analysis.comments %]
+										
+			[% IF analysis.links.0 != "" %]
+				<hr>
+			[% END %]
+			[% FOREACH link IN analysis.links %]
+				<span class="analyze-item-link" data-linkdigest="[% link.digest | uri %]" data-itemid="[% link.id %]">
+					<img src="[% webroot %]/images/icon_details.png" alt="show"	title="Show details" data-digest="[% link.digest | uri %]" class="btn-analyze-assess-details pointer"> 
+				[% link.source %]: 
+				[% IF link.link.match('^id=\d+$') || link.link.match('.*?show_mail\.pl\?id=\d+$') %]
+					<span class="span-link assess-email-item-link" data-link="[% link.link %]">[% link.title %]</span>
+				[% ELSE %]
+					<a href="[% link.link %]" target="_blank">[% link.title %]</a>
+				[% END %]
+				[% IF analysis.links.size > 1 %]
+					<img src="[% webroot %]/images/icon_linkto_other.png" class="btn-link-to-other-analysis pointer" data-digest="[% link.digest | uri %]" data-analysisid="[% analysis.orgid %]" alt="analyze" title="Create other analysis from item and unlink from current analysis">
+					<img src="[% webroot %]/images/icon_link_break.png" class="btn-unlink-from-analysis pointer" data-itemid="[% link.id %]" data-analysisid="[% analysis.orgid %]" alt="analyze" title="unlink from current analysis">
+				[% END %]
+					<br>
+				</span>
+			[% END %]
+			[% IF analysis.links.0 != "" %]
+				<hr>
+			[% END %]
+		[% END %]									
+		</div>
+	</div>		
+
+	<div class="align-block-right block">
+		<div class="align-block-right">
+		
+		[%- USE analysis_sts = String(analysis.status) +%]
+		[% IF analysis.opened_by != '' && ( analysis.opened_by == pageSettings.info_username || is_admin ) %]
+			<img src="[% webroot %]/images/icon_lock.png" alt="remove" title="Remove lock from [% analysis.openedbyfullname %]" data-analysisid="[% analysis.orgid %]" class="pointer btn-analyze-lock">
+		[% ELSIF analysis.opened_by != '' %]
+			<img src="[% webroot %]/images/icon_lock.png" alt="is locked" title="Is locked by [% analysis.openedbyfullname %]" class="analyze-locked">
+		[% ELSE %]
+			<img src="[% webroot %]/images/icon_none.png" class="img-placeholder" alt="no icon">
+		[% END %]
+
+			<img src="[% webroot %]/images/icon_tag.png" alt="tag" title="add/remove tags" class="pointer img-edit-tags" data-itemid="[% analysis.orgid %]" data-tname="analysis">
+		[% IF write_right && analysis_sts.lower != 'joined' && analysis.opened_by == '' %]
+			<img src="[% webroot %]/images/icon_modify.png" alt="open" title="Open analysis" data-analysisid="[% analysis.orgid %]" class="analyze-item-details-link pointer">
+		[% ELSE %]
+	 		<img src="[% webroot %]/images/icon_details.png" alt="view" title="View Details" data-analysisid="[% analysis.orgid %]" class="analyze-item-details-link pointer">
+		[% END %]
+		
+		[% IF publication_right %] 
+			<img src="[% webroot %]/images/icon_import.png" alt="use" title="Publish analysis" class="btn-analyze-to-publication pointer" data-analysisid="[% analysis.orgid %]">
+		[% END %]
+						
+		[% IF analysis.owned_by == "" +%]
+			<img src="[% webroot %]/images/icon_user_grey.png" alt="owner" title="no owner" class="btn-analyze-ownership pointer analyze-item-has-no-owner" data-analysisidownership="[% analysis.orgid %]">
+		[% ELSIF pageSettings.info_username == analysis.owned_by +%]
+			<img src="[% webroot %]/images/icon_user_green.png" alt="owner" title="you are owner" class="btn-analyze-ownership pointer analyze-item-is-owner" data-analysisidownership="[% analysis.orgid %]">
+		[% ELSE +%]
+			<img src="[% webroot %]/images/icon_user_red.png" alt="owner" title="[% analysis.ownedbyfullname %]" class="btn-analyze-ownership pointer analyze-item-is-not-owner" data-analysisidownership="[% analysis.orgid %]">
+		[% END +%]
+		</div>
+		<br>
+		
+		[% IF analysis.publishedAdvisories && analysis.publishedAdvisories.size > 0 %]
+		<span class="align-block-right analyze-published-publications">[% analysis.publishedAdvisories.size %] advisor[% IF analysis.publishedAdvisories.size > 1 %]ies[% ELSE %]y[% END %]</span>
+		[% END %]
+	
+	</div>
+</div>
+[% IF renderItemContainer %]		
+</div>
+[% END %]

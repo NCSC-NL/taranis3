@@ -1,0 +1,155 @@
+<!-- Taranis menu -->
+
+<ul id="menu">
+[% IF pageSettings.menuitem.assess +%]
+<li class="menu-item pointer" id="assess-menu">
+	<span>Assess</span>
+</li>
+[% END +%]
+[% IF pageSettings.menuitem.analyze %]
+<li class="menu-item pointer" id="analyze-menu">
+	<span>Analyze</span>
+</li>
+[% END +%]
+[% IF pageSettings.menuitem.publications %]
+<li class="menu-item pointer" id="write-menu">
+	<span>Write</span>
+</li>
+[% END +%]
+[% IF pageSettings.menuitem.publish %]
+<li class="menu-item pointer" id="publish-menu">
+	<span>Publish</span>
+</li>
+[% END +%]
+[% IF pageSettings.menuitem.dossier %]
+<li class="menu-item pointer" id="dossier-menu">
+	<span>Dossier</span>
+</li>
+[% END +%]
+[% IF pageSettings.menuitem.report %]
+<li class="menu-item pointer" id="report-menu">
+	<span>Report</span>
+</li>
+[% END +%]
+[% IF pageSettings.menuitem.about %]
+<li class="menu-item pointer" id="tools-menu">
+	<span>Tools</span>
+</li>
+[% END +%]
+</ul>
+
+<div id="metasearch-wrapper">
+	<div id="metasearch">
+		<input type="search" name="metasearch" id="metasearch-input" value="" placeholder="search">
+		<img src="[% webroot %]/images/icon_search.png" id="btn-metasearch" class="pointer">
+	</div>
+    <span class="span-link" id="metasearch-show-advanced">Advanced search</span>
+</div>
+
+<!-- Assess submenu -->
+<ul class="submenu" id="assess-submenu">
+	[% IF pageSettings.assess_categories %]
+		[% FOREACH category IN pageSettings.assess_categories +%]
+			[% USE String(category.name) %]
+			[% category_name = String.new %]
+			[%- category_name = String.replace('-', ' ')  -%]
+<li class="submenu-item pointer" data-url="assess/assess/displayAssess/category=[% category.id %]/">[% String.capital(category_name) %]
+   <span class="count-display" data-category="[% category.id %]" data-count="?">?</span>
+</li>
+		[%- END -%]
+	[% END +%]
+</ul>
+
+[% IF pageSettings.menuitem.analyze +%]
+<!-- Analyze submenu -->
+<ul class="submenu" id="analyze-submenu">
+	[% FOREACH status_opt IN pageSettings.analysis_status_options +%]
+		[%- USE String(status_opt) -%]
+<li class="submenu-item pointer" data-url="analyze/analyze/displayAnalyze/status=[% status_opt %]">[% String.capital(status_opt) %]</li>
+	[%- END -%]
+</ul>
+[% END +%]
+
+[% IF pageSettings.menuitem.publications +%]
+<!-- Write submenu -->
+<ul class="submenu" id="write-submenu">
+	[% FOREACH publication_opt IN pageSettings.publication_options +%]
+		[% IF publication_opt  == "advisory (email)" -%]
+<li class="submenu-item pointer" data-url="write/publications/displayPublications/pub_type=advisory/" data-pubtype="advisory">[% pageSettings.organisation %] Advisory</li>
+		[%- END -%]
+		[% IF publication_opt  == "advisory (forward)" -%]
+<li class="submenu-item pointer" data-url="write/publications/displayPublications/pub_type=forward/" data-pubtype="forward">[% pageSettings.organisation %] Advisory Forward</li>
+		[%- END -%]
+		[%- IF publication_opt == "end-of-shift (email)" -%]
+<li class="submenu-item pointer" data-url="write/publications/displayPublications/pub_type=eos/" data-pubtype="eos">End-of-Shift</li>
+		[%- END -%]
+		[%- IF publication_opt == "end-of-day (email)" -%]
+<li class="submenu-item pointer" data-url="write/publications/displayPublications/pub_type=eod/" data-pubtype="eod">End-of-Day</li>
+		[%- END -%]
+		[%- IF publication_opt == "end-of-week (email)" -%]
+<li class="submenu-item pointer" data-url="write/publications/displayPublications/pub_type=eow/" data-pubtype="eow">End-of-Week</li>
+		[%- END -%]
+	[% END +%]
+</ul>
+[% menuOptionAdded = 0 %]
+[% END %]
+
+[%+ IF pageSettings.menuitem.publish +%]
+<!-- Publish submenu -->
+<ul class="submenu" id="publish-submenu">
+	[% FOREACH publication_opt IN pageSettings.publication_options +%]
+		[% IF publication_opt == "advisory (email)" -%]
+<li class="submenu-item pointer" data-url="publish/publish/displayPublish/pub_type=advisory/">[% pageSettings.organisation %] Advisory Email</li>
+		[%- END -%]
+		[%- IF publication_opt == "advisory (forward)" -%]
+<li class="submenu-item pointer" data-url="publish/publish/displayPublish/pub_type=forward/">[% pageSettings.organisation %] Advisory Forward</li>
+		[%- END -%]
+		[%- IF publication_opt == "end-of-shift (email)" -%]
+<li class="submenu-item pointer" data-url="publish/publish/displayPublish/pub_type=eos/">End-of-Shift</li>
+		[%- END %]
+		[%- IF publication_opt == "end-of-day (email)" -%]
+<li class="submenu-item pointer" data-url="publish/publish/displayPublish/pub_type=eod/">End-of-Day Confidential</li>
+		[%- END %]
+		[%- IF publication_opt == "end-of-day (email public)" -%]
+<li class="submenu-item pointer" data-url="publish/publish/displayPublish/pub_type=eod_public/">End-of-Day Public</li>
+		[%- END %]
+		[%- IF publication_opt == "end-of-day (email white)" -%]
+<li class="submenu-item pointer" data-url="publish/publish/displayPublish/pub_type=eod_white/">End-of-Day White</li>
+		[%- END %]
+		[%- IF publication_opt == "end-of-week (email)" -%]
+<li class="submenu-item pointer" data-url="publish/publish/displayPublish/pub_type=eow/">End-of-Week</li>
+		[%- END -%]
+	[% END +%]
+</ul>
+[% END +%]
+
+[%+ IF pageSettings.menuitem.dossier +%]
+<!-- Dossier submenu -->
+<ul class="submenu" id="dossier-submenu">
+	<li class="submenu-item pointer" data-url="dossier/dossier/displayMyDossiers/">My Dossiers</li>
+	<li class="submenu-item pointer" data-url="dossier/dossier/displayDossiers/">All Dossiers</li>
+	<li class="submenu-item pointer" data-url="dossier/dossier_pending/displayMyPendingItems/">My Pending Items</li>
+</ul>
+[% END +%]
+
+[%+ IF pageSettings.menuitem.report +%]
+<!-- Report submenu -->
+<ul class="submenu" id="report-submenu">
+	<li class="submenu-item pointer" data-url="report/todo/displayToDos/">To-Dos</li>
+	<li class="submenu-item pointer" data-url="report/contact_log/displayContactLogs/">Contact Logs</li>
+	<li class="submenu-item pointer" data-url="report/incident_log/displayIncidentLogs/">Incident Logs</li>
+	<li class="submenu-item pointer" data-url="report/special_interest/displaySpecialInterests/">Special Interests</li>
+</ul>
+[% END +%]
+
+[% IF pageSettings.menuitem.tools +%]
+<!-- Tools submenu -->
+<ul class="submenu" id="tools-submenu">
+	[%- FOREACH tool IN pageSettings.toolsconfig -%]
+<li class="submenu-item pointer" data-url="[% tool.webscript | url %]">[% tool.toolname %]</li>
+	[%- END -%]
+</ul>
+[% END +%]
+<div class="submenu" id="empty-submenu">&nbsp;</div>
+<div class="submenu" id="metasearch-submenu">&nbsp;</div>
+<div class="submenu selected-submenu" id="dashboard-submenu">&nbsp;</div>

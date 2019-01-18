@@ -1,0 +1,127 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="hidden"></div>
+	<form id="form-assess-custom-search-add">
+		<fieldset>
+			<div class="dialog-input-wrapper block">
+				<label for="custom-search-description" class="dialog-input-label">Description *</label><br>
+				<input type="text" name="description" id="custom-search-description" class="input-default dialog-input-text">
+			</div><br>
+		
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Make public</span><br>
+				<input type="radio" name="is_public" id="is_public_yes" value="1"><label for="is_public_yes">Yes</label> 
+				<input type="radio" name="is_public" id="is_public_no" value="0" checked="checked"><label for="is_public_no">No</label>
+			</div>
+		</fieldset>
+		
+		<fieldset>
+			<legend>Filter settings</legend>
+			<div class="dialog-input-wrapper block">
+				<label for="custom-search-keywords" class="dialog-input-label">Keywords</label><br>
+				<input type="text" name="keywords" id="custom-search-keywords" class="input-default dialog-input-text">
+			</div><br>
+			
+			<div class="dialog-input-wrapper assess-statuses block">
+				<span class="dialog-input-label">Unread / Read / Important / Waitingroom *</span><br>
+				<label for="unread" class="block assess-unread bold">
+					<span>U</span><br>
+					<input type="checkbox" id="unread" title="unread" name="item_status" value="0">
+				</label>
+				<label for="read" class="block assess-read bold">
+					<span>R</span><br>
+					<input type="checkbox" id="read" title="read" name="item_status" value="1">
+				</label>
+			
+				<label for="important" class="block assess-important bold">
+					<span>I</span><br>
+					<input type="checkbox" id="important" title="important" name="item_status" value="2">
+				</label>
+			
+				<label for="waitingroom" class="block assess-waitingroom bold">
+					<span>W</span><br>
+					<input type="checkbox" id="waitingroom" title="waitingroom" name="item_status" value="3">
+				</label>
+			</div><br>
+		
+			<div class="dialog-input-wrapper block">
+				<div class="block">
+					<label for="custom-search-start-date" class="dialog-input-label">From date *</label><br>
+					<input id="custom-search-start-date" name="startdate" type="text" class="input-default date-picker" value="[% startdate %]">
+				</div>
+				<div class="block">
+					<label for="custom-search-custom-end-date" class="dialog-input-label">To date</label><br>
+					<input id="custom-search-end-date" name="enddate" type="text" class="input-default date-picker" value="[% enddate %]">
+				</div>
+			</div><br>
+	
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Sources</span><br>
+				<div class="select-two-columns">
+					<div>
+						<select multiple="multiple" name="sources_left_column" id="sources_left_column" size="8" class="select-multiple select-left select-multiple-narrow">
+						[% FOREACH source IN selected_sources %]
+							<option value="[% source %]" id="[% source %]" title="[% source.capital() %]">[% source FILTER ucfirst %]</option>
+						[% END %]
+						</select>
+					</div>
+					<div class="option-left-right">	
+						<input type="button" class="button btn-option-to-left" value="<"><br><br>
+						<input type="button" class="button btn-option-to-right" value=">">
+					</div>
+					<div>
+						<select multiple="multiple" name="sources_right_column" id="sources_right_column" size="8" class="select-multiple select-right select-multiple-narrow">
+						[% FOREACH source IN all_sources %]
+							<option value="[% source %]" id="[% source %]" title="[% source.capital() %]">[% source FILTER ucfirst %]</option>
+						[% END %]
+						</select>
+					</div>
+				</div>
+			</div><br>
+		
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Categories</span><br>
+				<div class="select-two-columns">
+					<div>
+						<select multiple="multiple" name="categories_left_column" id="categories_left_column" size="8" class="select-multiple select-left select-multiple-narrow">
+						[% FOREACH category IN selected_categories +%]
+							<option value="[% category.id %]" id="[% category.id %]" title="[% category.name %]">[% category.name %]</option>
+						[% END +%]
+						</select>
+					</div>					
+					<div class="option-left-right">
+						<input type="button" class="button btn-option-to-left" value="<"><br><br>
+						<input type="button" class="button btn-option-to-right" value=">">
+					</div>
+					<div>
+						<select multiple="multiple" name="categories_right_column" id="categories_right_column" size="8" class="select-multiple select-right select-multiple-narrow">
+						[% FOREACH category IN all_categories +%]
+							<option value="[% category.id %]" id="[% category.id %]" title="[% category.name %]">[% category.name %]</option>
+						[% END +%]
+						</select>
+					</div>
+				</div>
+			</div><br>
+		</fieldset>
+		
+		<fieldset>
+			<legend>Display settings</legend>
+			<div class="dialog-input-wrapper block">
+				<label for="assess-hitsperpage" class="dialog-input-label">Hits per page *</label><br>
+				<input type="number" size="3" name="hitsperpage" id="assess-hitsperpage" class="input-default">
+			</div><br>
+		
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Sorting order *</span><br>
+				<select name="sorting" id="assess-sorting" class="select-single">
+					<option value="created_desc">Date/Time newest (default)</option>
+					<option value="created_asc">Date/Time oldest</option>
+					<option value="source_asc">Source A-Z</option>
+					<option value="source_desc">Source Z-A</option>
+					<option value="title_asc">Title A-Z</option>
+					<option value="title_desc">Title Z-A</option>
+				</select>      				
+			</div><br>		
+		</fieldset>
+		
+	</form>
+</div>

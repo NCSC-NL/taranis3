@@ -1,0 +1,26 @@
+<div id="report-contact-log-content-heading" class="content-heading">
+	<div id="report-contact-log-content-heading-created" class="block configuration-heading-default date-width-default">
+		<span>Date/Time</span>
+	</div>
+	<div id="report-contact-log-content-heading-type" class="block configuration-heading-default">
+		<span>Type</span>
+	</div>
+	<div id="report-contact-log-content-heading-notes" class="block configuration-heading-default">
+		<span>Message</span>
+	</div>
+</div>
+
+[% IF contactLogList.size > 0 %]
+	[% FOREACH contactLog IN contactLogList %]
+	
+		[% INCLUDE report_contact_log_item.tt %]
+	
+	[% END %]
+[% ELSE %]
+<div class="item-row" id="empty-row">No logs found...</div>
+
+[% END %]
+
+<div class="action-block filter-block-separator">
+	<div class="center" id="number-of-results">&mdash; [% numberOfResults %] results &mdash;</div>
+</div>

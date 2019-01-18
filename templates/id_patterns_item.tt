@@ -1,0 +1,20 @@
+[% IF renderItemContainer %]
+<div class="patterns-item item-row" id="[% pattern.idname | uri %]">
+[% END %]
+	
+	<div class="patterns-item-name block">
+		<span>[% pattern.idname %]</span>
+	</div>		
+
+	<div class="block align-block-right">
+	[% IF write_right %]
+		<img src="[% webroot %]/images/icon_modify.png" alt="edit" title="edit pattern" class="pointer btn-edit-pattern" data-id="[% pattern.idname %]">
+		<img src="[% webroot %]/images/icon_delete.png" alt="delete" title="delete pattern" class="pointer btn-delete-pattern" data-id="[% pattern.idname %]">
+	[% ELSE %]
+		<img src="[% webroot %]/images/icon_details.png" alt="view" title="view details" class="pointer btn-view-pattern" data-id="[% pattern.idname %]">
+	[% END %]
+
+	</div>
+[% IF renderItemContainer %]
+</div>
+[% END %]

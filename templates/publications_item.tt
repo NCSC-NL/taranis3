@@ -1,0 +1,49 @@
+[% IF renderItemContainer %]
+<div class="publications-item colored-item-row publications-[% publication.statusDescription %]" id="[% publication.publication_id %]" data-pubtype="[% pub_type %]" data-detailsid="[% publication.details_id %]">
+[% END %]
+		
+	<div class="publications-item-id block">
+		<span>[% publication.specific_id %]</span>
+	</div>		
+
+	<div class="publications-item-title block">
+		<span>
+	[% IF publication.title_content.length > 100  %]
+		[% publication.title_content.substr( 100, publication.title_content.length, '...') %]
+	[% ELSE %]
+		[% publication.title_content %]
+	[% END %]
+		</span>
+		[% INCLUDE tags.tt %]
+	</div>
+	
+	<div class="block publications-item-actions align-block-right">
+	[% IF publication.opened_by != '' && ( publication.opened_by == pageSettings.info_username || is_admin ) %]
+		<img src="[% webroot %]/images/icon_lock.png" alt="remove lock" title="Remove lock from [% publication.fullname %]" class="pointer img-publications-lock" data-pubtype="[% pub_type %]" data-publicationid="[% publication.publication_id %]">
+	[% ELSIF publication.opened_by != '' %]
+		<img src="[% webroot %]/images/icon_lock.png" alt="Is locked" title="Is locked by [% publication.fullname %]" class="img-publications-locked" data-publicationid="[% publication.publication_id %]">
+	[% END %]
+
+	[% IF write_right && publication.opened_by == '' && publication.status == 0 %]
+		<img src="[% webroot %]/images/icon_modify.png" alt="edit" title="edit" class="pointer img-publications-edit" data-publicationid="[% publication.publication_id %]" data-pubtype="[% pub_type %]" data-detailsid="[% publication.details_id %]">
+	[% END %]
+
+	[% IF publication.status == 3 && publication.replacedby_id == "" && pub_type != "eow" && pub_type != "eos" && pub_type != "eod" && write_right && publication.opened_by == '' %]						
+		<img src="[% webroot %]/images/icon_update.png" alt="update" title="update" class="pointer img-publications-update" data-pubtype="[% pub_type %]" data-detailsid="[% publication.details_id %]" data-publicationid="[% publication.publication_id %]">
+	[% END %]
+
+		<img src="[% webroot %]/images/icon_tag.png" alt="tag" title="add/remove tags" class="pointer img-edit-tags" data-itemid="[% publication.details_id %]" data-tname="[% publication.tname %]">
+		<img src="[% webroot %]/images/icon_advisory.png" alt="preview" title="preview" class="pointer img-publications-preview" data-pubtype="[% pub_type %]" data-publicationid="[% publication.publication_id %]">
+
+	[% IF ( publication.status == 0 || publication.status == 1 ) && write_right && publication.opened_by == '' %]
+		<img src="[% webroot %]/images/icon_delete.png" alt="delete" data-pubtype="[% pub_type %]" data-detailsid="[% publication.details_id %]" data-publicationid="[% publication.publication_id %]" title="delete" class="pointer img-publications-delete">
+	[% ELSIF publication.status == 3 && execute_right %]
+		<img src="[% webroot %]/images/icon_sent_to.png" alt="show publishing details" title="show publishing details" class="pointer img-publications-sentto" data-publicationid="[% publication.publication_id %]" data-pubtype="[% pub_type %]">
+	[% ELSE %]
+		<img src="[% webroot %]/images/icon_none.png" class="img-publications-placeholder" data-publicationid="[% publication.publication_id %]" alt="no icon"> 
+	[% END %]
+	</div>
+
+[% IF renderItemContainer %]		
+</div>
+[% END %]

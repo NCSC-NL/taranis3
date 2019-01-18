@@ -1,0 +1,44 @@
+#!perl
+# late link items to an advisory, use publication_id not details_id
+
+use warnings;
+use strict;
+
+sub {
+	my ($db, %args) = @_;
+
+	$db->query( <<'__RUN__');
+
+DROP TABLE advisory_linked_items;
+
+__RUN__
+
+	$db->query( <<'__RUN__');
+
+CREATE TABLE advisory_linked_items (
+	id integer DEFAULT nextval(' advisory_linked_items_id_seq'::regclass) NOT NULL,
+    created timestamp with time zone default now(),
+    item_digest character varying(50) NOT NULL,
+    publication_id integer NOT NULL
+);
+
+__RUN__
+
+	$db->query( <<'__RUN__');
+
+ALTER TABLE advisory_linked_items
+	ADD CONSTRAINT fk_advisory_linked_item_digest
+    FOREIGN KEY (item_digest) REFERENCES item(digest);
+
+__RUN__
+
+
+	$db->query( <<'__RUN__');
+
+ALTER TABLE advisory_linked_items
+	ADD CONSTRAINT fk_advisory_linked_items_publication_id
+    FOREIGN KEY (publication_id) REFERENCES publication(id);
+
+__RUN__
+
+};

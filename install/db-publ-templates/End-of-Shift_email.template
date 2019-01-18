@@ -1,0 +1,82 @@
+<publication>
+<template><![CDATA[
+--- TLP:AMBER / Departementaal Vertrouwelijk / Intern ---
+(https://first.org/tlp/)
+
+================
+= Shiftrapport =
+================
+Periode:     _fld_timeframe_begin_ &minus; _fld_timeframe_end_
+Handler:     _fld_handler_
+
+_fld_notes_
+
+=================
+= Contacten log =
+=================
+_fld_contact_log_
+
+==================
+= Incidenten log =
+==================
+_fld_incident_log_
+
+===============
+= To-do lijst =
+===============
+_fld_todo_
+
+======================
+= Interesse gebieden =
+======================
+_fld_special_interest_
+
+=======================================
+= Afgehandeld, Verwijderd en Verlopen =
+=======================================
+_fld_done_
+
+--- TLP:AMBER / Departementaal Vertrouwelijk / Intern ---
+]]></template>
+
+<fields>
+    <fld_timeframe_begin type="database">
+        <tbl type="key" column="id">publication_endofshift</tbl>
+        <tbl type="select_date_Dutch" column="timeframe_begin">publication_endofshift</tbl>
+    </fld_timeframe_begin>
+    <fld_timeframe_end type="database">
+        <tbl type="key" column="id">publication_endofshift</tbl>
+        <tbl type="select_date_Dutch" column="timeframe_end">publication_endofshift</tbl>
+    </fld_timeframe_end>
+    <fld_handler type="database">
+        <tbl type="select" column="fullname" alias="handler">users</tbl>
+        <tbl type="key" column="id">publication_endofshift</tbl>
+        <tbl type="join1" column="handler">publication_endofshift</tbl>
+        <tbl type="join2" column="username">users</tbl>
+    </fld_handler>
+    <fld_notes type="database">
+        <tbl type="key" column="id">publication_endofshift</tbl>
+        <tbl type="select" column="notes">publication_endofshift</tbl>
+    </fld_notes>
+    <fld_contact_log type="database">
+        <tbl type="key" column="id">publication_endofshift</tbl>
+        <tbl type="select" column="contact_log">publication_endofshift</tbl>
+    </fld_contact_log>
+    <fld_incident_log type="database">
+        <tbl type="key" column="id">publication_endofshift</tbl>
+        <tbl type="select" column="incident_log">publication_endofshift</tbl>
+    </fld_incident_log>
+    <fld_todo type="database">
+        <tbl type="key" column="id">publication_endofshift</tbl>
+        <tbl type="select" column="todo">publication_endofshift</tbl>
+    </fld_todo>
+    <fld_special_interest type="database">
+        <tbl type="key" column="id">publication_endofshift</tbl>
+        <tbl type="select" column="special_interest">publication_endofshift</tbl>
+    </fld_special_interest>
+    <fld_done type="database">
+        <tbl type="key" column="id">publication_endofshift</tbl>
+        <tbl type="select" column="done">publication_endofshift</tbl>
+    </fld_done>
+</fields>
+</publication>

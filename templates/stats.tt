@@ -1,0 +1,36 @@
+<div id="stats-content-heading" class="content-heading">
+	<div id="stats-content-heading-source" class="block">
+		<span>Source</span>
+	</div>
+
+	<div id="stats-content-heading-description" class="block">
+		<span>Description/Image</span>
+	</div>
+
+</div>
+
+[% IF stats && stats.size > 0 %]
+	[% FOREACH stat IN stats %]
+
+	<div class="stats-item item-row">
+		<div class="stats-item-icon block">
+			<img src="[% webroot %]/images/icons/[% stat.source %].gif" alt="[% stat.source %]">
+		</div>		
+	
+		<div class="stats-item-url block">
+			<div class="stats-description block bold">[% stat.description %]</div><br>
+			<a href="[% stat.link%]">
+				<img src='loadfile/statistics/stats/loadImage?params=[% stat.image_src %]' class="stats-image" alt="[% stat.description %]">
+			</a>
+		</div>		
+	</div>
+
+	[% END %]
+[% ELSE %]
+<div class="item-row">No stats found...</div>
+
+[% END %]
+
+<div class="action-block filter-block-separator">
+	
+</div>
