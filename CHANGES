@@ -1,5 +1,6 @@
 
 = release 3.5.1
+  - #266 Analysis open crashes list on the background
 
 = release 3.5.0
   Fri Jan 18 13:29:24 CET 2019

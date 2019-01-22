@@ -224,6 +224,7 @@ sub _searchAnalyses($%) {
 	);
 
 	my $where    = join "\n    AND ", @where;
+
 	my $analyses = $self->{db}->query(<<__SEARCH_ANALYSES, @binds) or return;
  SELECT ana.id, ana.title, ana.comments AS description, ana.idstring,
         TO_CHAR(ana.orgdatetime, 'DD-MM-YYYY HH24:MI:SS:MS') AS date
@@ -430,16 +431,23 @@ sub _addSearchFilters($$$$) {
 	my ($self, $where, $binds, $prefix, $prefs) = @_;
 	$prefs or return ();
 
+	# Product specific search fields do not specify whether the come from
+	# the pu table (are generic) or the details table (specific)  So in that
+	# case, we let postgres decide.
+	$prefix = undef if $prefix eq 'details';
+
 	foreach my $field (sort keys %$prefs) {
 		my $content = $prefs->{$field};
 		defined $content && length $content or next;
 		next if $field =~ /^search/;  # skip group enabled flag
 
+		my $fieldname = defined $prefix ? "$prefix.$field" : $field;
+
 		if($content =~ /\D/) {
-			push @$where, "$prefix.$field ILIKE ?";
+			push @$where, "$fieldname ILIKE ?";
 			push @$binds, $content;
 		} else {
-			push @$where, "$prefix.$field = $content";
+			push @$where, "$fieldname = $content";
 		}
 	}
 }
@@ -558,7 +566,7 @@ sub _addSearchQuestion($$$%) {
 
 sub _wordFilter($$$) {
 	my ($self, $binds, $words, $args) = @_;
-	$words && @$words or return undef;
+	$words && @$words or return ();
 
 	my $all_columns = $args->{columns} or confess;
 	my $nr_columns  = @$all_columns;
@@ -594,7 +602,7 @@ sub _wordFilterBlock($$%) {
 
 sub _tagFilter($$) {
 	my ($self, $binds, $tags, $args) = @_;
-	$tags && @$tags or return undef;
+	$tags && @$tags or return ();
 
 	my $where = join ' OR ', ("tag.name ILIKE ?") x @$tags;
 	push @$binds, @$tags;
@@ -665,7 +673,7 @@ sub _certidFilterFields($$$) {
 			push @$binds, "%$certid %", "%$certid";
 		}
 	}
-	'(' . join(' OR ', @where) . ')';
+	@where > 1 ? '(' . join(' OR ', @where) . ')' : @where;
 }
 
 sub _certidFilterFieldsFind($$%) {
