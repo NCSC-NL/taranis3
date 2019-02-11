@@ -29,6 +29,7 @@ centos_packages
 	'perl-version',
 	'perl-CPAN',
 	'perl-Data-Dumper',  # to be able to create the CPAN Config
+	'perl-File-Remove',  # needed by "taranis install"
 	'policycoreutils-python',
 	;
 

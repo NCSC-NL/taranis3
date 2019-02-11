@@ -33,6 +33,7 @@ redhat_packages
 	'perl-YAML',         # to speed-up perl module installation
 	'perl-version',
 	'perl-CPAN',
+	'perl-File-Remove',  # needed by "taranis install"
 	'libxml2-devel',     # for XML::LibXML
 	'expat-devel',       # for XML::Parser
 	;

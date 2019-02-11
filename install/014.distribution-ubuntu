@@ -27,6 +27,7 @@ ubuntu_packages
 	'g++',
 	'libjson-perl',      # need it early for configuration setup
 	'libyaml-perl',      # to speed-up perl module installation
+	'libfile-remove-perl',  # needed by "taranis install"
 	;
 
 exit 0;

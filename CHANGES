@@ -1,6 +1,7 @@
 
 = release 3.5.1
   - #266 Analysis open crashes list on the background
+  - #269 (E#19) 3da4d262 at install
 
 = release 3.5.0
   Fri Jan 18 13:29:24 CET 2019

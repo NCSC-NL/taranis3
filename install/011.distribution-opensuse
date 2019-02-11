@@ -26,6 +26,7 @@ my @packages = (
 	'wget',              # to access CPAN
 	'perl-JSON',         # need it early for configuration setup
 	'perl-YAML',         # to speed-up perl module installation
+	'perl-File-Remove',  # needed by "taranis install"
 );
 
 # gcc development headers are required to compile XS, f.i. XML::LibXML
