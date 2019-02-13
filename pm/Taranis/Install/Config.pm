@@ -113,10 +113,11 @@ sub set_default_release(%) {
 sub installed_versions() {
 	my $generic = config_generic;
 
-	my $home    = $generic->{home} or confess;
+	my $etc    = $generic->{etc} or confess;
 	my %versions;
-	foreach my $subdir (bsd_glob "$home/taranis-*") {
-		$versions{$1} = $subdir if $subdir =~ m{/taranis-([0-9a-z.-]+)$};
+	foreach my $setup (bsd_glob "$etc/setup-*") {
+		(my $version) = $setup =~ m/setup\-(.*)\.json$/ or next;
+		$versions{$1} = $setup if $version ne 'generic';
 	}
 
 	\%versions;

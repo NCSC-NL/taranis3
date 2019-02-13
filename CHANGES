@@ -1,5 +1,6 @@
 
 = release 3.5.1
+  - #241 Profile generation dies when distribution in /home/taranis
   - #266 Analysis open crashes list on the background
   - #269 (E#19) 3da4d262 at install
 

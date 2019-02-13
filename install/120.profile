@@ -35,9 +35,11 @@ my $latest_version  = $versions[-1][0];   # latest installed, not git
 my @menu;
 foreach my $v (@versions) {
 	my ($version, $loc, $is_sel) = @$v;
-	$loc ||= 'not (yet) installed';
-	$loc  .= ' (branch "$GIT_CHECKOUT")' if $version eq 'git';
-	push @menu, sprintf "  %1s %-15s %s", ($is_sel ? '*' : ' '), $version, $loc;
+	my $msg
+	  = $version eq 'git'             ? 'branch "$GIT_CHECKOUT"'
+	  : ! -d "$home/taranis-$version" ? 'not (yet) installed'
+	  :                                 'installed';
+	push @menu, sprintf "  %1s %-15s %s", ($is_sel ? '*' : ' '), $version, $msg;
 }
 
 my @options;
