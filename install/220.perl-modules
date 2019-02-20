@@ -37,6 +37,7 @@ my @dependencies = qw(
 	Encode::IMAPUTF7				0
 	Error							0
 	File::Compare                   0
+	File::Glob                      0
 	File::Remove					0
 	File::Slurper					0
 	File::Spec::Functions           0

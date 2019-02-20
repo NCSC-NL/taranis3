@@ -1,7 +1,11 @@
 
-= release 3.5.1
+= release 3.5.2
 
+  - #271 (E#21) sudoers file incorrect.
+
+= release 3.5.1
 Thu Feb 14 08:36:24 CET 2019
+
   - #241 Profile generation dies when distribution in /home/taranis
   - #266 Analysis open crashes list on the background
   - #269 (E#19) 3da4d262 at install
