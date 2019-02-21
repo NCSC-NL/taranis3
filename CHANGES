@@ -2,6 +2,7 @@
 = release 3.5.2
 
   - #271 (E#21) sudoers file incorrect.
+  - #265 include analyses and advisories in advanced search output
 
 = release 3.5.1
 Thu Feb 14 08:36:24 CET 2019

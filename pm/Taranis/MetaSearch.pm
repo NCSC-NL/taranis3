@@ -128,7 +128,7 @@ sub search(%) {
 	#XXX working towards separate tabs for search categories
 	# \%results;
 	$self->_sortScores(map @{$results{$_} || []},
-		qw/items analyses eow eos eod/ );
+		qw/items analysis eow eos eod advisories/ );
 }
 
 sub _getTags($$) {
@@ -812,12 +812,14 @@ sub _score($%) {
 	# This is also needed to avoid double scores: the result hash does
 	# not like that...
 
-	use bignum;
-	$dbdate =~ m/(..).(..).(....).(..).(..).(..).(..)/;
-	my $date   = "$3$2$1$4$5$6$7";
-	$score    += $date / 10_000_000_000_000_000;
-	$log      .= '+ ' . ($date / 10_000_000_000_000_000) . " timestamp\n";
-	no bignum;
+	if($dbdate =~ m/(..).(..).(....).(..).(..).(..)/) {
+		my $date   = "$3$2$1$4$5$6";
+		$score    += $date / 100_000_000_000_000;
+		$log      .= '+ ' . ($date / 100_000_000_000_000) . " timestamp\n";
+	} else {
+		$score++;
+		$log      .= "+ 1 for undated\n";
+	}
 
 	$self->{log}->("$scored{type} score: $score - $scored{title} =\n$log");
 
