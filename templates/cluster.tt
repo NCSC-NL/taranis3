@@ -1,0 +1,23 @@
+<div id="cluster-content-heading" class="content-heading">
+	<div id="cluster-content-heading-category" class="block">
+		<span>Category</span>
+	</div>
+	<div id="cluster-content-heading-language" class="block">
+		<span>Language</span>
+	</div>
+</div>
+
+[% IF clusters && clusters.size > 0 %]
+	[% FOREACH cluster IN clusters %]
+	
+		[% INCLUDE cluster_item.tt %]
+	
+	[% END %]
+[% ELSE %]
+<div class="item-row" id="empty-row">No clusters found...</div>
+
+[% END %]
+
+<div class="action-block filter-block-separator">
+	<div class="center" id="number-of-results">&mdash; [% numberOfResults %] results &mdash;</div>
+</div>

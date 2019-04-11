@@ -1,0 +1,33 @@
+[% USE date %]
+<div class="dossier-item-timeline-note">
+	<div class="dossier-item-timeline-note-content">
+		<span class="dossier-item-timeline-timestamp">[% date.format( note.created.stripSeconds,  format = ' %H:%M %A %d %B %Y' ) %][% IF note.created_by; ' by ' _ note.created_by; END %]</span><br>
+		<pre>[% note.text %]</pre>
+	</div>
+	[% IF note.urls.size > 0 || note.files.size > 0 || note.tickets.size > 0 %]
+	<div class="dossier-item-timeline-note-content">
+		[% FOREACH url IN note.urls %]
+			<div class="block">
+				[ <span class="dossier-item-link-head">URL</span> :: <a href="[% url.url %]" title="[% url.url %]" target="_blank">[% url.description || url.url %]</a> ]
+			</div>
+		[% END %]
+		[% FOREACH file IN note.files %]
+			<div class="block">[
+				<span class="dossier-item-link-head">FILE</span> :: <span class="span-link dossier-item-link-file" data-fileid="[% file.id %]" title="[% file.name %]">[% file.name %]</span> :: 
+			[% IF file.size > 1000000 %]
+			 	[% file.size div 1000000 %]mb
+			[% ELSIF file.size > 1000 %]
+				[% file.size div 1000 %]kb
+			[% ELSE %]
+				[% file.size %]b
+			[% END %]
+			] </div>
+		[% END %]
+		[% FOREACH ticket IN note.tickets %]
+			<div class="block">
+				[ <span class="dossier-item-link-head">TICKET</span> :: <a href="[% ticketURL _ ticket.reference %]" target="_blank" title="[% ticket.reference %]">[% ticket.reference %]</a> ]
+			</div> 
+		[% END %]
+	</div>
+	[% END %]
+</div>

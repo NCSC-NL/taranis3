@@ -1,0 +1,31 @@
+[% IF renderItemContainer %]
+<div class="cve-item item-row" id="[% cve.identifier %]">
+[% END %]
+		
+	<div class="cve-item-id block">
+		<span>[% cve.identifier %]</span>
+	</div>
+	<div class="cve-item-published block">
+		<span>[% cve.published_date %]</span>
+	</div>
+	<div class="cve-item-modified block">
+		<span>[% cve.modified_date %]</span>
+	</div>
+	<div class="cve-item-has-translation center block">
+		[% IF cve.custom_description != '' %]
+		<span class="cve-item-has-translation-yes bold padding-default" title="a custom translation has been added">YES</span>
+		[% ELSE %]
+		<span class="cve-item-has-translation-no bold padding-default" title="a custom translation has NOT been added">NO</span>
+		[% END %]
+	</div>
+
+	<div class="block align-block-right">
+	[% IF write_right %]
+		<img src="[% webroot %]/images/icon_modify.png" alt="edit" title="edit cve description" class="pointer btn-edit-cve-description" data-id="[% cve.identifier %]">
+	[% ELSE %]
+		<img src="[% webroot %]/images/icon_details.png" alt="view" title="view cve details" class="pointer btn-view-cve-description" data-id="[% cve.identifier %]">
+	[% END %]
+	</div>
+[% IF renderItemContainer %]
+</div>
+[% END %]

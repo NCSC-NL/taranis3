@@ -1,0 +1,21 @@
+<table class="default-table align-left">
+	<thead>
+		<tr>
+			<th>opened by</th>
+			<th>owned by</th>
+			<th>analysis ID</th>
+			<th>title</th>
+		</tr>
+	</thead>
+	<tbody ng-repeat="analysis in analyses.result" ng-class-odd="'oneven'">
+		<tr ng-if="$index < 10">
+			<td>{{ analysis.opened_by }}</td>
+			<td>{{ analysis.owned_by }}</td>
+			<td class="font-monospace bold">AN-{{ analysis.id|substring:0:4 }}-{{ analysis.id|substring:4}}</td>
+			<td class="marked"><a ng-href="#/analyses/{{ analysis.id }}">{{ analysis.title }}</a></td>
+		</tr>
+		<tr ng-if="$index >= 10 && $last" class="oneven">
+			<td colspan="4">(plus {{ $index - 9 }} more analyses)</td>
+		</tr>
+	</tbody>
+</table>

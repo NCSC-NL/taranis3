@@ -1,0 +1,25 @@
+<div class="filter-block filter-block-separator">
+
+	<form id="form-report-contact-log-search">
+		<div class="block">
+			<label for="report-contact-log-filters-search">Search</label><br>
+			<input id="report-contact-log-filters-search" name="search" type="text" class="input-default search-default">
+		</div>
+		<div class="block">
+			<span>&nbsp;</span>
+			<input type="button" id="btn-report-contact-log-search" class="button" value="Search!">
+		</div>
+	</form>
+</div>
+
+<div class="action-block filter-block-separator">
+	[% IF write_right %]
+	<div class="block">
+		<input type="button" id="btn-add-report-contact-log" class="button" value="Add new contact log entry">
+	</div>
+	[% END %]
+
+	<div class="block align-block-right">
+		<span class="bold page-title">Report Contact Log</span>
+	</div>
+</div>

@@ -1,0 +1,20 @@
+[% IF renderItemContainer %]
+<div class="strips-item item-row" id="[% strips.hostname | uri %]">
+[% END %]
+	
+	<div class="strips-item-name block">
+		<span>[% strips.hostname %]</span>
+	</div>		
+
+	<div class="block align-block-right">
+	[% IF write_right %]
+		<img src="[% webroot %]/images/icon_modify.png" alt="edit" title="edit strip" class="pointer btn-edit-strips" data-id="[% strips.hostname %]">
+		<img src="[% webroot %]/images/icon_delete.png" alt="delete" title="delete strip" class="pointer btn-delete-strips" data-id="[% strips.hostname %]">
+	[% ELSE %]
+		<img src="[% webroot %]/images/icon_details.png" alt="view" title="view details" class="pointer btn-view-strips" data-id="[% strips.hostname %]">
+	[% END %]
+
+	</div>
+[% IF renderItemContainer %]
+</div>
+[% END %]

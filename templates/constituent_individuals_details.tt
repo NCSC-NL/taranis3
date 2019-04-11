@@ -1,0 +1,146 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden[% END %] ui-state-error ui-corner-all">[% message %]</div>
+
+	[% IF constituentIndividual.firstname || constituentIndividual.lastname %]
+	<div class="dialog-title">
+		<span>[% constituentIndividual.firstname _ ' ' _  constituentIndividual.lastname %]</span>	
+	</div>
+	[% END %]
+	
+	<form id="constituent-individual-details-form" data-id="[% IF constituentIndividual.id; constituentIndividual.id; ELSE; 'NEW'; END %]">
+
+		<div id="constituent-individual-details-tabs" class="dialog-tabs">
+			<ul>
+				<li><a href="#constituent-individual-details-tabs-general">General</a></li>
+				<li><a href="#constituent-individual-details-tabs-groups">Groups</a></li>
+				<li><a href="#constituent-individual-details-tabs-publication-types">Publication types</a></li>
+			</ul>
+
+<!-- TAB GENERAL -->
+			<div id="constituent-individual-details-tabs-general">
+				<fieldset>
+
+					[% IF roles.size == 0 %]
+					<p class="red-font">You have not defined any roles for
+					individuals yet.  Please first configure one.</p>
+					[% END %]
+
+					<div class="dialog-input-wrapper block">
+						<label for="constituent-individual-details-firstname" class="dialog-input-label">First name*</label><br>
+						<input type="text" value="[% constituentIndividual.firstname %]" name="firstname" id="constituent-individual-details-firstname" class="input-default dialog-input-text-wider">
+					</div><br>
+					
+					<div class="dialog-input-wrapper block">
+						<label for="constituent-individual-details-lastname" class="dialog-input-label">Last Name*</label><br>
+						<input type="text" value="[% constituentIndividual.lastname %]" name="lastname" id="constituent-individual-details-lastname" class="input-default dialog-input-text-wider">
+					</div><br>
+
+					<div class="dialog-input-wrapper block">
+						<label for="constituent-individual-details-emailaddress" class="dialog-input-label">Email address</label><br>
+						<input type="text" value="[% constituentIndividual.emailaddress %]" name="emailaddress" id="constituent-individual-details-emailaddress" class="input-default dialog-input-text-wider">
+					</div><br>
+
+					<div class="dialog-input-wrapper block">
+						<label for="constituent-individual-details-tel-mobile" class="dialog-input-label">Phone (mobile)</label><br>
+						<input type="text" value="[% constituentIndividual.tel_mobile %]" name="tel_mobile" id="constituent-individual-details-tel-mobile" class="input-default dialog-input-text-narrow">
+					</div><br>
+
+					<div class="dialog-input-wrapper block">
+						<label for="constituent-individual-details-tel-regular" class="dialog-input-label">Phone (regular)</label><br>
+						<input type="text" value="[% constituentIndividual.tel_regular %]" name="tel_regular" id="constituent-individual-details-tel-regular" class="input-default dialog-input-text-narrow">
+					</div><br>
+
+					<div class="dialog-input-wrapper block">
+						<span class="dialog-input-label">Role*</span><br>
+						<select name="role" id="constituent-individual-details-role" class="select-single dialog-input-text">
+							[% FOREACH role IN roles %]
+								<option value="[% role.id %]" [% IF constituentIndividual.role == role.id %]selected="selected"[% END %]>[% role.role_name %]</option>
+							[% END %]
+						</select>
+					</div><br>
+
+					<div class="dialog-input-wrapper block">
+						<span class="dialog-input-label">Status*</span><br>
+						<select name="status" id="constituent-individual-details-status" class="select-single dialog-input-text">
+							<option value="0" [% IF constituentIndividual.status == 0 %]selected="selected"[% END %]>Normal</option>
+							<option value="2" [% IF constituentIndividual.status == 2 %]selected="selected"[% END %]>Temporarily disabled</option>
+						</select>
+					</div><br>
+
+					<div class="dialog-input-wrapper block">
+						<span class="dialog-input-label">Call 24/7*</span><br>
+						<input type="radio" name="call247" id="constituent-individual-details-call247-yes" value="1" [% IF constituentIndividual.call247 == 1 %] checked="checked"[% END %]> 
+						<label for="constituent-individual-details-call247-yes">Yes</label>
+						<input type="radio" name="call247" id="constituent-individual-details-call247-no" value="0" [% IF constituentIndividual.call247 == 0 %] checked="checked"[% END %]>
+						<label for="constituent-individual-details-call247-no">No</label>
+					</div><br>
+
+					<div class="dialog-input-wrapper block">
+						<span class="dialog-input-label">Call for H/H incident*</span><br>
+						<input type="radio" name="call_hh" id="constituent-individual-details-call-hh-yes" value="1" [% IF constituentIndividual.call_hh == 1 %] checked="checked"[% END %]> 
+						<label for="constituent-individual-details-call-hh-yes">Yes</label>
+						<input type="radio" name="call_hh" id="constituent-individual-details-call-hh-no" value="0" [% IF constituentIndividual.call_hh == 0 %] checked="checked"[% END %]>
+						<label for="constituent-individual-details-call-hh-no">No</label>
+					</div><br>
+					
+				</fieldset>
+			</div>
+			
+<!-- TAB GROUPS -->
+			<div id="constituent-individual-details-tabs-groups">
+				<fieldset>
+					<div class="select-two-columns dialog-input-wrapper">
+						<div class="inline">
+							<span class="dialog-input-label">Group memberships</span><br>
+							<select multiple="multiple" name="membership_groups" id="constituent-individual-details-membership-groups" size="25" class="select-multiple select-left select-multiple-wide">
+								[% FOREACH group IN membership_groups %]
+								<option value="[% group.id %]" title="[% group.name %][% IF group.status != 0 %] TEMPORARILY DISABLED[% END %]" [% IF group.status != "0" %]class="strikethrough"[% END %]>[% group.name %]</option>
+								[% END %]
+							</select>
+						</div>
+						<div class="option-left-right">	
+							<input type="button" class="button btn-option-to-left btn-add-member" value="&lt;"><br><br>
+							<input type="button" class="button btn-option-to-right btn-remove-member" value="&gt;">
+						</div>
+						<div class="inline">
+							<span class="dialog-input-label">All groups</span><br>
+							<select multiple="multiple" name="all_groups" id="constituent-individual-details-all-groups" size="25" class="select-multiple select-right select-multiple-wide">
+								[% FOREACH group IN all_groups %]
+								<option value="[% group.id %]" title="[% group.name %][% IF group.status != 0 %] TEMPORARILY DISABLED[% END %]" [% IF group.status != "0" %]class="strikethrough"[% END %]>[% group.name %]</option>
+								[% END %]
+							</select>
+						</div>
+					</div>
+				</fieldset>
+			</div>
+
+<!-- TAB PUBLICATION TYPES -->
+			<div id="constituent-individual-details-tabs-publication-types">
+				<fieldset>
+					<div class="select-two-columns dialog-input-wrapper">
+						<div class="inline">
+							<span class="dialog-input-label">Selected publication types</span><br>
+							<select multiple="multiple" name="selected_types" id="constituent-individual-details-selected-types" size="25" class="select-multiple select-left select-multiple-wide">
+								[% FOREACH type IN selected_types %]
+								<option value="[% type.id %]" title="[% type.title %]" [% IF type.group_status != 0 %]class="strikethrough"[% END %]>[% type.title %]</option>
+								[% END %]
+							</select>
+						</div>
+						<div class="option-left-right">	
+							<input type="button" class="button btn-option-to-left" value="&lt;"><br><br>
+							<input type="button" class="button btn-option-to-right" value="&gt;">
+						</div>
+						<div class="inline">
+							<span class="dialog-input-label">All publication types</span><br>
+							<select multiple="multiple" name="all_types" id="constituent-individual-details-all-types" size="25" class="select-multiple select-right select-multiple-wide">
+								[% FOREACH type IN all_types %]
+								<option value="[% type.id %]" title="[% type.title %]" [% IF type.group_status != 0 %]class="strikethrough"[% END %]>[% type.title %]</option>
+								[% END %]
+							</select>
+						</div>
+					</div>
+				</fieldset>
+			</div>
+		</div>
+	</form>
+</div>

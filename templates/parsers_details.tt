@@ -1,0 +1,135 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden[% END %] ui-state-error ui-corner-all">[% message %]</div>
+
+	[% IF parser.parsername %]
+	<div class="dialog-title">
+		<span>[% parser.parsername %]</span>	
+	</div>
+	[% END %]
+	
+	<form id="parsers-details-form" data-id="[% IF parser.parsername; parser.parsername; ELSE; 'NEW'; END %]">
+
+		<div id="parsers-details-tabs" class="dialog-tabs">
+			<ul>
+				<li><a href="#parsers-details-tabs-general">General</a></li>
+				[% IF parser.parsername %]
+				<li><a href="#parsers-details-tabs-sources">Sources</a></li>
+				[% END %]
+			</ul>
+
+<!-- TAB GENERAL -->
+			<div id="parsers-details-tabs-general">
+				<fieldset>
+					[% IF parser.parsername %]
+					<div class="dialog-input-wrapper block">
+						<label for="parsers-details-parsername" class="dialog-input-label">Parser name</label><br>
+						<span>[% parser.parsername %]</span>
+					</div><br>
+					[% ELSE %]
+					<div class="dialog-input-wrapper block">
+						<label for="parsers-details-parsername" class="dialog-input-label">Parser name *</label><br>
+						<input type="text" value="[% parser.parsername %]" name="parsername" id="parsers-details-parsername" class="input-default dialog-input-text-wide">
+					</div><br>
+					[% END %]
+					
+					<div class="dialog-input-wrapper block">
+						<label for="parsers-details-item-start" class="dialog-input-label parser-details-tags">Item start *</label>
+						<label for="parsers-details-item-end" class="dialog-input-label parser-details-tags">Item end *</label><br>
+						<input type="text" value="[% parser.item_start %]" name="item_start" id="parsers-details-item-start" class="input-default dialog-input-text-normal">
+						<input type="text" value="[% parser.item_stop %]" name="item_stop" id="parsers-details-item-end" class="input-default dialog-input-text-normal">
+					</div><br>
+
+					<div class="dialog-input-wrapper block">
+						<label for="parsers-details-title-start" class="dialog-input-label parser-details-tags">Title start *</label>
+						<label for="parsers-details-title-end" class="dialog-input-label parser-details-tags">Title end *</label><br>
+						<input type="text" value="[% parser.title_start %]" name="title_start" id="parsers-details-title-start" class="input-default dialog-input-text-normal">
+						<input type="text" value="[% parser.title_stop %]" name="title_stop" id="parsers-details-title-end" class="input-default dialog-input-text-normal">
+					</div><br>
+
+					<div class="dialog-input-wrapper block">
+						<label for="parsers-details-description-start" class="dialog-input-label parser-details-tags">Description start</label>
+						<label for="parsers-details-description-end" class="dialog-input-label parser-details-tags">Description end</label><br>
+						<input type="text" value="[% parser.desc_start %]" name="desc_start" id="parsers-details-description-start" class="input-default dialog-input-text-normal">
+						<input type="text" value="[% parser.desc_stop %]" name="desc_stop" id="parsers-details-description-end" class="input-default dialog-input-text-normal">
+					</div><br>
+
+					<div class="dialog-input-wrapper block">
+						<label for="parsers-details-link-start" class="dialog-input-label parser-details-tags">Link start *</label>
+						<label for="parsers-details-link-end" class="dialog-input-label parser-details-tags">Link end *</label><br>
+						<input type="text" value="[% parser.link_start %]" name="link_start" id="parsers-details-link-start" class="input-default dialog-input-text-normal">
+						<input type="text" value="[% parser.link_stop %]" name="link_stop" id="parsers-details-link-end" class="input-default dialog-input-text-normal">
+					</div><br>
+					
+					<div class="dialog-input-wrapper block">
+						<label for="parsers-details-link-prefix" class="dialog-input-label">Overrule base for relative links</label><br>
+						<input type="text" value="[% parser.link_prefix %]" name="link_prefix" id="parsers-details-link-prefix" class="input-default dialog-input-text-wide">
+					</div><br>
+
+					<div class="dialog-input-wrapper block">
+						<label for="parsers-details-strip0-start" class="dialog-input-label parser-details-tags">Strip (1) start</label>
+						<label for="parsers-details-strip0-end" class="dialog-input-label parser-details-tags">Strip (1) end</label><br>
+						<input type="text" value="[% parser.strip0_start %]" name="strip0_start" id="parsers-details-strip0-start" class="input-default dialog-input-text-normal">
+						<input type="text" value="[% parser.strip0_stop %]" name="strip0_stop" id="parsers-details-strip0-end" class="input-default dialog-input-text-normal">
+					</div><br>
+
+					<div class="dialog-input-wrapper block">
+						<label for="parsers-details-strip1-start" class="dialog-input-label parser-details-tags">Strip (2) start</label>
+						<label for="parsers-details-strip1-end" class="dialog-input-label parser-details-tags">Strip (2) end</label><br>
+						<input type="text" value="[% parser.strip1_start %]" name="strip1_start" id="parsers-details-strip1-start" class="input-default dialog-input-text-normal">
+						<input type="text" value="[% parser.strip1_stop %]" name="strip1_stop" id="parsers-details-strip1-end" class="input-default dialog-input-text-normal">
+					</div><br>
+
+					<div class="dialog-input-wrapper block">
+						<label for="parsers-details-strip2-start" class="dialog-input-label parser-details-tags">Strip (3) start</label>
+						<label for="parsers-details-strip2-end" class="dialog-input-label parser-details-tags">Strip (3) end</label><br>
+						<input type="text" value="[% parser.strip2_start %]" name="strip2_start" id="parsers-details-strip2-start" class="input-default dialog-input-text-normal">
+						<input type="text" value="[% parser.strip2_stop %]" name="strip2_stop" id="parsers-details-strip2-end" class="input-default dialog-input-text-normal">
+					</div><br>
+
+				</fieldset>
+			</div>
+			
+			[% IF parser.parsername %]
+			<div id="parsers-details-tabs-sources">
+				<fieldset>
+					<div class="dialog-input-wrapper block">
+						
+						[% IF sources.size > 0 %]
+						<table class="dialog-table">
+							<thead>
+								<tr>
+									<th class="bold">Source</th>
+									<th class="bold">Category</th>
+									<th class="bold">Url</th>
+								</tr>
+							</thead>
+							<tbody>
+							[% FOREACH source IN sources %]
+								<tr class="item-row">
+									<td>[% source.sourcename %]</td>
+									<td>[% source.category %]</td>
+									<td>
+										<a href="[% source.fullurl %]" target="_blank" title="[% source.fullurl %]">
+										[% IF source.fullurl.length > 70 %]
+											[% source.fullurl.substr( 70, source.fullurl.length, '...') %]
+										[% ELSE %]
+											[% source.fullurl %]
+										[% END %]
+										</a>
+									</td>
+								</tr>
+							[% END %]							
+							</tbody>
+						</table>
+						
+						[% ELSE %]
+						<span>There are no sources using this parser.</span>
+						[% END %]
+					</div><br>
+				</fieldset>
+			</div>
+			[% END %]
+			
+		</div>
+	</form>
+</div>

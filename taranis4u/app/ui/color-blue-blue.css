@@ -1,0 +1,87 @@
+.main-color {
+  color: #2024fb;
+  background-color: #9597fd;
+}
+hr {
+  background-color: #2024fb;
+}
+.nav-item,
+.nav-list-item {
+  color: inherit;
+}
+.nav-item:hover,
+.nav-list-item:hover {
+  color: #9597fd;
+  background-color: #2024fb;
+}
+.marked {
+  color: #2a2a2a;
+}
+h4 {
+  color: #5255fc;
+}
+h3 {
+  color: #8486fd;
+}
+h2 {
+  color: #b6b8fe;
+}
+h1 {
+  color: #e8e9ff;
+}
+#loading-bar {
+  background: #2024fb !important;
+}
+.default-table,
+.compact-table {
+  border: 1px solid #aeb0fd;
+}
+.default-table th,
+.compact-table th {
+  color: #9597fd;
+  background-color: #2024fb;
+}
+.default-table .oneven,
+.compact-table .oneven {
+  background-color: #aeb0fd;
+}
+/* tagcloud */
+div.jqcloud {
+  color: #2024fb;
+}
+div.jqcloud a {
+  color: #5255fc;
+}
+div.jqcloud a:hover {
+  color: #8486fd;
+}
+div.jqcloud span.w10 {
+  color: #ffffff;
+}
+div.jqcloud span.w9 {
+  color: #ffffff;
+}
+div.jqcloud span.w8 {
+  color: #e8e9ff;
+}
+div.jqcloud span.w7 {
+  color: #cfd0fe;
+}
+div.jqcloud span.w6 {
+  color: #b6b8fe;
+}
+div.jqcloud span.w5 {
+  color: #9d9ffd;
+}
+div.jqcloud span.w4 {
+  color: #8486fd;
+}
+div.jqcloud span.w3 {
+  color: #6b6efc;
+}
+div.jqcloud span.w2 {
+  color: #5255fc;
+}
+div.jqcloud span.w1 {
+  color: #393dfb;
+}

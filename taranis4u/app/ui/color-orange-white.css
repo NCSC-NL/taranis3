@@ -1,0 +1,86 @@
+.main-color {
+  color: #ffead9;
+  background-color: #ff831e;
+}
+hr {
+  background-color: #ffead9;
+}
+.nav-item,
+.nav-list-item {
+  color: inherit;
+}
+.nav-item:hover,
+.nav-list-item:hover {
+  color: #ff831e;
+  background-color: #ffead9;
+}
+.marked {
+  color: #2a2a2a;
+}
+h4 {
+  color: #ffffff;
+}
+h3 {
+  color: #fffbf8;
+}
+h2 {
+  color: #fff5ed;
+}
+h1 {
+  color: #fff0e3;
+}
+#loading-bar {
+  background: #ffead9 !important;
+}
+.default-table,
+.compact-table {
+  border: 1px solid #ff7504;
+}
+.default-table th,
+.compact-table th {
+  color: #ff831e;
+  background-color: #ffead9;
+}
+.default-table .oneven,
+.compact-table .oneven {
+  background-color: #ff7504;
+}
+div.jqcloud {
+  color: #ffead9;
+}
+div.jqcloud a {
+  color: #ffffff;
+}
+div.jqcloud a:hover {
+  color: #ffffff;
+}
+div.jqcloud span.w10 {
+  color: #fff8f3;
+}
+div.jqcloud span.w9 {
+  color: #ffffff;
+}
+div.jqcloud span.w8 {
+  color: #ffffff;
+}
+div.jqcloud span.w7 {
+  color: #ffffff;
+}
+div.jqcloud span.w6 {
+  color: #ffffff;
+}
+div.jqcloud span.w5 {
+  color: #ffffff;
+}
+div.jqcloud span.w4 {
+  color: #ffffff;
+}
+div.jqcloud span.w3 {
+  color: #ffffff;
+}
+div.jqcloud span.w2 {
+  color: #ffffff;
+}
+div.jqcloud span.w1 {
+  color: #ffffff;
+}

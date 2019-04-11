@@ -1,0 +1,20 @@
+<div id="constituent-types-content-heading" class="content-heading">
+	<div id="constituent-types-content-heading-id" class="block configuration-heading-default">
+		<span>Constituent type name</span>
+	</div>
+</div>
+
+[% IF constituentTypes.size > 0 %]
+	[% FOREACH constituentType IN constituentTypes %]
+	
+		[% INCLUDE constituent_types_item.tt %]
+	
+	[% END %]
+[% ELSE %]
+<div class="item-row" id="empty-row">No constituent types found...</div>
+
+[% END %]
+
+<div class="action-block filter-block-separator">
+	<div class="center" id="number-of-results">&mdash; [% numberOfResults %] results &mdash;</div>
+</div>

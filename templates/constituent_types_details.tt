@@ -1,0 +1,42 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden[% END %] ui-state-error ui-corner-all">[% message %]</div>
+	
+	[% IF type_description %]
+	<div class="dialog-title">
+		<span>[% type_description %]</span>
+	</div>
+	[% END %]
+	
+	<form id="form-constituent-types" data-id="[% IF id; id; ELSE; 'NEW'; END %]">
+		<fieldset>
+			<div class="dialog-input-wrapper block">
+				<label for="constituent-types-description" class="dialog-input-label">Description *</label><br>
+				<input type="text" name="description" id="constituent-types-description" class="input-default dialog-input-text" value="[% type_description %]">
+			</div><br>
+			
+			<div class="select-two-columns dialog-input-wrapper">
+				<div class="inline">
+					<span class="dialog-input-label">Selected publication types</span><br>
+					<select multiple="multiple" name="selected_types" id="constituent-types-selected-types" size="10" class="select-multiple select-left select-multiple-wide">
+						[% FOREACH type IN selectedPublicationTypes %]
+						<option value="[% type.id %]">[% type.title %]</option>
+						[% END %]
+					</select>
+				</div>
+				<div class="option-left-right">	
+					<input type="button" class="button btn-option-to-left " value="<"><br><br>
+					<input type="button" class="button btn-option-to-right" value=">">
+				</div>
+				<div class="inline">
+					<span class="dialog-input-label">All publication types</span><br>
+					<select multiple="multiple" name="all_types" id="constituent-types-all-types" size="10" class="select-multiple select-right select-multiple-wide">
+						[% FOREACH type IN allPublicationTypes %]
+						<option value="[% type.id %]">[% type.title %]</option>
+						[% END %]
+					</select>
+				</div>
+			</div>
+		
+		</fieldset>
+	</form>
+</div>

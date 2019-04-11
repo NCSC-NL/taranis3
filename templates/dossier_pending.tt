@@ -1,0 +1,224 @@
+[%
+	IF pendingItems.assess
+	|| pendingItems.analyze
+	|| pendingItems.advisory
+	|| pendingItems.forward
+	|| pendingItems.eos
+	|| pendingItems.eod
+	|| pendingItems.eow
+%]
+
+[% USE date %]
+<div id="dossier-content-heading" class="content-heading">
+	<div id="dossier-content-heading-description" class="block">
+		<span>Pending items</span>
+	</div>
+</div>
+[% IF pendingItems.assess %]
+	[% FOREACH item IN pendingItems.assess %]
+<div class="assess-item item-row" id="[% item.digest | uri %]" data-itemid="[% item.digest | uri %]" data-tagid="[% item.tag_id %]" data-itemtype="assess">
+	<div class="pending-selector block">
+		<input type="checkbox" class="pending-item-select-input">
+	</div>
+
+	<div class="assess-item-timestamp block">
+		[% date.format( item.created.stripSeconds, format = '%d-%m-%Y' ) %]<br>
+		[% date.format( item.created.stripSeconds, format = '%H:%M:%S' ) %]<br>
+	</div>
+	
+	<div class="assess-item-source block center">
+		<img src="[% webroot %]/images/icons/[% item.source %].gif" alt="[% item.source %]" title="[% item.source %]"><br>
+	</div>
+	
+	<div class="assess-item-title-description block">
+		<div class="assess-item-title block bold assess-[% item.status.displayAssessStatus %]">
+		[% IF item.is_mail %]
+			<img src="[% webroot %]/images/bw_envelope_mail.png">
+			<span data-id="[% item.digest | uri %]" data-link="[% item.link %]" class="span-link assess-email-item-link">[% item.title %]</span>
+		[% ELSIF item.screenshot_object_id %]
+			<img src="[% webroot %]/images/bw_camera.png">
+		 	<span data-id="[% item.digest | uri %]" data-link="[% item.link %]" class="span-link assess-screenshot-item-link">[% item.title %]</span>
+		[% ELSE %]
+			<a data-id="[% item.digest | uri %]" href="[% item.link %]" target="_blank">[% item.title %]</a>
+		[% END %]
+		</div>
+		<br>
+		<span class="assess-item-description">[% item.description %]</span><br><br>
+		dossier tag: <span class="bold">[% item.name %]</span>
+	</div>
+	<div class="block align-block-right">
+		<img src="[% webroot %]/images/icon_ok.png" alt="add to dossier" title="add to dossier" class="pointer btn-add-item-to-dossier">
+		<img src="[% webroot %]/images/icon_not_ok.png" alt="discard" title="discard" class="pointer btn-discard-pending-item">
+	</div>
+</div>
+	[% END %]
+[% END %]
+
+[% IF pendingItems.analyze %]
+	[% FOREACH analysis IN pendingItems.analyze %] 
+
+<div class="item-row" id="[% analysis.id %]" data-itemid="[% analysis.id %]" data-itemtype="analyze" data-tagid="[% analysis.tag_id %]">
+
+	<div class="pending-selector block">
+		<input type="checkbox" class="pending-item-select-input">
+	</div>
+
+	<div class="analyze-item-date-time block">
+		[% date.format( analysis.orgdatetime.stripSeconds, format = '%d-%m-%Y' ) %]<br>
+		[% date.format( analysis.orgdatetime.stripSeconds, format = '%H:%M:%S' ) %]<br>
+	</div>
+		
+	<div class="analyze-item-id-status block center">
+		<span>ANALYSIS</span>
+	</div>
+
+	<div class="analyze-item-details block break-word">
+		<div class="analyze-[% analysis.rating.displayAnalyzeRating %] bold block">
+			<span data-analysisid="[% analysis.id %]" class="span-link analyze-item-details-readonly-link">AN-[% analysis.id.substr(0,4) _ '-' _ analysis.id.substr(4,4) %]&nbsp;[% analysis.title %]</span>
+		</div><br><br>
+		dossier tag: <span class="bold">[% analysis.name %]</span>
+	</div>
+	<div class="block align-block-right">
+		<img src="[% webroot %]/images/icon_ok.png" alt="add to dossier" title="add to dossier" class="pointer btn-add-item-to-dossier">
+		<img src="[% webroot %]/images/icon_not_ok.png" alt="discard" title="discard" class="pointer btn-discard-pending-item">
+	</div>
+</div>
+
+	[% END %]
+[% END %]
+
+[% IF pendingItems.advisory || pendingItems.forward %]
+	
+	[% FOREACH publicationType IN [ pendingItems.advisory, pendingItems.forward ] %]
+		[% FOREACH publication IN publicationType %]
+<div class="publications-item item-row" id="[% publication.id %]" data-itemid="[% publication.id %]" data-itemtype="[% IF publication.exists('source') %]forward[% ELSE %]advisory[% END %]" data-tagid="[% publication.tag_id %]">
+
+	<div class="pending-selector block">
+		<input type="checkbox" class="pending-item-select-input">
+	</div>
+
+	<div class="publications-item-created-on block">
+		[% date.format( publication.created_on.stripSeconds, format = '%d-%m-%Y' ) %]<br>
+		[% date.format( publication.created_on.stripSeconds, format = '%H:%M:%S' ) %]<br>
+	</div>
+	
+	<div class="block center dossier-pending-type-column">
+		<span>ADVISORY</span>
+	</div>
+	
+	<div class="publications-item-title block">
+		<span class="span-link publications-dossier-link" data-publicationid="[% publication.publication_id %]" data-pubtype="[% IF publication.exists('source') %]forward[% ELSE %]advisory[% END %]">
+		[% publication.govcertid %]&nbsp;[v[% publication.version %]]&nbsp;[% publication.title %]
+		</span><br><br>
+		dossier tag: <span class="bold">[% publication.name %]</span>
+	</div>
+	<div class="block align-block-right">
+		<img src="[% webroot %]/images/icon_ok.png" alt="add to dossier" title="add to dossier" class="pointer btn-add-item-to-dossier">
+		<img src="[% webroot %]/images/icon_not_ok.png" alt="discard" title="discard" class="pointer btn-discard-pending-item">
+	</div>
+</div>
+		[% END %]
+	[% END %]
+[% END %]
+
+[% IF pendingItems.eos %]
+	[% FOREACH publication IN pendingItems.eos %]
+<div class="publications-item item-row" id="[% publication.id %]" data-itemid="[% publication.id %]" data-itemtype="eos" data-tagid="[% publication.tag_id %]">
+
+	<div class="pending-selector block">
+		<input type="checkbox" class="pending-item-select-input">
+	</div>
+
+	<div class="publications-item-created-on block">
+		[% date.format( publication.created_on.stripSeconds, format = '%d-%m-%Y' ) %]<br>
+		[% date.format( publication.created_on.stripSeconds, format = '%H:%M:%S' ) %]<br>
+	</div>
+
+	<div class="block center dossier-pending-type-column">
+		<span>END-OF-SHIFT</span>
+	</div>
+
+	<div class="publications-item-title block">
+		<span class="span-link publications-dossier-link" data-publicationid="[% publication.publication_id %]" data-pubtype="eos">
+		[% date.format( publication.timeframe_begin.stripSeconds, format = '%d-%m-%Y %H:%M' ) %] - [% date.format( publication.timeframe_end.stripSeconds, format = '%d-%m-%Y %H:%M' ) %]
+		</span><br><br>
+		dossier tag: <span class="bold">[% publication.name %]</span>
+	</div>
+	<div class="block align-block-right">
+		<img src="[% webroot %]/images/icon_ok.png" alt="add to dossier" title="add to dossier" class="pointer btn-add-item-to-dossier">
+		<img src="[% webroot %]/images/icon_not_ok.png" alt="discard" title="discard" class="pointer btn-discard-pending-item">
+	</div>
+</div>
+	[% END %]
+[% END %]
+
+[% IF pendingItems.eod %]
+	[% FOREACH publication IN pendingItems.eod %]
+<div class="publications-item item-row" id="[% publication.id %]" data-itemid="[% publication.id %]" data-itemtype="eod" data-tagid="[% publication.tag_id %]">
+
+	<div class="pending-selector block">
+		<input type="checkbox" class="pending-item-select-input">
+	</div>
+
+	<div class="publications-item-created-on block">
+		[% date.format( publication.created_on.stripSeconds, format = '%d-%m-%Y' ) %]<br>
+		[% date.format( publication.created_on.stripSeconds, format = '%H:%M:%S' ) %]<br>
+	</div>
+
+	<div class="block center dossier-pending-type-column">
+		<span>END-OF-DAY</span>
+	</div>
+
+	<div class="publications-item-title block">
+		<span class="span-link publications-dossier-link" data-publicationid="[% publication.publication_id %]" data-pubtype="eod">
+		[% date.format( publication.timeframe_begin.stripSeconds, format = '%d-%m-%Y %H:%M' ) %] - [% date.format( publication.timeframe_end.stripSeconds, format = '%d-%m-%Y %H:%M' ) %]
+		</span><br><br>
+		dossier tag: <span class="bold">[% publication.name %]</span>
+	</div>
+
+	<div class="block align-block-right">
+		<img src="[% webroot %]/images/icon_ok.png" alt="add to dossier" title="add to dossier" class="pointer btn-add-item-to-dossier">
+		<img src="[% webroot %]/images/icon_not_ok.png" alt="discard" title="discard" class="pointer btn-discard-pending-item">
+	</div>
+</div>
+	[% END %]
+[% END %]
+
+[% IF pendingItems.eow %]
+	[% FOREACH publication IN pendingItems.eow %]
+<div class="publications-item item-row" id="[% publication.id %]" data-itemid="[% publication.id %]" data-itemtype="eow" data-tagid="[% publication.tag_id %]">
+
+	<div class="pending-selector block">
+		<input type="checkbox" class="pending-item-select-input">
+	</div>
+
+	<div class="publications-item-created-on block">
+		[% date.format( publication.created_on.stripSeconds, format = '%d-%m-%Y' ) %]<br>
+		[% date.format( publication.created_on.stripSeconds, format = '%H:%M:%S' ) %]<br>
+	</div>
+
+	<div class="block center dossier-pending-type-column">
+		<span>END-OF-WEEK</span>
+	</div>
+
+	<div class="publications-item-title block">
+		<span class="span-link publications-dossier-link" data-publicationid="[% publication.publication_id %]" data-pubtype="eow">
+		Published on [% date.format( publication.published_on.stripSeconds, format = '%d-%m-%Y %H:%M' ) %]
+		</span><br><br>
+		dossier tag: <span class="bold">[% publication.name %]</span>
+	</div>
+	<div class="block align-block-right">
+		<img src="[% webroot %]/images/icon_ok.png" alt="add to dossier" title="add to dossier" class="pointer btn-add-item-to-dossier">
+		<img src="[% webroot %]/images/icon_not_ok.png" alt="discard" title="discard" class="pointer btn-discard-pending-item">
+	</div>
+</div>
+	[% END %]
+[% END %]
+
+[% ELSE %]
+	<div class="item-row">No pending items found...</div>
+[% END %]
+
+<div class="action-block filter-block-separator">
+<!-- 	<div class="center" id="number-of-results">&mdash; results &mdash;</div> -->
+</div>

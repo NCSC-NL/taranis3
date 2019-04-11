@@ -1,0 +1,19 @@
+[% IF renderItemContainer %]
+<div class="category-item item-row" id="[% category.id %]">
+[% END %]
+		
+	<div class="category-item-name block">
+		<span>[% category.name %][% IF !category.is_enabled; ' [DISABLED]'; END %]</span>
+	</div>		
+
+	<div class="block align-block-right">
+	[% IF write_right %]
+		<img src="[% webroot %]/images/icon_modify.png" alt="edit" title="edit category" class="pointer btn-edit-category" data-id="[% category.id %]">
+		<img src="[% webroot %]/images/icon_delete.png" alt="delete" title="delete category" class="pointer btn-delete-category" data-id="[% category.id %]">
+	[% ELSE %]
+		<img src="[% webroot %]/images/icon_details.png" alt="view" title="view details" class="pointer btn-view-category" data-id="[% category.id %]">
+	[% END %]		
+	</div>
+[% IF renderItemContainer %]
+</div>
+[% END %]

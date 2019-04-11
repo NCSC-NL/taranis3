@@ -1,0 +1,34 @@
+<div class="dialog-form-wrapper block">
+	<div class="dialog-title">
+		<span>[% publication.title %]</span>
+	</div>
+
+	<fieldset>
+		<div class="dialog-input-wrapper block">
+			<div class="table">
+				<div class="cell">
+					<textarea class="scroll-y-always font-courier border-default" id="dossier-publication-details" readonly="readonly">[% publication.contents %]</textarea>
+				</div>
+				<div class="cell eod-preview-info-cell">
+					<fieldset>
+						<legend>Publication details</legend>
+						<div class="block">
+							[% IF created_by_name %]
+							<span>Created by: </span><br>
+							<span class="tpl-heading">[% created_by_name %]</span><br><br>
+							[% END %]
+							[% IF approved_by_name %]
+							<span>Approved by: </span><br>
+							<span class="tpl-heading">[% approved_by_name %]</span><br><br>
+							[% END %]
+							[% IF published_by_name %]
+							<span>Published by: </span><br>
+							<span class="tpl-heading">[% published_by_name %]</span><br><br>
+							[% END %]
+						</div>
+					</fieldset>
+				</div>
+			</div>
+		</div>
+	</fieldset>
+</div>

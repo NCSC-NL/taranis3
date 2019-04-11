@@ -1,0 +1,46 @@
+[% IF renderItemContainer %]
+<div class="software-hardware-item [% IF softwareHardwareItem.in_use %]item-row-in-use[% ELSE %]item-row[% END %]" id="[% softwareHardwareItem.id %]">
+[% END %]
+		
+	<div class="software-hardware-item-producer block">
+		<span>[% softwareHardwareItem.producer %]</span>
+	</div>		
+
+	<div class="software-hardware-item-name block">
+		<span>[% softwareHardwareItem.name %]</span>
+	</div>		
+
+	<div class="software-hardware-item-version block">
+		<span>[% softwareHardwareItem.version %]</span>
+	</div>
+	
+	[% IF softwareHardwareItem.in_use %]
+	<div class="software-hardware-item-usage help bold block">
+
+		<div class="software-hardware-usage hover-block">
+			<span>[% softwareHardwareItem.in_use %]</span>
+			<div class="hover-block-wrapper">
+				<div class="hover-block-content software-hardware-usage-content">
+					<ul>
+					[%- FOREACH group IN softwareHardwareItem.constituentGroups +%]
+						<li>[% group.name %]</li>
+					[% END %]
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	[% END %]
+	
+	<div class="block align-block-right">
+	[% IF write_right -%]
+		<img src="[% webroot %]/images/icon_modify.png" alt="edit" title="edit this item" class="pointer btn-edit-software-hardware" data-id="[% softwareHardwareItem.id %]">  
+		<img src="[% webroot %]/images/icon_delete.png" alt="delete" title="delete this item" class="pointer btn-delete-software-hardware" data-id="[% softwareHardwareItem.id %]" data-inuse="[% softwareHardwareItem.in_use %]">
+	[% ELSE %]
+		<img src="[% webroot %]/images/icon_details.png" alt="view" title="view details" class="pointer btn-view-software-hardware" data-id="[% softwareHardwareItem.id %]">
+	[% END -%]
+	
+	</div>
+[% IF renderItemContainer %]
+</div>
+[% END %]

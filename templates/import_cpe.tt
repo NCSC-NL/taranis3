@@ -1,0 +1,71 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden[% END %] ui-state-error ui-corner-all">[% message %]</div>
+	
+	<div class="dialog-title">
+		<span>Import CPE dictionary</span>
+	</div>
+	
+
+	<fieldset id="cpe-import-load-file">
+
+		<div class="dialog-input-wrapper block" id="import-cpe-loader-block">
+			<img id="img_ajax" src="[% webroot %]/images/ajax-loader.gif">
+			<span id="import-cpe-load-file-result"></span>
+		</div>
+		
+		<div class="dialog-input-wrapper block" id="import-cpe-location-block">
+			<label for="import-cpe-location" class="dialog-input-label">Location of dictionary (on web or server) *</label><br>
+			<input type="text" id="import-cpe-location" class="input-default dialog-input-text">
+		</div><br>
+
+		<div class="dialog-input-wrapper block" id="import-cpe-option-block">
+			<input type="checkbox" name="importOptionVerions" id="import-cpe-option">
+			<label for="import-cpe-option" class="dialog-input-label">Don&#39;t import items with version</label>
+		</div>
+		
+	</fieldset>
+	
+	<fieldset id="cpe-import-process-items">
+	
+		<div id="cpe-import-list-header">
+			<div class="block">
+				<span>producer</span> <span class="bold">productname</span> <span class="italic">version</span>
+			</div>
+
+			<div class="block align-block-right">
+				<span>Select: </span>
+				<span class="span-link" id="import-cpe-select-all">All</span>
+				<span> | </span> 
+				<span class="span-link" id="import-cpe-select-none">None</span>
+			</div>
+		</div>
+		
+		<div class="block" id="import-cpe-load-list-block">
+			<img src="[% webroot %]/images/ajax-loader.gif" id="img_ajax2">
+			<span id="span_ajax2">Loading import list...</span>
+		</div>
+		
+		<div id="cpe-import-list" class="scroll-auto">
+			<table id="cpe-import-list-table">
+			</table>
+		</div>
+
+		<div id="cpe-import-set-version-to-delete-block" class="center">
+			<span>
+				<input type="checkbox" id="cpe-import-set-version-to-delete" name="setVersionToDelete" value="1">
+				<label for="cpe-import-set-version-to-delete">Import items <i>with version</i> as deleted (DELETE flag turned on).</label>
+			</span>
+		</div>
+		
+		<div id="cpe-import-list-action" class="align-block-right">
+			<span class="bold pointer" id="cpe-import-list-action-import">Import</span>
+			<span class="strikethrough italic pointer" id="cpe-import-list-action-discard">Discard</span>
+			<span class="bold cpe-import-list-action-all-x" id="cpe-import-list-action-all-new">all new</span>
+			<span class="strikethrough italic cpe-import-list-action-all-x pointer" id="cpe-import-list-action-all-changed">all changed</span>
+			<span class="strikethrough italic cpe-import-list-action-all-x pointer" id="cpe-import-list-action-all-selected">all selected</span>
+			<span class="bold">items above.</span>
+			<input type="button" class="button" value="Import" id="btn-cpe-import-action">
+		</div>
+	
+	</fieldset>		
+</div>

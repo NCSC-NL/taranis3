@@ -1,0 +1,17 @@
+#!/usr/bin/env perl
+# Check some postgresql configuration things which cannot be changed automatically.
+
+use warnings;
+use strict;
+
+use Taranis::Install::DB qw(connect_db);
+
+my $db = connect_db;
+my $max_locks = $db->query('SHOW max_locks_per_transaction')->list;
+
+warn <<__INCREASE_LOCKS if $max_locks <=100;
+WARNING: Postgresql setting 'max_locks_per_transaction' == $max_locks, which has
+   shown to be too low for some complex transactions as removal of photos.
+   You probably want to increase the value in your database configuration.
+
+__INCREASE_LOCKS

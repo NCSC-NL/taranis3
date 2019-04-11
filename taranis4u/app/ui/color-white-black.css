@@ -1,0 +1,86 @@
+.main-color {
+  color: #2a2a2a;
+  background-color: #ffffff;
+}
+hr {
+  background-color: #2a2a2a;
+}
+.nav-item,
+.nav-list-item {
+  color: inherit;
+}
+.nav-item:hover,
+.nav-list-item:hover {
+  color: #ffffff;
+  background-color: #2a2a2a;
+}
+.marked {
+  color: #666666;
+}
+h4 {
+  color: #3e3e3e;
+}
+h3 {
+  color: #393939;
+}
+h2 {
+  color: #343434;
+}
+h1 {
+  color: #2f2f2f;
+}
+#loading-bar {
+  background: #2a2a2a !important;
+}
+.default-table,
+.compact-table {
+  border: 1px solid #f2f2f2;
+}
+.default-table th,
+.compact-table th {
+  color: #ffffff;
+  background-color: #2a2a2a;
+}
+.default-table .oneven,
+.compact-table .oneven {
+  background-color: #f2f2f2;
+}
+div.jqcloud {
+  color: #2a2a2a;
+}
+div.jqcloud a {
+  color: #444444;
+}
+div.jqcloud a:hover {
+  color: #5d5d5d;
+}
+div.jqcloud span.w10 {
+  color: #373737;
+}
+div.jqcloud span.w9 {
+  color: #444444;
+}
+div.jqcloud span.w8 {
+  color: #505050;
+}
+div.jqcloud span.w7 {
+  color: #5d5d5d;
+}
+div.jqcloud span.w6 {
+  color: #6a6a6a;
+}
+div.jqcloud span.w5 {
+  color: #777777;
+}
+div.jqcloud span.w4 {
+  color: #838383;
+}
+div.jqcloud span.w3 {
+  color: #909090;
+}
+div.jqcloud span.w2 {
+  color: #9d9d9d;
+}
+div.jqcloud span.w1 {
+  color: #aaaaaa;
+}

@@ -1,0 +1,27 @@
+<div class="filter-block filter-block-separator">
+
+	<form id="form-parsers-search">
+
+		<div class="block">
+			<label for="parsers-filters-search">Parser name search</label><br>
+			<input id="parsers-filters-search" name="search_parsername" type="text" class="input-default">
+		</div>
+
+		<div class="block">
+			<span>&nbsp;</span>
+			<input type="button" id="btn-parsers-search" class="button" value="Search!">		
+		</div>
+
+	</form>
+</div>
+
+<div class="action-block filter-block-separator">
+[% IF write_right +%]
+	<div class="block">
+		<input type="button" class="button" id="btn-add-parser" value="Add new parser">
+	</div>
+[% END %]	
+	<div class="block align-block-right">
+		<span class="bold page-title">Parsers</span>
+	</div>
+</div>

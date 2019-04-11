@@ -1,0 +1,17 @@
+#!perl
+# The cpe-simplification of 3.4.0 used '-' to signal "no version", but the
+# logic requires undef or ''.
+
+use warnings;
+use strict;
+
+sub {
+	my ($db, %args) = @_;
+
+	$db->query(<<'__FIX');
+UPDATE software_hardware
+   SET version = ''
+ WHERE version = '-';
+__FIX
+
+};

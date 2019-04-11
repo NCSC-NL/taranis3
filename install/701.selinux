@@ -1,0 +1,172 @@
+#!/usr/bin/env perl
+# Systems may have SELinux.  I do not care whether it is (already) enabled:
+# just configure it when available.
+
+use warnings;
+use strict;
+
+use Carp           qw(confess);
+
+use Taranis::Install::Config qw(config_release config_generic
+	installed_versions);
+
+my $generic = config_generic;
+my $home    = $generic->{home};
+
+my $release = config_release;
+
+my @path    = split /\:/, $ENV{PATH};
+(my $has_selinux) = grep -f, map "$_/getenforce", @path;
+
+unless($has_selinux) {
+	print "*   SELinux not installed\n";
+	exit 0;
+}
+
+if(qx($has_selinux) =~ /disabled/i) {
+	print "*   SELinux installed but disabled\n";
+	exit 0;
+}
+
+sub setsebool($$) {
+	my ($flag, $truth) = @_;
+	system setsebool =>
+		'-P',             # persistent
+		$flag => ($truth ? '1' : '0');
+}
+
+### Open ports for Apache
+
+my %ports;
+my $installed = installed_versions;
+
+foreach my $version (keys %$installed) {
+	my $release = config_release $version;
+	my $apache  = $release->{apache};
+	$ports{$_}++ for grep defined,
+		$apache->{vhost_port}, $apache->{vhost4u_port};
+}
+$ports{$generic->{apache}{use_https} ? 443 : 80}++;
+my @ports = sort {$a <=> $b} keys %ports;
+
+print "*   Apache gets access to ports @ports\n";
+
+foreach my $port (@ports) {
+	# When the port was already added before, this command gives an error
+	# with a generic rc==1 (useless)  Checking beforehand whether the port
+	# is already open (via --list) is really slow.  Therefore, for the moment
+	# we just ignore the reported error.
+	system semanage => 'port',
+		'--add',
+		'--type'  => 'http_port_t',
+		'--proto' => 'tcp',
+		$port;
+}
+# use "semanage port -l" to see the result
+
+print "*   Apache is allowed to make network connections\n";
+setsebool httpd_can_network_connect => 1;
+
+print "*   Apache permitted to start external programs\n";
+setsebool httpd_execmem => 1;
+
+### Apache access to all taranis software
+
+print "*   Apache gets access to the software\n";
+system chcon =>
+	'--recursive',
+	'--reference' => '/var/www/html',    # means 'same as'
+	$home
+	and die "ERROR: cannot add context for $home: $!\n";
+
+print "*   Apache gets execute rights on .so's\n";
+system chcon =>
+	'--recursive',
+	'--no-dereference',
+	'--type' => 'httpd_sys_script_exec_t',
+	"$home/lib/perl5/"
+	and die "ERROR: cannot change context of $home/lib/perl5/\n";
+
+print "*   Apache gets execute rights on PhantomJS\n";
+my $phantomjs = "$home/PhantomJS/bin/phantomjs";
+if(-f $phantomjs) {
+	system chcon =>
+		'--recursive',
+		'--no-dereference',
+		'--type' => 'httpd_sys_script_exec_t',
+		$phantomjs,
+		and die "ERROR: cannot change context of $phantomjs\n";
+} else {
+	warn <<__PHANTOMJS;
+WARNING: phantomjs binary not installed at $phantomjs
+    You have to rerun "taranis install" after installing PhantomJS by hand,
+    so access rights can be granted for Apache to allow using the library.
+__PHANTOMJS
+}
+
+print "*   Apache gets execute rights on ChartDirector\n";
+my $chartdir = "$home/ChartDirector";
+if(-d $chartdir) {
+	system chcon =>
+		'--recursive',
+		'--no-dereference',
+		'--type' => 'httpd_sys_script_exec_t',
+		$chartdir
+		and die "ERROR: cannot change context of $chartdir\n";
+} else {
+	warn <<__CHARTDIR;
+WARNING: ChartDirectory is not installed at $chartdir
+    You have to rerun "taranis install" after installing ChartDirector by hand,
+    so access rights can be granted for Apache to allow using the library.
+__CHARTDIR
+}
+
+print "*   Apache get write right on source-icons dir-n\n";
+system chcon =>
+	'--type' => 'httpd_sys_rw_content_t',
+	"$home/var/source-icons"
+	and die "ERROR: cannot change context of $home/var/source-icons\n";
+
+print "*   Apache get write right on custom-stats dir-n\n";
+system chcon =>
+	'--type' => 'httpd_sys_rw_content_t',
+	"$home/var/custom-stats"
+	and die "ERROR: cannot change context of $home/var/custom-stats\n";
+
+
+### Give Apache access to other features
+
+print "*   Apache gets access to the database\n";
+setsebool httpd_can_network_connect_db => 1;
+
+
+print "*   Apache access to private tmp\n";
+system semanage => fcontext =>
+	'--add',
+	'--type' => 'httpd_tmp_t',
+	$generic->{tmp};
+
+print "*   Apache gets access to the logdir\n";
+system chcon =>
+    '--recursive',
+	'--type' => 'httpd_log_t',
+	"/var/log/taranis/"
+	and die "ERROR: cannot change context of /var/log/taranis/\n";
+
+### Apache access to smtp
+
+print "*   Apache access to smtp\n";
+setsebool httpd_can_sendmail => 1;
+
+
+### Not Apache related
+
+if (-d "$home/.ssh") {
+	print "*   SSH directory gets the right context\n";
+	system restorecon =>
+		'-r',				# recursively
+		"$home/.ssh"
+		and die "ERROR: cannot restore context of $home/.ssh\n";
+}
+
+exit 0;

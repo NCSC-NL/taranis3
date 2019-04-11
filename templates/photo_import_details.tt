@@ -1,0 +1,204 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden[% END %] ui-state-error ui-corner-all">[% message %]</div>
+
+	<div class="dialog-title">
+		<span>[% photo.name %]</span>	
+	</div>
+	
+	<div id="photo-issues-import-details-tabs" class="dialog-tabs" data-id="[% photo.id %]">
+		<ul>
+			<li><a href="#photo-issues-details-tabs-import-list">Import list</a></li>
+			<li><a href="#photo-issues-details-tabs-ignore-imports-list">Ignore imports list</a></li>
+			<li><a href="#photo-issues-details-tabs-delete-from-old-photo">Delete from old photo</a></li>
+			<li><a href="#photo-issues-details-tabs-issues">Issues</a></li>
+		</ul>
+
+<!-- TAB IMPORT LIST -->
+		<div id="photo-issues-details-tabs-import-list">
+			<fieldset>
+				<div class="dialog-input-wrapper">
+					<span class="dialog-input-label">All green items in this list will be imported.</span>
+
+					<div class="block bold toggle-imports-block align-block-right">
+						<label for="toggle-darkorange" class="block toggle-darkorange-import padding-default" title="show/hide 'No match found'">
+							<input type="checkbox" id="toggle-darkorange" checked="checked">
+						</label>
+						<label for="toggle-orange" class="block toggle-orange-import padding-default" title="show/hide 'Not in use by constituents (search for new source?)'">
+							<input type="checkbox" id="toggle-orange" checked="checked">
+						</label>
+						<label for="toggle-green" class="block toggle-green-import padding-default" title="show/hide 'Exact match found on CPE' and 'Exact match found (but no CPE match)' and 'A resolved issue exists.'">
+							<input type="checkbox" id="toggle-green" checked="checked">
+						</label>
+						<label for="toggle-blue" class="block toggle-blue-import padding-default" title="show/hide 'Has duplicates in Taranis'">
+							<input type="checkbox" id="toggle-blue" checked="checked">
+						</label>
+						<label for="toggle-white" class="block toggle-white-import padding-default" title="show/hide 'Already in current photo of this constituent.'">
+							<input type="checkbox" id="toggle-white" checked="checked">
+						</label>
+					</div>
+				</div><br>
+			
+				<div id="photo-issues-details-import-list" class="scroll-auto border-default">
+						[% FOREACH item IN importList +%]
+							
+							[% subTitle = '' %]
+							[% cpe_match = '0' %]
+							[% issueType = '0' %]
+							[% classColor = 'white' %]
+							
+							[% IF item.exactMatch && !item.noCpe %]
+								[% classColor = 'green' %]
+								[% subTitle = subTitle _ 'Exact match found on CPE, ' %]
+								[% cpe_match = '1' %]
+							[% END %]
+							
+							[% IF item.noCpe %]
+								[% classColor = 'green' %]
+								[% subTitle = subTitle _ 'Exact match found (but no CPE match), ' %]
+							[% END %]
+							
+							[% IF item.hasDuplicates %]
+								[% classColor = 'lightblue' %]
+								[% subTitle = subTitle _ 'Has duplicates in Taranis, ' %]
+								[% issueType = '2' %]
+							[% END %]
+							
+							[% IF item.noMatch %]
+								[% classColor = 'darkorange' %]
+								[% subTitle = subTitle _ 'No match found, ' %]
+								[% issueType = '3' %]
+							[% END %]
+							
+							[% IF item.exists( 'inUse' ) && item.inUse == '0' %]
+								[% classColor = 'orange' %]
+								[% subTitle = subTitle _ 'Not in use by constituents (search for new source?), ' %]
+								[% issueType = '1' %]
+							[% ELSIF item.exists( 'inUse' ) && item.inUse == '1' %]
+								[% subTitle = subTitle _ 'In use by constituents, ' %]															
+							[% END %]
+							
+							[% IF item.alreadyInPhoto %]
+								[% classColor = 'item-row' %]
+								[% subTitle = subTitle _ 'Already in current photo of this constituent.' %]
+							[% END %]
+						
+							[% IF item.hasClosedIssue %]
+								[% classColor = 'green' %]
+								[% subTitle = 'A resolved issue exists.' %]
+							[% END %]
+					<div class="[% IF classColor == 'item-row' %]item-row photo-issues-status-color-white[% ELSE %]colored-item-row photo-issues-status-color-[% classColor %][% END %] photo-issue-item" data-id="[% item.id %]">
+						<div class="block">
+							<span class="bold" id="span_import_item_[% item.id %]">[% item.producer _ ' ' _ item.name %]</span><br>
+							<span class="italic" id="span_import_item_type_[% item.id %]">[% item.type %]</span><br>
+							<span id="span_subtitle_[% item.id %]" class="subTitle">[% subTitle.replace( '(.*?), $', '$1' ) %]</span>
+						</div>
+						<div class="block align-block-right">
+							[% IF classColor.match('^orange$') +%]
+							<img src="[% webroot %]/images/icon_check.png" class="pointer btn-resolve-item-photo-details" data-id="[% item.id %]" title="Resolve item">
+							[% ELSE %]
+							<img src="[% webroot %]/images/icon_none.png" class="placeholder-resolve-item-photo-details" data-id="[% item.id %]">
+							[% END +%]
+							
+							[% IF classColor.match('^(orange|darkorange|lightblue)$') +%]
+								[% IF issueType == '3' %]
+							<img src="[% webroot %]/images/icon_add.png" class="pointer btn-create-software-hardware-photo-details" data-id="[% item.id %]"  data-issuetype="[% issueType %]" title="create Software/Hardware">
+								[% END %]
+							<img src="[% webroot %]/images/icon_exclamation.png" class="pointer btn-create-issue-photo-details" data-id="[% item.id %]"  data-issuetype="[% issueType %]" title="Create issue">
+							[% ELSE %]
+							<img src="[% webroot %]/images/icon_none.png" class="placeholder-create-issue-photo-details" data-id="[% item.id %]">
+							[% END +%]
+							[% IF !classColor.match('^item-row$') +%]
+							<img src="[% webroot %]/images/icon_delete.png" class="pointer btn-delete-item-photo-details" data-id="[% item.id %]" title="Remove item from import list">
+							[% END %]
+						</div>
+					</div>
+					
+					[% END %]
+				</div>
+			</fieldset>
+		</div>
+
+<!-- TAB IGNORE IMPORTS LIST -->
+		<div id="photo-issues-details-tabs-ignore-imports-list">
+			<fieldset>
+				<div class="dialog-input-wrapper block">
+					<span class="dialog-input-label">Items in this list will not be imported.</span>
+				</div><br>
+				
+				<div id="photo-issues-details-dont-import-list" class="scroll-auto border-default">
+					[% FOREACH item IN dontImportList +%]
+					<div class="item-row photo-issues-details-dont-import-item" data-id="[% item.id %]">
+						<div>
+							<span class="bold">[% item.producer _ ' ' _ item.name %]</span><br>
+							<span class="italic">[% item.type %]</span>
+						</div>
+					</div>
+					[% END %]				
+				</div>
+				
+			</fieldset>
+		</div>
+
+<!-- TAB DELETE FROM OLD PHOTO -->
+		<div id="photo-issues-details-tabs-delete-from-old-photo">
+			<fieldset>
+				<div class="dialog-input-wrapper block">
+					<span class="dialog-input-label">Items in this list will be deleted from old photo.</span>
+				</div><br>
+				
+				<div id="photo-issues-details-delete-from-old-photo-list" class="scroll-auto border-default">
+					[% FOREACH item IN deleteList +%]
+					[% NEXT IF !item %]
+
+					<div class="item-row photo-issues-details-delete-from-old-photo-item" data-id="[% item.id %]">
+						<div>
+							<span class="bold">[% item.producer _ ' ' _ item.name %]</span><br>
+							<span class="italic">[% item.description %]</span>
+						</div>
+					</div>
+					[% END %]				
+				</div>
+				
+			</fieldset>
+		</div>
+
+<!-- TAB ISSUES -->
+		<div id="photo-issues-details-tabs-issues">
+			<fieldset>
+				<div class="dialog-input-wrapper block">
+					<span class="dialog-input-label">Issues linked to this photo import.</span>
+				</div><br>
+				
+				<div id="photo-issues-details-issue-list" class="scroll-auto border-default">
+				[% FOREACH issue IN issueList +%]
+					[% SWITCH issue.status %]
+						[% CASE '0' %] 
+							[% statusDescription = 'pending' %]
+						[% CASE '1' %] 
+							[% statusDescription = 'readyforreview' %]
+						[% CASE '3' %]
+							[% statusDescription = 'done' %]								 
+					[% END %]							
+
+					<div class="colored-item-row photo-issues-[% statusDescription %] photo-issues-details-issue-item" data-id="[% issue.id %]">
+						<span class="bold">[% issue.producer _ ' ' _ issue.name %]</span><br>
+						<span>[% issue.type %]</span><br>
+						<span class="italic">[% issue.description %]</span>
+					</div>
+				[% END %]				
+				</div>
+			</fieldset>
+		</div>
+	</div>
+</div>
+
+<div class="colored-item-row photo-issues-details-issue-item hidden photo-issues-details-issue-item-blanco" data-id="">
+	<span class="bold photo-issues-details-issue-item-product"></span><br>
+	<span class="photo-issues-details-issue-item-type"></span><br>
+	<span class="italic photo-issues-details-issue-item-description"></span>
+</div>
+
+<div class="item-row photo-issues-details-dont-import-item photo-issues-details-dont-import-item-blanco hidden" data-id="">
+	<span class="bold photo-issues-details-dont-import-item-product"></span><br>
+	<span class="italic photo-issues-details-dont-import-item-type"></span>
+</div>

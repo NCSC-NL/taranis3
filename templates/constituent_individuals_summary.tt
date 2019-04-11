@@ -1,0 +1,34 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="hidden"></div>
+
+	<div class="dialog-title">
+		<span>[% constituentGroup.name %]</span>	
+	</div>	
+	
+	<fieldset>
+		<div class="dialog-input-wrapper block">
+			<span class="dialog-input-label">Constituent individual summary</span><br>
+<textarea readonly="readonly" class="textarea-preview scroll-y-always" id="constituent-individual-summary">NAME: [% constituentIndividual.firstname _ ' ' _ constituentIndividual.lastname +%]
+EMAIL: [% constituentIndividual.emailaddress +%]
+TEL: [% constituentIndividual.tel_regular %], MOB: [% constituentIndividual.tel_mobile +%]
+ROLE: [% constituentIndividual.role_name +%]
+CALL FOR HIGH/HIGH: [% IF constituentIndividual.call_hh ; 'YES' ; ELSE ; 'NO' ; END +%]
+CALL 24/7: [% IF constituentIndividual.call247 ; 'YES' ; ELSE ; 'NO' ; END +%]
+
+SUBSCRIBED TO:
+[% FOR publication IN publicationTypes +%]
+ - [% publication.title +%]
+[% END +%]
+
+MEMBER OF GROUP(S):
+[% FOREACH group IN groups +%]
+- GROUP NAME: [% group.name +%]
+  CALL FOR HIGH/HIGH: [% IF (group.use_sh && group.call_hh) || (!group.use_sh && group.any_hh); 'YES' ; ELSE ; 'NO' ; END +%]
+ : group.any_hh)
+  SOFTWARE/HARDWARE LIST USED: [% IF group.use_sh ; 'YES' ; ELSE ; 'NO' ; END +%]
+[% END %]
+</textarea>
+		</div>
+	
+	</fieldset>
+</div>

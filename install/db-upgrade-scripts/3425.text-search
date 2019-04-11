@@ -1,0 +1,15 @@
+#!perl
+
+use warnings;
+use strict;
+
+sub {
+	my ($db, %args) = @_;
+
+	$db->query( <<'__RUN__');
+ALTER TABLE search ALTER COLUMN description TYPE TEXT;
+ALTER TABLE search ALTER COLUMN sortby TYPE TEXT;
+ALTER TABLE search ALTER COLUMN keywords TYPE TEXT;
+ALTER TABLE search ALTER COLUMN created_by TYPE TEXT;
+__RUN__
+};

@@ -1,0 +1,11 @@
+<div class="filter-block filter-block-separator">
+	<br>
+	[% IF write_right %]
+	<div class="block">
+		<input type="button" id="btn-add-constituent-role" class="button" value="Add new constituent role">		
+	</div>
+	[% END %]
+	<div class="block align-block-right">
+		<span class="bold page-title">Constituent Roles</span>
+	</div>
+</div>

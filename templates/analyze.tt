@@ -1,0 +1,39 @@
+<div id="analyze-content-heading" class="content-heading">
+	<div id="analyze-content-heading-id-status" class="block">
+		<span>ID/status</span>
+	</div>
+	<div id="analyze-content-heading-date-time" class="block">
+		<span>Date/Time</span>
+	</div>
+	<div id="analyze-content-heading-details" class="block">
+		<span>Details</span>
+	</div>
+</div>
+
+[% IF collection && collection.size > 0 %]
+	[% FOREACH analysis IN collection %]
+	
+		[% INCLUDE analyze_item.tt %]
+	
+	[% END %]
+[% ELSE %]
+	<div class="item-row">No items found...</div>	
+[% END %]
+
+<div class="action-block filter-block-separator">
+
+	<div class="block">
+	[% IF write_right +%]
+		<input type="button" class="button-blue btn-analyze-join" value="Join">&nbsp;
+		<input type="button" class="button btn-analyze-new" value="Add new">
+	[% END %]		
+	</div>
+
+	<div class="center block analyze-number-of-results" id="number-of-results">&mdash; [%  page_bar.number_results_text %] &mdash;</div>
+
+	<div class="block analyze-show-hide-descriptions-buttons">  					
+		<input type="button" class="button btn-analyze-show-hide-descriptions" value="Show all descriptions" data-status="hide">&nbsp; 
+	</div>
+</div>
+
+[% PROCESS page_bar.tt %]

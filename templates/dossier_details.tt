@@ -1,0 +1,81 @@
+[% USE date %]
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden[% END %] ui-state-error ui-corner-all">[% message %]</div>
+	
+	[% IF dossier.description %]
+	<div class="dialog-title">
+		<span>[% dossier.description %]</span>
+	</div>
+	[% END %]
+	
+	<form id="form-dossier" data-id="[% IF dossier.id; dossier.id; ELSE; 'NEW'; END %]">
+		<fieldset>
+			<div class="dialog-input-wrapper block">
+				<label for="dossier-details-description" class="dialog-input-label">Dossier description *</label><br>
+				<input type="text" name="description" id="dossier-details-description" class="input-default dialog-input-text" value="[% dossier.description %]">
+			</div><br>
+
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Tags *</span><br>
+				<input type="text" name="tags" id="dossier-details-tags" value="[% tags.join(', ') %]" class="input-default dialog-input-text tags-input" maxlength="100">
+			</div><br>
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Status</span><br>
+				<select id="dossier-details-status" name="status" class="select-single dialog-input-text-normal">
+					[% FOREACH dossierStatus IN statuses.keys %]
+						[% IF dossierStatus == 'JOINED' && dossier.status == statuses.$dossierStatus %]
+					<option selected>JOINED</option>
+						[% ELSIF dossierStatus != 'JOINED' %]
+					<option value="[% statuses.$dossierStatus %]"[% IF dossier.status == statuses.$dossierStatus %]selected[% END %]>[% dossierStatus %]</option>
+						[% END %]
+					[% END %]
+				</select>
+			</div><br>
+			<hr>
+			<div class="dialog-input-wrapper block">
+				<span class="grey-font">A reminder will be sent to selected user after selected amount of time inactivity</span>
+			</div>
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Remind after</span><br>
+				<input type="text" class="input-default select-tiny" id="dossier-reminder-time-amount" name="reminder_interval_amount" value="[% dossier.reminder_interval.replace('(\d+).*', '$1') %]">
+				<select class="select-single select-tiny block" name="reminder_interval_units">
+					<option value="days" [% IF (matches = dossier.reminder_interval.match('.*day.*')) %]selected[% END %]>days</option>
+					<option value="months" [% IF (matches = dossier.reminder_interval.match('.*mon*')) %]selected[% END %]>months</option>
+				</select>
+			</div>
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Send reminder to</span><br>
+				<select id="dossier-details-reminder-username" name="reminder_account" class="select-single dialog-input-text-normal">
+					[% FOREACH user IN reminderAccounts %]
+						<option value="[% user.username %]"[% IF dossier.reminder_account == user.username %]selected[% END %]>[% user.fullname %]</option>
+					[% END %]
+				</select>
+			</div>
+			<hr>
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Contributors</span><br>
+
+				<select id="dossier-details-contributor-username" class="select-single dialog-input-text-normal block">
+					[% FOREACH user IN users %]
+						<option value="[% user.username %]">[% user.fullname %]</option>
+					[% END %]
+				</select>
+				<input class="button" type="button" id="btn-dossier-add-contributor" value="add">
+				<hr>
+				<ul id="dossier-details-contributors-list">
+				[% FOREACH contributor IN contributors %]
+					<li class="dossier-details-contributors-item" data-username="[% contributor.username %]">
+						<span class="cell">
+						[% contributor.fullname %]<br><input type="checkbox" class="align-middle" id="dossier-details-contributor-is-owner-[% loop.count %]" data-itemcount="[% loop.count %]" [% IF contributor.is_owner %]checked[% END %]> <label for="dossier-details-contributor-is-owner-[% loop.count %]"> is dossier owner</label>
+						</span>
+						<span class="cell block">
+							<input type="button" class="button btn-dossier-remove-contributor" value="remove" data-username="[% contributor.username %]">
+						</span>
+					</li>
+				[% END %]
+				</ul>
+				<br>
+			</div>
+		</fieldset>
+	</form>
+</div>

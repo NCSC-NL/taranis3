@@ -1,0 +1,111 @@
+#!perl
+# Give each id-sequence a new starting point.  On existing installations,
+# lower numbers can co-exist.  On new installations they cannot.
+
+use warnings;
+use strict;
+
+use Term::ReadLine;
+
+# This table is a hard-copy of READMEs/README.db-id-space.md, with the
+# unused records removed.
+my %ranges = reverse qw(
+  10000000 advisory_linked_items_id_seq
+  20000000 calling_list_id_seq
+  30000000 category_id_seq
+  40000000 cluster_id_seq
+  50000000 collector_id_seq
+  60000000 constituent_group_id_seq
+  70000000 constituent_individual_id_seq
+  80000000 constituent_publication_id_seq
+  90000000 constituent_role_id_seq
+ 110000000 constituent_type_id_seq
+ 120000000 damage_description_id_seq
+ 130000000 email_item_id_seq
+ 140000000 entitlement_id_seq
+ 150000000 errors_id_seq
+ 160000000 import_issue_id_seq
+ 170000000 import_photo_id_seq
+ 180000000 import_software_hardware_id_seq
+ 190000000 item_id_seq
+ 210000000 membership_membership_id_seq
+ 220000000 phish_id_seq
+ 230000000 publication_id_seq
+ 240000000 publication2constituent_id_seq
+ 250000000 publication_advisory_seq
+ 260000000 publication_advisory_forward_id_seq
+ 260000000 publication_attachment_id_seq
+ 270000000 publication_endofday_id_seq
+ 280000000 publication_endofweek_id_seq
+ 290000000 publication_template_id_seq
+ 310000000 publication_type_seq
+ 320000000 role_id_seq
+ 330000000 role_right_id_seq
+ 340000000 search_id_seq
+ 350000000 soft_hard_usage_id_seq
+ 360000000 software_hardware_id_seq
+ 370000000 software_hardware_cpe_import_id_seq
+ 380000000 sources_id_seq
+ 390000000 statistics_analyze_id_seq
+ 410000000 statistics_assess_id_seq
+ 420000000 statistics_collector_id_seq
+ 430000000 statistics_database_id_seq
+ 440000000 tag_id_seq
+ 450000000 user_action_id_seq
+ 460000000 user_role_id_seq
+ 470000000 dossier_id_seq
+ 480000000 dossier_note_id_seq
+ 490000000 dossier_note_url_id_seq
+ 510000000 dossier_note_ticket_id_seq
+ 520000000 dossier_note_file_id_seq
+ 530000000 dossier_item_id_seq
+ 540000000 wordlist_id_seq
+ 550000000 source_wordlist_id_seq
+ 560000000 feeddigest_id_seq
+ 570000000 cve_template_id_seq
+ 580000000 report_todo_id_seq
+ 590000000 report_special_interest_id_seq
+ 610000000 report_contact_log_id_seq
+ 620000000 report_incident_log_id_seq
+ 630000000 publication_endofshift_id_seq
+ 640000000 stream_id_seq
+ 650000000 announcement_id_seq
+);
+
+# Usually we can simply replace _id_seq by .id to find the column of the
+# counter.  But in rare cases it is different.
+my %owner_exceptions = qw(
+	soft_hard_usage_id_seq   soft_hard_usage.usage_id
+	publication_type_seq     publication_type.id
+	photo_import_id_seq      import_photo.id
+	publication_advisory_seq publication_advisory.id
+	membership_membership_id_seq membership.id
+);
+
+sub {
+	my ($db, %args) = @_;
+
+	my $term = Term::ReadLine->new('Separate id-ranges');
+
+	my $a = $term->readline('Do you want id-range separation [y]? ');
+	my $do_separate = $a !~ /\S/ || $a =~ /^\s*y/i;
+
+	foreach my $seq (keys %ranges) {
+		my $restart = $do_separate ? "RESTART WITH $ranges{$seq}" : '';
+
+		my $owner = $owner_exceptions{$seq};
+		unless($owner) {
+			($owner = $seq) =~ s/_id_seq$/.id/;
+		}
+
+		# cache size > 1 speeds-up bulk inserts considerably
+		# owned by spec will remove the sequence when its table disappears
+		$db->query(<<__ALTER);
+ ALTER SEQUENCE $seq
+    $restart
+    OWNED BY $owner
+    CACHE 10;
+__ALTER
+
+	}
+};

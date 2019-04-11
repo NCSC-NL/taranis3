@@ -1,0 +1,28 @@
+<div id="photo-issues-content-heading" class="content-heading">
+	<div id="photo-issues-content-heading-issue-number" class="block">
+		<span>Issue nr</span>
+	</div>
+
+	<div id="photo-issues-content-heading-description" class="block">
+		<span>Description</span>
+	</div>
+</div>
+
+[% IF issues.size > 0 %]
+	[% FOREACH issue IN issues %]
+	
+	[% IF ( issue.issuetype != 1 ) && !execute_right; page_bar.number_results = page_bar.number_results - 1 ; NEXT; END %]
+	
+		[% INCLUDE photo_issues_item.tt %]
+	
+	[% END %]
+[% ELSE %]
+<div class="item-row" id="empty-row">No issues found...</div>
+
+[% END %]
+
+<div class="action-block filter-block-separator">
+	<div class="center" id="number-of-results">&mdash; [% page_bar.number_results_text %] &mdash;</div>
+</div>
+
+[% PROCESS page_bar.tt %]

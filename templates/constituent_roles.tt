@@ -1,0 +1,20 @@
+<div id="constituent-roles-content-heading" class="content-heading">
+	<div id="constituent-roles-content-heading-id" class="block configuration-heading-default">
+		<span>Constituent role name</span>
+	</div>
+</div>
+
+[% IF constituentRoles.size > 0 %]
+	[% FOREACH constituentRole IN constituentRoles %]
+	
+		[% INCLUDE constituent_roles_item.tt %]
+	
+	[% END %]
+[% ELSE %]
+<div class="item-row" id="empty-row">No constituent roles found...</div>
+
+[% END %]
+
+<div class="action-block filter-block-separator">
+	<div class="center" id="number-of-results">&mdash; [% numberOfResults %] results &mdash;</div>
+</div>

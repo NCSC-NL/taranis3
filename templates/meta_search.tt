@@ -1,0 +1,26 @@
+<div id="meta-search-content-heading" class="content-heading">
+	<div id="meta-search-content-heading-date" class="block">
+		<span>Date</span>
+	</div>
+
+	<div id="meta-search-content-heading-title-description" class="block">
+		<span>Title/Description</span>
+	</div>
+</div>
+
+[% IF search_results AND search_results.size > 0 %]
+	[% FOREACH result IN search_results %]
+	
+		[% INCLUDE meta_search_item.tt %]
+	
+	[% END %]
+[% ELSE %]
+<div class="item-row">(No results)</div>
+
+[% END %]
+
+<div class="action-block filter-block-separator">
+	<div class="center" id="number-of-results">&mdash; [%  page_bar.number_results_text %] &mdash;</div>
+</div>
+
+[% PROCESS page_bar.tt %]

@@ -1,0 +1,37 @@
+<div class="filter-block filter-block-separator">
+
+	<form id="form-users-search">
+
+		<div class="block">
+			<label for="users-filters-search">User Search</label><br>
+			<input id="users-filters-search" name="name" type="text" class="input-default">
+		</div>
+
+		<div class="block">
+			<label for="users-filters-role">User role</label><br>
+			<select name="role_id" class="select-single" id="users-filters-role">
+				<option value="">-any role-</option>
+				[% FOREACH role IN roles %]
+				<option value="[%- role.id -%]">[%- role.name -%]</option>
+				[%- END %]
+			</select>
+		</div>
+
+		<div class="block">
+			<span>&nbsp;</span>
+			<input type="button" id="btn-users-search" class="button" value="Search!">		
+		</div>
+
+	</form>
+</div>
+
+<div class="action-block filter-block-separator">
+[% IF write_right +%]
+	<div class="block">
+		<input type="button" class="button" id="btn-add-user" value="Add new user">
+	</div>
+[% END %]	
+	<div class="block align-block-right">
+		<span class="bold page-title">Users</span>
+	</div>
+</div>

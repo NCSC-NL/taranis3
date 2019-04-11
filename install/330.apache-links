@@ -1,0 +1,46 @@
+#!/usr/bin/env perl
+# Include vhost configs in main apache config
+#
+# Same logic in Taranis/Command/Control.pm
+
+use warnings;
+use strict;
+
+use Taranis::Install::Config   qw(config_generic);
+
+sub vhost_enable($$);
+
+# Every single Linux distribution has its own idea where the vhosts are.  It
+# also depends on the Apache version.  So: let's just scan for the right
+# directory...
+my ($apache) = grep -d,
+	'/etc/apache2/vhosts.d',        # OpenSuSE
+	'/etc/apache2/sites-enabled',   # Ubuntu 16.04
+	'/etc/httpd/vhosts.d',
+	'/etc/httpd/conf.d',
+	'/etc/httpd/conf';
+$apache or die "ERROR: cannot find apache2 vhosts.d\n";
+
+my $generic    = config_generic;
+my $lib        = $generic->{lib};       # vhost config is shared
+my $username   = $generic->{username};
+
+# More than one username may maintain taranis software.
+my $base       = $username eq 'taranis' ? '' : 'taranis.';
+
+vhost_enable "$apache/$base${username}.conf"    => "$lib/apache_vhosts.conf";
+vhost_enable "$apache/$base${username}_4u.conf" => "$lib/apache_vhosts4u.conf";
+
+sub vhost_enable($$) {
+	my ($from, $to) = @_;
+
+	-e $to
+		or print "*    installing $to\n";
+
+	unlink $from;
+
+	symlink $to, $from
+		or die "ERROR: cannot install apache vhost $to: $!\n";
+}
+
+exit 0;

@@ -1,0 +1,19 @@
+[% IF renderItemContainer %]
+<div class="stream-item item-row" data-id="[% stream.id %]">
+[% END %]
+
+	<div class="stream-item-description block">[% stream.description %]</div>
+
+	<div class="stream-item-displays block">[% stream.display_count %]</div>
+
+	<div class="align-block-right block">
+		[% IF write_right %]
+		<img src="[% webroot %]/images/icon_modify.png" alt="edit" title="edit" class="pointer btn-edit-stream" data-id="[% stream.id %]">
+		<img src="[% webroot %]/images/icon_delete.png" class="pointer btn-delete-stream" alt="delete" title="delete" data-id="[% stream.id %]">
+		[% ELSE %]
+		<img src="[% webroot %]/images/icon_details.png" alt="view" title="view details" class="pointer btn-view-stream" data-id="[% stream.id %]">
+		[% END %]
+	</div>
+[% IF renderItemContainer %]
+</div>
+[% END %]

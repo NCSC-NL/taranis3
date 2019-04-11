@@ -1,0 +1,21 @@
+#!perl
+# Add an external reference to the constituent groups and individuals, to
+# be able to track (generic) synchronization with external user databases.
+
+use warnings;
+use strict;
+
+sub {
+	my ($db, %args) = @_;
+
+	$db->query(<<'__GROUP');
+ALTER TABLE constituent_group
+  ADD COLUMN external_ref TEXT;
+__GROUP
+
+	$db->query(<<'__INDIV');
+ALTER TABLE constituent_individual
+  ADD COLUMN external_ref TEXT;
+__INDIV
+
+};

@@ -1,0 +1,20 @@
+<div id="parsers-content-heading" class="content-heading">
+	<div id="parsers-content-heading-name" class="block configuration-heading-default">
+		<span>Parser name</span>
+	</div>
+</div>
+
+[% IF parsers.size > 0 %]
+	[% FOREACH parser IN parsers %]
+	
+		[% INCLUDE parsers_item.tt %]
+	
+	[% END %]
+[% ELSE %]
+<div class="item-row" id="empty-row">No parsers found...</div>
+
+[% END %]
+
+<div class="action-block filter-block-separator">
+	<div class="center" id="number-of-results">&mdash; [% numberOfResults %] results &mdash;</div>
+</div>

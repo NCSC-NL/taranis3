@@ -1,0 +1,62 @@
+[% IF newAnalysis %]
+<div class="dialog-form-wrapper block">
+[% END %]
+
+	<form id="analyze-details-form" data-analysisid="[% analysis.id %]">
+			
+		[% USE sts = String(analysis.status) %]
+		<input type="hidden" name="original_status" id="original_status" value="[% sts.lower %]">
+		<input type="hidden" name="id" id="analyze-details-id" value="[% analysis.id %]">
+		
+		<fieldset>
+			<div class="dialog-input-wrapper block">
+				<label for="analyze-details-title" class="dialog-input-label">Title</label><br>
+				<input type="text" name="title" id="analyze-details-title" class="input-default dialog-input-text-wide" value="[% analysis.title %]">
+			</div><br>
+	
+			[% IF !newAnalysis %]
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Created / last status change</span><br>
+				<span>[% analysis.created %] / [% analysis.status_change %]</span>
+			</div><br>
+			[% END %]
+			
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Comments</span><br>
+				<textarea name="comments" id="analyze-details-comments" class="input-default dialog-input-text-wide" readonly="readonly" data-commentsadded="no">[% analysis.comments %]</textarea>
+			</div><br>
+		
+			<div class="dialog-input-wrapper block">
+				<textarea name="addComment" id="analyze-details-add-comment" class="input-default"></textarea>
+				<input type="button" class="button" value="Add comment" id="btn-analyze-item-new-analysis-add-comment">
+			</div><br>
+			
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Status</span><br>
+				<select name="status" id="analyze-details-status" class="select-single dialog-input-text-narrow">
+					[% FOREACH status_option IN pageSettings.analysis_status_options +%]
+					<option value="[% status_option %]" [% IF sts.lower == status_option %]selected="selected"[% END %] >[% status_option %]</option>
+					[% END +%]
+				</select>
+			</div><br>
+		
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Related ID's</span><br>
+				<textarea name="idstring" id="analyze-details-idstring" class="input-default dialog-input-text-wide">[% analysis.idstring %]</textarea>
+			</div><br>
+		
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Rating</span><br>
+				<select name="rating" id="analyze-details-rating" class="select-single dialog-input-text-narrow">
+					<option value="1" [% IF analysis.rating == 1 %]selected="selected"[% END %]>Low</option>
+					<option value="2" [% IF analysis.rating == 2 %]selected="selected"[% END %]>Medium</option>
+					<option value="3" [% IF analysis.rating == 3 %]selected="selected"[% END %]>High</option>
+					<option value="4" [% IF analysis.rating == 4 %]selected="selected"[% END %]>Undefined</option>
+				</select>
+			</div><br>		
+		</fieldset>
+	</form>
+	
+[% IF newAnalysis %]	
+</div>
+[% END %]

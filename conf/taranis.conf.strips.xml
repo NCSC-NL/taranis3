@@ -1,0 +1,68 @@
+<strips>
+  <anon>
+    <hostname><![CDATA[www.secunia.com]]></hostname>
+    <strip0><![CDATA[Send Feedback to Secunia(.*?)&lt;/HTML]]></strip0>
+    <strip1><![CDATA[]]></strip1>
+    <strip2><![CDATA[]]></strip2>
+  </anon>
+  <anon>
+    <hostname><![CDATA[secunia.com]]></hostname>
+    <strip0><![CDATA[Send Feedback to Secunia(.*?)&lt;/HTML]]></strip0>
+    <strip1><![CDATA[]]></strip1>
+    <strip2><![CDATA[]]></strip2>
+  </anon>
+  <anon>
+    <hostname><![CDATA[www.securiteam.com]]></hostname>
+    <strip0><![CDATA[&lt;/HTML&gt;(.*?)securiteam-style.css]]></strip0>
+    <strip1><![CDATA[Comments:(.*?)&lt;/HTML]]></strip1>
+    <strip2><![CDATA[]]></strip2>
+  </anon>
+  <anon>
+    <hostname><![CDATA[fedoranews.org]]></hostname>
+    <strip0><![CDATA[&lt;/html(.*?)&lt;!-- start main content --&gt;]]></strip0>
+    <strip1><![CDATA[]]></strip1>
+    <strip2><![CDATA[]]></strip2>
+  </anon>
+  <anon>
+    <hostname><![CDATA[securitydot.net]]></hostname>
+    <strip0><![CDATA[&lt;html(.*?)xboxcontent]]></strip0>
+    <strip1><![CDATA[xbottom(.*?)&lt;/html]]></strip1>
+    <strip2><![CDATA[]]></strip2>
+  </anon>
+  <anon>
+    <hostname><![CDATA[seclists.org]]></hostname>
+    <strip0><![CDATA[&lt;dfn&gt;This message&lt;/dfn&gt;(.*?)&lt;/map&gt;]]></strip0>
+    <strip1><![CDATA[]]></strip1>
+    <strip2><![CDATA[]]></strip2>
+  </anon>
+  <anon>
+    <hostname><![CDATA[www.frsirt.com]]></hostname>
+    <strip0><![CDATA[&lt;u&gt;Feedback&lt;/u&gt;(.*?)&lt;/HTML&gt;]]></strip0>
+    <strip1><![CDATA[]]></strip1>
+    <strip2><![CDATA[]]></strip2>
+  </anon>
+  <anon>
+    <hostname><![CDATA[secwatch.org]]></hostname>
+    <strip0><![CDATA[&lt;html(.*?)centercontent]]></strip0>
+    <strip1><![CDATA[Receive free instant(.*?)&lt;/html&gt;]]></strip1>
+    <strip2><![CDATA[]]></strip2>
+  </anon>
+  <anon>
+    <hostname><![CDATA[lists.vmware.com]]></hostname>
+    <strip0><![CDATA[&lt;HTML&gt;(.*?)BEGIN PGP SIGNED]]></strip0>
+    <strip1><![CDATA[END PGP SIGNATURE(.*?)&lt;/html&gt;]]></strip1>
+    <strip2><![CDATA[]]></strip2>
+  </anon>
+  <anon>
+    <hostname><![CDATA[packetstormsecurity.org]]></hostname>
+    <strip0><![CDATA[&lt;html&gt;(.*?)Start: Main Content Area]]></strip0>
+    <strip1><![CDATA[End: Main Content Area(.*?)&lt;/html&gt;]]></strip1>
+    <strip2><![CDATA[]]></strip2>
+  </anon>
+  <anon>
+    <hostname><![CDATA[www.net-security.org]]></hostname>
+    <strip0><![CDATA[DOCTYPE(.*?)center column]]></strip0>
+    <strip1><![CDATA[end of center column(.*?)&lt;/html&gt;]]></strip1>
+    <strip2><![CDATA[]]></strip2>
+  </anon>
+</strips>

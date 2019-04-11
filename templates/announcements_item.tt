@@ -1,0 +1,29 @@
+[% IF renderItemContainer %]
+<div class="announcements-item item-row" id="[% announcement.id %]">
+[% END %]
+		
+	<div class="announcements-item-created block">
+		<span>[% announcement.created_str %]</span>
+	</div>		
+
+	<div class="announcements-item-title block">
+		<span>[% announcement.title %]</span>
+	</div>		
+
+	<div class="announcements-item-type block">
+		<span>[% announcement.type %]</span>
+	</div>		
+
+	[% IF write_right %]
+	<div class="block announcements-item-actions align-block-right">
+		<img src="[% webroot %]/images/icon_modify.png" alt="edit" title="edit this item" class="btn-edit-announcement pointer" data-itemid="[% announcement.id %]">
+		<img src="[% webroot %]/images/icon_delete.png" alt="delete" title="delete this item" class="btn-delete-announcement pointer" data-itemid="[% announcement.id %]">
+	[% ELSE %]
+		<img src="[% webroot %]/images/icon_details.png" alt="view" title="view details" class="btn-view-announcement pointer" data-itemid="[% announcement.id %]">				           
+	[% END %]
+	</div>
+[% IF renderItemContainer %]		
+</div>
+[% END %]
+
+

@@ -1,0 +1,25 @@
+#!/usr/bin/env perl
+# Check whether we already have sources
+
+use warnings;
+use strict;
+
+use Taranis::Install::DB qw(connect_db);
+use File::Basename qw(dirname);
+
+my $db = connect_db;
+
+my $nr_sources = $db->query('SELECT COUNT(*) FROM sources')->list;
+exit 0 if $nr_sources;
+
+my $here = (dirname $0) . '/example-sources/';
+
+print <<__HINT;
+!! HINT: you do not have sources yet.  You may start-off with the small
+!!    English and/or Dutch set which is shipped with this distribution.
+!!    Go to "taranis configuration" (top bar) --> "collector configuration"
+!!    --> "Taranis sources" --> "Import/Export sources" and then browse
+!!    to $here to pick them.
+__HINT
+
+exit 0;

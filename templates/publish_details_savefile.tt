@@ -1,0 +1,9 @@
+"[% details.publication.pub_title.decodeEntity +%]"
+Approved by [% details.publication.approved_by.decodeEntity %] on [% details.publication.approved_on_str +%]
+Published by [% details.publication.published_by.decodeEntity %] on [% details.publication.published_on_str +%]
+
+Publication was sent to:
+
+[% FOREACH person IN details.receivers_list +%]
+[% person.lastname.decodeEntity _ ', '  _ person.firstname.decodeEntity _ ' (' _  person.groupname.decodeEntity  _ ') - ' _ person.emailaddress.decodeEntity _ ' [' _ person.timestamp_str _ ']' +%]
+[%+ END %]

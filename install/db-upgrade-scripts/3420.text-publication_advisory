@@ -1,0 +1,13 @@
+#!perl
+
+use warnings;
+use strict;
+
+sub {
+	my ($db, %args) = @_;
+
+	$db->query( <<'__RUN__');
+ALTER TABLE publication_advisory ALTER COLUMN title TYPE TEXT;
+ALTER TABLE publication_advisory ALTER COLUMN based_on TYPE TEXT;
+__RUN__
+};

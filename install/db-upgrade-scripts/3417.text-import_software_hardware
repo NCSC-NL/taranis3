@@ -1,0 +1,15 @@
+#!perl
+
+use warnings;
+use strict;
+
+sub {
+	my ($db, %args) = @_;
+
+	$db->query( <<'__RUN__');
+ALTER TABLE import_software_hardware ALTER COLUMN cpe_id TYPE TEXT;
+ALTER TABLE import_software_hardware ALTER COLUMN producer TYPE TEXT;
+ALTER TABLE import_software_hardware ALTER COLUMN "name" TYPE TEXT;
+ALTER TABLE import_software_hardware ALTER COLUMN "type" TYPE TEXT;
+__RUN__
+};

@@ -1,0 +1,24 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden[% END %] ui-state-error ui-corner-all">[% message %]</div>
+	
+	[% IF collector.description %]
+	<div class="dialog-title">
+		<span>[% collector.description %]</span>
+	</div>
+	[% END %]
+	
+	<form id="form-collector" data-id="[% IF collector.id; collector.id; ELSE; 'NEW'; END %]">
+		<fieldset>
+			<div class="dialog-input-wrapper block">
+				<label for="collector-description" class="dialog-input-label">Description *</label><br>
+				<input type="text" name="description" id="collector-description" class="input-default dialog-input-text" value="[% collector.description %]">
+			</div>
+			[% IF collector.id %]
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Secret</span><br>
+				<span id="collector-secret">[% collector.secret %]</span>
+			</div>
+			[% END %]
+		</fieldset>
+	</form>
+</div>

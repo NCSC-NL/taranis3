@@ -1,0 +1,20 @@
+#!perl
+# remove default portnumber from fullurl
+
+use warnings;
+use strict;
+
+sub {
+	my ($db, %args) = @_;
+	$db->query( <<'__RUN__');
+UPDATE sources
+   SET fullurl = protocol || host || url
+ WHERE protocol = 'https://' AND port = 443;
+__RUN__
+
+	$db->query( <<'__RUN__');
+UPDATE sources
+   SET fullurl = protocol || host || url
+ WHERE protocol = 'http://'  AND port = 80;
+__RUN__
+};

@@ -1,0 +1,25 @@
+<div id="feeddigest-content-heading" class="content-heading">
+	<div id="feeddigest-content-heading-sendinghour" class="block">
+		<span>Send at (hour of day)</span>
+	</div>	
+
+	<div id="feeddigest-content-heading-url" class="block">
+		<span>URL</span>
+	</div>
+</div>
+
+[% IF feeds.size > 0 %]
+	[% FOREACH feed IN feeds %]
+	
+		[% INCLUDE feed_digest_item.tt %]
+	
+	[% END %]
+[% ELSE %]
+
+<div class="feeddigest-item bold item-row no-items" id="empty-row">No feeds to display.</div>
+
+[% END %]
+
+<div class="action-block filter-block-separator">
+	<div class="block">&nbsp;</div>
+</div>

@@ -1,0 +1,13 @@
+#!perl
+# adv 2.0 add late links of items, keep pub-eod separate
+
+use warnings;
+use strict;
+
+sub {
+	my ($db, %args) = @_;
+	$db->query( <<'__RUN__');
+ALTER TABLE publication_endofday
+    ADD COLUMN published_advisories text;
+__RUN__
+};

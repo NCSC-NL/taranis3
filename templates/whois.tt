@@ -1,0 +1,51 @@
+<div id="whoi-content-heading" class="content-heading">
+	<div id="whois-content-heading-source" class="block">
+		<span>Source</span>
+	</div>
+	<div id="whois-content-heading-output" class="block">
+		<span>Output</span>
+	</div>
+</div>
+
+[% IF body_multiple == 1 %]
+<!-- found multiple IPs for host -->
+	[% FOREACH host_ip IN ips %]
+<div class="whois-item item-row">
+	<span><a href="tools/whois/doWhoisLookup/tool=whois&whois=[% host_ip %]&host=[% whois_host %]&page=[% whois_page %]">[% host_ip %]</a></span>
+</div>
+	[% END %]      
+[% END %]
+
+[% IF body_error == 1 %]
+<!-- no results for query  -->
+<div class="whois-item item-row">
+	<span class="bold">Your query did not retrieve any hosts! [% errmsg %]</span>
+</div>
+[% END %]
+
+[% IF body_result %]
+<!-- whois results -->
+	[% FOREACH result IN results %]
+<div class="whois-item item-row">	
+	<div class="whois-item-source block">
+		<img src="[% webroot %]/images/icons/[% result.source %].gif" alt="[% result.source %]">
+	</div>
+	<div class="whois-item-output block">
+		[% IF result.output.match('\n') %]
+		<pre class="font-courier">[% result.output %]</pre>
+		[% ELSE %]
+		<span>[% result.output %]</span>
+		[% END %]
+	</div>
+</div>
+	[% END %]
+[% ELSE %]
+
+	[% IF body_multiple != 1 && body_error == 0 %]
+<div class="whois-item bold item-row">Please insert query.</div>
+	[% END %]	    
+[% END %]
+
+<div class="action-block filter-block-separator">
+	<div class="block">&nbsp;</div>
+</div>

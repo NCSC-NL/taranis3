@@ -1,0 +1,138 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="hidden ui-state-error ui-corner-all">[% message %]</div>
+	[% IF isLocked +%]
+	<div class="ui-state-highlight ui-corner-all dialog-highlight">
+		[% IF isLocked %]
+		This is End-of-week has been locked by [% openedByFullname %]
+		[% END %]
+	</div>
+	[% END %]
+
+	<div class="dialog-title">
+		<span>END OF WEEK</span>	
+	</div>
+	
+	<form id="eow-details-form" class="publication-details-form" data-publicationid="[% IF eow.publication_id; eow.publication_id; ELSE; 'NEW'; END %]">
+		<input type="hidden" class="include-in-form" value="[% IF eow.publication_id; eow.publication_id; ELSE; eow_publication_id; END %]" name="pub_id">
+		<input type="hidden" value="[% eow.id %]" name="eow_id" id="eow-details-eow-id" class="include-in-form">
+		<div id="eow-details-tabs" class="dialog-tabs">
+			<ul>
+				<li><a href="#eow-details-tabs-introduction">Introduction</a></li>
+				<li><a href="#eow-details-tabs-sent-advisories">Sent advisories</a></li>
+				<li><a href="#eow-details-tabs-new-kb-items">New KB items</a></li>
+				<li><a href="#eow-details-tabs-other-news">Other news</a></li>
+				<li><a href="#eow-details-tabs-closing">Closing</a></li>
+				[% IF !isNewEow %]
+				<li><a href="#eow-details-tabs-preview">Preview</a></li>
+				[% END %]
+			</ul>
+
+<!-- TAB INTRODUCTION -->
+			<div id="eow-details-tabs-introduction">
+				<fieldset>
+					<div class="dialog-input-wrapper block">
+						<span class="dialog-input-label">Summary</span><br>
+<!-- 						enable tabs in  -->
+						<textarea name="introduction_txt" id="eow-details-introduction-text" class="input-default scroll-y-always include-in-form font-courier">[% eow.introduction %]</textarea>
+					</div>
+				</fieldset>
+			</div>
+
+<!-- TAB SENT ADVISORIES -->
+			<div id="eow-details-tabs-sent-advisories">
+				<fieldset>
+					<div class="table">
+						<div class="cell dialog-input-wrapper">
+							<span class="dialog-input-label">Summary</span><br>
+							<textarea name="sentadvisories_txt" id="eow-details-sent-advisories-text" class="input-default scroll-y-always include-in-form font-courier">[% eow.sent_advisories %]</textarea>
+						</div>
+						<div class="cell eow-details-advisory-selection-cell">
+							<span class="dialog-input-label">Advisory selection</span><br>
+							<div class="eow-advisory border-default">
+								<span>Date from:</span><br>
+								<input id="eow-details-start-date" name="datefrom" type="text" value="[% datefrom %]" class="input-default date-picker">
+								<br><br>
+								<span>Date to:</span><br>
+								<input id="eow-details-end-date" name="dateto" type="text" value="[% dateto %]" class="input-default date-picker"><br><br>
+								[% IF write_right %]
+								<div class="block">
+									<input type="button" class="button btn-eow-details-apply-selection" value="&lt; Apply selection">
+								</div>
+								[% END %]
+							</div>
+						</div>
+					</div>
+				</fieldset>
+			</div>
+
+<!-- TAB NEW KB ITEMS -->
+			<div id="eow-details-tabs-new-kb-items">
+				<fieldset>
+					<div class="dialog-input-wrapper block">
+						<span class="dialog-input-label">New KB items</span><br>
+						<textarea name="newkbitems_txt" id="eow-details-new-kb-items-text" class="input-default scroll-y-always include-in-form font-courier">[% eow.newondatabank %]</textarea>
+					</div>
+				</fieldset>
+			</div>
+
+<!-- TAB OTHER NEWS -->
+			<div id="eow-details-tabs-other-news">
+				<fieldset>
+
+					<div class="table">
+						<div class="cell dialog-input-wrapper">
+							<span class="dialog-input-label">Suggested items</span><br>
+							<textarea name="othernews_txt" id="eow-details-other-news-text" class="input-default scroll-y-always include-in-form font-courier">[% eow.newsitem %]</textarea>
+						</div>
+
+						<div class="cell eow-details-analysis-selection-cell">
+							<span class="dialog-input-label">Analysis:</span><br>
+							<div class="border-default eow-analysis">
+								<select class="input-default dialog-input-text-narrow" name="analysis" id="eow-details-analysis-selection">
+									<option value="">-select analysis-</option>
+									[% FOREACH analysis IN all_eow_analysis %]
+									<option value="[% analysis.id %]">[% analysis.id _ ' ' _ analysis.title %]</option>
+									[% END %]
+								</select>
+								<br><br>
+								<span>Title:</span><br>
+								<input class="input-default dialog-input-text-narrow" title="" type="text" name="analysis_title" id="eow-details-analysis-title">
+								<br><br>
+								<span>Description:</span><br>
+								<textarea name="analysis_description" id="eow-details-analysis-description" class="input-default font-courier dialog-input-text-narrow"></textarea>
+								<br><br>
+								<span>Links:</span><br>
+								<div id="eow-details-item-links" class="border-default"></div><br>
+								[% IF write_right +%]
+								<input type="button" class="button" id="btn-eow-details-other-news-use-item" value="&lt; Use item">
+								[% END %]
+							</div>
+						</div>
+					</div>
+				</fieldset>
+			</div>
+
+<!-- TAB CLOSING -->
+			<div id="eow-details-tabs-closing">
+				<fieldset>
+					<div class="dialog-input-wrapper block">
+						<span class="dialog-input-label">Closing</span><br>
+						<textarea name="closing_txt" id="eow-details-closing-text" class="input-default scroll-y-always include-in-form font-courier">[% eow.closing %]</textarea>
+					</div>
+				</fieldset>
+			</div>
+
+<!-- TAB PREVIEW -->			
+			[% IF !isNewEow %]
+			<div id="eow-details-tabs-preview">
+				<fieldset>
+					<div class="dialog-input-wrapper block" data-printable="created by [% eow.created_by %]">
+						<span class="dialog-input-label" [% IF eow.approved_by %]data-printable="approved by [% eow.approved_by %]"[% END %]>Preview</span><br>
+						<textarea name="preview_txt" id="eow-details-preview-text" class="input-default scroll-y-always font-courier publications-details-preview" readonly="readonly"></textarea>
+					</div>
+				</fieldset>
+			</div>
+			[% END %]			
+		</div>
+	</form>
+</div>

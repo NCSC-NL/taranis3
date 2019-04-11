@@ -1,0 +1,20 @@
+<div id="strips-content-heading" class="content-heading">
+	<div id="strips-content-heading-hostname" class="block">
+		<span>Hostname</span>
+	</div>
+</div>
+
+[% IF stripsList.size > 0 %]
+	[% FOREACH strips IN stripsList %]
+	
+		[% INCLUDE strips_item.tt %]
+	
+	[% END %]
+[% ELSE %]
+<div class="item-row" id="empty-row">No strips found...</div>
+
+[% END %]
+
+<div class="action-block filter-block-separator">
+	<div class="center" id="number-of-results">&mdash; [% numberOfResults %] results &mdash;</div>
+</div>

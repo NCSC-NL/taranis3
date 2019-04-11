@@ -1,0 +1,7 @@
+<ul>
+	<li ng-repeat="todolist in announcements.result">
+		<span class="font-monospace">{{ todolist.created_str }}</span>
+		<a ng-href="#/todo/{{ todolist.id }}"><span class="marked">{{ todolist.title }}</span></a><br>
+		<hr class="thin" ng-if="!$last">
+	</li>
+</ul>

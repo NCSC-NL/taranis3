@@ -1,0 +1,286 @@
+#!/usr/bin/env perl
+# Install the mod_perl startup script into apache's modperl module.
+
+use warnings;
+use strict;
+
+use Carp           qw(confess);
+use File::Basename qw(basename);
+use File::Find     qw(find);
+
+use Taranis::Install::Perl   qw(perl5lib);
+use Taranis::Install::Config qw(config_release config_generic become_user_taranis
+	sort_versions installed_versions taranis_sources);
+
+my ($apache_v_out) = qx(apachectl -v) || '';
+my $apache_version = $apache_v_out =~ m[Apache/([0-9.]+)] ? $1 : 'unknown';
+
+print "*   Apache server version $apache_version\n";
+
+become_user_taranis;
+
+my $generic   = config_generic;
+my $version   = $generic->{default_version};
+
+my $installed = installed_versions;
+my $global    = $generic->{apache};
+my $config_fn = "$generic->{lib}/apache_vhosts.conf";
+
+print "*   Generating apache vhosts in $config_fn\n";
+
+open my $config, '>:encoding(utf8)', $config_fn
+	or die "ERROR: cannot write $config_fn: $!\n";
+
+my $libs		= join " \\\n\t\t\t",
+	map "-I$_", perl5lib $version;
+
+my $script = basename __FILE__;
+
+$config->print(<<_INTRO);
+# The content of this file is generated during 'install', via
+# script $script.  Configure this via ~/etc/setup-*
+# **** DO NOT CHANGE THIS FILE BY HAND ****
+
+_INTRO
+
+if($apache_version lt '2.4.99') {
+	# On older Apaches, the +parent is implemented differently. Only in more
+	# recent mod_perls, the vhosts can use separate compiled Perl instances.
+	# This also limits the usefulness of parallel installations of Taranis
+	# versions under old mod_perl/Apaches.
+	print "*   older meaning of +Parent\n";
+
+	# Remove one indent
+	(my $libleft = $libs) =~ s/\t//m;
+
+	$config->print(<<_OLD_PARENT);
+	#XXX only needed for Apaches < 2.4.18
+	PerlSwitches	\\
+		$libleft
+
+_OLD_PARENT
+}
+
+$config->print(<<_COMMON);
+	PerlRequire  $generic->{lib}/apache_startup.pl
+	PerlModule   Apache2::compat
+	PerlModule   ModPerl::Registry
+	PerlResponseHandler ModPerl::Registry
+	AddHandler   cgi-script  .pl
+
+_COMMON
+
+
+### Create a listen for each of the unique used ports
+
+my %ports = ($global->{primary_port} => 1);
+foreach my $version (keys %$installed) {
+	my $release     = config_release $version;
+	$ports{$release->{apache}{vhost_port}}++;
+}
+
+# Ports 80 and 443 are often already initiated in the default apache config,
+# or used by other virtual hosts.
+my @listen = grep $_ != 80 && $_ != 443, keys %ports;
+$config->print("	Listen $_\n")
+	for sort {$a <=> $b} @listen;
+
+
+#### Create a vhost for each of the installed versions
+
+foreach my $version (sort_versions keys %$installed) {
+	my $release     = config_release $version;
+	my $install     = $release->{install};
+	my $is_default  = $version eq $generic->{default_version};
+	my $is_git      = $version eq 'git';
+
+	my $settings    = $release->{apache};
+
+	my $procs_start = $settings->{procs_start}
+		|| ($is_default ? $global->{procs_start} : 0)
+		|| 1;
+
+	my $procs_max   = $settings->{procs_max}
+		|| ($is_default ? $global->{procs_max} : 0)
+		|| 5;
+
+	my $vhost       = $settings->{vhost_name};
+	my @ports		= $settings->{vhost_port};
+
+	push @ports, $global->{primary_port}
+		if $is_default;
+
+	my $ports       = join ' ', map "*:$_", @ports;
+
+	my $libs		= join " \\\n			",
+		map "-I$_", perl5lib $version;
+
+	my $same_vhost  = $global->{vhost_name} eq $vhost;
+	my $alias		= $is_default && ! $same_vhost ? <<_ALIAS : '';
+		ServerAlias               $global->{vhost_name}
+_ALIAS
+
+	my $log         = "$release->{logs}/apache";
+	-d $log or confess $log;
+
+	# Also in profile
+	my $configs    = join ':', grep -d,
+		$release->{extension},
+		$generic->{extension},
+		$generic->{home};
+
+	my @statics   = grep -d,
+		"$release->{extension}/web-static",
+		"$generic->{extension}/web-static";
+
+	my @templates = grep -d,
+		"$release->{extension}/templates",
+		"$generic->{extension}/templates";
+
+	my @modperl = grep -d,
+		"$release->{extension}/modperl",
+		"$generic->{extension}/modperl";
+
+	my ($docroot, $dynamic, $phantom_libs, $clustering);
+	if($is_git) {
+		# Use from un-installed location
+		my $sources	  = taranis_sources $version;
+		$docroot      = "$sources/webinterface";
+		$dynamic      = "$sources/scripts";
+		$phantom_libs = "$sources/phantomjs";
+		$clustering   = "$sources/pm/Taranis/Clustering";
+		push @templates, "$sources/templates";
+	} else {
+		$docroot      = "$install/web-static";
+		$dynamic      = "$install/modperl";
+		$phantom_libs = "$install/PhantomJS";
+		$clustering   = "$install/clustering";
+		push @templates, "$install/templates";
+	}
+
+	my $templates     = join ':', @templates;
+	my $modperl       = join ':', @modperl, $dynamic;
+	my $tmpdir        = $release->{tmp} || '/tmp';
+	my $icons         = $generic->{source_icons};
+	my $stats         = $generic->{custom_stats};
+
+	my @apache_access = ($docroot, @statics, $dynamic, @modperl, $icons,$stats);
+	my $grantdirs     = join "\n", map <<"__ACCESS", @apache_access;
+		<Directory "$_/">
+			Require all granted
+			AllowOverride All
+		</Directory>
+__ACCESS
+
+	my $incldir = "$generic->{etc}/apache-vhost-extra";
+	-d $incldir or mkdir $incldir
+		or die "ERROR: cannot create $incldir: $!\n";
+
+	my $vname   = $settings->{vhost_name};
+	my $include = "$incldir/$vname";
+	unless(-f $include) {
+		open my $vh, '>:encoding(utf8)', $include
+			or die "ERROR: cannot create $include: $!\n";
+
+		$vh->print(<<'__HEADER');
+# Site specific vhost configuration.  You may need to add some
+# lines which are not forseen in the standard Taranis installation.
+
+__HEADER
+
+		$vh->print(<<__SSL) if grep $_ == 443, @ports;
+WARNING-NEEDS-CONFIGURATION: SSL vhost must be configured
+# You may change this to any location you want: it will not be
+# overwritten at new installs.
+SSLEngine on
+SSLCertificateFile       $incldir/$vname.crt
+SSLCertificateKeyFile    $incldir/$vname.key
+#SSLCertificateChainFile $incldir/DigiCertCA.crt
+
+__SSL
+		$vh->close;
+	}
+
+	# File::Find is painful
+	my $overrule_static = '';
+	my @s = grep -d, "$release->{extension}/web-static",
+		"$generic->{extension}/web-static";
+
+	if(@s) {
+		my %overrule_static;
+		my $take_overrule = sub {
+			my $name = $File::Find::name;
+			-f $name or return;
+			(my $alias = $name) =~ s/^\Q$File::Find::topdir//;
+			$overrule_static{$alias} ||= $name;
+		};
+		find $take_overrule, @s;
+
+		$overrule_static = join "\n",
+			map qq[\t\tAlias $_ "$overrule_static{$_}"],
+				sort keys %overrule_static;
+	}
+
+	$config->print(<<_VIRTUAL_HOST);
+	<VirtualHost $ports>
+		ServerName                $vname
+$alias
+		ServerAdmin               $generic->{admin_email}
+
+		# You may need to add some fields, for instance SSL configuration.
+		Include                   $include
+
+		# DO NOT CHANGE THIS BY HERE!!!!
+		# You can change some values in $release->{filebase}.json
+		# and then re-install any taranis version to get this file
+		# updated.
+
+		DocumentRoot	          "$docroot/"
+		Alias /taranis/           "$dynamic/"
+		Alias /images/icons/      "$icons/"
+		Alias /custom-stats/      "$stats/"
+
+$overrule_static
+
+		RedirectMatch	^/\$      /taranis/
+
+		PerlOptions               +Parent +GlobalRequest
+		PerlInterpStart           $procs_start
+		PerlInterpMax             $procs_max
+
+		PerlSwitches	\\
+			$libs
+
+		PerlSetEnv HOME           "$generic->{home}"
+		PerlSetEnv PHANTOMJS      "$generic->{phantomjs}/bin/phantomjs"
+		PerlSetEnv PHANTOMJS_LIB  "$phantom_libs"
+		PerlSetEnv TEMPLATE_PATH  "$templates"
+		PerlSetEnv APPCONFIG_PATH "$configs"
+		PerlSetEnv TMPDIR         "$tmpdir"
+		PerlSetEnv CLUSTERING     "$clustering"
+		PerlSetEnv MODPERL_PATH   "$modperl"
+		PerlSetEnv SOURCE_ICONS   "$icons"
+
+		CustomLog		"$log/access_log" common
+		ErrorLog		"$log/error_log"
+
+		<Location /taranis>
+			SetHandler		perl-script
+			DirectoryIndex	index.pl
+			PerlFixupHandler My::Fixup
+			PerlOptions		+ParseHeaders
+			Options			+ExecCGI +FollowSymLinks
+			Require			all granted
+		</Location>
+
+$grantdirs
+	</VirtualHost>
+
+_VIRTUAL_HOST
+
+}
+
+$config->close
+	or die "ERROR while writing $config_fn: $!\n";
+
+exit 0;

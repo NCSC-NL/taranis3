@@ -1,0 +1,148 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="hidden ui-state-error ui-corner-all">[% message %]</div>
+	[% IF isLocked +%]
+	<div class="ui-state-highlight ui-corner-all dialog-highlight">
+		[% IF isLocked %]
+		This is End-of-shift has been locked by [% openedByFullname %]
+		[% END %]
+	</div>
+	[% END %]
+
+	[% IF !isNewEos %]
+	<div class="dialog-title">
+		<span>[% eos_heading %]</span>	
+	</div>
+	[% END %]
+[% USE date %]	
+	<form id="eos-details-form" class="publication-details-form" data-publicationid="[% IF eos.publication_id; eos.publication_id; ELSE; 'NEW'; END %]">
+		<input type="hidden" class="include-in-form" value="[% IF eos.publication_id; eos.publication_id; ELSE; eos_publication_id; END %]" name="pub_id">
+		<input type="hidden" value="[% eos.id %]" name="eos_id" id="eos-details-eos-id" class="include-in-form">
+		<input type="hidden" value="[% publication_type_id %]" id="eos-details-publication-type-id">		
+		<div id="eos-details-tabs" class="dialog-tabs">
+			<ul>
+				<li><a href="#eos-details-tabs-general">General</a></li>
+				<li><a href="#eos-details-tabs-contact-log">Contact Log</a></li>
+				<li><a href="#eos-details-tabs-incident-log">Incident Log</a></li>
+				<li><a href="#eos-details-tabs-todo">To-do</a></li>
+				<li><a href="#eos-details-tabs-special-interest">Special Interest</a></li>
+				<li><a href="#eos-details-tabs-done">Done</a></li>
+				[% IF !isNewEos %]				
+				<li><a href="#eos-details-tabs-preview">Preview</a></li>
+				[% END %]
+			</ul>
+
+<!-- TAB GENERAL -->
+			<div id="eos-details-tabs-general">
+				<fieldset>
+					<div class="dialog-input-wrapper block">
+						<span class="dialog-input-label">Shift</span><br>
+						<span>from</span>
+						<input type="text" class="date-picker input-default include-in-form" id="eos-details-timeframe-start-date" name="timeframe_begin_date" value="[% IF currentDateStart; currentDateStart; ELSE; date.format(eos.timeframe_begin.stripSeconds, '%d-%m-%Y'); END %]" placeholder="dd-mm-yyyy">
+						<input type="text" class="time start input-default include-in-form" id="eos-details-timeframe-begin-time" name="timeframe_begin_time" value="[% IF currentShift; currentShift.start.substr(0,2) _ ':' _ currentShift.start.substr(2,2); ELSE; date.format(eos.timeframe_begin.stripSeconds, '%H:%M'); END %]" placeholder="HH:MM">
+						<span>to</span>
+						<input type="text" class="date-picker input-default include-in-form" id="eos-details-timeframe-end-date" name="timeframe_end_date" value="[% IF currentDateEnd; currentDateEnd; ELSE; date.format(eos.timeframe_end.stripSeconds, '%d-%m-%Y'); END %]" placeholder="dd-mm-yyyy">
+						<input type="text" class="time end input-default include-in-form" id="eos-details-timeframe-end-time" name="timeframe_end_time" value="[% IF currentShift; currentShift.end.substr(0,2) _ ':' _ currentShift.end.substr(2,2); ELSE; date.format(eos.timeframe_end.stripSeconds, '%H:%M'); END %]" placeholder="HH:MM">
+					</div><br>
+
+					<div class="dialog-input-wrapper block">
+						<span class="dialog-input-label">Handler*</span><br>
+						<select name="handler" id="eos-details-handler" class="select-single dialog-input-text include-in-form">
+							<option value="" [% IF !eos.handler %]selected="selected"[% END %]>-no handler-</option>
+						[% FOREACH user IN users %]
+							<option value="[% user.username %]" [% IF eos.handler == user.username || handler == user.username %]selected="selected"[% END %]>[% user.fullname %]</option>
+						[% END %] 
+						</select>
+					</div><br>
+
+					<div class="dialog-input-wrapper block">
+						<span class="dialog-input-label">Handler comments/notes</span><br>
+						<textarea name="notes" id="eos-details-notes" class="input-default font-courier scroll-y-always include-in-form">[% eos.notes %]</textarea>
+					</div>
+				</fieldset>
+			</div>
+			
+<!-- TAB CONACT LOG -->
+			<div id="eos-details-tabs-contact-log">
+				<fieldset>
+					<div class="dialog-input-wrapper block">
+						<span class="dialog-input-label">Contact log entries</span><br>
+						<textarea name="contact_log" id="eos-details-contact-log" class="input-default font-courier scroll-y-always include-in-form eos-details-input-text">[% contactLog || eos.contact_log %]</textarea>
+					</div>
+					<div class="dialog-input-wrapper block">
+						<span class="dialog-input-label">Contact log entries up-to-date</span><span class="italic"> (read only)</span><br>
+						<textarea id="eos-details-contact-log-updated" class="input-default font-courier scroll-y-always eos-details-input-text" readonly="readonly">[% contactLogUpdated %]</textarea>
+					</div>
+				</fieldset>
+			</div>
+
+<!-- TAB INCIDENT LOG -->
+			<div id="eos-details-tabs-incident-log">
+				<fieldset>
+					<div class="dialog-input-wrapper block">
+						<span class="dialog-input-label">Incident log entries</span><br>
+						<textarea name="incident_log" id="eos-details-incident-log" class="input-default font-courier scroll-y-always include-in-form eos-details-input-text">[% incidentLog || eos.incident_log %]</textarea>
+					</div>
+					<div class="dialog-input-wrapper block">
+						<span class="dialog-input-label">Incident log entries up-to-date</span><span class="italic"> (read only)</span><br>
+						<textarea id="eos-details-incident-log-updated" class="input-default font-courier scroll-y-always eos-details-input-text" readonly="readonly">[% incidentLogUpdated %]</textarea>
+					</div>
+				</fieldset>
+			</div>
+
+<!-- TAB TO-DO -->
+			<div id="eos-details-tabs-todo">
+				<fieldset>
+					<div class="dialog-input-wrapper block">
+						<span class="dialog-input-label">To-dos</span><br>
+						<textarea name="todo" id="eos-details-todo" class="input-default font-courier scroll-y-always include-in-form eos-details-input-text">[% todo || eos.todo %]</textarea>
+					</div>
+					<div class="dialog-input-wrapper block">
+						<span class="dialog-input-label">To-dos up-to-date</span><span class="italic"> (read only)</span><br>
+						<textarea id="eos-details-todo-updated" class="input-default font-courier scroll-y-always eos-details-input-text" readonly="readonly">[% todoUpdated %]</textarea>
+					</div>
+				</fieldset>
+			</div>
+
+<!-- TAB SPECIAL INTEREST -->
+			<div id="eos-details-tabs-special-interest">
+				<fieldset>
+					<div class="dialog-input-wrapper block">
+						<span class="dialog-input-label">Special interests</span><br>
+						<textarea name="special_interest" id="eos-details-special-interest" class="input-default font-courier scroll-y-always include-in-form eos-details-input-text">[% specialInterest || eos.special_interest %]</textarea>
+					</div>
+					<div class="dialog-input-wrapper block">
+						<span class="dialog-input-label">Special interests up-to-date</span><span class="italic"> (read only)</span><br>
+						<textarea id="eos-details-special-interest-updated" class="input-default font-courier scroll-y-always eos-details-input-text" readonly="readonly">[% specialInterestUpdated %]</textarea>
+					</div>
+				</fieldset>
+			</div>
+
+<!-- TAB DONE -->
+			<div id="eos-details-tabs-done">
+				<fieldset>
+					<div class="dialog-input-wrapper block">
+						<span class="dialog-input-label">Done</span><br>
+						<textarea name="done" id="eos-details-done" class="input-default font-courier scroll-y-always include-in-form eos-details-input-text">[% done || eos.done %]</textarea>
+					</div>
+					<div class="dialog-input-wrapper block">
+						<span class="dialog-input-label">Done up-to-date</span><span class="italic"> (read only)</span><br>
+						<textarea id="eos-details-done-updated" class="input-default font-courier scroll-y-always eos-details-input-text" readonly="readonly">[% doneUpdated %]</textarea>
+					</div>
+				</fieldset>
+			</div>
+
+
+			[% IF !isNewEos %]
+<!-- TAB PREVIEW -->
+			<div id="eos-details-tabs-preview">
+				<fieldset>
+					<div class="dialog-input-wrapper block" data-printable="created by [% eos.created_by %]">
+						<span class="dialog-input-label">Preview</span><br>
+						<textarea name="preview_txt" id="eos-details-preview-text" class="input-default scroll-y-always font-courier publications-details-preview" readonly="readonly"></textarea>
+					</div>
+				</fieldset>
+			</div>
+			[% END %]
+		</div>
+	</form>
+</div>

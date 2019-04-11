@@ -1,0 +1,32 @@
+[% USE date %]
+[% IF renderItemContainer %]
+<div class="report-special-interest-item item-row" id="[% specialInterest.id %]">
+[% END %]
+
+	<div class="report-special-interest-item-date-start block date-width-default">
+		<span>[% date.format( specialInterest.date_start.stripSeconds, format = '%d-%m-%Y' ) %]</span>
+	</div>
+
+	<div class="report-special-interest-item-date-end block date-width-default">
+		<span>[% date.format( specialInterest.date_end.stripSeconds, format = '%d-%m-%Y' ) %]</span>
+	</div>
+
+	<div class="report-special-interest-item-requestor block">
+		<span>[% specialInterest.requestor %]</span>
+	</div>
+
+	<div class="report-special-interest-item-topic block">
+		<span>[% specialInterest.topic %]</span>
+	</div>
+
+	<div class="block align-block-right">
+	[% IF write_right %]
+		<img src="[% webroot %]/images/icon_modify.png" alt="edit" title="edit special interest" class="pointer btn-edit-report-special-interest" data-id="[% specialInterest.id %]">
+		<img src="[% webroot %]/images/icon_delete.png" alt="delete" title="delete special interest" class="pointer btn-delete-report-special-interest" data-id="[% specialInterest.id %]">
+	[% ELSE %]
+		<img src="[% webroot %]/images/icon_details.png" alt="view" title="view details" class="pointer btn-view-report-special-interest" data-id="[% specialInterest.id %]">
+	[% END %]
+	</div>
+[% IF renderItemContainer %]
+</div>
+[% END %]

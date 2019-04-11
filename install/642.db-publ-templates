@@ -1,0 +1,93 @@
+#!/usr/bin/env perl
+# Insert publication templates into the database
+
+use warnings;
+use strict;
+
+use HTML::Entities qw(encode_entities);
+use File::Basename qw(dirname);
+use JSON           qw(decode_json);
+use File::Slurper  qw(read_text);
+use Term::ReadLine qw();
+
+use Taranis::Install::DB qw(connect_db);
+
+my $templ_dir = dirname($0) . '/db-publ-templates';
+my $db        = connect_db;
+my $term;
+
+my $indexfn = "$templ_dir/00INDEX.json";
+-f $indexfn
+	or die "ERROR: index file $indexfn does not exist";
+
+my $index;
+{	local $/;
+	open my $fh, "<:encoding(utf8)", $indexfn
+		or die "ERROR: cannot read $indexfn";
+	$index = decode_json <$fh>;
+}
+
+foreach my $templ (@$index) {
+	my $ttitle = $templ->{type_title};
+	my $pt     = $db->query(<<'_TYPE_ID', $ttitle)->list;
+SELECT id FROM publication_type WHERE title = ?
+_TYPE_ID
+
+	unless($pt) {
+		print "*   creating type $ttitle\n";
+		my $td = $templ->{type_description};
+		$pt    = $db->insert(publication_type => {
+			title       => encode_entities($ttitle),
+			description => ($td ? encode_entities($td) : undef),
+		}, { returning => 'id' })->list;
+	}
+
+	#warn "publication template type = $ttitle = $pt\n";
+
+	my $title = $templ->{title}
+		or next;                  # no template for type
+
+	my $enc_title = encode_entities $title;
+	my $has = $db->query(<<'__TEMPL', $enc_title)->hash;
+SELECT id, template FROM publication_template WHERE title = ?
+__TEMPL
+
+	my $templ_fn = "$templ_dir/$templ->{template}";
+	-f $templ_fn or die "ERROR: cannot find $templ_fn";
+	my $default_template = read_text $templ_fn, 'utf-8';
+
+	if($has) {
+		# issue 215, TLP:AMBER missing from default templates
+		if($default_template =~ /TLP\:AMBER/ && $has->{template} !~ /TLP[:-]AMBER/i) {
+			$term ||= Term::ReadLine->new('Update templates');
+
+			print <<__REPLACE_TEMPLATE;
+
+FIX: The default template for '$title' contains a TLP:AMBER block,
+but yours does not.  Probably because you loaded the default template
+before 3.4.2/3.5.  Take changes by hand from the Advisory Forward
+templates when you have made other modifications to your template.
+Otherwise, you can simple overwrite the template now.
+
+__REPLACE_TEMPLATE
+
+			my $update = $term->readline("Replace template? (yes/no)[no] ") || 'no';
+			if($update =~ /y/i) {
+				$db->delete(publication_template => {id => $has->{id}} );
+				undef $has;
+			}
+		}
+
+		next if $has;
+	}
+
+	my $pd       = $templ->{description};
+	my $tid      = $db->insert(publication_template => {
+		title       => $enc_title,
+		description => ($pd ? encode_entities($pd) : undef),
+		template    => encode_entities($default_template),
+		type        => $pt,
+	}, {returning => 'id'})->list;
+
+	print "*   inserted template $tid: $title.\n";
+}

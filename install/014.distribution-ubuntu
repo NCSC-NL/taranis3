@@ -1,0 +1,33 @@
+#!/usr/bin/env perl
+# Install common packages needed on Ubuntu.  We are in a very early
+# stage without knowledge of configuration.
+use warnings;
+use strict;
+
+use Taranis::Install::Bare   qw(is_ubuntu);
+use Taranis::Install::Ubuntu qw(ubuntu_packages);
+
+# 2017-02-13 MO: tested using docker image ubuntu:16.04 server, very bare
+# 2017-02-20 MO: tested with 16.05LTS Live CD
+
+unless(is_ubuntu) {
+	print "*   skipped: not running on Ubuntu.\n";
+	exit 0;
+}
+
+ubuntu_packages
+	'wget',              # to access CPAN
+	'sudo',              # to call bin/taranis as root
+	'cron',
+
+	# We need these before we get to install Perl modules
+	'libexpat-dev',      # SAX
+	'make',              # to install some Perl XS packages
+	'gcc',
+	'g++',
+	'libjson-perl',      # need it early for configuration setup
+	'libyaml-perl',      # to speed-up perl module installation
+	'libfile-remove-perl',  # needed by "taranis install"
+	;
+
+exit 0;

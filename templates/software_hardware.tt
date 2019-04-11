@@ -1,0 +1,35 @@
+<div id="software-hardware-content-heading" class="content-heading">
+	<div id="software-hardware-content-heading-producer" class="block">
+		<span>Producer</span>
+	</div>
+	
+	<div id="software-hardware-content-heading-name" class="block">
+		<span>Name</span>
+	</div>
+
+	<div id="software-hardware-content-heading-version" class="block">
+		<span>Version</span>
+	</div>
+
+	<div id="software-hardware-content-heading-count" class="block">
+		<span>Usage count</span>
+	</div>
+	
+</div>
+
+[% IF softwareHardware.size > 0 %]
+	[% FOREACH softwareHardwareItem IN softwareHardware %]
+	
+		[% INCLUDE software_hardware_item.tt %]
+	
+	[% END %]
+[% ELSE %]
+<div class="item-row" id="empty-row">No software/hardware found...</div>
+
+[% END %]
+
+<div class="action-block filter-block-separator">
+	<div class="center" id="number-of-results">&mdash; [%  page_bar.number_results_text %] &mdash;</div>
+</div>
+
+[% PROCESS page_bar.tt %]

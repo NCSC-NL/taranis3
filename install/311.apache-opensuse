@@ -1,0 +1,53 @@
+#!/usr/bin/env perl
+# Install the apache environment, in an openSUSE specific way.
+
+# Probably the other Linux distributions do not differ much, but still
+# there will be difference.
+
+use warnings;
+use strict;
+
+use File::Copy   qw(move);
+
+use Taranis::Install::Bare     qw(is_opensuse);
+use Taranis::Install::Config   qw(config_generic);
+use Taranis::Install::OpenSUSE qw(opensuse_packages);
+
+my $apache = '/etc/apache2';
+
+unless(is_opensuse) {
+	print "*   skipped: not running on openSUSE.\n";
+	exit 0;
+}
+
+opensuse_packages
+	'apache2',
+	'apache2-mod_perl',
+	;
+
+my $std_conf = "$apache/conf.d/mod_perl.conf";
+if(-f $std_conf) {
+	print "*   Set aside conflicting $std_conf\n";
+	move $std_conf, "$std_conf.orig"
+		or die "ERROR: cannot disable distributed $std_conf\n";
+}
+
+my %mods = map +($_ => 1), split /\s+/, qx(a2enmod -l);
+keys %mods
+	or die "ERROR: could not list enabled modules.\n";
+
+foreach my $reqmod ( qw/perl headers rewrite proxy proxy_http ssl/ ) {
+	next if $mods{$reqmod};
+
+	print "*   Enabling the mod_$reqmod module in apache2\n";
+	system "a2enmod $reqmod"
+		and die "ERROR: cannot enable mod_$reqmod: $!\n";
+}
+
+print "*   Enabling the apache2 daemon\n";
+
+# chkconfig produces an ugly "helpful" text
+system "chkconfig -a apache2 2>/dev/null"
+	and die "ERROR: cannot enable the apache2 daemon: $!\n";
+
+exit 0;

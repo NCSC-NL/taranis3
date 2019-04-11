@@ -1,0 +1,20 @@
+#!/usr/bin/env perl
+# Install perl modules which require XS via the official package system.
+# These may be hard to compile automatically or require active patching.
+
+use warnings;
+use strict;
+
+use Taranis::Install::Bare   qw(is_ubuntu);
+use Taranis::Install::Ubuntu qw(ubuntu_packages);
+
+unless(is_ubuntu) {
+	print "*   skipped, not running on Ubuntu\n";
+	exit 0;
+}
+
+ubuntu_packages
+	'libio-socket-ssl-perl', # follow security patches
+	'libgd-perl',
+	'libxml-libxml-perl',
+	;

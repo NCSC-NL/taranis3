@@ -1,0 +1,35 @@
+[% USE date %]
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden[% END %] ui-state-error ui-corner-all">[% message %]</div>
+	
+	[% IF todo.description %]
+	<div class="dialog-title">
+		<span>[% todo.description %]</span>
+	</div>
+	[% END %]
+	
+	<form id="form-report-todo" data-id="[% IF todo.id; todo.id; ELSE; 'NEW'; END %]">
+		<fieldset>
+			<div class="dialog-input-wrapper block">
+				<label for="report-todo-description" class="dialog-input-label">Description *</label><br>
+				<input type="text" name="description" id="report-todo-description" class="input-default dialog-input-text-wide" value="[% todo.description %]">
+			</div><br>
+			<div class="dialog-input-wrapper block">
+				<label for="report-todo-due-date" class="dialog-input-label">Due date *</label><br>
+				<input type="text" name="due_date" id="report-todo-due-date" class="input-default date-picker" value="[% date.format( todo.due_date.stripSeconds, format = '%d-%m-%Y' ) %]">
+			</div><br>
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Done status *</span><br>
+				<select name="done_status" id="report-todo-done-status" class="select-single dialog-input-text-narrow">
+					[% FOREACH status IN [ 0 25 50 75 100 ]%]
+					<option value="[% status %]" [% IF status == todo.done_status %]selected[% END %]>[% status %]%</option>
+					[% END %]
+				</select>
+			</div>
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Notes</span><br>
+				<textarea name="notes" id="report-todo-notes" class="input-default dialog-input-text-wide">[% todo.notes %]</textarea>
+			</div>
+		</fieldset>
+	</form>
+</div>

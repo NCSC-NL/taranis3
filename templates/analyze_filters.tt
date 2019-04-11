@@ -1,0 +1,71 @@
+<div class="filter-block filter-block-separator">
+	<div id="analyze-search-types">
+		<input type="button" class="button" value="Reset filters and search" id="btn-analyze-default-search">
+	</div>
+</div>
+
+<div class="filter-block filter-block-separator" id="analyze-standard-search-wrapper">
+
+	<form id="form-analyze-standard-search">
+
+		<div class="block">
+			<span>Status</span><br>
+			[%- USE sts = String(status) +%]
+			<select name="status" class="select-single" id="analyze-status">
+				<option value="">-any status-</option>
+				[% FOREACH status_option IN pageSettings.analysis_status_options +%]
+				<option value="[% status_option %]" [% IF sts.lower == status_option %]selected="selected"[% END %] >[% status_option %]</option>
+				[% END +%]
+			</select>
+		</div>
+
+		<div class="block">
+			<span>Search</span><br>
+			<input type="search" id="analyze-search" name="searchkeywords" class="input-default" value="[% search %]">
+		</div>
+
+		<div class="block analyze-rating bold">
+			<label for="analyze-rating-low" class="block analyze-low" title="low">
+				<span>L</span><br>
+				<input type="checkbox" id="analyze-rating-low" name="rating" value="1" [% IF !rating || rating.match('1') %]checked[% END %]>
+			</label>
+			<label for="analyze-rating-medium" class="block analyze-medium" title="medium">
+				<span>M</span><br>
+				<input type="checkbox" id="analyze-rating-medium" name="rating" value="2" [% IF !rating || rating.match('2') %]checked[% END %]>
+			</label>
+	
+			<label for="analyze-rating-high" class="block analyze-high" title="high">
+				<span>H</span><br>
+				<input type="checkbox" id="analyze-rating-high" name="rating" value="3" [% IF !rating || rating.match('3') %]checked[% END %]>
+			</label>
+	
+			<label for="analyze-rating-undefined" class="block analyze-undefined" title="undefined">
+				<span>U</span><br>
+				<input type="checkbox" id="analyze-rating-undefined" name="rating" value="4" [% IF !rating || rating.match('4') %]checked[% END %]>
+			</label>
+		</div>
+	
+		<div class="block">
+			<span>&nbsp;</span>
+			<input type="button" id="btn-analyze-search" class="button" value="Search!">		
+		</div>
+	</form>	
+</div>
+
+<div class="action-block filter-block-separator">
+
+	<div class="block">
+	[% IF write_right +%]
+        <label for="join-button" title="join two or more analyses">
+            <input type="button" id="join-button" class="button-blue
+             btn-analyze-join" value="Join"></label>&nbsp;
+        <label for="new-button" title="create a new analysis">
+            <input type="button" id="new-button" class="button btn-analyze-new"
+             value="Add new"></label>
+	[% END %]
+	</div>
+
+	<div class="block analyze-show-hide-descriptions-buttons">  					
+		<input type="button" class="button btn-analyze-show-hide-descriptions" value="Show all comments" data-status="hide">&nbsp; 
+	</div>
+</div>

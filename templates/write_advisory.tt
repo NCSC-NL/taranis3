@@ -1,0 +1,342 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="hidden ui-state-error ui-corner-all">[% message %]</div>
+	[% IF isLocked || update_notes || importNotifications || warning +%]
+	<div class="ui-state-highlight ui-corner-all dialog-highlight">
+		[% IF isLocked %]
+		This is advisory has been locked by [% openedByFullname %]
+		[% END %]
+		[% IF update_notes %]
+		<pre>[% update_notes %]</pre>
+		[% END %]
+		[% IF importNotifications && importNotifications.size > 0 %]
+			<ul>
+			[% FOREACH notification IN importNotifications %]
+				<li>Warning: [% notification.error %][% IF notification.logfile %] <span class="advisory-details-notification-link pointer" data-errorid="[% notification.id %]">view details</span>.[% END %]</li>
+			[% END %]
+			</ul>
+		[% END %]
+		[% IF warning %]
+		<span>[% warning %]</span>
+		[% END %]
+	</div>
+	[% END %]
+	<div class="ui-state-highlight ui-corner-all dialog-highlight hidden" id="advisory-messages" data-publicationid="[% IF advisory.publication_id; advisory.publication_id; ELSE; 'NEW'; END %]"></div>
+
+	[% IF advisory_heading %]
+	<div class="dialog-title">
+		<span>[% advisory_heading %]</span>
+	</div>
+	[% END %]
+	
+	<form id="advisory-details-form" class="publication-details-form" data-publicationid="[% IF advisory.publication_id; advisory.publication_id; ELSE; 'NEW'; END %]">
+		<input type="hidden" value="[% analysis_id %]" name="analysisId" class="include-in-form">
+		<input type="hidden" class="include-in-form" value="[% IF advisory.publication_id; advisory.publication_id; ELSE; advisory_publication_id; END %]" name="pub_id">
+		<input type="hidden" value="[% advisory.id %]" name="adv_id" id="advisory-details-advisory-id" class="include-in-form">
+		<input type="hidden" value="[% publishLL %]" id="advisory-details-publish-LL">
+		<div id="advisory-details-tabs" class="dialog-tabs">
+			<ul>
+				<li><a href="#advisory-details-tabs-general">General</a></li>
+				<li><a href="#advisory-details-tabs-matrix">Matrix</a></li>
+				<li><a href="#advisory-details-tabs-platforms">Platforms</a></li>
+				<li><a href="#advisory-details-tabs-products">Products</a></li>
+				[% IF isUpdate %]
+				<li><a href="#advisory-details-tabs-update">Update</a></li>
+				[% END %]
+				<li><a href="#advisory-details-tabs-summary">Summary</a></li>
+				<li><a href="#advisory-details-tabs-consequences">Consequences</a></li>
+				<li><a href="#advisory-details-tabs-description">Description</a></li>
+				<li><a href="#advisory-details-tabs-solution">Solution</a></li>
+				<li><a href="#advisory-details-tabs-tlpamber">TLP:AMBER</a></li>
+				<li><a href="#advisory-details-tabs-links">Links</a></li>
+				[% IF !isNewAdvisory %]
+				<li><a href="#advisory-details-tabs-preview">Preview</a></li>
+				[% END %]
+			</ul>
+
+<!-- TAB GENERAL -->
+			<div id="advisory-details-tabs-general">
+				<fieldset>
+
+					<div class="dialog-input-wrapper block">
+						<span class="dialog-input-label">Advisory ID</span><br>
+						<span id="advisory-details-id">[% advisory_id %] [v[% advisory_version %]]</span>
+						<input type="hidden" id="advisory-details-id-input" name="advisory_id" value="[% advisory_id %]" class="include-in-form">
+						<input type="hidden" id="advisory-details-version" name="advisory_version" value="[% advisory_version %]" class="include-in-form">
+						[% IF publication_previous_version_id %]
+						<input type="hidden" id="advisory-details-previous-version-id" name="publication_previous_version_id" value="[% publication_previous_version_id %]" class="include-in-form">
+						[% END %]
+					</div>
+					<div class="dialog-input-wrapper block" data-printable="created by [% advisory.created_by %]">
+						<span class="dialog-input-label">Author</span><br>
+						<span id="advisory-details-author">[% author %]</span>
+					</div>
+					[% IF advisory.created_on_str %]
+					<div class="dialog-input-wrapper block">
+						<span class="dialog-input-label">Date created</span><br>
+						<span>[% advisory.created_on_str %]</span>
+					</div>
+					[% END %]
+					[% IF approved_by %]
+					<div class="dialog-input-wrapper block" data-printable="approved by [% advisory.approved_by %]">
+						<span class="dialog-input-label">Approved by</span><br>
+						<span>[% approved_by %]</span>
+					</div>
+					[% END %]
+					[% IF advisory.based_on %]
+					<div class="dialog-input-wrapper block" data-printable="based on [% advisory.based_on.replace( '(\d\.\d\d$)', ' [v$1]' ) %]">
+						<span class="dialog-input-label">Based on advisory</span><br>
+						<span>[% advisory.based_on.replace( '(\d\.\d\d$)', ' [v$1]' ) %]</span>
+						<input type="hidden" id="advisory-details-based-on" name="based_on" value="[% advisory.based_on %]" class="include-in-form">
+					</div>
+					[% END %]
+					<br>
+					<div class="dialog-input-wrapper block">
+						<label for="advisory-details-title" class="dialog-input-label">Title</label><br>
+						<input type="text" name="title" id="advisory-details-title" class="input-default dialog-input-text-wider include-in-form" value="[% advisory.title %]">
+					</div><br>
+
+					<div class="dialog-input-wrapper block">
+						<label for="advisory-details-cveid" class="dialog-input-label">CVE-ID</label><br>
+						<input type="text" name="cve_id" id="advisory-details-cveid" class="input-default dialog-input-text-wider include-in-form" value="[% IF cve_id; cve_id; ELSE; advisory.ids; END %]">
+					</div><br>
+
+					<div class="dialog-input-wrapper block">
+						<span class="dialog-input-label">Damage Description</span><br>
+						<div class="advisory-details-damage-descriptions border-default">
+						[% FOREACH dd IN damage_description +%]
+							<input type="checkbox" value="[% dd.id %]" name="damage_description" id="dd_[% dd.id %]" [% IF dd.selected == 1 %]checked="checked"[% END %] class="include-in-form">
+							<label for="dd_[% dd.id %]">[% dd.description %]</label>
+							<br>
+						[% END +%]
+						</div>
+					</div><br>
+				</fieldset>
+			</div>
+
+<!-- TAB MATRIX -->
+		[% INCLUDE write_advisory_tab_matrix.tt %]
+
+<!-- TAB PLATFORMS -->
+			<div id="advisory-details-tabs-platforms">
+				<fieldset>
+					<div class="dialog-input-wrapper block">
+						<div class="select-two-columns">
+							<div class="inline">
+								<span class="dialog-input-label">Affected platforms</span><br>
+								<select multiple="multiple" name="pf_left_column" id="advisory-platforms-left-column" size="20" class="select-multiple select-left select-multiple-wide include-in-form" data-tab="platforms">
+								[% FOREACH pf IN platforms +%]
+									[% USE String(pf.producer) %]
+									[% pf_fulltext = String.capital _ ' ' _ pf.name _ ' ' _ pf.version _ ' (' _ pf.description _ ')' %]
+									<option value="[% pf.id %]" title="[% pf_fulltext %]" class="[% IF pf.in_use %]option-sh-in-use[% END %]" data-producer="[% String.capital %]" data-name="[% pf.name %]" data-version="[% pf.version %]">[% pf_fulltext %]</option>
+								[% END +%]
+								</select>
+							</div>
+							<div class="option-left-right" id="advisory-platforms-left-right">
+								<input type="button" class="button btn-option-to-left " value="<"><br><br>
+								<input type="button" class="button btn-option-to-right" value=">">
+							</div>
+							<div class="inline">
+								<input type="search" name="pf_search" id="advisory-platforms-search" class="input-default" placeholder="search platforms">
+								<input type="button" value="Search" class="button" id="btn-advisory-platforms-search">
+								<br>
+								<select multiple="multiple" name="pf_right_column" id="advisory-platforms-right-column" size="20" class="select-multiple select-right select-multiple-wide" data-tab="platforms"></select>
+								<br>
+								<input type="checkbox" id="btn-advisory-platforms-inuse-only" CHECKED>&nbsp;<label
+								  for="btn-advisory-platforms-inuse-only">Show only platforms which are in use.</label>
+							</div>
+						</div>
+					</div><br>
+	
+					<div class="dialog-input-wrapper">
+						<div class="publications-software-hardware-fulltext"></div><br>
+					</div><br>
+	
+					<div class="dialog-input-wrapper block">
+						<span class="dialog-input-label">Platforms text:</span><br>
+						<textarea name="platforms_txt" id="advisory-platforms-txt" class="input-default dialog-input-text-wider include-in-form">[% platforms_text %]</textarea><br>
+						<input type="button" class="button btn-sort" value="sort"
+							data-textarea="#advisory-platforms-txt">
+					</div>
+				</fieldset>
+			</div>
+
+<!-- TAB PRODUCTS -->
+			<div id="advisory-details-tabs-products">
+				<fieldset>
+					<div class="dialog-input-wrapper block">
+						
+						<div class="select-two-columns">
+							<div class="inline">
+								<span class="dialog-input-label ">Affected products</span><br>
+								<select multiple="multiple" name="pd_left_column" id="advisory-products-left-column" size="20" class="select-multiple select-left select-multiple-wide include-in-form" data-tab="products">
+								[% FOREACH sh IN software_hardware +%]
+									[% USE String(sh.producer) +%]
+									[% pd_fulltext = String.capital _ ' ' _ sh.name _ ' ' _ sh.version _ ' (' _ sh.description _ ')' %]
+									<option value="[% sh.id %]" title="[% pd_fulltext %]" class="[% IF sh.in_use %]option-sh-in-use[% END %]" data-producer="[% String.capital %]" data-name="[% sh.name %]" data-version="[% sh.version %]">[% pd_fulltext %]</option>
+								[% END +%]
+								</select>
+							</div>
+							<div class="option-left-right" id="advisory-products-left-right">
+								<input type="button" class="button btn-option-to-left" value="<"><br><br>
+								<input type="button" class="button btn-option-to-right" value=">">
+							</div>
+							<div class="inline">
+								<input type="search" name="pd_search" id="advisory-products-search" class="input-default" placeholder="search products">
+								<input type="button" value="Search" class="button" id="btn-advisory-products-search">
+								<br>
+								<select multiple="multiple" name="pf_right_column" id="advisory-products-right-column" size="20" class="select-multiple select-right select-multiple-wide" data-tab="products"></select>
+								<br>
+								<input type="checkbox" id="btn-advisory-products-inuse-only" CHECKED>&nbsp;<label
+								  for="btn-advisory-products-inuse-only">Show only products which are in use.</label>
+							</div>
+						</div>
+					</div><br>
+					
+					<div class="dialog-input-wrapper">
+						<div class="publications-software-hardware-fulltext"></div><br>
+					</div><br>
+	
+					<div class="dialog-input-wrapper block">
+						<span class="dialog-input-label">Products text:</span><br>
+						<textarea name="products_txt" id="advisory-products-txt" class="input-default include-in-form">[% products_text %]</textarea><br>
+						<input type="button" class="button btn-sort" value="sort"
+							data-textarea="#advisory-products-txt">
+					</div>
+	
+					<div class="dialog-input-wrapper block">
+						<span class="dialog-input-label">Versions text:</span><br>
+						<textarea name="versions_txt" id="advisory-versions-txt" class="input-default include-in-form">[% versions_text %]</textarea><br>
+						<input type="button" class="button btn-sort" value="sort"
+							data-textarea="#advisory-versions-txt">
+					</div>
+				</fieldset>
+			</div>
+			
+			[% IF isUpdate %]
+<!-- TAB UPDATE -->
+			<div id="advisory-details-tabs-update">
+				<fieldset>
+					<div class="dialog-input-wrapper">
+						<div class="table">
+							<div class="cell">
+								<span class="dialog-input-label">Update</span><br>
+								<textarea class="input-default advisory-texts-input block include-in-form font-courier publications-details-update-text" name="tab_update_txt" id="advisory-update-text">[% advisory.update %]</textarea>
+							</div>
+	
+							<div class="cell advisory-template-selection-cell">
+								<span class="dialog-input-label">Use template</span><br>
+								<div class="advisory-template border-default">
+									<select name="tab_update_template" id="advisory-update-template-selection" data-tab="update" class="input-default advisory-template-selection">
+										<option value="">-select template to use-</option>
+										[% IF cveList && cveList.size > 0 %]
+										<optgroup label="CVE list">
+											[% FOREACH cve IN cveList %]
+											<option value="[% cve.identifier %]">[% cve.identifier %]</option>
+											[% END %]
+										</optgroup>
+										[% END %]
+										<optgroup label="publication templates">
+										[% FOREACH adv_tpl IN advisory_templates +%]
+											<option value="[% adv_tpl.id %]">[% adv_tpl.title %]</option>
+										[% END +%]
+										</optgroup>
+									</select><br>
+									
+									<div id="advisory-update-template" class="publication-template-result"></div>
+									<div class="block advisory-details-apply-template">
+										<input type="button" class="button btn-advisory-details-apply-template" value="&lt; Apply template" data-tab="update">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</fieldset>
+			</div>
+			[% END %]
+
+<!-- TABS SUMMARY, CONSEQUENCES, DESCRIPTION SOLUTION TLPAMBER -->
+			[% FOREACH texttab IN ['summary', 'consequences', 'description', 'solution', 'tlpamber'] %]
+			<div id="advisory-details-tabs-[% texttab %]">
+				<fieldset>
+					<div class="dialog-input-wrapper">
+						<div class="table">
+							<div class="cell">
+								<span class="dialog-input-label">[% texttab == 'tlpamber' ? 'TLP:AMBER' : texttab.ucfirst %]</span><br>
+								<textarea class="input-default font-courier advisory-texts-input block publications-details-[% texttab %]-text include-in-form" name="tab_[% texttab %]_txt" id="advisory-[% texttab %]-text">[% advisory.$texttab %]</textarea>
+							</div>
+							<div class="cell advisory-template-selection-cell">
+								<span class="dialog-input-label">Use template</span><br>
+								<div class="advisory-template border-default">
+									<select name="tab_[% texttab %]_template" id="advisory-[% texttab %]-template-selection" data-tab="[% texttab %]" class="input-default advisory-template-selection">
+										<option value="">-select template to use-</option>
+										[% IF cveList && cveList.size > 0 %]
+										<optgroup label="CVE list">
+											[% FOREACH cve IN cveList %]
+											<option value="[% cve.identifier %]" data-hastranslation="[% IF cve.custom_description; 1; ELSE; 0; END %]" data-hasdescription="[% IF cve.description; 1; ELSE; 0; END %]" data-published="[% cve.published_date %]" data-modified="[% cve.modified_date %]">[% cve.identifier %]</option>
+											[% END %]
+										</optgroup>
+										[% END %]
+										<optgroup label="publication templates">
+										[% FOREACH adv_tpl IN advisory_templates +%]
+											<option value="[% adv_tpl.id %]">[% adv_tpl.title %]</option>
+										[% END +%]
+										</optgroup>
+									</select><br>
+									
+									<div id="advisory-[% texttab %]-template" class="publication-template-result scroll-y-always"></div>
+									<div class="block advisory-details-apply-template">
+										<input type="button" class="button btn-advisory-details-apply-template" value="&lt; Apply template" data-tab="[% texttab %]">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</fieldset>	
+			</div>
+			[% END %]
+
+<!-- TAB LINKS -->
+			<div id="advisory-details-tabs-links">
+				<fieldset>
+					<div class="dialog-input-wrapper block">
+						<span class="dialog-input-label">Links (from analysis)</span><br>
+						<div class="advisory-details-links border-default break-word scroll-auto">
+						[% IF uncheck_new_links %]
+							[% FOREACH link IN links.keys +%]
+							<input type="checkbox" name="advisory_links" class="include-in-form" id="[% link %]" value="[% link %]" [% IF links.$link.check %]checked="checked"[% END %]><label for="[% link %]">[% link %]</label><br>
+							[% END +%]
+						[% ELSE %]
+							[% FOREACH link IN links +%]
+							<input type="checkbox" name="advisory_links" class="include-in-form" id="[% link %]" value="[% link %]" [% IF ! ignore_new_links %] checked="checked" [% END %]><label for="[% link %]">[% link %]</label><br>
+							[% END +%]
+						[% END %]
+						</div>
+					</div><br>
+					
+					<div class="dialog-input-wrapper block">
+						<span class="dialog-input-label">Additional links</span><br>				
+						<textarea class="input-default advisory-details-additional-links include-in-form" name="additional_links" placeholder="Enter each link on a separate line"></textarea>
+					</div>
+				</fieldset>
+			</div>
+
+			[% IF !isNewAdvisory %]
+<!-- TAB PREVIEW -->
+			<div id="advisory-details-tabs-preview">
+				<fieldset>
+					<div class="dialog-input-wrapper block">
+						<input type="radio" name="preview_type" id="advisory-details-preview-email" value="[% pub_type %]" checked="checked">
+						<label for="advisory-details-preview-email">Preview advisory email</label>
+						<input type="radio" name="preview_type" id="advisory-details-preview-xml" value="xml">
+						<label for="advisory-details-preview-xml">Preview advisory XML</label>
+					</div><br>	
+				
+					<div class="dialog-input-wrapper block">
+						<textarea name="advisory_preview" id="advisory-details-preview-text" class="font-courier border-default scroll-y-always publications-details-preview" readonly="readonly">[% preview %]</textarea>				
+					</div>
+				</fieldset>	
+			</div>
+			[% END %]
+		</div>
+	</form>	
+</div>

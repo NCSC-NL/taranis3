@@ -1,0 +1,18 @@
+<div class="block center numbers-overview taranis4u-block">
+	<span ng-switch on="endOfShiftStatus.previous.status">
+		<span ng-switch-when="green" class="fa fa-check-square fa-5x green"></span>
+		<span ng-switch-when="orange" class="fa fa-exclamation-triangle fa-5x orange"></span>
+		<span ng-switch-when="red" class="fa fa-exclamation-triangle fa-5x red"></span>
+	</span><br>
+	Previous <span class="bold">End-of-Shift</span>
+	<br><br>
+</div>
+<div class="block center numbers-overview taranis4u-block">
+	<span ng-switch on="endOfShiftStatus.current.status">
+		<span ng-switch-when="green" class="fa fa-check-square fa-5x green"></span>
+		<span ng-switch-when="orange" class="fa fa-exclamation-triangle fa-5x orange"></span>
+		<span ng-switch-when="red" class="fa fa-exclamation-triangle fa-5x red"></span>
+	</span><br>
+	Current <span class="bold">End-of-Shift</span>
+	<br><br>
+</div>

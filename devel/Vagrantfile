@@ -1,0 +1,31 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# VMs for testing the installation scripts and (thereby) dependencies.
+Vagrant.configure(2) do |config|
+	# Mount /vagrant readonly, just to be sure the VMs don't accidentally
+	# mess up the developer's work dir.
+	config.vm.synced_folder '.', '/vagrant', :mount_options => ['ro']
+
+	config.vm.define 'install_scripts_ubuntu' do |machine|
+		machine.vm.box = 'ubuntu/trusty64'
+
+		machine.vm.provision :puppet do |puppet|
+			puppet.options = '--verbose'
+			puppet.manifests_path = '.vagrant/puppet/manifests'
+			puppet.manifest_file = 'install_scripts_ubuntu.pp'
+			puppet.module_path = '.vagrant/puppet/modules'
+		end
+	end
+
+	config.vm.define 'install_scripts_centos' do |machine|
+		machine.vm.box = 'puphpet/centos65-x64'
+
+		machine.vm.provision :puppet do |puppet|
+			puppet.options = '--verbose'
+			puppet.manifests_path = '.vagrant/puppet/manifests'
+			puppet.manifest_file = 'install_scripts_centos.pp'
+			puppet.module_path = '.vagrant/puppet/modules'
+		end
+	end
+end

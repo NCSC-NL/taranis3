@@ -1,0 +1,33 @@
+#!/usr/bin/env perl
+# Install the apache environment, in an RedHat specific way.
+
+# Probably the other Linux distributions do not differ much, but still
+# there will be difference.
+
+use warnings;
+use strict;
+
+use File::Copy   qw(move);
+
+use Taranis::Install::Bare   qw(is_redhat);
+use Taranis::Install::RedHat qw(redhat_packages);
+
+my $apache = '/etc/httpd';
+
+unless(is_redhat) {
+	print "*   skipped: not running on RedHat.\n";
+	exit 0;
+}
+
+redhat_packages
+	'httpd',
+	'httpd-devel',
+	'httpd-tools',
+	'apr',
+	'apr-util',
+	'mod_ssl',
+	'mod_perl',
+	'mod_proxy',
+	;
+
+exit 0;

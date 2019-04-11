@@ -1,0 +1,25 @@
+<div class="block">
+	[% IF numberOfUnreadItems && numberOfUnreadItems.showMinified %]
+		[% IF numberOfUnreadItems.data > 1000 %]
+			[% count = numberOfUnreadItems.data / 1000 %]
+			[% count = count.remove('\.\d+$') _ 'k' %]
+		[% ELSE %]
+			[% count = numberOfUnreadItems.data %]
+		[% END %]
+	
+		<div title="[% numberOfUnreadItems.data %] unread Assess items">
+			<a href="assess/assess/displayAssess/status=0/" data-callback="setMenu">
+				<span class="dashboard-minified-icons-with-text">[% count %]</span>
+				<img src="[% webroot %]/images/MailBox.png" alt="[% numberOfUnreadItems.data %]">
+			</a>
+		</div>
+	[% END %]
+	[% IF oldestUnreadItem && oldestUnreadItem.showMinified && oldestUnreadItem.data && oldestUnreadItem.data.hours_ago %]
+		<div title="unread assess items date back to [% oldestUnreadItem.data.oldest_created %]" class="blink">
+			<a href="assess/assess/displayAssess/status=0/" data-callback="setMenu">
+				<span class="dashboard-minified-icons-with-text">&gt;[% oldestUnreadItem.data.hours_ago %]</span>
+				<img src="[% webroot %]/images/MailBox.png" alt="&gt;[% oldestUnreadItem.data.hours_ago %]" class="dashboard-warning-border">
+			</a>
+		</div>
+	[% END %]
+</div>

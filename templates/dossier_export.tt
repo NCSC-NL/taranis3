@@ -1,0 +1,73 @@
+[% USE date %]
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden[% END %] ui-state-error ui-corner-all">[% message %]</div>
+	
+	[% IF dossier.description %]
+	<div class="dialog-title">
+		<span>[% dossier.description %]</span>
+	</div>
+	[% END %]
+
+	[% IF start_date && end_date %]
+	<p>Including dossier items between [% start_date %] and [% end_date %].</p>
+	[% ELSIF start_date %]
+	<p>Including dossier items since [% start_date %].</p>
+	[% ELSIF end_date %]
+	<p>Including dossier items until [% end_date %].</p>
+	[% END %]
+
+	<form id="form-dossier-export" data-id="[% dossier.id %]">
+		<fieldset>
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Dossier export options</span><br>
+			</div><br>
+			<hr>
+			<div class="dialog-input-wrapper block">
+				<input type="radio" name="export_content" id="export_content_all" value="all_content" checked><label for="export_content_all">Export all content</label><br>
+				<input type="radio" name="export_content" id="export_content_titles" value="titles_only"><label for="export_content_titles">Export only titles</label>
+			</div><br>
+			<hr>
+			<div class="dialog-input-wrapper block">
+				<input type="radio" name="include_comments" id="include_comments_yes" value="1" checked><label for="include_comments_yes">Include comments</label><br> 
+				<input type="radio" name="include_comments" id="include_comments_no" value="0"><label for="include_comments_no">Do not include comments</label>
+			</div><br>
+			<hr>
+			<div class="dialog-input-wrapper block">
+				<input type="radio" name="export_format" id="export_format_text" value="txt" checked><label for="export_format_text">Export to plain text file (.txt)</label><br> 
+				<input type="radio" name="export_format" id="export_format_pdf" value="pdf"><label for="export_format_pdf">Export to PDF (.pdf)</label>
+			</div><br>
+			<hr>
+			<div class="dialog-input-wrapper block">
+				<input type="radio" name="export_to" id="export_download" value="download" checked><label for="export_download">Download dossier export</label><br> 
+				<input type="radio" name="export_to" id="export_email" value="email"><label for="export_email">Email dossier export</label>
+				<fieldset id="dossier-export-to-mail" class="disabled" disabled>
+					<div class="dialog-input-wrapper block">
+						<span class="dialog-input-label">Mail from</span><br>
+				        <span>[% mailfrom_sender %]&lt;[% mailfrom_email %]&gt;</span>				
+					</div><br>
+		
+					<div class="dialog-input-wrapper block">
+						<span class="dialog-input-label">Mail to</span><br>
+						<select id="dossier-mail-to" name="mailto" multiple="multiple" size="4" class="select-multiple">
+						[% FOREACH address IN mailto %]
+							<option value="[% address %]">[% address %]</option>
+						[% END %]
+						</select>
+					</div><br>
+		
+					<div class="dialog-input-wrapper block">
+						<input type="text" name="extra" class="input-default dialog-input-text" id="dossier-mail-extra-address">
+						<input type="button" class="button" id="btn-dossier-mail-add-address" value="Add">
+					</div><br>
+		
+					<div class="dialog-input-wrapper block">
+						<label for="dossier-mail-subject" class="dialog-input-label">Subject</label><br>
+						<input type="text" name="subject" id="dossier-mail-subject" class="input-default dialog-input-text" value="Dossier: [% dossier.description %]">
+					</div><br>
+				</fieldset>
+				
+			</div><br>
+		</fieldset>
+	</form>
+</div>
+<iframe name="downloadFrame" id="downloadFrame" src="" class="super-secret-iframe"></iframe>

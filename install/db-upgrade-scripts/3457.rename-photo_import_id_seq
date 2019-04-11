@@ -1,0 +1,15 @@
+#!perl
+# All row counters in tables have the format ${table}_id_sequence... only
+# table import_photo has a photo_import_id_seq.  Fix that.
+
+use warnings;
+use strict;
+
+sub {
+	my ($db, %args) = @_;
+
+	$db->query( <<'__RUN');
+ALTER SEQUENCE photo_import_id_seq RENAME TO import_photo_id_seq
+__RUN
+ 
+};

@@ -1,0 +1,15 @@
+#!perl
+
+use warnings;
+use strict;
+
+sub {
+	my ($db, %args) = @_;
+
+	$db->query( <<'__RUN__');
+CREATE INDEX analysis_title_trgm_idx ON analysis using GIN(title gin_trgm_ops);
+CREATE INDEX analysis_comments_trgm_idx ON analysis using GIN(comments gin_trgm_ops);
+CREATE INDEX analysis_idstring_trgm_idx ON analysis using GIN(idstring gin_trgm_ops);
+CREATE INDEX analysis_id_trgm_idx ON analysis using GIN(id gin_trgm_ops);
+__RUN__
+};

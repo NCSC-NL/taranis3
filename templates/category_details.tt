@@ -1,0 +1,31 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden[% END %] ui-state-error ui-corner-all">[% message %]</div>
+	
+	[% IF category.name %]
+	<div class="dialog-title">
+		<span>[% category.name %]</span>
+	</div>
+	[% END %]
+	
+	<form id="form-category" data-id="[% IF category.id; category.id; ELSE; 'NEW'; END %]">
+		<fieldset>
+			<div class="dialog-input-wrapper block">
+				<label for="category-details-name" class="dialog-input-label">Name *</label><br>
+				<input type="text" name="name" id="category-details-name" class="input-default dialog-input-text" value="[% category.name %]">
+			</div>
+		</fieldset>
+		
+		[% IF category.name %]
+		<fieldset>
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Disabled *</span><br>
+				<input type="radio" name="disable_category" id="category-details-disable-yes" value="1" [% IF category.is_enabled == 0 %] checked="checked"[% END %]>
+				<label for="category-details-disable-yes">Yes</label> 
+				<input type="radio" name="disable_category" id="category-details-disable-no" value="0" [% IF category.is_enabled == 1 %] checked="checked"[% END %]>
+				<label for="category-details-disable-no">No</label>
+			</div>
+		</fieldset>
+		[% END %]
+		
+	</form>
+</div>

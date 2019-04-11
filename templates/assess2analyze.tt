@@ -1,0 +1,288 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="hidden ui-state-error ui-corner-all">[% message %]</div>
+	
+	<div class="dialog-title">
+		<span>[% item.title %]</span>	
+	</div>
+
+	<div id="assess-analyze-item-tabs" class="dialog-tabs" data-itemdigest="[% item.digest | uri %]">
+		<ul>
+			<li><a href="#analyze-item-tabs-1" id="tab-new-analysis">Create new analysis</a></li>
+			<li><a href="#analyze-item-tabs-2" id="tab-link-analysis-id-match">Analysis (ID match)</a></li>
+			<li><a href="#analyze-item-tabs-3" id="tab-link-analysis-keyword-match">Analysis (keyword match)</a></li>
+			<li><a href="#analyze-item-tabs-4" id="tab-link-analysis-pending">Analysis (pending)</a></li>
+			<li><a href="#analyze-item-tabs-5" id="tab-link-analysis-search">Analysis (search)</a></li>			
+		</ul>
+		<div id="analyze-item-tabs-1">
+			<form id="analyze-item-form-new-analysis">
+				<input type="hidden" name="ul" value="[% analysisUnlinkId %]">
+				<input type="hidden" name="digest" value="[% item.digest | uri %]">
+				
+				<div class="dialog-input-wrapper block">
+					<label for="analyze-item-new-analysis-title" class="dialog-input-label">Title</label><br>
+					<input type="text" name="title" id="analyze-item-new-analysis-title" class="input-default dialog-input-text-wide" value="[% item.title %]">
+				</div><br>
+
+				<div class="dialog-input-wrapper block">
+					<span class="dialog-input-label">Description</span><br>
+					<textarea name="description" id="analyze-item-new-analysis-description" class="input-default dialog-input-text-wide">[% item.description %]</textarea>
+				</div><br>
+
+				<div class="dialog-input-wrapper block">
+					<span class="dialog-input-label">Comments</span><br>
+					<textarea name="comments" id="analyze-item-new-analysis-comments" class="input-default dialog-input-text-wide" readonly="readonly"></textarea>
+				</div><br>
+
+				<div class="dialog-input-wrapper block">
+					<textarea name="addComment" id="analyze-item-new-analysis-add-comment" class="input-default"></textarea>
+					<input type="button" class="button" value="Add comment" id="btn-analyze-item-new-analysis-add-comment">
+				</div><br>
+
+				<div class="dialog-input-wrapper block">
+					<label for="analyze-item-new-analysis-ids" class="dialog-input-label">ID's</label><br>
+					<input type="text" name="ids" id="analyze-item-new-analysis-ids" class="input-default dialog-input-text-wide" value="[% ids %]">
+				</div><br>
+
+				<div class="dialog-input-wrapper block">
+					<span class="dialog-input-label">Link</span><br>
+					
+					<span>
+						[% IF item.link.match('^id=\d+$') %]
+						<span class="span-link assess-email-item-link" data-link="[% item.link %]">[% item.title %]</span>
+						[% ELSE %]
+							<a href="[% item.link %]" target="_blank" title="[% item.link %]">
+							[% IF item.link && item.link.length > 90 %]
+								[% item.link.substr( 90, item.link.length, '...') %]
+							[% ELSE %] 
+								[% item.link %]
+							[% END %]
+							</a>
+						[% END %]
+					</span>
+				</div><br>
+
+				<div class="dialog-input-wrapper block">
+					<label for="analyze-item-new-analysis-status" class="dialog-input-label">Status</label><br>
+					[%- USE sts = String(status) +%]
+					<select name="status" id="analyze-item-new-analysis-status" class="select-single dialog-input-text-narrow">
+					[% FOREACH status_option IN analysis_status_options +%]
+						<option value="[% status_option %]" [% IF sts.lower == status_option %]selected="selected"[% END %] >[% status_option %]</option>
+					[% END +%]
+					</select>
+				</div><br>
+
+				<div class="dialog-input-wrapper block">
+					<label for="analyze-item-new-analysis-priority" class="dialog-input-label">Rating</label><br>
+					<select name="rating" class="select-single dialog-input-text-narrow" id="analyze-item-new-analysis-priority">
+						<option value="1">Low</option>
+						<option value="2">Medium</option>
+						<option value="3">High</option>
+					</select>
+				</div><br>
+
+				[% IF hasClusteredItems %]
+				<div class="dialog-input-wrapper block">
+					<span class="dialog-input-label">The selected item is part of a cluster. Select one of the following options:</span><br>
+					
+					<input type="radio" class="no-margin align-top" name="include-clustered-items" id="include-clustered-items-new-analysis-yes" value="1" checked="checked">
+					<label for="include-clustered-items-new-analysis-yes">Link all clustered items to analysis.</label><br>
+					
+					<input type="radio" class="no-margin" name="include-clustered-items" id="include-clustered-items-new-analysis-no" value="0">
+					<div class="block align-top">
+					<label for="include-clustered-items-new-analysis-no">Only link selected item of cluster to analysis. <br>(rest of items in cluster will be set to &#39;read&#39; status)</label>
+					</div>
+				</div>
+				[% END %]				
+			</form>
+		</div>
+		<div id="analyze-item-tabs-2">
+			<form id="analyze-item-link-analysis-id-match-form">
+				<input type="hidden" name="ul" value="[% analysisUnlinkId %]">
+				<input type="hidden" name="digest" value="[% item.digest | uri %]">
+							
+				<div class="dialog-input-wrapper block">
+					<span class="dialog-input-label">Analysis</span><br>
+					<select name="analysis" size="22" class="select-single dialog-input-text-wide" id="analyze-item-link-analysis-id-match-analysis">
+					[% FOREACH id_match IN analysis_id_match %]
+					[% USE String(id_match.status) %]
+						<option value="[% id_match.id %]">AN-[% id_match.id.substr(0,4) %]-[% id_match.id.substr(4,4) %]: [% id_match.title %] ([% String.lower %])</option>
+					[% END %]
+					</select>
+				</div><br>
+		
+				[% IF write_right %]
+				<div class="dialog-input-wrapper block">
+					<label for="analyze-item-link-analysis-id-match-title" class="dialog-input-label">Title</label><br>
+					<input type="text" name="title" id="analyze-item-link-analysis-id-match-title" class="input-default dialog-input-text-wide">
+				</div><br>		
+				
+				<div class="dialog-input-wrapper block">
+					<span class="dialog-input-label">Status</span><br>
+					<select name="status" id="analyze-item-link-analysis-id-match-status" class="select-single dialog-input-text-narrow">
+					[% FOREACH status_option IN analysis_status_options +%]
+						<option value="[% status_option %]" [% IF sts.lower == status_option %]selected="selected"[% END %] >[% status_option %]</option>
+					[% END +%]
+					</select>
+				</div><br>
+				[% END %]
+				[% IF hasClusteredItems %]
+				<div class="dialog-input-wrapper block">
+					<span class="dialog-input-label">The selected item is part of a cluster. Select one of the following options:</span><br>
+					
+					<input type="radio" class="no-margin align-top" name="include-clustered-items" id="include-clustered-items-link-analysis-id-match-yes" value="1" checked="checked">
+					<label for="include-clustered-items-link-analysis-id-match-yes">Link all clustered items to analysis.</label><br>
+					
+					<input type="radio" class="no-margin" name="include-clustered-items" id="include-clustered-items-link-analysis-id-match-no" value="0">
+					<div class="block align-top">
+					<label for="include-clustered-items-link-analysis-id-match-no">Only link selected item of cluster to analysis. <br>(rest of items in cluster will be set to &#39;read&#39; status)</label>
+					</div>
+				</div>
+				[% END %]				
+			</form>
+		</div>
+		<div id="analyze-item-tabs-3">
+			<form id="analyze-item-link-analysis-keyword-match-form">
+				<input type="hidden" name="ul" value="[% analysisUnlinkId %]">
+				<input type="hidden" name="digest" value="[% item.digest | uri %]">
+				
+				<div class="dialog-input-wrapper block">
+					<span class="dialog-input-label">Analysis</span><br>
+					<select name="analysis" size="22" class="select-single dialog-input-text-wide" id="analyze-item-link-analysis-keyword-match-analysis">
+					[% FOREACH keyword_match IN analysis_keyword_match %]
+					[% USE String(keyword_match.status) %]
+						<option value="[% keyword_match.id %]">AN-[% keyword_match.id.substr(0,4) %]-[% keyword_match.id.substr(4,4) %]: [% keyword_match.title %] ([% String.lower %])</option>
+					[% END %]
+					</select>
+				</div><br>
+		
+				[% IF write_right %]
+				<div class="dialog-input-wrapper block">
+					<label for="analyze-item-link-analysis-keyword-match-title" class="dialog-input-label">Title</label><br>
+					<input type="text" name="title" id="analyze-item-link-analysis-keyword-match-title" class="input-default dialog-input-text-wide">
+				</div><br>		
+				
+				<div class="dialog-input-wrapper block">
+					<span class="dialog-input-label">Status</span><br>
+					<select name="status" id="analyze-item-link-analysis-keyword-match-status" class="select-single dialog-input-text-narrow">
+					[% FOREACH status_option IN analysis_status_options +%]
+						<option value="[% status_option %]" [% IF sts.lower == status_option %]selected="selected"[% END %] >[% status_option %]</option>
+					[% END +%]
+					</select>
+				</div><br>
+				[% END %]
+				[% IF hasClusteredItems %]
+				<div class="dialog-input-wrapper block">
+					<span class="dialog-input-label">The selected item is part of a cluster. Select one of the following options:</span><br>
+					
+					<input type="radio" class="no-margin align-top" name="include-clustered-items" id="include-clustered-items-link-analysis-keyword-match-yes" value="1" checked="checked">
+					<label for="include-clustered-items-link-analysis-keyword-match-yes">Link all clustered items to analysis.</label><br>
+					
+					<input type="radio" class="no-margin" name="include-clustered-items" id="include-clustered-items-link-analysis-keyword-match-no" value="0">
+					<div class="block align-top">
+					<label for="include-clustered-items-link-analysis-keyword-match-no">Only link selected item of cluster to analysis. <br>(rest of items in cluster will be set to &#39;read&#39; status)</label>
+					</div>
+				</div>
+				[% END %]				
+			</form>		
+		
+		</div>
+		
+		[% IF analysis_pending_right %]
+		<div id="analyze-item-tabs-4">
+			<form id="analyze-item-link-analysis-pending-form">
+				<input type="hidden" name="ul" value="[% analysisUnlinkId %]">
+				<input type="hidden" name="digest" value="[% item.digest | uri %]">
+				
+				<div class="dialog-input-wrapper block">
+					<span class="dialog-input-label">Analysis</span><br>
+					<select name="analysis" size="22" class="select-single dialog-input-text-wide" id="analyze-item-link-analysis-pending-analysis">
+					[% FOREACH no_match IN analysis_no_match %]
+						<option value="[% no_match.id %]">AN-[% no_match.id.substr(0,4) %]-[% no_match.id.substr(4,4) %]: [% no_match.title %]</option>
+					[% END %]
+					</select>
+				</div><br>
+		
+				[% IF write_right %]
+				<div class="dialog-input-wrapper block">
+					<label for="analyze-item-link-analysis-pending-title" class="dialog-input-label">Title</label><br>
+					<input type="text" name="title" id="analyze-item-link-analysis-pending-title" class="input-default dialog-input-text-wide">
+				</div><br>		
+				
+				<div class="dialog-input-wrapper block">
+					<span class="dialog-input-label">Status</span><br>
+					<select name="status" id="analyze-item-link-analysis-pending-status" class="select-single dialog-input-text-narrow">
+					[% FOREACH status_option IN analysis_status_options +%]
+						<option value="[% status_option %]" [% IF sts.lower == status_option %]selected="selected"[% END %] >[% status_option %]</option>
+					[% END +%]
+					</select>
+				</div><br>
+				[% END %]
+				[% IF hasClusteredItems %]
+				<div class="dialog-input-wrapper block">
+					<span class="dialog-input-label">The selected item is part of a cluster. Select one of the following options:</span><br>
+					
+					<input type="radio" class="no-margin align-top" name="include-clustered-items" id="include-clustered-items-link-analysis-pending-yes" value="1" checked="checked">
+					<label for="include-clustered-items-link-analysis-pending-yes">Link all clustered items to analysis.</label><br>
+					
+					<input type="radio" class="no-margin" name="include-clustered-items" id="include-clustered-items-link-analysis-pending-no" value="0">
+					<div class="block align-top">
+					<label for="include-clustered-items-link-analysis-pending-no">Only link selected item of cluster to analysis. <br>(rest of items in cluster will be set to &#39;read&#39; status)</label>
+					</div>
+				</div>
+				[% END %]				
+			</form>			
+		</div>
+		[% END %]
+		<div id="analyze-item-tabs-5">
+			<form id="analyze-item-link-analysis-search-form">
+				<input type="hidden" name="ul" value="[% analysisUnlinkId %]">
+				<input type="hidden" name="digest" value="[% item.digest | uri %]">
+								
+				<div class="dialog-input-wrapper block">
+					<select name="search_status" id="select-analyze-item-link-analysis-search-search-status" class="select-single dialog-input-text-narrow">
+						<option value="">-any status-</option>
+					[% FOREACH status_option IN analysis_status_options +%]
+						<option value="[% status_option %]">[% status_option %]</option>
+					[% END +%]
+					</select>
+					<input type="text" name="search" id="analyze-item-link-analysis-search-input" class="input-default">
+					<input type="button" class="button" value="Search" id="btn-analyze-item-link-analysis-search">					
+				</div><br>
+
+				<div class="dialog-input-wrapper block">
+					<span class="dialog-input-label">Analysis</span><br>
+					<select name="analysis" size="19" class="select-single dialog-input-text-wide" id="analyze-item-link-analysis-search-analysis"></select>
+				</div><br>
+		
+				[% IF write_right %]
+				<div class="dialog-input-wrapper block">
+					<label for="analyze-item-link-analysis-pending-title" class="dialog-input-label">Title</label><br>
+					<input type="text" name="title" id="analyze-item-link-analysis-search-title" class="input-default dialog-input-text-wide">
+				</div><br>		
+				
+				<div class="dialog-input-wrapper block">
+					<span class="dialog-input-label">Status</span><br>
+					<select name="status" id="analyze-item-link-analysis-search-status" class="select-single dialog-input-text-narrow">
+					[% FOREACH status_option IN analysis_status_options +%]
+						<option value="[% status_option %]" [% IF sts.lower == status_option %]selected="selected"[% END %] >[% status_option %]</option>
+					[% END +%]
+					</select>
+				</div><br>
+				[% END %]
+				[% IF hasClusteredItems %]
+				<div class="dialog-input-wrapper block">
+					<span class="dialog-input-label">The selected item is part of a cluster. Select one of the following options:</span><br>
+					
+					<input type="radio" class="no-margin align-top" name="include-clustered-items" id="include-clustered-items-link-analysis-search-yes" value="1" checked="checked">
+					<label for="include-clustered-items-link-analysis-search-yes">Link all clustered items to analysis.</label><br>
+					
+					<input type="radio" class="no-margin" name="include-clustered-items" id="include-clustered-items-link-analysis-search-no" value="0">
+					<div class="block align-top">
+					<label for="include-clustered-items-link-analysis-search-no">Only link selected item of cluster to analysis. <br>(rest of items in cluster will be set to &#39;read&#39; status)</label>
+					</div>
+				</div>
+				[% END %]				
+			</form>			
+		</div>
+	</div>
+</div>

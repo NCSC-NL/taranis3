@@ -1,0 +1,14 @@
+#!perl
+# Remove collector column 'ip'
+
+use warnings;
+use strict;
+
+sub {
+	my ($db, %args) = @_;
+
+	$db->query( <<'__RUN__');
+ALTER TABLE collector
+   DROP COLUMN ip;
+__RUN__
+};

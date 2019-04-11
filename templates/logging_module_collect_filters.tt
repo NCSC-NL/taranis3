@@ -1,0 +1,32 @@
+<div class="filter-block filter-block-separator">
+
+	<form id="form-collector-logging-search">
+
+		<div class="block">
+			<label for="collector-logging-filters-group">Error code</label><br>
+			<select name="error_code" class="select-single" id="collector-logging-filters-error-code">
+				<option value="">-any-</option>
+				[% FOREACH error_code IN error_codes %]
+				<option value="[% error_code %]">[% error_code %]</option>
+				[% END %]
+			</select>
+		</div>
+
+		<div class="block">
+			<span>&nbsp;</span>
+			<input type="button" id="btn-collector-logging-search" class="button" value="Search!">		
+		</div>
+
+	</form>
+</div>
+
+<div class="action-block filter-block-separator">
+[% IF write_right +%]
+	<div class="block">
+		<input type="button" class="button" id="btn-delete-bulk-collector-logging" value="Delete logs">
+	</div>
+[% END %]	
+	<div class="block align-block-right">
+		<span class="bold page-title">Collector error logging</span>
+	</div>
+</div>

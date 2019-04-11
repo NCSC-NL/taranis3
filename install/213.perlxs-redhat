@@ -1,0 +1,19 @@
+#!/usr/bin/env perl
+# Install perl modules which require XS via the official package system.
+# These may be hard to compile automatically or require active patching.
+
+use warnings;
+use strict;
+
+use Taranis::Install::Bare   qw(is_redhat);
+use Taranis::Install::RedHat qw(redhat_packages);
+
+unless(is_redhat) {
+	print "*   skipped, not running on RedHat\n";
+	exit 0;
+}
+
+redhat_packages
+	'perl-IO-Socket-SSL', # follow security patches
+	'perl-GD',            # GD-2.56 does not install (script permission)
+	;

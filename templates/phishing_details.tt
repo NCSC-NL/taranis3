@@ -1,0 +1,35 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden[% END %] ui-state-error ui-corner-all">[% message %]</div>
+	
+	<div class="dialog-title">
+		<span>[% site %]</span>
+	</div>
+	
+	<form id="form-phish-details" data-id="[% id %]">
+		<fieldset>
+			<div class="dialog-input-wrapper block">
+				<label for="phishing-reference" class="dialog-input-label">Reference *</label><br>
+				<input type="text" name="reference" id="phising-reference" class="input-default dialog-input-text-narrow" value="[% reference %]" [% IF referenceIsMandatory %]mandatory[% END %]>
+			</div>
+			<div class="dialog-input-wrapper block">
+				<label for="phishing-campaign" class="dialog-input-label">Campaign</label><br>
+				<input type="text" name="campaign" id="phising-campaign" class="input-default dialog-input-text-narrow" value="[% campaign %]">
+			</div>
+		</fieldset>
+	</form>
+	
+	<fieldset id="fieldset-phishing-screenshots" data-id="[% id %]">
+		<div class="dialog-input-wrapper block">
+			<span class="dialog-input-label">Site screenshots</span><br>
+			<ul>
+			[% FOREACH image IN images %]
+				<li>
+					<img src="[% webroot %]/images/bw_camera.png">
+					<span class="span-link phishing-site-screenshot" data-phishid="[% id %]" data-objectid="[% image.object_id %]">[% image.timestamp_string %]</span>
+				</li>
+			[% END %]
+			</ul>
+		</div>
+	</fieldset>
+	
+</div>

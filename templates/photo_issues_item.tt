@@ -1,0 +1,44 @@
+[% SWITCH issue.status %]
+	[% CASE '0' %] 
+		[% statusDescription = 'pending' %]
+	[% CASE '1' %] 
+		[% statusDescription = 'readyforreview' %]
+	[% CASE '3' %]
+		[% statusDescription = 'done' %]
+[% END %]
+
+[% IF renderItemContainer %]
+<div class="photo-issues-item colored-item-row photo-issues-[% statusDescription %]" id="[% issue.ii_id %]">
+[% END %]
+	
+	<div class="photo-issues-item-issue-number block">
+		<span>#[% issue.ii_id %]</span>
+	</div>		
+
+	<div class="photo-issues-item-description block">
+		[% IF issue.issuetype == 4 +%]
+		<span class="">INFORM CONSTITUENT</span><br>
+		<span class="italic">[% issue.description %]</span> 							
+		[% ELSIF issue.producer +%]
+		<span class="">[% issue.producer _ ' ' _ issue.name %]</span><br /> 
+		<span>[% issue.type %]</span><br />
+		<span class="italic">[% issue.description %]</span>
+		[% ELSE %]
+		<span class="">[% issue.description %]</span>
+		[% END +%]
+	</div>		
+
+	<div class="block align-block-right">
+
+		[% IF issue.status != 0  && execute_right +%]
+		<img src="[% webroot %]/images/icon_advisory.png" alt="details" title="Issue details" data-id="[% issue.ii_id %]" class="pointer btn-view-issue-details">
+		[% END +%]
+																
+		[% IF issue.status == 0 && write_right +%]
+		<img src="[% webroot %]/images/icon_modify.png" alt="edit" title="Open issue" data-id="[% issue.ii_id %]" class="pointer btn-edit-issue">
+		[% END +%]
+	</div>
+	
+[% IF renderItemContainer %]
+</div>
+[% END %]

@@ -1,0 +1,39 @@
+<publication>
+<template>
+--- TLP:WHITE ---
+(https://first.org/tlp/)
+
+  ########################################################
+ ## N C S C ~ DAGELIJKS OVERZICHT BEVEILIGINGSADVIEZEN ##
+######################################################## 
+
+Uitgiftedatum   : _fld_publication_date_
+
+=====================================
+= Uitgebrachte Beveiligingsadviezen =
+=====================================
+_fld_published_advisories_
+
+========================================
+= Gerelateerd aan Beveiligingsadviezen =
+========================================
+_fld_linked_items_
+
+--- TLP:WHITE ---
+</template>
+
+<fields>
+	<fld_publication_date type="database">
+		<tbl type="key" column="id">publication</tbl>
+		<tbl type="select_date" column="published_on">publication</tbl>
+	</fld_publication_date>
+ 	<fld_published_advisories type="database">
+        <tbl type="key" column="id">publication_endofday</tbl>
+        <tbl type="select" column="published_advisories">publication_endofday</tbl>
+	</fld_published_advisories>
+	<fld_linked_items type="database">
+        <tbl type="key" column="id">publication_endofday</tbl>
+        <tbl type="select" column="linked_items">publication_endofday</tbl>
+	</fld_linked_items>
+ </fields>
+</publication>

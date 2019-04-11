@@ -1,0 +1,38 @@
+#!/usr/bin/env perl
+# Install the apache environment, in an ubunutu specific way.
+
+# Probably the other Linux distributions do not differ much, but still
+# there will be difference.
+
+use warnings;
+use strict;
+
+use File::Copy   qw(move);
+
+use Taranis::Install::Bare   qw(is_ubuntu);
+use Taranis::Install::Ubuntu qw(ubuntu_packages);
+
+my $apache = '/etc/httpd';
+
+unless(is_ubuntu) {
+	print "*   skipped: not running on Ubuntu.\n";
+	exit 0;
+}
+
+ubuntu_packages
+	'apache2',
+	'libapache2-mod-perl2',
+	'libapache2-mod-perl2-dev',
+	'libapache2-mod-perl2-doc',
+	'libapache2-request-perl',
+	;
+
+# a2enmod does not support '-l' on Ubuntu 16.05
+
+foreach my $reqmod ( qw/perl headers rewrite proxy ssl/ ) {
+	print "*   Enabling the mod_$reqmod module in apache2\n";
+	system "a2enmod -q $reqmod"
+		and die "ERROR: cannot enable mod_$reqmod: $!\n";
+}
+
+exit 0;

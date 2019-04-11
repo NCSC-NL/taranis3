@@ -1,0 +1,127 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden [% END %]ui-state-error ui-corner-all">[% message %]</div>
+	[% IF isLocked && openedByFullname +%]
+	<div class="ui-state-highlight ui-corner-all dialog-highlight">This advisory has been locked by [% openedByFullname %]</div>
+	[% END %]
+
+	<div class="dialog-title">
+		<span>[% advisory.title %]</span>	
+	</div>
+	
+	<div id="advisory-preview-tabs" class="dialog-tabs" data-publicationid="[% advisory.publication_id %]">
+		<input type="hidden" value="[% advisory.id %]" name="advisory-id" id="advisory-preview-advisory-id">
+		<ul>
+			<li><a href="#advisory-preview-tabs-general">General</a></li>
+			<li><a href="#advisory-details-tabs-matrix">Matrix</a></li>
+			<li><a href="#advisory-preview-tabs-software-hardware">Software/Hardware</a></li>
+			[% IF advisory.status == 3 && !is_updated +%]
+			<li><a href="#advisory-preview-tabs-notes">Notes</a></li>
+			[% END %]
+		</ul>
+		
+<!-- TAB GENERAL -->
+		<div id="advisory-preview-tabs-general">
+			<div class="dialog-input-wrapper block">
+				<div class="table">
+					<div class="cell">
+						<textarea class="scroll-y-always font-courier border-default" name="advisory_preview" id="advisory-preview-text" readonly="readonly">[% advisory.contents %]</textarea>
+					</div>
+					<div class="cell advisory-preview-selection-cell">
+						[% IF pub_type == 'email' || pub_type == 'update' %]
+						<fieldset class="advisory-preview-fieldset">
+							<legend>Preview selection</legend>
+							<div class="block">
+								<input type="radio" name="preview_type" id="advisory-details-preview-email" value="[% pub_type %]" checked="checked">
+								<label for="advisory-details-preview-email">Advisory email</label><br>
+								<input type="radio" name="preview_type" id="advisory-details-preview-xml" value="xml">
+								<label for="advisory-details-preview-xml">Advisory XML</label><br>
+							</div>
+						</fieldset><br>
+						[% END %]
+						<fieldset class="advisory-preview-fieldset">
+							<legend>Publication details</legend>
+							<div class="block" id="advisory-preview-publication-details">
+								[% IF created_by_name %]
+								<span data-printable="created by [% advisory.created_by %]">Created by: </span><br>
+								<span class="tpl-heading">[% created_by_name %]</span><br><br>
+								[% END %]
+								[% IF approved_by_name %]
+								<span data-printable="approved by [% advisory.approved_by %]">Approved by: </span><br>
+								<span class="tpl-heading">[% approved_by_name %]</span><br><br>
+								[% END %]
+								[% IF published_by_name %]
+								<span data-printable="published by [% advisory.published_by %]">Published by: </span><br>
+								<span class="tpl-heading">[% published_by_name %]</span><br><br>
+								[% END %]
+								[% IF advisory.based_on %]
+								<span data-printable="based on [% advisory.based_on.replace( '(\d\.\d\d$)', '[v$1]' ) %]">Based on: </span><br>
+								<span class="tpl-heading">[% advisory.based_on.replace( '(\d\.\d\d$)', '[v$1]' ) %]</span><br><br>
+								[% END %]
+							</div>
+						</fieldset><br>
+						[% IF attachments && attachments.size > 0 %]
+						<fieldset class="advisory-preview-fieldset">
+							<legend>Attachments</legend>
+							<div class="block break-word advisory-preview-attachment-block">
+								[% FOREACH attachment IN attachments %]
+								<span class="span-link publication-attachment-link" data-fileid="[% attachment.id %]" title="[% attachment.filename %]">[% attachment.filename %]</span> 
+									([% IF attachment.file_size > 1000000 %]
+										[% attachment.file_size div 1000000 %]MB
+									[% ELSIF attachment.file_size > 1000 %]
+										[% attachment.file_size div 1000 %]KB
+									[% ELSE %]
+										[% attachment.file_size %]B
+									[% END %])
+									<br><br>
+								[% END %]
+							</div>
+						</fieldset>
+						[% END %]
+					</div>
+				</div>
+			</div>
+		</div>
+
+<!-- TAB MATRIX -->	
+	[% INCLUDE write_advisory_tab_matrix.tt %]
+
+		<div id="advisory-preview-tabs-software-hardware">
+			<fieldset>
+				<div class="dialog-input-wrapper block">
+					<span class="dialog-input-label">Platforms</span><br>
+					<select multiple="multiple" id="advisory-preview-platforms" size="10" class="select-multiple">
+					[% FOREACH platform IN platforms +%]
+						[% USE String(platform.producer) +%]
+						[% platform_fulltext = String.capital _ ' ' _ platform.name _ ' ' _ platform.version _ ' (' _ platform.description _ ')' %]
+						<option title="[% platform_fulltext %]" class="[% IF platform.in_use %]option-sh-in-use[% END %]">[% platform_fulltext %]</option>
+					[% END +%]
+					</select><br>
+				</div>			
+				<div class="dialog-input-wrapper block">
+					<span class="dialog-input-label">Products</span><br>
+					<select multiple="multiple" id="advisory-preview-products" size="10" class="select-multiple">
+					[% FOREACH product IN products +%]
+						[% USE String(product.producer) +%]
+						[% product_fulltext = String.capital _ ' ' _ product.name _ ' ' _ product.version _ ' (' _ product.description _ ')' %]
+						<option title="[% product_fulltext %]" class="[% IF product.in_use %]option-sh-in-use[% END %]">[% product_fulltext %]</option>
+					[% END +%]
+					</select>
+				</div>
+			</fieldset>
+		</div>
+
+[% IF advisory.status == 3 && !is_updated +%]
+<!-- TAB NOTES -->
+		<div id="advisory-preview-tabs-notes">
+			<fieldset>
+				<div class="dialog-input-wrapper block">
+					<textarea class="scroll-y-always border-default" name="advisory_notes" id="advisory-preview-notes">[% advisory.notes %]</textarea><br>
+					<br>
+					<span id="advisory-preview-notes-save-result" class="hide"></span>
+				</div>
+			</fieldset>
+		</div>
+	</div>
+[% END %]
+</div>
+<iframe name="downloadFrame" id="downloadFrame" src="" class="super-secret-iframe"></iframe>

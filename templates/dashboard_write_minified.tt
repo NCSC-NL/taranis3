@@ -1,0 +1,31 @@
+<div class="block">
+	[% IF endOfShiftStatus && endOfShiftStatus.showMinified %]
+		
+		[% IF endOfShiftStatus.data.previous.status && endOfShiftStatus.data.previous.status != 'green' %]
+		<div title="The End-of-Shift of previous shift has not been sent yet.">
+			<a href="write/publications/displayPublications/pub_type=eos/" data-callback="setMenu">
+				<span class="dashboard-minified-icons-with-text">eos</span>
+				<img src="[% webroot %]/images/mail_plain_[% endOfShiftStatus.data.previous.status %].png" alt="[% endOfShiftStatus.data.previous.status FILTER upper %]">
+			</a>
+		</div>
+		[% END %]
+		[% IF endOfShiftStatus.data.current.status && endOfShiftStatus.data.current.status != 'green' %]
+		<div title="The End-of-Shift has not been sent yet">
+			<a href="write/publications/displayPublications/pub_type=eos/" data-callback="setMenu">
+				<span class="dashboard-minified-icons-with-text">eos</span>
+				<img src="[% webroot %]/images/mail_plain_[% endOfShiftStatus.data.current.status %].png" alt="[% endOfShiftStatus.data.current.status FILTER upper %]">
+			</a>
+		</div>
+		[% END %]
+	[% END %]
+	[% IF endOfDayStatus && endOfDayStatus.showMinified %]
+		[% IF endOfDayStatus.data.status && endOfDayStatus.data.status != 'green' %]
+		<div title="Last End-of-Day was sent on [% endOfDayStatus.data.lastPublication %]">
+			<a href="write/publications/displayPublications/pub_type=eod/" data-callback="setMenu">
+				<span class="dashboard-minified-icons-with-text">eod</span>
+				<img src="[% webroot %]/images/mail_plain_[% endOfDayStatus.data.status %].png" alt="[% endOfDayStatus.data.status FILTER upper %]">
+			</a>
+		</div>
+		[% END %]
+	[% END %]
+</div>

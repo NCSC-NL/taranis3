@@ -1,0 +1,172 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden[% END %] ui-state-error ui-corner-all">[% message %]</div>
+
+	[% IF constituentGroup.name %]
+	<div class="dialog-title">
+		<span>[% constituentGroup.name %]</span>	
+	</div>
+	[% END %]
+	
+	<form id="constituent-group-details-form" data-id="[% IF constituentGroup.id; constituentGroup.id; ELSE; 'NEW'; END %]">
+
+		<div id="constituent-group-details-tabs" class="dialog-tabs">
+			<ul>
+				<li><a href="#constituent-group-details-tabs-general">General</a></li>
+				<li><a href="#constituent-group-details-tabs-members">Members</a></li>
+				<li><a href="#constituent-group-details-tabs-software-hardware">Software/Hardware</a></li>
+				<li><a href="#constituent-group-details-tabs-notes">Notes</a></li>
+				[% IF hasImportPhotoRight && issueList && issueList.size > 0 %]
+				<li><a href="#constituent-group-details-tabs-issues">Unresolved issues</a></li>
+				[% END %]
+			</ul>
+
+<!-- TAB GENERAL -->
+			<div id="constituent-group-details-tabs-general">
+				<fieldset>
+					<div class="dialog-input-wrapper block">
+						<label for="constituent-group-details-name" class="dialog-input-label">Constituent Name*</label><br>
+						<input type="text" name="name" id="constituent-group-details-name" class="input-default dialog-input-text-wider" value="[% constituentGroup.name %]">
+					</div><br>
+
+					<div class="dialog-input-wrapper block">
+						<span class="dialog-input-label">Constituent Type</span><br>
+						<select name="constituent_type" id="constituent-group-details-type" class="select-single dialog-input-text">
+						[% FOREACH type IN types %]
+							<option value="[% type.id %]" [% IF constituentGroup.constituent_type == type.id %]selected="selected" class="constituent-group-type-selected"[% END %]>[% type.type_description %]</option>
+						[% END %]
+						</select>
+					</div><br>
+
+					<div class="dialog-input-wrapper block">
+						<span class="dialog-input-label">Constituent Status</span><br>
+						<select name="status" id="constituent-group-details-status" class="select-single dialog-input-text">
+							<option value="0" [% IF constituentGroup.status == 0 %] selected="selected"[% END %]>Normal</option>
+							<option value="2" [% IF constituentGroup.status == 2 %] selected="selected"[% END %]>Temporarily disabled</option>
+						</select>
+					</div><br>
+
+					<div class="dialog-input-wrapper block"
+						id="constituent-group-details-inform">
+						<label for="constituent-group-details-inform" class="dialog-input-label">Inform the Constituent</label><br>
+
+						<input type="checkbox" name="use_sh" value="1" [% IF constituentGroup.use_sh == 1 %] checked="checked"[% END %] id="constituent-group-details-shwh-use">
+						Software/Hardware list in use<br>
+
+						<div class="dialog-input-wrapper block indentation"
+							id="constituent-group-details-shwh-using">
+
+							<input type="checkbox" name="call_hh" value="1" [% IF constituentGroup.call_hh == 1 %] checked="checked"[% END %]>
+							Call for H/H incident with selected software/hardware<br>
+                    	</div>
+
+						<div class="dialog-input-wrapper block indentation"
+							id="constituent-group-details-shwh-not-using">
+							<input type="checkbox" name="any_hh" value="1" [% IF constituentGroup.any_hh == 1 %] checked="checked"[% END %]>
+							Call for any H/H incident<br>
+
+							<input type="checkbox" name="no_advisories" value="1" [% IF constituentGroup.no_advisories == 1 %] checked="checked"[% END %]>
+							Do not send separate advisories<br>
+						</div><br>
+					</div><br>
+				
+				</fieldset>
+			</div>
+			
+<!-- TAB MEMBERS -->
+			<div id="constituent-group-details-tabs-members">
+				<fieldset>
+					<div class="select-two-columns dialog-input-wrapper">
+						<div class="inline">
+							<span class="dialog-input-label">Members</span><br>
+							<select multiple="multiple" name="members" id="constituent-group-members" size="25" class="select-multiple select-left select-multiple-wide">
+								[% FOREACH member IN members %]
+									[% full_name_m = member.lastname _ ', ' _ member.firstname _ ' (' _ member.role_name _ ')' %]
+								<option value="[% member.id %]" title="[% full_name_m %]"[% IF member.status != 0 %] class="strikethrough"[% END %]>[% full_name_m %]</option>
+								[% END %]
+							</select>
+						</div>
+						<div class="option-left-right">	
+							<input type="button" class="button btn-option-to-left1" id="btn-add-member" value="&lt;"><br><br>
+							<input type="button" class="button btn-option-to-right" value="&gt;">
+						</div>
+						<div class="inline">
+							<span class="dialog-input-label">All individuals</span><br>
+							<select multiple="multiple" name="all_individuals" id="constituent-group-all-individuals" size="25" class="select-multiple select-right select-multiple-wide">
+								[% FOREACH individual IN all_individuals %]
+									[% full_name_i = individual.lastname _ ', ' _ individual.firstname _ ' (' _ individual.role_name _ ')' %]
+								<option value="[% individual.id %]" title="[% full_name_i %]"[% IF individual.status != 0 %] class="strikethrough"[% END %]>[% full_name_i %]</option>
+								[% END %]
+							</select>
+						</div>
+					</div>				
+				</fieldset>
+			</div>
+
+<!-- TAB SOFTWARE/HARDWARE -->
+			<div id="constituent-group-details-tabs-software-hardware">
+				<fieldset>
+
+					<div class="dialog-input-wrapper block">
+						<div class="select-two-columns">
+							<div class="inline">
+								<span class="dialog-input-label">Software/hardware in use</span><br>
+								<select multiple="multiple" name="sh_left_column" id="constituent-group-software-hardware-left-column" size="25" class="select-multiple select-left select-multiple-wide">
+								[% FOREACH sh IN sh_left_column %]
+									[% USE String(sh.producer) %]
+									[% full_text = String.capital _ ' ' _ sh.name _ ' ' _ sh.version _ ' (' _ sh.description _ ')' %]
+									<option value="[% sh.id %]" id="[% sh.id %]" title="[% full_text %]">[% full_text %]</option>
+								[% END %]
+								</select>
+							</div>
+							<div class="option-left-right">	
+								<input type="button" class="button btn-option-to-left" value="&lt;"><br><br>
+								<input type="button" class="button btn-option-to-right" value="&gt;">
+							</div>
+							<div class="inline">
+								<input type="search" name="sh_search" id="constituent-group-software-hardware-search" class="input-default" placeholder="search software/hardware">
+								<input type="button" value="Search" class="button" id="btn-constituent-group-software-hardware-search">
+								<br>
+								<select multiple="multiple" name="sh_list" id="constituent-group-software-hardware-right-column" size="25" class="select-multiple select-right select-multiple-wide"></select>
+							</div>
+						</div>
+					</div><br>
+
+					<div class="dialog-input-wrapper">
+						<div class="constituent-group-software-hardware-fulltext"></div><br>
+					</div><br>
+
+				</fieldset>
+			</div>
+
+<!-- TAB NOTES -->
+			<div id="constituent-group-details-tabs-notes">
+				<fieldset>
+					<div class="dialog-input-wrapper block">
+						<span class="dialog-input-label">Notes</span><br>
+						<textarea class="input-default block" name="notes" id="constituent-group-notes">[% constituentGroup.notes %]</textarea>
+					</div>
+				</fieldset>
+			</div>
+
+[% IF hasImportPhotoRight && issueList && issueList.size > 0 %]
+<!-- TAB ISSUES -->
+			<div id="constituent-group-details-tabs-issues">
+				<fieldset>
+				<table class="center" id="constituent-group-details-issue-list">
+					[% FOREACH issue IN issueList +%]
+					<tr class="RowHover" id="tr_photo_[% photo.id %]">
+						<td class="contentBlokje greyBorderTop">
+							<span class="span_clickable_red" id="span_issue_[% issue.id %]">[% issue.producer _ ' ' _ issue.name _ ' (' _ issue.sh_type _ ')' %]</span><br />
+							<span>[% issue.description %]</span>
+						</td>
+					</tr>					
+					[% END %]
+				</table>
+				
+				</fieldset>
+			</div>
+[% END %]
+			
+		</div>
+	</form>
+</div>

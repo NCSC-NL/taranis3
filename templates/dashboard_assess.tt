@@ -1,0 +1,29 @@
+<div class="block dashboard-block">
+	<fieldset>
+		<legend class="bold">Assess</legend>
+		[% IF numberOfUnreadItems %]
+			<div>
+				<img src="[% webroot %]/images/MailBox.png" alt="[% numberOfUnreadItems.data %]" class="align-middle dashboard-icon">
+				<div class="block">There are <span class="bold">[% numberOfUnreadItems.data %]</span> unread Assess items.</div>
+			</div>
+			[% IF ( oldestUnreadItem && oldestUnreadItem.data.hours_ago ) || assessTagCloud %]
+			<hr class="light">
+			[% END %]
+		[% END %]
+		[% IF oldestUnreadItem && oldestUnreadItem.data.hours_ago %]
+			<div>
+				<img src="[% webroot %]/images/MailBox.png" alt="&gt;[% oldestUnreadItem.data.hours_ago %]j" class="align-middle dashboard-icon">
+				<div class="block">Unread items date back to <span class="bold">[% oldestUnreadItem.data.oldest_created %]</span>.</div>
+			</div>
+			[% IF assessTagCloud %]
+			<hr class="light">
+			[% END %]
+		[% END %]
+		[% IF assessTagCloud %]
+			<div class="center">
+				<span class="bold">Items tagcloud of last 24 hours.</span>
+			</div>
+			<div id="assessTagCloud" class="dashboard-tagcloud border-default"></div>
+		[% END %]
+	</fieldset>
+</div>

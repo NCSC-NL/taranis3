@@ -1,0 +1,15 @@
+#!perl
+# call constituent on any HH flag
+
+use warnings;
+use strict;
+
+sub {
+	my ($db, %args) = @_;
+	$db->query( <<'__RUN__');
+
+ALTER TABLE constituent_group
+  ADD COLUMN any_hh BOOLEAN DEFAULT false;
+
+__RUN__
+};

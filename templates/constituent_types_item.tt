@@ -1,0 +1,23 @@
+[% IF renderItemContainer %]
+<div class="constituent-types-item item-row" id="[% constituentType.id %]">
+[% END %]
+		
+	<div class="constituent-types-item-name block">
+		<span>[% constituentType.type_description %]</span>
+	</div>		
+
+	<div class="block align-block-right">
+	[% IF write_right %]
+		<img src="[% webroot %]/images/icon_modify.png" alt="edit" title="edit type" class="pointer btn-edit-constituent-type" data-id="[% constituentType.id %]">
+		[% IF constituentType.status == 1 %]
+		<img src="[% webroot %]/images/icon_delete.png" alt="delete" title="delete type" class="pointer btn-delete-constituent-type" data-id="[% constituentType.id %]">
+		[% ELSE %]
+		<img src="[% webroot %]/images/icon_delete_disabled.png" alt="no delete" title="Cannot delete type because a constituent group has been configured with this type">
+		[% END %]
+	[% ELSE %]
+		<img src="[% webroot %]/images/icon_details.png" alt="view" title="view details" class="pointer btn-view-constituent-type" data-id="[% constituentType.id %]">
+	[% END %]		
+	</div>
+[% IF renderItemContainer %]
+</div>
+[% END %]

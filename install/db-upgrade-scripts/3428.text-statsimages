@@ -1,0 +1,16 @@
+#!perl
+
+use warnings;
+use strict;
+
+sub {
+	my ($db, %args) = @_;
+
+	$db->query( <<'__RUN__');
+ALTER TABLE statsimages ALTER COLUMN digest TYPE TEXT;
+ALTER TABLE statsimages ALTER COLUMN description TYPE TEXT;
+ALTER TABLE statsimages ALTER COLUMN link TYPE TEXT;
+ALTER TABLE statsimages ALTER COLUMN source TYPE TEXT;
+ALTER TABLE statsimages ALTER COLUMN category TYPE TEXT;
+__RUN__
+};

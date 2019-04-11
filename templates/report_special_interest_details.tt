@@ -1,0 +1,43 @@
+[% USE date %]
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden[% END %] ui-state-error ui-corner-all">[% message %]</div>
+	
+	[% IF specialInterest.topic %]
+	<div class="dialog-title">
+		<span>[% specialInterest.topic %]</span>
+	</div>
+	[% END %]
+	
+	<form id="form-report-special-interest" data-id="[% IF specialInterest.id; specialInterest.id; ELSE; 'NEW'; END %]">
+		<fieldset>
+			<div class="dialog-input-wrapper block">
+				<label for="report-special-interest-topic" class="dialog-input-label">Topic/Description * </label><span class="italic">(this text will be sent to requestor as reminder three days before end date)</span><br>
+				<input type="text" name="topic" id="report-special-interest-topic" class="input-default dialog-input-text" value="[% specialInterest.topic %]">
+			</div>
+			<div class="dialog-input-wrapper block">
+				<label for="report-special-interest-requestor" class="dialog-input-label">Requestor emailaddress*</label><br>
+				<input type="text" name="requestor" id="report-special-interest-requestor" class="input-default dialog-input-text" value="[% specialInterest.requestor %]">
+			</div><br>
+			[% IF specialInterest.timestamp_reminder_sent %]
+			<div class="dialog-input-wrapper block">
+				<span class="italic">A reminder was sent to the requestor on [% date.format( specialInterest.timestamp_reminder_sent.stripSeconds, '%H:%M %d-%m-%Y' ) %] </span><br>
+				<span class="dialog-input-label">Do you want to reset the reminder notice?</span><br>
+				<input type="radio" name="reminder_reset" id="report-special-interest-reminder-yes" class="input-default dialog-input-text" value="1"><label for="report-special-interest-reminder-yes">Yes</label><br>
+				<input type="radio" name="reminder_reset" id="report-special-interest-reminder-no" class="input-default dialog-input-text" value="0" checked><label for="report-special-interest-reminder-no">No</label>
+			</div><br>
+			[% END %]
+			<div class="dialog-input-wrapper block">
+				<label for="report-special-interest-date-start" class="dialog-input-label">Start date *</label><br>
+				<input type="text" name="date_start" id="report-special-interest-date-start" class="input-default date-picker" value="[% IF specialInterest.date_start; date.format( specialInterest.date_start.stripSeconds, format = '%d-%m-%Y' ); END %]">
+			</div><br>
+			<div class="dialog-input-wrapper block">
+				<label for="report-special-interest-date-end" class="dialog-input-label">End date *</label><span class="italic"> (max 4 weeks from start date)</span><br>
+				<input type="text" name="date_end" id="report-special-interest-date-end" class="input-default date-picker" value="[% IF specialInterest.date_end; date.format( specialInterest.date_end.stripSeconds, format = '%d-%m-%Y' ); END %]">
+			</div>
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">What action should be taken?</span><br>
+				<textarea name="action" id="report-special-interest-action" class="input-default dialog-input-text-wide">[% specialInterest.action %]</textarea>
+			</div>
+		</fieldset>
+	</form>
+</div>

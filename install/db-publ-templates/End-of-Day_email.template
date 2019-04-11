@@ -1,0 +1,114 @@
+<publication>
+<template><![CDATA[
+--- TLP:AMBER / Departementaal Vertrouwelijk / Intern ---
+(https://first.org/tlp/)
+
+==============
+= Dagrapport =
+==============
+Periode:     _fld_timeframe_begin_ &minus; _fld_timeframe_end_
+Handler:     _fld_handler_
+Tweede man:  _fld_first_co_handler_
+Canis:       _fld_second_co_handler_
+
+_fld_general_info_
+
+===========================
+= Kwetsbaarheden/Dreiging =
+===========================
+_fld_vulnerabilities_threats_
+
+=================
+= Incident-info =
+=================
+_fld_incident_info_
+
+=================
+=   TLP:AMBER   =
+=================
+_fld_tlp_amber_
+
+====================
+= Community nieuws =
+====================
+_fld_community_news_
+
+==================
+= Media Exposure =
+==================
+_fld_media_exposure_
+
+=====================================
+= Uitgebrachte Beveiligingsadviezen =
+=====================================
+_fld_published_advisories_
+
+========================================
+= Gerelateerd aan Beveiligingsadviezen =
+========================================
+_fld_linked_items_
+
+--- TLP:AMBER / Departementaal Vertrouwelijk / Intern ---
+]]></template>
+
+<fields>
+    <fld_timeframe_begin type="database">
+        <tbl type="key" column="id">publication_endofday</tbl>
+        <tbl type="select_date_Dutch" column="timeframe_begin">publication_endofday</tbl>
+    </fld_timeframe_begin>
+    <fld_timeframe_end type="database">
+        <tbl type="key" column="id">publication_endofday</tbl>
+        <tbl type="select_date_Dutch" column="timeframe_end">publication_endofday</tbl>
+    </fld_timeframe_end>
+    <fld_handler type="database">
+        <tbl type="select" column="fullname" alias="handler">users</tbl>
+        <tbl type="key" column="id">publication_endofday</tbl>
+        <tbl type="join1" column="handler">publication_endofday</tbl>
+        <tbl type="join2" column="username">users</tbl>
+    </fld_handler>
+    <fld_first_co_handler type="database">
+        <tbl type="select" column="fullname" alias="first_co_handler">users</tbl>
+        <tbl type="key" column="id">publication_endofday</tbl>
+        <tbl type="join1" column="first_co_handler">publication_endofday</tbl>
+        <tbl type="join2" column="username">users</tbl>
+    </fld_first_co_handler>
+    <fld_second_co_handler type="database">
+        <tbl type="select" column="fullname" alias="second_co_handler">users</tbl>
+        <tbl type="key" column="id">publication_endofday</tbl>
+        <tbl type="join1" column="second_co_handler">publication_endofday</tbl>
+        <tbl type="join2" column="username">users</tbl>
+    </fld_second_co_handler>
+    <fld_general_info type="database">
+        <tbl type="key" column="id">publication_endofday</tbl>
+        <tbl type="select" column="general_info">publication_endofday</tbl>
+    </fld_general_info>
+    <fld_vulnerabilities_threats type="database">
+        <tbl type="key" column="id">publication_endofday</tbl>
+        <tbl type="select" column="vulnerabilities_threats">publication_endofday</tbl>
+    </fld_vulnerabilities_threats>
+    <fld_incident_info type="database">
+        <tbl type="key" column="id">publication_endofday</tbl>
+        <tbl type="select" column="incident_info">publication_endofday</tbl>
+    </fld_incident_info>
+  <fld_tlp_amber type="database">
+    <tbl type="key" column="id">publication_endofday</tbl>
+    <tbl type="select" column="tlp_amber">publication_endofday</tbl>
+  </fld_tlp_amber>
+    <fld_community_news type="database">
+        <tbl type="key" column="id">publication_endofday</tbl>
+        <tbl type="select" column="community_news">publication_endofday</tbl>
+    </fld_community_news>
+    <fld_media_exposure type="database">
+        <tbl type="key" column="id">publication_endofday</tbl>
+        <tbl type="select" column="media_exposure">publication_endofday</tbl>
+    </fld_media_exposure>
+	<fld_published_advisories type="database">
+        <tbl type="key" column="id">publication_endofday</tbl>
+        <tbl type="select" column="published_advisories">publication_endofday</tbl>
+	</fld_published_advisories>
+	<fld_linked_items type="database">
+        <tbl type="key" column="id">publication_endofday</tbl>
+        <tbl type="select" column="linked_items">publication_endofday</tbl>
+	</fld_linked_items>
+</fields>
+</publication>

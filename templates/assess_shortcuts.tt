@@ -1,0 +1,105 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="hidden">[% message %]</div>
+	
+	<div class="dialog-title">
+		<span>Assess shortcuts overview</span>
+	</div><br>
+	<div>
+		<table class="bold shortcuts-table">
+			<tbody>
+				<tr>
+					<th colspan="2" class="italic">SCROLLING THROUGH LIST</th>
+				</tr>
+				<tr>
+					<td>k</td>
+					<td>up</td>
+				</tr>
+				<tr>
+					<td>j</td>
+					<td>down</td>
+				</tr>
+				<tr>
+					<th colspan="2" class="italic">OPERATIONS ON LIST</th>
+				</tr>
+				<tr>
+					<td>c</td>
+					<td>check all</td>
+				</tr>
+				<tr>
+					<td>^</td>
+					<td>check all above</td>
+				</tr>
+				<tr>
+					<td>!</td>
+					<td>check all below</td>
+				</tr>
+				<tr>
+					<td>u</td>
+					<td>uncheck all</td>
+				</tr>
+				<tr>
+					<td>r</td>
+					<td>mark as read</td>
+				</tr>
+				<tr>
+					<td>i</td>
+					<td>mark as important</td>
+				</tr>
+				<tr>
+					<td>b</td>
+					<td>bulk analysis</td>
+				</tr>
+				<tr>
+					<td>p</td>
+					<td>multiple analysis</td>
+				</tr>
+				<tr>
+					<td>+</td>
+					<td>show me more</td>
+				</tr>
+				<tr>
+					<th colspan="2" class="italic">OPERATIONS ON ONE ITEM</th>
+				</tr>
+				<tr>
+					<td>a</td>
+					<td>analyze</td>
+				</tr>
+				<tr>
+					<td>e</td>
+					<td>export text to clipboard</td>
+				</tr>
+				<tr>
+					<td>f</td>
+					<td>fold/unfold cluster</td>
+				</tr>
+				<tr>
+					<td>l</td>
+					<td>open link</td>
+				</tr>
+				<tr>
+					<td>m</td>
+					<td>mail</td>
+				</tr>
+				<tr>
+					<td>s or SPACE</td>
+					<td>select</td>
+				</tr>
+				<tr>
+					<td>t</td>
+					<td>tag</td>
+				</tr>
+				<tr>
+					<td>v</td>
+					<td>view details</td>
+				</tr>
+				<tr>
+					<th colspan="2" class="italic">OTHER</th>
+				</tr>
+				<tr>
+					<td>?</td>
+					<td>show this dialog...</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

@@ -1,0 +1,62 @@
+@text-color: #d52b1e;
+@background-color: #2a2a2a;
+@marked: #f8e61d;
+
+.main-color {
+	color: @text-color;
+	background-color: @background-color;
+}
+
+hr {
+	background-color: @text-color;
+}
+
+.nav-item, .nav-list-item {
+	color: inherit;
+}
+.nav-item:hover, .nav-list-item:hover {
+	color: @background-color;
+	background-color: @text-color;
+}
+
+.marked {
+	color: @marked;
+}
+
+.generate-h-tags(@i) when (@i > 0) {
+	h@{i} {
+		color: lighten( @text-color, ( @i * 2% ) );
+	}
+	.generate-h-tags(@i - 1);
+}
+.generate-h-tags(4);
+
+.counter-block {}
+
+#loading-bar {
+	background: @text-color !important;
+}
+
+.default-table, .compact-table { border: 1px solid darken( @background-color, 5%); }
+
+.default-table th, .compact-table th {
+	color: @background-color;
+	background-color: @text-color;
+}
+.default-table .oneven, .compact-table .oneven {
+	background-color: darken( @background-color, 5%);
+}
+
+div.jqcloud { color: @text-color; }
+div.jqcloud a { color: lighten( @text-color, 10%); }
+div.jqcloud a:hover { color: lighten( @text-color, 20%) }
+div.jqcloud span.w10 { color: lighten( @text-color, 5%) }
+div.jqcloud span.w9 { color: lighten( @text-color, 10%) }
+div.jqcloud span.w8 { color: lighten( @text-color, 15%) }
+div.jqcloud span.w7 { color: lighten( @text-color, 20%) }
+div.jqcloud span.w6 { color: lighten( @text-color, 25%) }
+div.jqcloud span.w5 { color: lighten( @text-color, 30%) }
+div.jqcloud span.w4 { color: lighten( @text-color, 35%) }
+div.jqcloud span.w3 { color: lighten( @text-color, 40%) }
+div.jqcloud span.w2 { color: lighten( @text-color, 45%) }
+div.jqcloud span.w1 { color: lighten( @text-color, 50%) }

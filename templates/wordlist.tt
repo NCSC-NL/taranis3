@@ -1,0 +1,23 @@
+<div id="cluster-content-heading" class="content-heading">
+	<div id="wordlist-content-heading-description" class="block">
+		<span>Description</span>
+	</div>
+	<div id="wordlist-content-heading-wordcount" class="block">
+		<span>Wordcount</span>
+	</div>
+</div>
+
+[% IF wordlists && wordlists.size > 0 %]
+	[% FOREACH wordlist IN wordlists %]
+	
+		[% INCLUDE wordlist_item.tt %]
+	
+	[% END %]
+[% ELSE %]
+<div class="item-row" id="empty-row">No wordlists found...</div>
+
+[% END %]
+
+<div class="action-block filter-block-separator">
+	<div class="center" id="number-of-results">&mdash; [% numberOfResults %] results &mdash;</div>
+</div>

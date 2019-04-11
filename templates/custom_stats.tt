@@ -1,0 +1,9 @@
+<div id="custom-statistics-heading" class="content-heading">
+	<div id="custom-statistics-content-heading-statistics" class="block">
+		<span>Statistics</span>
+	</div>
+</div>
+
+<div id="custom-statistics-content"></div>
+
+<div class="action-block filter-block-separator"></div>

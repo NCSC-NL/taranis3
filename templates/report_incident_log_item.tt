@@ -1,0 +1,31 @@
+[% USE date %]
+[% IF renderItemContainer %]
+<div class="report-incident-log-item item-row" id="[% incidentLog.id %]">
+[% END %]
+	<div class="report-incident-log-item-status block">
+		<span>[% incidentLog.status.displayReportIncidentLogStatus %]</span>
+	</div>
+	<div class="report-incident-log-item-created block date-width-default">
+		<span>[% date.format( incidentLog.created.stripSeconds, format = '%d-%m-%Y %H:%M' ) %]</span>
+	</div>
+	<div class="report-incident-log-item-ticket-number block">
+		<span>[% incidentLog.ticket_number %]</span>
+	</div>
+	<div class="report-incident-log-item-owner block">
+		<span>[% incidentLog.fullname %]</span>
+	</div>
+	<div class="report-incident-log-item-description block">
+		<span>[% incidentLog.description %]</span>
+	</div>
+
+	<div class="block align-block-right">
+	[% IF write_right %]
+		<img src="[% webroot %]/images/icon_modify.png" alt="edit" title="edit to-do" class="pointer btn-edit-report-incident-log" data-id="[% incidentLog.id %]">
+		<img src="[% webroot %]/images/icon_delete.png" alt="delete" title="delete to-do" class="pointer btn-delete-report-incident-log" data-id="[% incidentLog.id %]">
+	[% ELSE %]
+		<img src="[% webroot %]/images/icon_details.png" alt="view" title="view details" class="pointer btn-view-report-incident-log" data-id="[% incidentLog.id %]">
+	[% END %]		
+	</div>
+[% IF renderItemContainer %]
+</div>
+[% END %]

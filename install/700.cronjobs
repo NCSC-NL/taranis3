@@ -1,0 +1,128 @@
+#!/usr/bin/env perl
+# Add cron lines to run background scripts.
+
+use warnings;
+use strict;
+
+use Carp           qw(confess);
+
+use Taranis::Install::Config qw(config_release config_generic taranis_sources
+	become_user_taranis);
+use Taranis::Install::Bare   qw(copy_file);
+
+sub edit_record($$$);
+sub edit_env($$);
+
+become_user_taranis;
+
+my $generic = config_generic;
+my $release = config_release;
+my $version = $release->{version};
+my $var     = $generic->{var};
+my $sources = taranis_sources $version;
+
+foreach my $cron ('cron.often', 'cron.cycle', 'cron.daily') {
+	if(-f "$var/$cron") {
+		print "*   skip $cron: already exists\n";
+		next;
+	}
+
+	my $from = "$sources/conf/$cron";
+	copy_file $from, "$var/$cron", 0755;
+	print "*   taken $from\n";
+}
+
+my @crontab = qx(crontab -l 2>/dev/null);
+my $changes = 0;
+
+# Remove all comments: the order of the lines get quite complex if we
+# have to maintain comments surrounding them.
+@crontab = grep !/^\#/, @crontab;
+
+@crontab
+	or print "** installing new crontab\n";
+
+unless(grep /^MAILTO\b/, @crontab) {
+	my $email = $generic->{admin_email} or confess;
+	print "*   post error reports to $email\n";
+	push @crontab, "MAILTO='$email'\n";
+	$changes++;
+}
+
+my $bin = ($version eq 'git' ? $sources : $release->{install}) . '/bin';
+
+my $taranis_bin = "$bin/taranis";
+if((local $_) = grep /^TARANIS\b/, @crontab) {
+	$_ = qq{TARANIS='$taranis_bin'\n};
+} else {
+	unshift @crontab, qq{TARANIS='$taranis_bin'\n};
+}
+
+edit_env 'TARANIS', "$taranis_bin";
+
+edit_record 'cron.often', [ qw(*/5  * * * *) ], "$var/cron.often";
+edit_record 'cron.cycle', [ qw(*/20 * * * *) ], "$var/cron.cycle";
+edit_record 'cron.daily', [ qw(45   6 * * *) ], "$var/cron.daily";
+
+unless($changes) {
+	print "*   no changes in crontab.\n";
+	exit 0;
+}
+
+open my $cron, '| crontab'
+	or die "ERROR: cannot write to crontab: $!\n";
+
+$cron->print(@crontab);
+$cron->close
+	or die "ERROR while writing crontab: $!\n";
+
+exit 0;
+
+### HELPERS
+
+sub edit_record($$$) {
+	my ($pattern, $default_times, $command) = @_;
+
+	my ($has) = grep /\b\Q$pattern\E\b/, @crontab;
+	unless($has) {
+		print "*   added new task: $pattern\n";
+		push @crontab, join "\t", @$default_times, "$command\n";
+		$changes++;
+		return;
+	}
+
+	my @cols        = split ' ', $has, 6;
+	my $old_command = pop @cols;
+	return if $old_command eq "$command\n";
+
+	print "*   changed task $pattern\n";
+	@crontab = grep !/\b\Q$pattern\E\b/, @crontab;
+	push @crontab, join "\t", @cols, "$command\n";
+	$changes++;
+}
+
+sub edit_env($$) {
+	my ($varname, $varvalue) = @_;
+
+	my ($has) = grep /^\Q$varname\E\s*\=/, @crontab;
+	unless($has) {
+		print "*   added $varname\n";
+		unshift @crontab, "$varname='$varvalue'\n";
+		$changes++;
+		return;
+	}
+
+	$has =~ s/.*?\=\s*//;
+	$has =~ s/\s+$//;
+	return
+		if $has eq $varvalue
+		|| $has eq qq{"$varvalue"}
+		|| $has eq qq{'$varvalue'};
+
+	print "*   changed variable $varname\n";
+	@crontab = grep !/^\Q$varname\E\s*\=/, @crontab;
+	unshift @crontab, "$varname='$varvalue'\n";
+	$changes++;
+}
+
+exit 0;

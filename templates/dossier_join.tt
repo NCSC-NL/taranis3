@@ -1,0 +1,85 @@
+[% USE date %]
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden[% END %] ui-state-error ui-corner-all">[% message %]</div>
+	<div class="ui-state-highlight ui-corner-all dialog-highlight">The joined dossiers will become READ-ONLY dossiers!</div>
+	
+	<form id="form-dossier-join">
+		<fieldset>
+		
+			<div class="dialog-input-wrapper block">
+				Join the following dossiers:
+				[% FOREACH dossier IN dossiers %]
+					<span class="bold">[% dossier.description %]</span>,
+				[% END %]
+			</div>
+
+			<hr>
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Description for new dossier</span><br>
+				<select id="dossier-join-existing-description" class="select-single dialog-input-text-wide" name="description">
+				[% FOREACH dossier IN dossiers %]
+					<option value="[% dossier.description %]">[% dossier.description %]</option>
+				[% END %]
+				</select>
+			</div><br>
+			<div class="dialog-input-wrapper block">
+				<span>or</span>
+			</div><br>
+			<div class="dialog-input-wrapper block">
+				<input type="text" name="description_alternative" id="dossier-join-new-description" class="dialog-input-text-wide input-default" maxlength="250" placeholder="create new description...">
+			</div>
+			<hr>
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Tags *</span><br>
+				<input type="text" name="tags" id="dossier-join-tags" value="[% tags.join(', ') %]" class="input-default dialog-input-text tags-input" maxlength="100">
+			</div><br>
+			
+			<hr>
+			<div class="dialog-input-wrapper block">
+				<span class="grey-font">A reminder will be sent to selected user after selected amount of time inactivity</span>
+			</div><br>
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Remind after</span><br>
+				<input type="text" class="input-default select-tiny" id="dossier-reminder-time-amount" name="reminder_interval_amount" value="">
+				<select class="select-single select-tiny block" name="reminder_interval_units">
+					<option value="days">days</option>
+					<option value="months">months</option>
+				</select>
+			</div><br>
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Send reminder to</span><br>
+				<select id="dossier-join-reminder-username" name="reminder_account" class="select-single dialog-input-text-normal">
+					[% FOREACH user IN reminderAccounts %]
+						<option value="[% user.username %]">[% user.fullname %]</option>
+					[% END %]
+				</select>
+			</div>
+
+			<hr>
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Contributors</span><br>
+				<select id="dossier-details-contributor-username" class="select-single dialog-input-text-normal block">
+					[% FOREACH user IN users %]
+						<option value="[% user.username %]">[% user.fullname %]</option>
+					[% END %]
+				</select>
+				<input class="button" type="button" id="btn-dossier-add-contributor" value="add">
+				<hr>
+				<ul id="dossier-details-contributors-list">
+				[% FOREACH contributor IN contributors %]
+					<li class="dossier-details-contributors-item" data-username="[% contributor.username %]">
+						<span class="cell">
+						[% contributor.fullname %]<br><input type="checkbox" class="align-middle" id="dossier-details-contributor-is-owner-[% loop.count %]" data-itemcount="[% loop.count %]" checked> <label for="dossier-details-contributor-is-owner-[% loop.count %]"> is dossier owner</label>
+						</span>
+						<span class="cell block">
+							<input type="button" class="button btn-dossier-remove-contributor" value="remove" data-username="[% contributor.username %]">
+						</span>
+					</li>
+				[% END %]
+				</ul>
+				<br>
+			</div>
+			
+		</fieldset>
+	</form>
+</div>

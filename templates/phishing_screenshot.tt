@@ -1,0 +1,9 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="hidden">[% message %]</div>
+	
+	<div class="dialog-title">
+		<span>[% timestamp_string %]</span>	
+	</div><br>
+	<br>
+	<img src='loadfile/tools/phishing_overview/loadImage?params=[% screenshot_details %]' class="screenshot-img">
+</div>
