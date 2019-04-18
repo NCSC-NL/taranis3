@@ -17,4 +17,5 @@ ubuntu_packages
 	'libio-socket-ssl-perl', # follow security patches
 	'libgd-perl',
 	'libxml-libxml-perl',
+	'libfile-remove-perl',
 	;

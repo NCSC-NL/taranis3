@@ -16,4 +16,5 @@ unless(is_redhat) {
 redhat_packages
 	'perl-IO-Socket-SSL', # follow security patches
 	'perl-GD',            # GD-2.56 does not install (script permission)
+	'perl-File-Remove',
 	;

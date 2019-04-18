@@ -21,4 +21,5 @@ opensuse_packages
 	'gd-devel',           # to build GD::*
 
 	'perl-GD',            # GD-2.56 does not install (script permission)
+	'perl-File-Remove',   # Used in bootstrap procedure
 	;
