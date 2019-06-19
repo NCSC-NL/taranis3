@@ -194,7 +194,8 @@ CREATE TABLE constituent_individual (
     tel_mobile text,
     tel_regular text,
     call_hh boolean DEFAULT false,
-    external_ref text
+    external_ref text,
+    PRIMARY KEY (id)
 );
 
 ALTER SEQUENCE constituent_individual_id_seq
@@ -221,7 +222,8 @@ CREATE SEQUENCE constituent_role_id_seq
 
 CREATE TABLE constituent_role (
     id integer DEFAULT nextval('constituent_role_id_seq'::regclass) NOT NULL,
-    role_name character varying(50)
+    role_name character varying(50),
+    PRIMARY KEY(id)
 );
 
 ALTER SEQUENCE constituent_role_id_seq
@@ -296,7 +298,7 @@ ALTER SEQUENCE email_item_id_seq
     OWNED BY email_item.id;
 
 CREATE INDEX email_item_body_trgm_idx
-	ON email_item USING GIN(body gin_trgm_ops);
+    ON email_item USING GIN(body gin_trgm_ops);
 
 --- email_item archive
 
@@ -307,7 +309,7 @@ CREATE TABLE email_item_archive (
 );
 
 CREATE INDEX email_item_archive_body_trgm_idx
-	ON email_item_archive USING GIN(body gin_trgm_ops);
+    ON email_item_archive USING GIN(body gin_trgm_ops);
 
 ---
 
@@ -1508,11 +1510,7 @@ ALTER TABLE ONLY analysis_publication ADD CONSTRAINT analysis_publication_pk PRI
 
 ALTER TABLE ONLY constituent_group ADD CONSTRAINT constituent_group_pkey PRIMARY KEY (id);
 
-ALTER TABLE ONLY constituent_individual ADD CONSTRAINT constituent_individual_pkey PRIMARY KEY (id);
-
 ALTER TABLE ONLY constituent_publication ADD CONSTRAINT constituent_publication_pkey PRIMARY KEY (id);
-
-ALTER TABLE ONLY constituent_role ADD CONSTRAINT constituent_role_pkey PRIMARY KEY (id);
 
 ALTER TABLE ONLY constituent_type ADD CONSTRAINT constituent_type_pkey PRIMARY KEY (id);
 
