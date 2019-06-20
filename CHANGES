@@ -3,6 +3,8 @@ CHANGES from 3.6 towards 3.7
 Please see the public wiki for upgrade instructions.
 
 === release 3.6.2
+Thu 20 Jun 2019 12:07:41 PM CEST
+
 - E#19 missing File::Remove in bare installation
 - #302 unable to process database schema
 
