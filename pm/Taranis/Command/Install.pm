@@ -90,7 +90,7 @@ sub taranis_install(%) {
 
 	my $from_git = 0;
 	$version ||= version_from_filename(getcwd)
-			 ||= $ENV{TARANIS_VERSION}
+			 ||  $ENV{TARANIS_VERSION}
 			 ||  $generic->{default_version};
 
 	if($version eq 'git') {
