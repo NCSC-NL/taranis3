@@ -1,0 +1,68 @@
+[% USE date %]
+<div class="dialog-form-wrapper block">
+	<div class="dialog-title">
+		<span>AN-[% analysis.id.substr(0,4) _ '-' _ analysis.id.substr(4,4) _ ' ' _ analysis.title %]</span>
+	</div>
+
+	<div id="analyze-details-readonly-tabs" class="dialog-tabs" data-analysisid="[% analysis.id %]">
+		<ul>
+			<li><a href="#analyze-details-readonly-tabs-1">Analysis details</a></li>
+			<li><a href="#analyze-details-readonly-tabs-2">Linked items</a></li>
+		</ul>
+		<div id="analyze-details-readonly-tabs-1">
+			<fieldset>
+				<div class="dialog-input-wrapper block">
+					<div class="table">
+						<div class="cell">
+							<textarea class="scroll-y-always font-courier border-default" id="dossier-publication-details" readonly="readonly">[% analysis.comments %]</textarea>
+						</div>
+						<div class="cell analyze-preview-info-cell">
+							<fieldset>
+								<legend>Analysis details</legend>
+								<div class="block">
+									<span>Created:</span><br>
+									<span class="tpl-heading">[% date.format( analysis.orgdatetime.stripSeconds, format = '%d-%m-%Y %H:%M' ) %]</span><br><br>
+									<span>Last status change:</span><br>
+									<span class="tpl-heading">[% date.format( analysis.last_status_change.stripSeconds, format = '%d-%m-%Y %H:%M' ) %]</span><br><br>
+									<span>Rating:</span><br>
+									<span class="tpl-heading">[% analysis.rating.displayAnalyzeRating %]</span><br><br>
+									<span>Related ID's:</span><br>
+									<span class="tpl-heading">[% analysis.idstring %]</span><br><br>
+								</div>
+							</fieldset>
+						</div>
+					</div>
+				</div>
+			</fieldset>
+		</div>
+
+		<div id="analyze-details-readonly-tabs-2">
+		[%- IF items.0 != "" +%]
+			<fieldset class="no-padding">
+			[%- FOREACH item IN items +%]
+				<div class="assess-item item-row">
+					<div class="block assess-item-timestamp">[% item.datetime %]</div>
+					<div class="block assess-item-source"><img src="[% webroot %]/images/icons/[% item.source %].gif" alt="[% item.source %]" title="[% item.source %]"></div>
+					<div class="block assess-item-title-description">
+						<div class="assess-item-title block bold assess-[% item.status.displayAssessStatus %]">				
+						[% IF item.is_mail %]
+							<img src="[% webroot %]/images/bw_envelope_mail.png">
+							<span id="[% item.digest | uri %]" data-link="[% item.link %]" class="span-link assess-email-item-link">[% item.title %]</span>
+						[% ELSIF item.screenshot_object_id %]
+							<img src="[% webroot %]/images/bw_camera.png">
+							<span class="span-link assess-screenshot-item-link" data-id="[% item.digest | uri %]">[% item.title %]</span>
+						[% ELSE %]
+							<a href="[% item.link %]" class="[% item.status %]" target="_blank">[% item.title %]</a>
+						[% END %]
+						</div><br>
+						<span class="assess-item-description">[% item.description %]</span>
+					</div>
+				</div>
+			[% END +%]
+			</fieldset>
+		[%- ELSE -%]
+			<div class="block">No linked items.</div>
+		[% END %]
+		</div>
+	</div>
+</div>

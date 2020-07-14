@@ -1,0 +1,32 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="hidden">[% message %]</div>
+	<input type="hidden" id="mailItemId" name="mailItemId" value="[% id %]" />
+	
+	<div class="dialog-title">
+		<span>[% title %]</span>	
+	</div>
+
+	[% IF attachments && attachments.keys.size > 0 %]
+	<div class="block dialog-subtitle">
+		Attachment(s):
+		[% FOREACH attachment IN attachments.keys +%]
+		<span class="span-link assess-show-mail-attachment">[% attachments.$attachment.filename | html %]</span>&nbsp;
+		[% END +%]
+	</div>
+	[% END %]
+
+	<div id="assess-show-mail-tabs" class="dialog-tabs">
+		<ul>
+			<li><a href="#show-mail-tabs-1">Mail contents</a></li>
+			<li><a href="#show-mail-tabs-2">Original text</a></li>
+		</ul>
+		<div id="show-mail-tabs-1">
+			<textarea class="textarea-preview scroll-y-always assess-show-mail-text" readonly="readonly">[% text %]</textarea>
+		</div>
+		<div id="show-mail-tabs-2">
+			<textarea class="textarea-preview scroll-y-always assess-show-mail-text" readonly="readonly">[% originalText %]</textarea>
+		</div>
+	</div>
+</div>
+ 
+<iframe name="downloadFrame" id="downloadFrame" src="" class="super-secret-iframe"></iframe>

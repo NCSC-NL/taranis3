@@ -1,0 +1,64 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="hidden ui-state-error ui-corner-all">[% message %]</div>
+	[% IF isLocked +%]
+	<div class="ui-state-highlight ui-corner-all dialog-highlight">This is analysis has been locked by [% openedByFullname %]</div>
+	[% END %]
+
+	<div class="dialog-title">
+		<span>[% analysis.name %]: [% analysis.title %]</span>	
+	</div>
+
+	<div id="analyze-details-tabs" class="dialog-tabs" data-analysisid="[% analysis.id %]">
+		<ul>
+			<li><a href="#analyze-details-tabs-1">Analysis details</a></li>
+			<li><a href="#analyze-details-tabs-2">Linked items</a></li>
+			<li><a href="#analyze-details-tabs-3">Taranis search results</a></li>
+		</ul>
+		<div id="analyze-details-tabs-1">
+		[% INCLUDE analyze_details_tab1.tt %]
+		</div>
+		<div id="analyze-details-tabs-2">
+		[%- IF items.0 != "" +%]
+			<fieldset class="no-padding">
+			[%- FOREACH item IN items +%]
+				<div class="assess-item item-row">
+					<div class="block assess-item-timestamp">[% item.datetime %]</div>
+					<div class="block assess-item-source"><img src="[% webroot %]/images/icons/[% item.source %].gif" alt="[% item.source %]" title="[% item.source %]"></div>
+					<div class="block assess-item-title-description">
+						<div class="assess-item-title block bold assess-[% item.status.displayAssessStatus %]">				
+						[% IF item.is_mail %]
+							<img src="[% webroot %]/images/bw_envelope_mail.png">
+							<span id="[% item.digest | uri %]" data-link="[% item.link %]" class="span-link assess-email-item-link">[% item.title %]</span>
+						[% ELSIF item.screenshot_object_id %]
+							<img src="[% webroot %]/images/bw_camera.png">
+							<span class="span-link assess-screenshot-item-link" data-id="[% item.digest | uri %]">[% item.title %]</span>
+						[% ELSE %]
+							<a href="[% item.link %]" class="[% item.status %]" target="_blank">[% item.title %]</a>
+						[% END %]
+						</div><br>
+						<span class="assess-item-description">[% item.description %]</span>
+					</div>
+				</div>
+			[% END +%]
+			</fieldset>
+		[%- ELSE -%]
+			<div class="block">No linked items.</div>
+		[% END %]
+		</div>
+
+		<div id="analyze-details-tabs-3">
+			<form class="analyze-details-form-metasearch" data-analysisid="[% analysis.id %]">
+				<input type="hidden" name="ids" id="ids" value="[% analysis.idstring %]">
+				<input type="button" class="button" id="btn-search-assess-archive" value="Also search Assess archive" disabled="disabled"><br>
+			
+				<fieldset class="no-padding">
+					<div class="content-heading">
+						<div class="block" id="analyze-details-tab3-heading-date">Date</div>
+						<div class="block" id="analyze-details-tab3-heading-title-description">Title/Descrition</div>
+					</div>
+					<div class="analyze-details-tab3-searching hidden">Searching...</div>
+				</fieldset>
+			</form>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,49 @@
+<div id="assess-content-heading" class="content-heading">
+	<div id="assess-content-heading-timestamp" class="block">
+		<span>Timestamp</span>
+	</div>
+	<div id="assess-content-heading-source" class="block">
+		<span>Source</span>
+	</div>
+	<div id="assess-content-heading-title-description" class="block">
+		<span>Title / description</span>
+	</div>
+</div>
+
+<div class="assess-items">
+[% IF items.size > 0 %]
+	[% INCLUDE assess_items_list.tt %]
+[% ELSE %]
+	<div class="item-row">No items found...</div>	
+[% END %]
+</div>
+
+[% IF write_right +%]
+<div class="action-block filter-block-separator">
+	
+ 	<div class="block">
+		<input type="button" class="button-blue" name="checkbutton1" id="checkAllBottom" value="C">&nbsp;
+		<input type="button" class="button-blue" name="checkbutton2" id="unCheckAllBottom" value="U">
+	</div>
+	<div class="block">
+		<input type="button" class="button btns_markRead" value="Mark as read" id="btn_markReadBottom">&nbsp;
+		<input type="button" class="button btns_markImportant" value="Mark as important" id="btn_markImportantBottom">
+	</div>
+	
+	<div class="center block assess-number-of-results" id="number-of-results">&mdash; <span id="assess-count">[% IF resultCount != items.size %][% items.size %] of [%END%][% resultCount %]</span> results &mdash;</div>
+	<div id="assess-result-count" hidden>[% resultCount %]</div>
+
+	<div class="block assess-analysis">  					
+		<input type="button" class="button" value="Bulk analysis" id="btn_bulkAnalysisBottom">&nbsp;
+		<input type="button" class="button" value="Multiple analyses" id="btn_multipleAnalysesBottom">
+	</div><br>
+	[% IF resultCount != items.size %]
+	<div class="center"><input type="button" class="button-blue" id="btn-show-more-items" value="show me more"></div>
+	[% END %]
+	<br>
+ </div>
+[% END +%]
+
+<input type="hidden" name="status" id="status" value="">
+<input type="hidden" name="type" id="type" value="">
+

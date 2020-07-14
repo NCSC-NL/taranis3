@@ -1,0 +1,32 @@
+[% nr_pubs = numberOfApprovedPublications.data %]
+<div class="block">
+[% IF  numberOfApprovedPublications.showMinified && nr_pubs %]
+	<div title="[% nr_pubs %] approved publication[% IF nr_pubs > 1 %]s[% END %] waiting to be published">
+		<a href="publish/publish/displayPublishOptions/" data-callback="setMenu">
+			<span class="dashboard-minified-icons-with-text">[% nr_pubs %]</span>
+			<img src="[% webroot %]/images/mail_check.png" alt="[% nr_pubs %]" class="dashboard-icon">
+		</a>
+	</div>
+[% END %]
+
+[% minutes_ago = oldestUnpublishedToWebsite.data.minutes_ago %]
+[% IF oldestUnpublishedToWebsite.showMinified && minutes_ago %]
+	[% IF minutes_ago > 1440 %]
+		[% time_ago = minutes_ago / 1440 %]
+		[% time_ago = time_ago.remove('\.\d+$') _ 'd' %]
+	[% ELSIF minutes_ago > 60 %]
+		[% time_ago = minutes_ago / 60 %]
+		[% time_ago = time_ago.remove('\.\d+$') _ 'h' %]
+	[% ELSE %]
+		[% time_ago = minutes_ago _ 'm'%]
+	[% END %]
+
+	<div title="oldest unpublished advisory for website is [% oldestUnpublishedToWebsite.data.oldest_created_on %]" class="blink">
+		<a href="publish/publish/displayPublish/pub_type=website/" data-callback="setMenu">
+			<span class="dashboard-minified-icons-with-text">&gt;[% time_ago %]</span>
+			<img class="dashboard-warning-border" src="[% webroot %]/images/mail_alert.png" alt="!!">
+		</a>
+	</div>
+[% END %]
+
+</div>

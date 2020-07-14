@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+This file defines which entitlements give users access to which scripts in the
+Taranis web interface.
+
+For instance, take this definition:
+
+	<entitlement id="some_script">
+		<menuitem>1</menuitem>
+		<use_entitlement>ent1</use_entitlement>
+		<use_entitlement>ent2</use_entitlement>
+	</entitlement>
+
+Here:
+
+* `id` is the filename of the script(s) to which it applies, regardless of
+  which subdirectory of /scripts/ the script is in.
+  id="some_script" means that this definition applies to any script, in any of
+  the subdirectories of the 'scripts' directory, whose filename is
+  "some_script.pl". In practice, the filenames are unique across
+  subdirectories, and thus we can define the rights per individual script.
+
+* <use_entitlement> indicates which entitlements give access to this script.
+  Note that if multiple entitlements (multiple <use_entitlement> elements) are
+  supplied, the user needs only one of these entitlements to be able to use the
+  script. This config file does not support specifying multiple entitlements
+  that are all required; that can be done inside the scripts themselves.
+
+* The optional <menuitem> element indicates that this item should be included,
+  if the user has access to it, in the output of
+  Taranis::Users::getMenuItems(), which is used in the templates to render
+  the appropriate menu items.
+
+Id "index" is magical: requests that don't specify a scriptname are mapped to
+<entitlement id="index">.
+-->
+<entitlements>
+	<entitlement id="index">
+		<use_entitlement>generic</use_entitlement>
+	</entitlement>
+	<entitlement id="tag">
+		<use_entitlement>generic</use_entitlement>
+	</entitlement>
+	<entitlement id="about">
+		<menuitem>1</menuitem>
+		<use_entitlement>generic</use_entitlement>
+	</entitlement>
+	<entitlement id="access_token">
+		<use_entitlement>configuration_generic</use_entitlement>
+		<menuitem>1</menuitem>
+	</entitlement>
+	<entitlement id="advisory">
+		<use_entitlement>publication</use_entitlement>
+	</entitlement>
+	<entitlement id="analysis2publication">
+		<use_entitlement>publication</use_entitlement>
+	</entitlement>
+	<entitlement id="analyze">
+		<menuitem>1</menuitem>
+		<use_entitlement>analysis</use_entitlement>
+	</entitlement>
+	<entitlement id="analyze_details">
+		<use_entitlement>analysis</use_entitlement>
+	</entitlement>
+	<entitlement id="analyze_join">
+		<use_entitlement>analysis</use_entitlement>
+	</entitlement>
+	<entitlement id="announcements">
+		<menuitem>1</menuitem>
+		<use_entitlement>generic</use_entitlement>
+	</entitlement>
+	<entitlement id="configuration">
+		<use_entitlement>configuration_generic</use_entitlement>
+		<use_entitlement>admin_generic</use_entitlement>
+		<use_entitlement>constituent_groups</use_entitlement>
+		<use_entitlement>photo_import</use_entitlement>
+		<use_entitlement>constituent_individuals</use_entitlement>
+		<use_entitlement>damage_description</use_entitlement>
+		<use_entitlement>software_hardware</use_entitlement>
+		<use_entitlement>publication_template</use_entitlement>
+		<use_entitlement>configuration_parser</use_entitlement>
+		<use_entitlement>configuration_strips</use_entitlement>
+		<use_entitlement>sources_items</use_entitlement>
+		<use_entitlement>tools</use_entitlement>
+		<use_entitlement>users</use_entitlement>
+		<use_entitlement>user_role</use_entitlement>
+	</entitlement>
+	<entitlement id="common_actions">
+		<use_entitlement>publication</use_entitlement>
+	</entitlement>
+	<entitlement id="assess">
+		<menuitem>1</menuitem>
+		<use_entitlement>items</use_entitlement>
+	</entitlement>
+	<entitlement id="assess2analyze">
+		<use_entitlement>item_analysis</use_entitlement>
+	</entitlement>
+	<entitlement id="assess_bulk">
+		<use_entitlement>item_analysis</use_entitlement>
+	</entitlement>
+	<entitlement id="assess_details">
+		<use_entitlement>items</use_entitlement>
+	</entitlement>
+	<entitlement id="assess_dialogs">
+		<use_entitlement>items</use_entitlement>
+	</entitlement>
+	<entitlement id="assess_custom_search">
+		<use_entitlement>items</use_entitlement>
+	</entitlement>
+	<entitlement id="assess_status">
+		<use_entitlement>items</use_entitlement>
+	</entitlement>
+	<entitlement id="category">
+		<use_entitlement>configuration_generic</use_entitlement>
+		<menuitem>1</menuitem>
+	</entitlement>
+	<entitlement id="cluster">
+		<use_entitlement>configuration_generic</use_entitlement>
+		<menuitem>1</menuitem>
+	</entitlement>
+	<entitlement id="collector">
+		<menuitem>1</menuitem>
+		<use_entitlement>configuration_generic</use_entitlement>
+	</entitlement>
+	<entitlement id="constituent_group">
+		<menuitem>1</menuitem>
+		<use_entitlement>constituent_groups</use_entitlement>
+	</entitlement>
+	<entitlement id="constituent_individuals">
+		<menuitem>1</menuitem>
+		<use_entitlement>constituent_individuals</use_entitlement>
+	</entitlement>
+	<entitlement id="constituent_roles">
+		<menuitem>1</menuitem>
+		<use_entitlement>constituent_individuals</use_entitlement>
+	</entitlement>
+	<entitlement id="constituent_types">
+		<menuitem>1</menuitem>
+		<use_entitlement>constituent_groups</use_entitlement>
+	</entitlement>
+	<entitlement id="contact_log">
+		<menuitem>1</menuitem>
+		<use_entitlement>report</use_entitlement>
+	</entitlement>
+	<entitlement id="custom_stats">
+		<use_entitlement>sources_stats</use_entitlement>
+	</entitlement>
+	<entitlement id="cve">
+		<use_entitlement>cve</use_entitlement>
+		<menuitem>1</menuitem>
+	</entitlement>
+	<entitlement id="cve_template">
+		<use_entitlement>cve</use_entitlement>
+		<menuitem>1</menuitem>
+	</entitlement>
+	<entitlement id="damage_description">
+		<menuitem>1</menuitem>
+		<use_entitlement>damage_description</use_entitlement>
+	</entitlement>
+	<entitlement id="dashboard">
+		<use_entitlement>generic</use_entitlement>
+	</entitlement>
+	<entitlement id="dossier">
+		<menuitem>1</menuitem>
+		<use_entitlement>dossier</use_entitlement>
+	</entitlement>
+	<entitlement id="dossier_note">
+		<use_entitlement>dossier</use_entitlement>
+	</entitlement>
+	<entitlement id="dossier_pending">
+		<use_entitlement>dossier</use_entitlement>
+	</entitlement>
+	<entitlement id="dossier_timeline">
+		<use_entitlement>dossier</use_entitlement>
+	</entitlement>
+	<entitlement id="download_attachment">
+		<use_entitlement>items</use_entitlement>
+	</entitlement>
+	<entitlement id="feed_digest">
+		<menuitem>1</menuitem>
+		<use_entitlement>tools</use_entitlement>
+	</entitlement>
+	<entitlement id="forward">
+		<use_entitlement>publication</use_entitlement>
+	</entitlement>
+	<entitlement id="id_patterns">
+		<menuitem>1</menuitem>
+		<use_entitlement>configuration_generic</use_entitlement>
+	</entitlement>
+	<entitlement id="import_cpe">
+		<use_entitlement>software_hardware</use_entitlement>
+	</entitlement>
+	<entitlement id="incident_log">
+		<menuitem>1</menuitem>
+		<use_entitlement>report</use_entitlement>
+	</entitlement>
+	<entitlement id="login">
+		<menuitem>1</menuitem>
+		<use_entitlement>generic</use_entitlement>
+	</entitlement>
+	<entitlement id="logout">
+		<menuitem>1</menuitem>
+		<use_entitlement>generic</use_entitlement>
+	</entitlement>
+	<entitlement id="mail">
+		<use_entitlement>items</use_entitlement>
+	</entitlement>
+    <entitlement id="meta_search">
+		<use_entitlement>generic</use_entitlement>
+	</entitlement>
+	<entitlement id="module_collect">
+		<menuitem>1</menuitem>
+		<use_entitlement>configuration_generic</use_entitlement>
+	</entitlement>
+	<entitlement id="no_permission">
+		<use_entitlement>generic</use_entitlement>
+	</entitlement>
+	<entitlement id="not_found">
+		<use_entitlement>generic</use_entitlement>
+	</entitlement>
+	<entitlement id="parsers">
+		<menuitem>1</menuitem>
+		<use_entitlement>configuration_parser</use_entitlement>
+	</entitlement>
+	<entitlement id="phishing_overview">
+		<menuitem>1</menuitem>
+		<use_entitlement>tools</use_entitlement>
+	</entitlement>
+	<entitlement id="photo_management">
+		<menuitem>1</menuitem>
+		<use_entitlement>photo_import</use_entitlement>
+	</entitlement>
+	<entitlement id="publications">
+		<menuitem>1</menuitem>
+		<use_entitlement>publication</use_entitlement>
+	</entitlement>
+	<entitlement id="publication_templates">
+		<menuitem>1</menuitem>
+		<use_entitlement>publication_template</use_entitlement>
+	</entitlement>
+	<entitlement id="report">
+		<menuitem>1</menuitem>
+		<use_entitlement>report</use_entitlement>
+	</entitlement>
+	<entitlement id="roles">
+		<menuitem>1</menuitem>
+		<use_entitlement>roles</use_entitlement>
+		<use_entitlement>role_right</use_entitlement>
+	</entitlement>
+	<entitlement id="show_mail">
+		<use_entitlement>items</use_entitlement>
+	</entitlement>
+	<entitlement id="special_interest">
+		<menuitem>1</menuitem>
+		<use_entitlement>report</use_entitlement>
+	</entitlement>
+	<entitlement id="soft_hard_type">
+		<menuitem>1</menuitem>
+		<use_entitlement>software_hardware</use_entitlement>
+	</entitlement>
+	<entitlement id="software_hardware">
+		<menuitem>1</menuitem>
+		<use_entitlement>software_hardware</use_entitlement>
+	</entitlement>
+	<entitlement id="sources">
+		<menuitem>1</menuitem>
+		<use_entitlement>sources_items</use_entitlement>
+	</entitlement>
+	<entitlement id="sources_import_export">
+		<use_entitlement>sources_items</use_entitlement>
+	</entitlement>
+	<entitlement id="stats">
+		<menuitem>1</menuitem>
+		<use_entitlement>sources_stats</use_entitlement>
+	</entitlement>
+	<entitlement id="stream">
+		<menuitem>1</menuitem>
+		<use_entitlement>tools</use_entitlement>
+	</entitlement>
+	<entitlement id="strips">
+		<menuitem>1</menuitem>
+		<use_entitlement>sources_items</use_entitlement>
+	</entitlement>
+	<entitlement id="todo">
+		<menuitem>1</menuitem>
+		<use_entitlement>report</use_entitlement>
+	</entitlement>
+	<entitlement id="tools">
+		<menuitem>1</menuitem>
+		<use_entitlement>tools</use_entitlement>
+	</entitlement>
+	<entitlement id="toolspage">
+		<use_entitlement>tools</use_entitlement>
+	</entitlement>
+	<entitlement id="user_actions">
+		<use_entitlement>admin_generic</use_entitlement>
+		<menuitem>1</menuitem>
+	</entitlement>
+	<entitlement id="user_panel">
+		<use_entitlement>generic</use_entitlement>
+	</entitlement>
+	<entitlement id="users">
+		<menuitem>1</menuitem>
+		<use_entitlement>users</use_entitlement>
+		<use_entitlement>user_role</use_entitlement>
+	</entitlement>
+	<entitlement id="whois">
+		<menuitem>1</menuitem>
+		<use_entitlement>tools</use_entitlement>
+	</entitlement>
+	<entitlement id="eod">
+		<use_entitlement>publication</use_entitlement>
+	</entitlement>
+	<entitlement id="eos">
+		<use_entitlement>publication</use_entitlement>
+	</entitlement>
+	<entitlement id="eow">
+		<use_entitlement>publication</use_entitlement>
+	</entitlement>
+	<entitlement id="publish">
+		<menuitem>1</menuitem>
+		<use_entitlement>publication</use_entitlement>
+	</entitlement>
+	<entitlement id="publish_advisory">
+		<menuitem>1</menuitem>
+		<use_entitlement>publication</use_entitlement>
+	</entitlement>
+	<entitlement id="publish_forward">
+		<menuitem>1</menuitem>
+		<use_entitlement>publication</use_entitlement>
+	</entitlement>
+	<entitlement id="publish_website">
+		<menuitem>1</menuitem>
+		<use_entitlement>publication</use_entitlement>
+	</entitlement>
+	<entitlement id="publish_eod">
+		<menuitem>1</menuitem>
+		<use_entitlement>publication</use_entitlement>
+	</entitlement>
+	<entitlement id="publish_eod_public">
+		<menuitem>1</menuitem>
+		<use_entitlement>publication</use_entitlement>
+	</entitlement>
+	<entitlement id="publish_eod_white">
+		<menuitem>1</menuitem>
+		<use_entitlement>publication</use_entitlement>
+	</entitlement>
+	<entitlement id="publish_eos">
+		<menuitem>1</menuitem>
+		<use_entitlement>publication</use_entitlement>
+	</entitlement>
+	<entitlement id="publish_eow">
+		<menuitem>1</menuitem>
+		<use_entitlement>publication</use_entitlement>
+	</entitlement>
+	<entitlement id="publish_details">
+		<use_entitlement>publication</use_entitlement>
+	</entitlement>
+	<entitlement id="wordlist">
+		<use_entitlement>configuration_generic</use_entitlement>
+		<menuitem>1</menuitem>
+	</entitlement>
+</entitlements>

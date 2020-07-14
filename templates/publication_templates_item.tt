@@ -1,0 +1,25 @@
+[% IF renderItemContainer %]
+<div class="publication-template-item item-row" id="[% publicationTemplate.id %]">
+[% END %]
+	
+	<div class="publication-template-item-name block">
+		<span>[% publicationTemplate.title %]</span>
+	</div>		
+
+	<div class="block align-block-right">
+	
+	[%- IF write_right +%]
+		<img src="[% webroot %]/images/icon_modify.png" alt="edit" title="edit template" class="pointer btn-edit-publication-template" data-id="[% publicationTemplate.id %]">
+		[%- IF publicationTemplate.no_delete == 1 -%]
+		<img src="[% webroot %]/images/icon_delete_disabled.png" alt="no delete" title="Cannot delete template.">
+		[%- ELSE -%]
+		<img src="[% webroot %]/images/icon_delete.png" alt="delete" title="delete template" class="pointer btn-delete-publication-template" data-id="[% publicationTemplate.id %]">
+		[%- END -%]
+	[%- ELSE -%]
+		<img src="[% webroot %]/images/icon_details.png" alt="view" title="view template" class="pointer btn-view-publication-template" data-id="[% publicationTemplate.id %]">
+	[%- END -%]
+	
+	</div>
+[% IF renderItemContainer %]
+</div>
+[% END %]

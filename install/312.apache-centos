@@ -1,0 +1,51 @@
+#!/usr/bin/env perl
+# Install the apache environment, in an CentOS specific way.
+
+# Probably the other Linux distributions do not differ much, but still
+# there will be difference.
+
+use warnings;
+use strict;
+
+use File::Copy   qw(move);
+
+use Taranis::Install::Bare   qw(is_centos);
+use Taranis::Install::CentOS qw(centos_packages);
+
+my $apache = '/etc/httpd';
+
+unless(is_centos) {
+	print "*   skipped: not running on CentOS.\n";
+	exit 0;
+}
+
+centos_packages
+	'httpd',
+	'httpd-tools',
+	'apr',
+	'apr-util',
+	'mod_ssl',
+	'mod_perl',
+	'mod_proxy',
+
+	'firewalld',
+	;
+
+#### FIREWALL
+
+my $has_firewalld = ! system systemctl => 'is-active', '--quiet', 'firewalld';
+if($has_firewalld) {
+	print "*   Open the firewalld\n";
+
+	# firewall-cmd --get-active-zones
+	system "firewall-cmd --zone=public --add-port=80/tcp --permanent"
+		and die "ERROR: failed to open port 80\n";
+
+	system "firewall-cmd --reload"
+		and die "ERROR: failed to reload firewall\n";
+}
+
+system "systemctl enable httpd";
+$? and die "ERROR: systemctl doesn't enable httpd\n";
+
+exit 0;

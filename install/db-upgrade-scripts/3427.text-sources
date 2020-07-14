@@ -1,0 +1,24 @@
+#!perl
+
+use warnings;
+use strict;
+
+sub {
+	my ($db, %args) = @_;
+
+	$db->query( <<'__RUN__');
+ALTER TABLE sources ALTER COLUMN digest TYPE TEXT;
+ALTER TABLE sources ALTER COLUMN fullurl  TYPE TEXT;
+ALTER TABLE sources ALTER COLUMN host  TYPE TEXT;
+ALTER TABLE sources ALTER COLUMN mailbox TYPE TEXT;
+ALTER TABLE sources ALTER COLUMN parser TYPE TEXT;
+ALTER TABLE sources ALTER COLUMN username TYPE TEXT;
+ALTER TABLE sources ALTER COLUMN password TYPE TEXT;
+ALTER TABLE sources ALTER COLUMN protocol TYPE TEXT;
+ALTER TABLE sources ALTER COLUMN sourcename TYPE TEXT;
+ALTER TABLE sources ALTER COLUMN status TYPE TEXT;
+ALTER TABLE sources ALTER COLUMN url  TYPE TEXT;
+ALTER TABLE sources ALTER COLUMN archive_mailbox TYPE TEXT;
+ALTER TABLE sources ALTER COLUMN advisory_handler TYPE TEXT;
+__RUN__
+};

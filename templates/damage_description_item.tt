@@ -1,0 +1,23 @@
+[% IF renderItemContainer %]
+<div class="damage-description-item item-row" id="[% damageDescription.id %]">
+[% END %]
+		
+	<div class="damage-description-item-description block">
+		<span>[% damageDescription.description %]</span>
+	</div>		
+
+	<div class="block align-block-right">
+	[% IF write_right %]
+		<img src="[% webroot %]/images/icon_modify.png" alt="edit" title="edit damage description" class="pointer btn-edit-damage-description" data-id="[% damageDescription.id %]">
+		[% IF damageDescription.status == 1 %]
+		<img src="[% webroot %]/images/icon_delete.png" alt="delete" title="delete damage description" class="pointer btn-delete-damage-description" data-id="[% damageDescription.id %]">
+		[% ELSE %]
+		<img src="[% webroot %]/images/icon_delete_disabled.png" alt="no delete" title="Cannot delete damage description, because an advisory exists with this description.">
+		[% END %]
+	[% ELSE %]
+		<img src="[% webroot %]/images/icon_details.png" alt="view" title="view details" class="pointer btn-view-damage-description" data-id="[% damageDescription.id %]">
+	[% END %]		
+	</div>
+[% IF renderItemContainer %]
+</div>
+[% END %]

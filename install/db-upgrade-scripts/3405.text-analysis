@@ -1,0 +1,14 @@
+#!perl
+
+use warnings;
+use strict;
+
+sub {
+	my ($db, %args) = @_;
+
+	$db->query( <<'__RUN__');
+ALTER TABLE analysis ALTER COLUMN title TYPE TEXT;
+ALTER TABLE analysis ALTER COLUMN opened_by TYPE TEXT;
+ALTER TABLE analysis ALTER COLUMN owned_by TYPE TEXT;
+__RUN__
+};

@@ -1,0 +1,31 @@
+<div class="filter-block filter-block-separator" id="dossier-timeline-search-wrapper">
+	<form id="form-dossier-timeline-search">
+		<div class="block">
+			<span>From date</span><br>
+			<input id="dossier-timeline-start-date" name="startdate" type="text"
+			 value="[% startdate %]" class="input-default date-picker">
+		</div>
+
+		<div class="block">
+			<span>To date</span><br>
+			<input id="dossier-timeline-end-date" name="enddate" type="text"
+			 value="[% enddate %]" class="input-default date-picker">
+		</div>
+
+	</form>
+</div>
+
+<div class="action-block filter-block-separator">
+	<br>
+[% IF write_right && dossierStatus.displayDossierStatus != 'JOINED' %]
+	<div class="block">
+		<input type="button" class="button" id="btn-dossier-note-new" data-dossierid="[% dossierID %]" value="Add note">
+	</div>
+[% END %]
+	<div class="block">
+		<input type="button" class="button" id="btn-dossier-export" data-dossierid="[% dossierID %]" value="Export dossier">
+	</div>
+	<div class="block align-block-right">
+		<span class="bold page-title">[% page_title %]</span>
+	</div>
+</div>

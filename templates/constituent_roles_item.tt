@@ -1,0 +1,23 @@
+[% IF renderItemContainer %]
+<div class="constituent-roles-item item-row" id="[% constituentRole.id %]">
+[% END %]
+		
+	<div class="constituent-roles-item-name block">
+		<span>[% constituentRole.role_name %]</span>
+	</div>		
+
+	<div class="block align-block-right">
+	[% IF write_right %]
+		<img src="[% webroot %]/images/icon_modify.png" alt="edit" title="edit role" class="pointer btn-edit-constituent-role" data-id="[% constituentRole.id %]">
+		[% IF constituentRole.status == 1 %]
+		<img src="[% webroot %]/images/icon_delete.png" alt="delete" title="delete role" class="pointer btn-delete-constituent-role" data-id="[% constituentRole.id %]">
+		[% ELSE %]
+		<img src="[% webroot %]/images/icon_delete_disabled.png" alt="no delete" title="Cannot delete role, because a constituent individual has been configured with this role.">
+		[% END %]
+	[% ELSE %]
+		<img src="[% webroot %]/images/icon_details.png" alt="view" title="view details" class="pointer btn-view-constituent-role" data-id="[% constituentRole.id %]">
+	[% END %]		
+	</div>
+[% IF renderItemContainer %]
+</div>
+[% END %]

@@ -1,0 +1,18 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden[% END %] ui-state-error ui-corner-all">[% message %]</div>
+	
+	[% IF role_name %]
+	<div class="dialog-title">
+		<span>[% role_name %]</span>
+	</div>
+	[% END %]
+	
+	<form id="form-constituent-roles" data-id="[% IF id; id; ELSE; 'NEW'; END %]">
+		<fieldset>
+			<div class="dialog-input-wrapper block">
+				<label for="constituent-roles-description" class="dialog-input-label">Description *</label><br>
+				<input type="text" name="role_name" id="constituent-roles-description" class="input-default dialog-input-text" value="[% role_name %]">
+			</div>
+		</fieldset>
+	</form>
+</div>

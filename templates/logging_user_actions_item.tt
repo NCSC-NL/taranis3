@@ -1,0 +1,23 @@
+<div class="user-actions-item item-row">
+
+	<div class="user-actions-item-date-time block">
+		<span>[% userAction.logging_timestamp %]</span>
+	</div>
+
+	<div class="user-actions-item-action block">
+		<span>[% userAction.action %]</span>
+	</div>
+
+	<div class="user-actions-item-user block">
+		<span>[% IF userAction.username; userAction.fullname _ ' (' _ userAction.username _')'; END %]</span>
+	</div>
+
+	<div class="user-actions-item-description block break-word">
+		<span>[% userAction.comment %]</span>
+	</div>
+
+	<div class="user-actions-item-entitlement block">
+		<span>[% userAction.entitlement %]</span>
+	</div>
+
+</div>

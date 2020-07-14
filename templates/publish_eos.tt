@@ -1,0 +1,15 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden[% END %] ui-state-error ui-corner-all">[% message %]</div>
+	
+	<div class="dialog-title">
+		<span>[% eos_heading %]</span>	
+	</div>
+	
+	<form method="post" id="eos-publish-form" data-publicationid="[% publication_id %]">
+		<fieldset>
+			<div class="dialog-input-wrapper block">
+				<textarea class="scroll-y-always font-courier border-default" name="eos_preview" id="eos-preview-text">[% preview %]</textarea>
+			</div>
+		</fieldset>	
+	</form>
+</div>

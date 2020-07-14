@@ -1,0 +1,12 @@
+CHANGES from 3.6 towards 3.7
+
+=== release 3.7.2
+- E#25 depends on Devel::GlobalDestruction
+
+=== release 3.6.1
+
+- #279 publication template parameter blocks width and height was
+  processed as chars, needs to be pixels.
+- #277 message with only attachment gets default plain text.
+- #286 postgres cannot start after install, when no netmask on if
+- #283 message signed by PGP incorrectly report change

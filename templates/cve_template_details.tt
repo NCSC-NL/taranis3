@@ -1,0 +1,20 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden[% END %] ui-state-error ui-corner-all">[% message %]</div>
+	[% IF cve_template %]
+	<div class="dialog-title">
+		<span>[% cve_template.description %]</span>
+	</div>
+	[% END %]
+	<form id="form-cve-template" data-id="[% IF cve_template.id; cve_template.id; ELSE; 'NEW'; END %]">
+		<fieldset>
+			<div class="dialog-input-wrapper block">
+				<label for="cve-template-details-description" class="dialog-input-label">Description *</label><br>
+				<input id="cve-template-details-description" type="text" name="description" class="input-default dialog-input-text" value="[% cve_template.description %]">
+			</div><br>
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Template</span><br>
+				<textarea name="template" class="scroll-y-always font-courier border-default" id="cve-template-details-template">[% cve_template.template %]</textarea><br>
+			</div>
+		</fieldset>
+	</form>
+</div>

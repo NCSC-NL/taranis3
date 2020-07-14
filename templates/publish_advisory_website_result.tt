@@ -1,0 +1,13 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden[% END %] ui-state-error ui-corner-all">[% message %]</div>
+	
+	<div class="dialog-title">
+		<span>[% advisory_heading %]</span>	
+	</div>
+	
+	<fieldset>
+		<div class="dialog-input-wrapper block">
+			<textarea class="scroll-y-always font-courier border-default" id="advisory-publish-result-text" readonly="readonly">[% results %]</textarea>
+		</div>
+	</fieldset>	
+</div>

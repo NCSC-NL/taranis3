@@ -1,0 +1,28 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden[% END %] ui-state-error ui-corner-all">[% message %]</div>
+	
+	<form id="form-access-token" data-token="[% IF token.token; token.token; ELSE; 'NEW'; END %]">
+		<fieldset>
+			[% IF token.token %]
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Token</span><br>
+				<span>[% token.token %]</span>
+			</div>
+			[% END %]
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">User *</span><br>
+				<select name="username" id="access-token-details-user" class="select-single dialog-input-text-normal">
+					<option value="" [% IF !token.username %]selected="selected"[% END %]>-select user-</option>
+				[% FOREACH user IN users %]
+					<option value="[% user.username %]" [% IF token.username == user.username %]selected="selected"[% END %]>[% user.fullname %]</option>
+				[% END %] 
+				</select>
+			</div><br>
+			<div class="dialog-input-wrapper block">
+				<label for="access-token-details-expiry" class="dialog-input-label">Expire time in minutes</label><br>
+				<input type="text" name="expiry_time" id="access-token-details-expiry" class="input-default dialog-input-text" value="[% token.expiry_time %]"><br>
+				<span class="italic">Token expires after set amount of minutes of inactivity.<br>Leave blank for 'never expires'.</span>
+			</div>
+		</fieldset>
+	</form>
+</div>

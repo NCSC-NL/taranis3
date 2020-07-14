@@ -1,0 +1,71 @@
+#!/usr/bin/env perl
+# Initialize the database, may be outdated version.
+#
+# This logic is closely related to the regression script t/054-db-load-schema.t
+# Please check that script as well when you make changes here.
+
+use warnings;
+use strict;
+
+use Carp           qw(confess);
+use Term::ReadLine ();
+use File::Basename qw(dirname);
+
+use Taranis::Install::Config qw(config_release taranis_sources
+	become_user_taranis);
+use Taranis::Install::DB     qw(connect_db schema_version
+	create_taranis_table database_load_sql);
+
+become_user_taranis;
+
+my $release  = config_release;
+my $version  = $release->{version};
+
+my $sources  = taranis_sources $version;
+my $load_sql = dirname(__FILE__).'/db-load';
+
+my $full_schema    = "$load_sql/taranis-schema.sql";
+my $initial_data   = "$load_sql/initial-inserts.sql";
+
+my $db             = connect_db;
+my $schema_version = eval { schema_version $db };
+
+if(defined $schema_version) {
+	print "*   current database schema version is $schema_version\n";
+	exit 0;
+}
+
+if(eval { $db->query('SELECT 1 FROM users')->list } ) {
+	print "*   database already present.\n";
+	create_taranis_table $db;
+	exit 0;
+}
+
+$ENV{COLUMNS} = 80; $ENV{LINES} = 25;  # insane defaults for putty
+my $term = Term::ReadLine->new('Loading database');
+
+print "*   no taranis database found.  Do you want a fresh install?\n";
+my $load_fn = $term->readline('load taranis dump [fresh install]: ');
+chomp $load_fn;
+
+if(length $load_fn) {
+	# Loading database dump
+	database_load_sql $db, $load_fn;
+
+	if($schema_version = eval { schema_version $db }) {
+		print "*   loaded dump with schema version $schema_version\n";
+		exit 0;
+	}
+
+	print "*   loaded dump without schema version information (added)\n";
+	create_taranis_table $db;
+	exit 0;
+}
+
+print "*   loading latest taranis schema from $full_schema\n";
+database_load_sql $db, $full_schema;
+
+print "*   loading initial data from $initial_data\n";
+database_load_sql $db, $initial_data;
+
+exit 0;

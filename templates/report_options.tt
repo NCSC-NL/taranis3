@@ -1,0 +1,131 @@
+[% USE date %]
+<div class="block configuration-block">
+	<fieldset>
+		<legend class="configuration-title bold">To-do</legend>
+		[% IF todos && todos.size > 0 %]
+			[% FOREACH todo IN todos %]
+			<div>
+				<div class="block align-top">
+					<meter max="100" value="[% todo.done_status %]" optimum="100" title="[% todo.done_status %]% done"></meter>
+				</div>
+				<div class="block report-dashboard-todo-description medium-font">
+					&nbsp;<span class="bold">[% todo.description %]</span><span> due on [% date.format( todo.due_date.stripSeconds, format='%d-%m-%Y' ) %]</span>
+				</div>
+			</div>
+				[% IF !loop.last %]
+			<hr class="light">
+				[% END %]
+			[% END %]
+		[% END %]
+		<br>
+		<span class="big-font">
+			<a href="report/todo/displayToDos/" class="padding-default">The to-do list</a> |
+			<span class="span-link padding-default" id="add-report-todo-link">Add new to-do</span>
+		</span>
+	</fieldset>
+</div>
+<div class="block configuration-block">
+	<fieldset>
+		<legend class="configuration-title bold">Special Interest</legend>
+		[% IF specialInterests && specialInterests.size > 0 %]
+			[% FOREACH specialInterest IN specialInterests %]
+			<div>
+				<div class="block medium-font">
+					<span class="bold">[% specialInterest.topic %]</span><span> requested by [% specialInterest.requestor %]</span>
+				</div>
+			</div>
+				[% IF !loop.last %]
+			<hr class="light">
+				[% END %]
+			[% END %]
+		[% END %]
+		<br>
+		<span class="big-font">
+			<a href="report/special_interest/displaySpecialInterests/" class="padding-default">The special interest list</a> |
+			<span class="span-link padding-default" id="add-report-special-interest-link">Add new special interest</span>
+		</span>
+	</fieldset>
+</div>
+
+<div class="block configuration-block">
+	<fieldset>
+		<legend class="configuration-title bold">Contact log</legend>
+		[% IF contactLogs && contactLogs.size > 0 %]
+			[% FOREACH contactLog IN contactLogs %]
+			<div>
+				<div class="block medium-font">
+					<span class="bold">
+					[% IF contactLog.notes.length > 50  %]
+						[% contactLog.notes.substr( 50, contactLog.notes.length, '...') %]
+					[% ELSE %]
+						[% contactLog.notes %]
+					[% END %]
+					</span><br>
+					<span> [% contactLog.type.displayReportContactLogType %]</span><span> on [% date.format( contactLog.created.stripSeconds, format = '%d-%m-%Y at %H:%M' ) %]</span>
+				</div>
+			</div>
+				[% IF !loop.last %]
+			<hr class="light">
+				[% END %]
+			[% END %]
+		[% END %]
+		<br>
+		<span class="big-font">
+			<a href="report/contact_log/displayContactLogs/" class="padding-default">The contact log</a> |
+			<span class="span-link padding-default" id="add-report-contact-log-link">Add new contact log entry</span>
+		</span>
+	</fieldset>
+</div>
+
+<div class="block configuration-block">
+	<fieldset>
+		<legend class="configuration-title bold">Incident log</legend>
+		[% IF incidentLogs && incidentLogs.size > 0 %]
+			[% FOREACH incidentLog IN incidentLogs %]
+			<div>
+				<div class="block medium-font">
+					<span class="bold">
+					[% IF incidentLog.description.length > 50  %]
+						[% incidentLog.description.substr( 50, incidentLog.description.length, '...') %]
+					[% ELSE %]
+						[% incidentLog.description %]
+					[% END %]
+					</span><br>
+					<span>[% incidentLog.status.displayReportIncidentLogStatus %]</span> &mdash;
+					<span>[% date.format( incidentLog.created.stripSeconds, format = '%d-%m-%Y %H:%M' ) %]</span> &mdash;
+					<span>[% incidentLog.ticket_number %]</span> &mdash;
+					<span>[% incidentLog.owner %]</span>
+				</div>
+			</div>
+				[% IF !loop.last %]
+			<hr class="light">
+				[% END %]
+			[% END %]
+		[% END %]
+		<br>
+		<span class="big-font">
+			<a href="report/incident_log/displayIncidentLogs/" class="padding-default">The incident log</a> |
+			<span class="span-link padding-default" id="add-report-incident-log-link">Add new incident log entry</span>
+		</span>
+	</fieldset>
+</div>
+
+<div class="block configuration-block">
+	<fieldset>
+		<legend class="configuration-title bold">End-of-Shift</legend>
+		[% IF publications && publications.size > 0 %]
+			[% FOREACH publication IN publications %]
+			<div>
+				<span class="fa fa-envelope-o publications-[% publication.status.displayPublicationStatus %] padding-default"></span>
+				<div class="block medium-font">
+					<span class="span-link publications-preview-link" data-pubtype="eos" data-id="[% publication.publication_id %]">[% publication.timeframe_str %]</span>
+					<span class="">by [% publication.handler %]</span>
+				</div>
+			</div>
+				[% IF !loop.last %]
+			<hr class="light">
+				[% END %]
+			[% END %]
+		[% END %]
+	</fieldset>
+</div>

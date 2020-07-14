@@ -1,0 +1,115 @@
+#!/usr/bin/env perl
+# Set-up the initial configuration for CPAN access.
+
+use warnings;
+use strict;
+
+use Taranis::Install::Bare   qw(has_internet);
+use Taranis::Install::Config qw(config_generic save_config_generic
+	become_user_taranis);
+use Taranis::Install::Perl   qw(cpan_init);
+
+use CPAN;
+
+sub create_myconfig_diff();
+
+use Data::Dumper;
+$Data::Dumper::Sortkeys = 1;
+
+# CPAN setup within username only works when you really run under
+# that username.  The procedure is not flexible enough to be able
+# to run it as root meanwhile configuring a normal user.
+become_user_taranis;
+
+# Create the myconfig filename
+my $generic = config_generic;
+my $changes = 0;
+
+my ($cpan_myconfig_fn, $cpan_config_fn);
+
+unless($cpan_myconfig_fn = $generic->{cpan_myconfig}) {
+	$cpan_myconfig_fn = $generic->{cpan_myconfig}
+		= "$generic->{etc}/CPAN-MyConfig.pm";
+	$changes++;
+}
+
+unless($cpan_config_fn = $generic->{cpan_config}) {
+	$cpan_config_fn = $generic->{cpan_config}
+		= "$generic->{lib}/CPAN-Config.pm";
+	$changes++;
+}
+
+if($changes) {
+	print "CPAN access configuration can be changed in $cpan_myconfig_fn\n";
+	save_config_generic $generic;
+}
+
+unless(has_internet) {
+	print "--> no internet: cannot (re)init cpan access\n";
+	exit 0;
+}
+
+# Discover basic settings
+cpan_init $cpan_config_fn;
+
+-f $cpan_myconfig_fn
+	or create_myconfig_diff;
+
+exit 0;
+
+####
+# The file create here can be changed by the application maintainers.  It
+# gets merged with the default Config.pm of the CPAN installation... which
+# may change with new versions of CPAN.pm
+
+sub create_myconfig_diff() {
+	print "*   create initial cpan config in $cpan_myconfig_fn\n";
+
+	my $tmp    = $generic->{cpan_tmp};
+
+	my @ftp_servers = qw(
+		ftp://ftp.nluug.nl/pub/languages/perl/CPAN/
+		ftp://ftp.cs.uu.nl/pub/CPAN/
+		http://www.cpan.org
+	);
+
+	my %config = (
+		build_dir_reuse         => 0,
+		build_requires_install_policy => 'yes',
+		colorize_ouput          => 1,
+		connect_to_internet_ok  => 1,
+		cpan_home               => $tmp,
+		inhibit_startup_message => 1,
+		load_module_verbosity   => "none",
+		prerequisites_policy    => 'follow',
+		term_is_latin           => 0,
+		prefer_installer        => 'EUMM',
+		mbuildpl_arg            => "--install_base $generic->{home}",
+#	mbuild_install_arg      => 'INSTALLDIRS=site >>/tmp/aaa',
+#	makepl_arg              => "INSTALL_BASE=$generic->{home}",
+#	make_install_arg        => 'INSTALLDIRS=site >>/tmp/aaa',
+		urllist                 => \@ftp_servers,
+	);
+
+	my $data = Data::Dumper->new( [\%config], ['$CPAN::MyConfig'])
+		->Indent(1)->Sortkeys(1)->Quotekeys(0);
+
+	open my $config, '>', $cpan_myconfig_fn
+		or die "ERROR: cannot write to $cpan_myconfig_fn: $!\n";
+
+	$config->print(<<'_HEADER', $data->Dump, <<'_FOOTER');
+# These settings overrule the defaults.  Feel invited to change or
+# extend this.  See the manual page of CPAN(.pm) for other parameters.
+
+_HEADER
+
+1;
+_FOOTER
+
+	$config->close
+		or die "ERROR while writing $cpan_myconfig_fn: $!\n";
+
+	\%config;
+}
+
+exit 0;

@@ -1,0 +1,14 @@
+#!perl
+
+use warnings;
+use strict;
+
+sub {
+	my ($db, %args) = @_;
+
+	$db->query( <<'__RUN__');
+ALTER TABLE publication_endofday ALTER COLUMN handler TYPE TEXT;
+ALTER TABLE publication_endofday ALTER COLUMN first_co_handler TYPE TEXT;
+ALTER TABLE publication_endofday ALTER COLUMN second_co_handler TYPE TEXT;
+__RUN__
+};

@@ -1,0 +1,50 @@
+#!/usr/bin/env perl
+# Install sudoer file to be able to run bin/taranis as root
+
+use warnings;
+use strict;
+
+use Carp        qw(confess);
+use File::Glob  qw(bsd_glob);
+
+use Taranis::Install::Config qw(config_generic config_release sort_versions);
+
+my $sudoers_dir = '/etc/sudoers.d';   #XXX may be os dependent
+-d $sudoers_dir
+	or confess "missing $sudoers_dir";
+
+my $generic   = config_generic;
+my $user      = $generic->{username};
+my $home      = $generic->{home};
+my $version   = $generic->{default_version};
+
+my $config_fn = "$sudoers_dir/$user";
+
+my @scripts   = bsd_glob "$home/taranis-*/bin/taranis";
+
+# This may be the first run, taranis not yet installed
+push @scripts, "$home/taranis-$version/bin/taranis"
+	unless $version eq 'git'                         # does not install bin
+	    || -e "$home/taranis-$version/bin/taranis";  # already found by glob
+
+# When recovering from a half-installed bootstrap, we still need to be able
+# to use the un-installed taranis binary via sudo-root.
+# When we have git, accept that as well
+
+my $release   = config_release $version;
+my $sources   = $release->{sources};
+push @scripts, "$sources/taranis-*/bin/taranis";
+
+my $scripts   = join ', ', @scripts;
+
+open my $sudoers, '>:encoding(utf8)', $config_fn
+	or die "ERROR: cannot write sudoers to $config_fn: $!\n";
+
+$sudoers->print("$user ALL = (root) NOPASSWD: $scripts\n");
+
+$sudoers->close
+	or die "ERROR while writing $config_fn\n";
+
+# not a daemon, nothing to restart.
+
+exit 0;

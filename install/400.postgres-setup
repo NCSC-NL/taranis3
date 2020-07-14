@@ -1,0 +1,108 @@
+#!/usr/bin/env perl
+# Initiate contact with postgress and install plugins.
+#
+# This script is silent when all required facts were already filled-in
+# during a previous install for this release.
+
+use warnings;
+use strict;
+
+use Carp           qw(confess);
+use Term::ReadLine ();
+use File::Basename qw(dirname);
+
+use Taranis::Install::Config qw(config_release config_generic
+	save_config_release save_config_generic taranis_sources is_newest_version
+	taranis_config_fn);
+
+use Taranis::Config;
+
+my $generic  = config_generic;
+my $release  = config_release;
+my $changes  = 0;
+
+### Which config file can we use for defaults?
+# are we migrating an existing 3.3 set-up?
+
+my $migrate   = $ENV{TARANIS_MIGRATE} || '';
+my $main_fn   = "$migrate/conf/taranis.conf.xml";
+
+# not migrating, but already installed some other version?
+$main_fn      = taranis_config_fn
+	if ! -f $main_fn;
+
+# nothing installed, take from distribution
+$main_fn      = dirname(__FILE__)."/../conf/taranis.conf.xml-dist"
+	if ! -f $main_fn;
+
+my $main_config = Taranis::Config->new($main_fn);
+
+### collect the default
+# When the old config used localhost, we can use the more efficient 'peer'
+
+my $old_dbhost  = $main_config->{dbhost};
+$old_dbhost     = 'peer'
+	if $old_dbhost && $old_dbhost =~ m/^127\.|^::1$|^localhost$/i;
+
+my $dbglobal = $generic->{database} ||= {
+	host     => $old_dbhost,
+	port     => $main_config->{dbport} || 5432,
+	name     => $main_config->{dbname},
+	password => $main_config->{dbpasswd},
+	user     => $main_config->{dbuser},
+};
+
+my $dbconfig = $release->{database} ||= {};
+
+$ENV{COLUMNS} = 80; $ENV{LINES} = 25;  # insane defaults for putty
+my $term     = Term::ReadLine->new('PostgreSQL configuration');
+
+### Get the database server.  Defaults to the global host
+
+unless(my $dbhost = $dbconfig->{host}) {
+	my $default_host = $dbglobal->{host} || 'peer';
+	$dbhost   = $term->readline("database host: [$default_host] ");
+	$dbhost   =~ s/\s//g;
+	$dbglobal->{host} = $dbhost ||= $default_host;
+	$dbconfig->{host} = $dbhost;
+	$changes++;
+}
+
+### Get the database name.  Defaults to the global name
+
+unless(my $dbname = $dbconfig->{name}) {
+	my $default_name = $dbglobal->{name} || $generic->{username};
+	$dbname   = $term->readline("database name: [$default_name] ");
+	$dbname   =~ s/\s//g;
+	$dbglobal->{name} ||= $dbname;
+	$dbconfig->{name}   = $dbname ||= $default_name;
+	$changes++;
+}
+
+### Get the database user.  Defaults to the global user
+
+unless(my $dbuser = $dbconfig->{user}) {
+	my $default_user = $dbglobal->{user} || $generic->{username};
+	$dbuser   = $term->readline("database user: [$default_user] ");
+	$dbuser   =~ s/\s//g;
+	$dbglobal->{user} ||= $dbuser;
+	$dbconfig->{user}   = $dbuser ||= $default_user;
+	$changes++;
+}
+
+### Get the database password.  Defaults to the global password
+
+my $dbpasswd    = $dbconfig->{password} || '';
+while($dbpasswd eq '') {
+	my $default_passwd = $dbglobal->{password} || '';
+	$dbpasswd   = $term->readline("database password: [$default_passwd] ");
+	$dbpasswd   =~ s/\s//g;
+	$dbglobal->{password} ||= $dbpasswd;
+	$dbconfig->{password}   = $dbpasswd ||= $default_passwd;
+	$changes++;
+}
+
+save_config_generic $generic;
+save_config_release $release;
+
+exit 0;

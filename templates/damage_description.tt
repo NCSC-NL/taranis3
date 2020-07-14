@@ -1,0 +1,20 @@
+<div id="damage-description-content-heading" class="content-heading">
+	<div id="damage-description-content-heading-id" class="block configuration-heading-default">
+		<span>Damage description</span>
+	</div>
+</div>
+
+[% IF damageDescriptions.size > 0 %]
+	[% FOREACH damageDescription IN damageDescriptions %]
+	
+		[% INCLUDE damage_description_item.tt %]
+	
+	[% END %]
+[% ELSE %]
+<div class="item-row" id="empty-row">No damage descriptions found...</div>
+
+[% END %]
+
+<div class="action-block filter-block-separator">
+	<div class="center" id="number-of-results">&mdash; [% numberOfResults %] results &mdash;</div>
+</div>

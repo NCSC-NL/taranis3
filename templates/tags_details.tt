@@ -1,0 +1,35 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden[% END %] ui-state-error ui-corner-all">[% message %]</div>
+	<fieldset>
+		<div class="dialog-input-wrapper block">
+			<label for="tags-input" class="dialog-input-label">Tags</label><br>
+			<input type="text" name="tags" id="tags-input" class="input-default dialog-input-text-wide" value="[% tags.join(', ') %]">
+		</div><br>
+		
+		<hr><br>
+		<div class="dialog-input-wrapper block">
+			<span class="span-link" id="dossier-quick-reference-link">Dossier Quick Reference</span>
+		</div><br>
+		<div class="dialog-input-wrapper block hidden" id="dossier-quick-reference">
+		[% IF dossiers %]
+			[% FOREACH dossier IN dossiers.keys.sort %]
+				[% IF loop.count MOD 5 == 1 %]
+				<div class="block align-top padding-default">
+				[% END %]
+					<span class="dialog-input-label">[% dossier %]</span><br>
+					<ul class="dossier-quick-reference-list block align-top">
+					[% FOREACH tag IN dossiers.$dossier.sort %]
+						<li class="dossier-quick-reference-list-item">[% tag %]</li>
+					[% END %]
+					</ul><br><br>
+				[% IF loop.count MOD 5 == 0 || loop.last %]
+				</div>
+				[% END %]
+			[% END %]
+		[% ELSE %]
+			<p>There are no dossiers yet.</p>
+		[% END %]
+		</div>
+	</fieldset>
+	
+</div>

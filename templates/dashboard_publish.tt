@@ -1,0 +1,27 @@
+<div class="block dashboard-block">
+	<fieldset>
+		<legend class="bold">Publish</legend>
+
+[% IF numberOfApprovedPublications %]
+	[% nr_approved = numberOfApprovedPublications.data %]
+		<div>
+			<img src="[% webroot %]/images/mail_check.png" alt="[% nr_approved %]" class="align-middle">
+	[% IF nr_approved == 1 %]
+			<div class="block">There is <span class="bold">one</span> approved publication.</div>
+	[% ELSE %]
+			<div class="block">There are <span class="bold">[% nr_approved %]</span> approved publications.</div>
+	[% END %]
+		</div>
+[% END %]
+
+[% minutes_ago = oldestUnpublishedToWebsite.data.minutes_ago %]
+[% IF oldestUnpublishedToWebsite && minutes_ago %]
+		<hr class="light">
+		<div>
+			<img src="[% webroot %]/images/mail_alert.png" alt="!!" class="dashboard-icon">
+			<div class="block">Oldest unpublished website publication<br>is <span class="bold">[% oldestUnpublishedToWebsite.data.oldest_created_on %]</span></div>
+		</div>
+[% END %]
+
+	</fieldset>
+</div>

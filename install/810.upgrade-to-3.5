@@ -1,0 +1,36 @@
+#!/usr/bin/env perl
+# Upgrade changes from 3.4.x to 3.5
+# Excluded database upgrades; they have their own process.
+
+use warnings;
+use strict;
+
+use Carp   qw(confess);
+use File::Slurper qw/read_text write_text/;
+use File::Find    qw/find/;
+
+use Taranis::Config;
+use Taranis::Install::Config qw(become_user_taranis config_generic);
+
+become_user_taranis;
+
+my $generic = config_generic;
+my $config  = Taranis::Config->new;
+
+#### Default Reply-To fields on emails
+
+unless($config->{mail_reply_to}) {
+	my $mainfn = $config->filename;
+	print "*   add <mail_reply_to> to $mainfn\n";
+	my $xml = read_text $mainfn, 'utf8', 1;
+	$xml =~ s!\<mimeparser!<mail_reply_to></mail_reply_to>\n  $&!;
+	write_text $mainfn, $xml, 'utf8';
+}
+
+#### Website templates in list
+
+#### Fix write access by website to configuration files
+
+find sub { chmod 0666, $_ if -f && m/\.xml$/ }, $generic->{var};
+
+exit 0;

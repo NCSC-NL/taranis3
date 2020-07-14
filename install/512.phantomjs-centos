@@ -1,0 +1,19 @@
+#!/usr/bin/env perl
+# PhantomJS requirements
+
+use warnings;
+use strict;
+
+use Taranis::Install::Bare   qw(is_centos);
+use Taranis::Install::CentOS qw(centos_packages);
+
+unless(is_centos) {
+	print "*   skipped: not running on CentOS.\n";
+	exit 0;
+}
+
+centos_packages
+	'liberation-mono-fonts',
+	;
+
+exit 0;

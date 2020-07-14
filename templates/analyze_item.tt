@@ -1,0 +1,133 @@
+[% IF renderItemContainer %]
+<div class="analyze-item item-row" id="[% analysis.orgid %]">
+[% END %]
+
+	<div class="item-arrow">
+		<div class="selected-row-left"></div>
+		<div class="selected-row-right"></div>
+	</div>
+
+<div class="item-row-inner">
+	<div class="analyze-item-select block">
+		[% IF write_right %]
+		<input class="analyze-item-select-input" type="checkbox" value="[% analysis.orgid %]">
+		[% END %]
+	</div>
+		
+	<div class="analyze-item-id-status block">
+		<span data-analysisid="[% analysis.orgid %]" class="span-link analyze-item-details-link">[% analysis.id %]</span><br>
+		<span class="span-analyze-item-status">([% analysis.status %])</span>
+	</div>		
+
+	<div class="analyze-item-date-time block">
+		[% analysis.created.substr(0, 10) %]<br>
+		[% analysis.created.substr(11, 8) %]
+	</div>		
+
+	<div class="analyze-item-details block break-word">
+		<div class="analyze-[% analysis.rating %] bold block">
+			<span data-analysisid="[% analysis.orgid %]" class="span-link analyze-item-details-link">[% analysis.title %]</span>
+		</div>
+		[% INCLUDE tags.tt %]
+		<div>
+			<span class="span-link btn-toggle-description" data-analysisid="[% analysis.orgid %]">show comments</span>
+		</div>
+		<div id="analyze-description-[% analysis.orgid %]" class="analyze-item-details-description">
+		<br>
+
+		[% IF analysis.comments == '' && !analysis.links %]
+			<span>no description</span>
+		[% ELSE %]
+			[% annumbers = analysis.comments.match( '(AN-\d\d\d\d-\d\d\d\d)', 1 ) %]
+			[% FOREACH nr IN annumbers %]
+				[% numeric = nr.substr(3, 4) _ nr.substr(8,4) %]
+				[% analysis.comments  = analysis.comments.replace( nr , '<span class="links-on-black-bg span-link analyze-item-details-link" data-analysisid="' _ numeric _ '">' _ nr _ '</span>' ) %]
+			[% END %]
+	
+			[% analysis.comments = analysis.comments.replace( '(?i)(' _ pageSettings.advisory_prefix _ '-\d{4}-\d{' _ pageSettings.advisory_id_length _ '})\[(\d+)\]\[(.*?)\]' , '<span class="publications-preview-link span-link" data-id="$2" data-pubtype="$3">$1</span>' ) %]
+	
+			[% analysis.comments %]
+										
+			[% IF analysis.links.0 != "" %]
+				<hr>
+			[% END %]
+
+			[% FOREACH link IN analysis.links %]
+				<span class="analyze-item-link" data-linkdigest="[% link.digest | uri %]" data-itemid="[% link.id %]">
+					<i class="fas fa-info btn-analyze-assess-details"
+					 title="Show details" data-digest="[% link.digest | uri %]"></i>
+				[% link.source %]: 
+				[% IF link.link.match('^id=\d+$') || link.link.match('.*?show_mail\.pl\?id=\d+$') %]
+					<span class="span-link assess-email-item-link" data-link="[% link.link %]">[% link.title %]</span>
+				[% ELSE %]
+					<a href="[% link.link %]" target="_blank">[% link.title %]</a>
+				[% END %]
+				[% IF analysis.links.size > 1 %]
+					<img src="[% webroot %]/images/icon_linkto_other.png" class="btn-link-to-other-analysis pointer" data-digest="[% link.digest | uri %]" data-analysisid="[% analysis.orgid %]" alt="analyze" title="Create other analysis from item and unlink from current analysis">
+					<i class="fas fa-unlink btn-unlink-from-analysis"
+			 		 title="unlink from current analysis" data-itemid="[% link.id %]"
+			 		 data-analysisid="[% analysis.orgid %]"></i>
+				[% END %]
+					<br>
+				</span>
+			[% END %]
+			[% IF analysis.links.0 != "" %]
+				<hr>
+			[% END %]
+		[% END %]									
+		</div>
+	</div>		
+
+	<div class="align-block-right block">
+		<div class="align-block-right icon-block">
+		
+		[%- USE analysis_sts = String(analysis.status) +%]
+		[% IF analysis.opened_by != '' && ( analysis.opened_by == pageSettings.info_username || is_admin ) %]
+			<i class="fas fa-lock btn-analyze-lock"
+			 title="Remove lock from [% analysis.openedbyfullname %]"
+			 data-analysisid="[% analysis.orgid %]"></i>
+		[% ELSIF analysis.opened_by != '' %]
+			<i class="fas fa-lock analyze-locked"
+			 title="Is locked by [% analysis.openedbyfullname %]"></i>
+		[% ELSE %]
+			<img src="[% webroot %]/images/icon_none.png" class="img-placeholder" alt="no icon">
+		[% END %]
+
+			<i class="fas fa-tag img-edit-tags" title="add/remove tags"
+				data-itemid="[% analysis.orgid %]" data-tname="analysis"></i>
+
+		[% IF write_right && analysis_sts.lower != 'joined' && analysis.opened_by == '' %]
+			<i class="fas fa-edit analyze-item-details-link"
+			 title="Open analysis" data-analysisid="[% analysis.orgid %]"></i>
+		[% ELSE %]
+            <i class="fas fa-info analyze-item-details-link"
+			 title="View Details" data-analysisid="[% analysis.orgid %]"></i>
+		[% END %]
+		
+		[% IF publication_right %] 
+			<i class="fas fa-chevron-circle-down btn-analyze-to-publication"
+			 title="Use in advisory" data-analysisid="[% analysis.orgid %]"></i>
+		[% END %]
+
+		[% IF analysis.owned_by == "" +%]
+			<i class="far fa-user btn-analyze-ownership analyze-item-has-no-owner"
+ 			 title="no owner" data-analysisidownership="[% analysis.orgid %]"></i>
+		[% ELSIF pageSettings.info_username == analysis.owned_by +%]
+			<i class="fas fa-user btn-analyze-ownership analyze-item-is-owner"
+ 			 title="you are the owner" data-analysisidownership="[% analysis.orgid %]"></i>
+		[% ELSE +%]
+			<i class="fas fa-user btn-analyze-ownership analyze-item-is-not-owner"
+ 			 title="owned by [% analysis.ownedbyfullname %]" data-analysisidownership="[% analysis.orgid %]"></i>
+		[% END +%]
+		</div>
+		<br>
+		
+		[% IF analysis.publishedAdvisories && analysis.publishedAdvisories.size > 0 %]
+		<span class="align-block-right analyze-published-publications">[% analysis.publishedAdvisories.size %] advisor[% IF analysis.publishedAdvisories.size > 1 %]ies[% ELSE %]y[% END %]</span>
+		[% END %]
+	
+	</div>
+</div>
+[% IF renderItemContainer %]		
+</div>
+[% END %]

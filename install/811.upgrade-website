@@ -1,0 +1,107 @@
+#!/usr/bin/env perl
+# Upgrade changes from 3.4.x to 3.5
+# Excluded database upgrades; they have their own process.
+
+use warnings;
+use strict;
+
+use File::Slurper qw/read_text write_text/;
+use Taranis       qw(find_config);
+use Taranis::Config;
+use Taranis::Install::DB qw(connect_db);
+
+my $config = Taranis::Config->new;
+
+#### Website templates in list
+# The templates themselves are added in 642.db-publ-templates
+# Here, we have to mangle installed/configured data from the instance.
+
+{
+	my $pubtempls = find_config $config->{publication_templates}
+		or die "ERROR: cannot find publication_templates configuration file";
+
+	my $xml = read_text $pubtempls, 'utf8', 1;
+	if($xml !~ /\<website\>/) {
+
+		print "*   add <website> to $pubtempls\n";
+
+		$xml =~ s!\</advisory\>!\t<website>Advisory (website)</website>
+\t<website_update>Advisory (website update)</website_update>\n\t$&!g;
+
+		write_text $pubtempls, $xml, 'utf8';
+	}
+}
+
+#### Website publication entitlement
+
+{
+	my $ents = find_config $config->{entitlements}
+		or die "ERROR: cannot find entitlements configuration file";
+
+	my $xml = read_text $ents, 'utf8', 1;
+	if($xml !~ /publish_website/) {
+
+		print "*   add publish_website to $ents\n";
+
+		$xml =~ s!\<entitlement id="publish_eod"\>!<entitlement id="publish_website">
+		<menuitem>1</menuitem>
+		<use_entitlement>publication</use_entitlement>
+	</entitlement>
+	$&!;
+
+		write_text $ents, $xml, 'utf8';
+	}
+}
+
+#### Website status in dashboard
+
+{
+	#XXX there is no main configuration option for this one
+	my $dashb = find_config 'var/dashboard/layout.xml'
+		or die "ERROR: cannot find dashboard configuration file";
+
+	my $xml = read_text $dashb, 'utf8', 1;
+	if($xml !~ /ToWebsite/) {
+
+		print "*   add Publish Website to $dashb\n";
+
+		$xml =~ s!\<module\>Database!<module>Publish</module>
+		<dataProcessor>oldestUnpublishedToWebsite</dataProcessor>
+		<showMinified>1</showMinified>
+	</item>
+	<item>
+		$&!;
+
+		write_text $dashb, $xml, 'utf8';
+	}
+}
+
+#### Website plugin interface in main config
+
+unless($config->{publish_website}) {
+	my $mainfn = $config->filename;
+	print "*   add <publish_website> to $mainfn\n";
+
+	my $xml = read_text $mainfn, 'utf8', 1;
+	$xml =~ s!<rt_ticket!<publish_website>
+    <implementation></implementation>
+    <configuration></configuration>
+  </publish_website>
+  $&!;
+
+	write_text $mainfn, $xml, 'utf8';
+}
+
+#### Website publication type in the database
+
+my $db = connect_db;
+
+my %titles = $db->query('SELECT title, id FROM publication_type')->map;
+foreach my $title ('Advisory (website)', 'Advisory (website update)') {
+	next if $titles{$title};
+
+	print "*   adding publication type to db: $title\n";
+	$db->insert(publication_type => { title => $title });
+}
+
+exit 0;

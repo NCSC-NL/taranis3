@@ -1,0 +1,28 @@
+<div id="dossier-content-heading" class="content-heading">
+	<div id="dossier-content-heading-description" class="block">
+		<span>Description</span>
+	</div>
+	<div id="dossier-content-heading-owners" class="block">
+		<span>Dossier Owner(s)</span>
+	</div>
+	<div id="dossier-content-heading-last-activity" class="block">
+		<span>Latest Activity</span>
+	</div>
+	<div id="dossier-content-heading-status" class="block">
+		<span>Status</span>
+	</div>
+</div>
+
+[% IF dossiers && dossiers.size > 0 %]
+	[% FOREACH dossier IN dossiers %]
+	
+		[% INCLUDE dossier_item.tt %]
+	
+	[% END %]
+[% ELSE %]
+	<div class="item-row">No dossiers found...</div>	
+[% END %]
+
+<div class="action-block filter-block-separator">
+	<div class="center" id="number-of-results">&mdash; [% dossiers.size %] results &mdash;</div>
+</div>

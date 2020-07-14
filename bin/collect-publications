@@ -1,0 +1,99 @@
+#!/usr/bin/env perl
+# This file is part of Taranis, Copyright NCSC-NL. See http://taranis.ncsc.nl
+# Licensed under EUPL v1.2 or newer, https://spdx.org/licenses/EUPL-1.2.html
+
+# 2019-01-31 MO !!!WARNING!!! This cannot be used to export to data.overheid.nl
+# without change: older advisories contain personal information.  Besides,
+# these messages contain AMBER fields.  This script must be rewritten to use
+# publication_website (simple)... but what to do with the XML?
+
+# 2017-10-20 MO
+# This script got created to produce an initial export of all advisories
+# to the data.overheid.nl project.  It produces zips per year with
+# advisories in plain text and (when available) in XML.
+
+use warnings;
+use strict;
+
+use Taranis::Database;
+use File::Basename qw(basename);
+
+@ARGV==1
+	or die "Usage: $0 <outdir>\n";
+
+my $outdir = shift @ARGV;
+-d $outdir or mkdir $outdir
+	or die "Cannot create $outdir: $!\n";
+
+my $db = Taranis::Database->new->simple;
+
+my $results = $db->query(<<'__GET_XML_ADVS');
+SELECT govcertid, version, contents, xml_contents
+  FROM publication_advisory  AS pa
+       LEFT JOIN publication AS pu  ON pu.id = pa.publication_id
+ WHERE NOT deleted
+   AND status = 3
+__GET_XML_ADVS
+
+my ($nr_advisories, $xmls_written, $txts_written) = (0, 0, 0);
+
+while(my $advisory = $results->hash) {
+	$nr_advisories++;
+
+	my $certid  = $advisory->{govcertid};
+	my ($prefix, $year, $seq) = split /\-/, $certid, 3;
+
+	my $yeardir = "$outdir/$year-$prefix";
+	-d $yeardir or mkdir $yeardir
+		or die "Cannot create $yeardir: $!\n";
+
+	my $version = $advisory->{version};
+	my $xml     = $advisory->{xml_contents};
+	my $txt     = $advisory->{contents};
+
+	if(defined $xml && $xml =~ /\S/) {
+		$xmls_written++;
+
+		my $outxml = "$yeardir/$certid-v$version.xml";
+		open my $out, '>:encoding(utf8)', $outxml
+			or die "Cannot write $outxml: $!\n";
+
+		$xml =~ s/\r*\n/\r\n/g;
+		$out->print($xml);
+    	$out->close
+			or die "Error while writing $outxml: $!\n";
+	}
+
+	if(defined $txt && $txt =~ /\S/) {
+		$txts_written++;
+
+		my $outtxt = "$yeardir/$certid-v$version.txt";
+		open my $out, '>:encoding(utf8)', $outtxt
+			or die "Cannot write $outtxt: $!\n";
+
+		$txt =~ s/\n*\z/\n/g;     # enforce trailing nl
+		$txt =~ s/\r*\n/\r\n/g;
+
+		$out->print($txt);
+    	$out->close
+			or die "Error while writing $outtxt: $!\n";
+	}
+}
+
+print "Found $nr_advisories advisories: "
+	. "wrote $xmls_written xmls and $txts_written as txt\n";
+
+my $zips = 0;
+foreach my $yeardir (grep !/\.zip$/, glob "$outdir/*") {
+	$zips++;
+
+	unlink "$yeardir.zip";
+	my $yearname = basename $yeardir;
+
+	system "cd '$outdir' && zip -rq $yeardir.zip $yearname"
+		and die "Cannot write zip $yeardir.zip: $!\n";
+}
+
+print "Wrote $zips year zips\n";
+
+1;

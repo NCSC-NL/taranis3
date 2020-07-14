@@ -1,0 +1,14 @@
+#!perl
+
+use warnings;
+use strict;
+
+sub {
+	my ($db, %args) = @_;
+
+	$db->query( <<'__RUN__');
+ALTER TABLE user_action ALTER COLUMN username TYPE TEXT;
+ALTER TABLE user_action ALTER COLUMN entitlement TYPE TEXT;
+ALTER TABLE user_action ALTER COLUMN action TYPE TEXT;
+__RUN__
+};

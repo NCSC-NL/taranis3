@@ -1,0 +1,27 @@
+#!/usr/bin/env perl
+#
+# Use this script to convert single roles per constituent individual,
+# into multiple roles per indivodual.  This is part of the introduction
+# of the interface to NCSC-NL's "Sage" CMS.
+
+use warnings;
+use strict;
+
+use Taranis::Database;
+
+my $db = Taranis::Database->new->simple;
+
+print "* Cleaning-up new role table\n";
+
+$db->query("DELETE FROM individual_roles");
+
+print "* Move all single roles over to the new table\n";
+
+$db->query(<<'_MOVE_ROLES');
+INSERT INTO individual_roles (individual_id, individual_role_id)
+	SELECT indiv.id, indiv.role
+	FROM constituent_individual AS indiv
+    WHERE indiv.role IS NOT NULL;
+_MOVE_ROLES
+
+print "* Done\n";

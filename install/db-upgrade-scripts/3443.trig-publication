@@ -1,0 +1,12 @@
+#!perl
+
+use warnings;
+use strict;
+
+sub {
+	my ($db, %args) = @_;
+
+	$db->query( <<'__RUN__');
+CREATE INDEX publication_contents_trgm_idx on publication using GIN(contents gin_trgm_ops);
+__RUN__
+};

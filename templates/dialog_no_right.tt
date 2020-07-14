@@ -1,0 +1,15 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="ui-state-error ui-corner-all">[% message %]</div>
+</div>
+
+<script type="text/javascript">
+$( function () {
+	// replace all buttons with a Close button 
+	$('#dialog').dialog('option', 'buttons', [
+		{
+			text: 'Close',
+			click: function () { $(this).dialog('close') }
+		}
+	]);
+});
+</script>

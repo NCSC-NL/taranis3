@@ -1,0 +1,7 @@
+<ul>
+	<li ng-repeat="list in announcements.result">
+		<span class="font-monospace">{{ list.created_str }}</span>
+		<a ng-href="#/list/{{ list.id }}"><span class="marked">{{ list.title }}</span></a><br>
+		<hr class="thin" ng-if="!$last">
+	</li>
+</ul>

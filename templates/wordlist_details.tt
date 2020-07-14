@@ -1,0 +1,27 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden[% END %] ui-state-error ui-corner-all">[% message %]</div>
+
+	[% IF wordlist.description %]
+	<div class="dialog-title">
+		<span>[% wordlist.description %]</span>
+	</div>
+	[% END %]
+	
+	<form id="form-wordlist" data-id="[% IF wordlist.id; wordlist.id; ELSE; 'NEW'; END %]">
+
+		<fieldset>
+			<div class="dialog-input-wrapper block">
+				<label class="dialog-input-label" for="wordlist-details-description">Description</label><br>
+				<input type="text" name="description" id="wordlist-details-description" class="input-default dialog-input-text" value="[% wordlist.description %]">
+			</div>
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Wordlist</span>
+				<span class="italic">(enter each entry on a new line)</span>
+				<br>
+				<textarea class="scroll-y-always font-courier border-default" id="wordlist-details-words" name="wordlist">[%- FOREACH word IN wordlist.words.sort +%]
+[%+ word +%]
+[%- END -%]</textarea>
+			</div>
+		</fieldset>
+	</form>
+</div>

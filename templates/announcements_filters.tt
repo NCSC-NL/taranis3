@@ -1,0 +1,11 @@
+<div class="action-block filter-block-separator">
+	<br>
+	[% IF write_right +%]
+	<div class="block">
+		<input type="button" class="button" value="Add announcement" id="btn-add-announcement">&nbsp;
+	</div>
+	[% END %]
+	<div class="block align-block-right">
+		<span class="bold page-title">Announcements</span>
+	</div>	
+</div>

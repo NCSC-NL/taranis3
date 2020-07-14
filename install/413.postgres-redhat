@@ -1,0 +1,22 @@
+#!/usr/bin/env perl
+# Install PostgreSQL on RedHat, the system-dependent bits.
+
+use warnings;
+use strict;
+
+use Taranis::Install::Bare   qw(is_redhat);
+use Taranis::Install::RedHat qw(redhat_packages);
+
+unless(is_redhat) {
+	print "*   skipped: not running on RedHat\n";
+	exit 0;
+}
+
+redhat_packages
+	'postgresql',
+	'postgresql-server',
+	'postgresql-contrib',   # needed?
+	'perl-DBD-Pg',
+	;
+
+exit 0;

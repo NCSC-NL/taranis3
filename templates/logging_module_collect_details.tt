@@ -1,0 +1,14 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden[% END %] ui-state-error ui-corner-all">[% message %]</div>
+	
+	<div class="dialog-title break-word">
+		<span>[% collectorLog.sourcename _ ' &mdash; ' _ collectorLog.error %]</span>
+	</div>
+	
+	<fieldset>
+		<div class="dialog-input-wrapper block">
+			<textarea id="collector-logging-log" class="input-default" readonly="readonly">[% log %]</textarea>
+		</div><br>
+	
+	</fieldset>
+</div>

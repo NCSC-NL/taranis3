@@ -1,0 +1,27 @@
+[% IF renderItemContainer %]
+<div class="wordlist-item item-row" id="[% wordlist.id %]">
+[% END %]
+		
+	<div class="wordlist-item-description block">
+		<span>[% wordlist.description %]</span>
+	</div>
+
+	<div class="wordlist-item-wordcount block align-text-right">
+		<span>[% wordlist.words.size %]</span>
+	</div>
+
+	<div class="block align-block-right">
+	[% IF write_right %]
+		<img src="[% webroot %]/images/icon_modify.png" alt="edit" title="edit wordlist" class="pointer btn-edit-wordlist" data-id="[% wordlist.id %]">
+		[% IF wordlist.canDelete == 1 %]
+		<img src="[% webroot %]/images/icon_delete.png" alt="delete" title="delete wordlist" class="pointer btn-delete-wordlist" data-id="[% wordlist.id %]">
+		[% ELSE %]
+		<img src="[% webroot %]/images/icon_delete_disabled.png" alt="delete">
+		[% END %]
+	[% ELSE %]
+		<img src="[% webroot %]/images/icon_details.png" alt="view" title="view details" class="pointer btn-view-wordlist" data-id="[% wordlist.id %]">
+	[% END %]		
+	</div>
+[% IF renderItemContainer %]
+</div>
+[% END %]

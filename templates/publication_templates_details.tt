@@ -1,0 +1,55 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden[% END %] ui-state-error ui-corner-all">[% message %]</div>
+
+	[% IF publicationTemplate.title %]
+	<div class="dialog-title">
+		<span>[% publicationTemplate.title %]</span>	
+	</div>
+	[% END %]
+	
+	<form id="publication-template-details-form" data-id="[% IF publicationTemplate.id; publicationTemplate.id; ELSE; 'NEW'; END %]">
+
+		<div id="publication-template-details-tabs" class="dialog-tabs">
+			<ul>
+				<li><a href="#publication-template-details-tabs-general">General</a></li>
+				<li><a href="#publication-template-details-tabs-template">Template</a></li>
+			</ul>
+
+<!-- TAB GENERAL -->
+			<div id="publication-template-details-tabs-general">
+				<fieldset>
+					<div class="dialog-input-wrapper block">
+						<label for="publication-template-details-title" class="dialog-input-label">Name *</label><br>
+						<input type="text" name="title" id="publication-template-details-title" class="input-default dialog-input-text-wide" value="[% publicationTemplate.title %]">
+					</div><br>
+
+					<div class="dialog-input-wrapper block">
+						<span class="dialog-input-label">Description *</span><br>
+						<textarea name="description" id="publication-template-details-description" class="input-default">[% publicationTemplate.description %]</textarea>
+					</div><br>
+
+					<div class="dialog-input-wrapper block">
+						<span class="dialog-input-label">Type</span><br>
+						<select name="type" id="publication-template-details-type" class="select-single dialog-input-text">
+						[% FOREACH publicationType IN publication_types %]
+							<option value="[% publicationType.id %]" [% IF publicationTemplate.type == publicationType.id %] selected="selected"[% END %]>[% publicationType.title %]</option>
+						[% END %]
+						</select>
+					</div><br>
+
+				</fieldset>
+			</div>
+
+<!-- TAB TEMPLATE -->
+			<div id="publication-template-details-tabs-template">
+				<fieldset>
+					<div class="dialog-input-wrapper block">
+						<span class="dialog-input-label">Template *</span><br>
+						<textarea name="template" id="publication-template-details-template" class="input-default font-courier">[% publicationTemplate.tpl %]</textarea>
+					</div><br>
+				</fieldset>
+			</div>
+			
+		</div>
+	</form>
+</div>

@@ -1,0 +1,14 @@
+"$LOGDIR/phish-cleanup-images.log" {
+	maxage 365
+	rotate 10
+	size=5M
+
+	compress
+	delaycompress
+	notifempty
+	missingok
+	create 0644 $USER $GROUP
+	su $USER $GROUP
+	dateext
+}
+

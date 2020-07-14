@@ -1,0 +1,62 @@
+[% IF renderItemContainer %]
+<div class="publications-item colored-item-row publications-[% publication.statusDescription %]" id="[% publication.publication_id %]" data-pubtype="[% pub_type %]" data-detailsid="[% publication.details_id %]">
+[% END %]
+		
+	<div class="publications-item-id block">
+		<span>[% publication.specific_id %]</span>
+	</div>		
+
+	<div class="publications-item-title block">
+		<span>
+	[%- IF publication.title_content.length > 100 -%]
+		[%- publication.title_content.substr( 100, publication.title_content.length, '...') -%]
+	[%- ELSE -%]
+		[%- publication.title_content -%]
+	[%- END -%]</span>
+		[% INCLUDE tags.tt %]
+	</div>
+
+	<div class="block publications-item-actions align-block-right icon-block">
+	[% IF publication.opened_by != '' && ( publication.opened_by == pageSettings.info_username || is_admin ) %]
+		<i class="fas fa-lock img-publications-lock"
+ 		title="Remove lock from [% publication.fullname %]" data-pubtype="[% pub_type %]"
+ 		data-publicationid="[% publication.publication_id %]"></i>
+	[% ELSIF publication.opened_by != '' %]
+		<i class="fas fa-lock img-publications-locked"
+		 title="Is locked by [% publication.fullname %]"
+		 data-publicationid="[% publication.publication_id %]"></i>
+	[% END %]
+
+	[% IF write_right && publication.opened_by == '' && publication.status == 0 %]
+		<i class="fas fa-edit img-publications-edit" data-pubtype="[% pub_type %]"
+		 title="edit" data-publicationid="[% publication.publication_id %]"
+		 data-detailsid="[% publication.details_id %]"></i>
+	[% END %]
+
+	[% IF publication.status == 3 && publication.replacedby_id == "" && pub_type != "eow" && pub_type != "eos" && pub_type != "eod" && write_right && publication.opened_by == '' %]						
+		<i class="fas fa-plus img-publications-update" data-pubtype="[% pub_type %]"
+		 title="update" data-detailsid="[% publication.details_id %]"
+		 data-publicationid="[% publication.publication_id %]"></i>
+	[% END %]
+
+		<i class="fas fa-tag img-edit-tags" title="add/remove tags"
+		 data-itemid="[% publication.details_id %]" data-tname="[% publication.tname %]"></i>
+		<i class="far fa-file-powerpoint img-publications-preview" title="preview"
+		 data-pubtype="[% pub_type %]" data-publicationid="[% publication.publication_id %]"></i>
+
+	[% IF ( publication.status == 0 || publication.status == 1 ) && write_right && publication.opened_by == '' %]
+		<i class="fas fa-times img-publications-delete" data-pubtype="[% pub_type %]"
+		 title="delete" data-detailsid="[% publication.details_id %]"
+		 data-publicationid="[% publication.publication_id %]"></i>
+	[% ELSIF publication.status == 3 && execute_right %]
+		<i class="fas fa-arrow-circle-right img-publications-sentto"
+		 title="show publishing details" data-pubtype="[% pub_type %]"
+		 data-publicationid="[% publication.publication_id %]"></i>
+	[% ELSE %]
+		<img src="[% webroot %]/images/icon_none.png" class="img-publications-placeholder" data-publicationid="[% publication.publication_id %]" alt="no icon"> 
+	[% END %]
+	</div>
+
+[% IF renderItemContainer %]		
+</div>
+[% END %]

@@ -1,0 +1,74 @@
+<div class="block configuration-block">
+	<fieldset>
+		<legend class="configuration-title bold">Publications</legend>
+		<ul>
+	[% menuOptionAdded = 0 %]
+	[% FOREACH publication_opt IN pageSettings.publication_options +%]
+		[% IF publication_opt  == "advisory (email)" -%]
+			<li>
+				<a href="publish/publish/displayPublish/pub_type=advisory/">Publish Advisory Email</a>
+				[% IF unpublishedCount && unpublishedCount.$publication_opt %]
+				( [% unpublishedCount.$publication_opt %] )
+				[% END %]
+			</li>
+		[%- END -%]
+		[% IF publication_opt  == "advisory (forward)" -%]
+			<li>
+				<a href="publish/publish/displayPublish/pub_type=forward/">Publish Advisory Forward</a>
+				[% IF unpublishedCount && unpublishedCount.$publication_opt %]
+				( [% unpublishedCount.$publication_opt %] )
+				[% END %]
+			</li>
+		[%- END -%]
+		[%- IF publication_opt == "advisory (website)" -%]
+			<li>
+				<a href="publish/publish/displayPublish/pub_type=website/">Publish Advisory Website</a>
+				[% IF unpublishedCount && unpublishedCount.$publication_opt %]
+				( [% unpublishedCount.$publication_opt %] )
+				[% END %]
+			</li>
+		[%- END -%]
+		[%- IF publication_opt == "end-of-shift (email)" -%]
+			<li>
+				<a href="publish/publish/displayPublish/pub_type=eos/">Publish End-of-Shift</a>
+				[% IF unpublishedCount && unpublishedCount.$publication_opt %]
+				( [% unpublishedCount.$publication_opt %] )
+				[% END %]
+			</li>
+		[%- END -%]
+		[%- IF publication_opt == "end-of-day (email)" -%]
+			<li>
+				<a href="publish/publish/displayPublish/pub_type=eod/">Publish End-of-Day Confidential</a>
+				[% IF unpublishedCount && unpublishedCount.$publication_opt %]
+				( [% unpublishedCount.$publication_opt %] )
+				[% END %]
+			</li>
+		[%- END -%]
+		[%- IF publication_opt == "end-of-day (email public)" -%]
+			<li>
+				<a href="publish/publish/displayPublish/pub_type=eod_public/">Publish End-of-Day Public</a>
+				[% IF unpublishedCount && unpublishedCount.$publication_opt %]
+				( [% unpublishedCount.$publication_opt %] )
+				[% END %]
+			</li>
+		[%- END -%]
+		[%- IF publication_opt == "end-of-day (email white)" -%]
+			<li>
+				<a href="publish/publish/displayPublish/pub_type=eod_white/">Publish End-of-Day White</a>
+				[% IF unpublishedCount && unpublishedCount.$publication_opt %]
+				( [% unpublishedCount.$publication_opt %] )
+				[% END %]
+			</li>
+		[%- END -%]
+		[%- IF publication_opt == "end-of-week (email)" -%]
+			<li>
+				<a href="publish/publish/displayPublish/pub_type=eow/">Publish End-of-Week</a>
+				[% IF unpublishedCount && unpublishedCount.$publication_opt %]
+				( [% unpublishedCount.$publication_opt %] )
+				[% END %]
+			</li>
+		[%- END -%]
+	[% END +%]
+		</ul>
+	</fieldset>
+</div>

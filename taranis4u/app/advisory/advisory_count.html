@@ -1,0 +1,12 @@
+<div ng-init="advisoryStatus='pending'" class="block center numbers-overview">
+	<br><h2 class="marked font-monospace bold" ng-controller="AdvisoryCountCtrl">{{ advisoryCount.total }}</h2>
+	<span>pending advisories</span><br><br>
+</div>
+<div ng-init="advisoryStatus='ready4review'" class="block center numbers-overview">
+	<br><h2 class="marked font-monospace bold" ng-controller="AdvisoryCountCtrl">{{ advisoryCount.total }}</h2>
+	<span>ready for review<br>advisories</span>
+</div>
+<div ng-init="advisoryStatus='approved'" class="block center numbers-overview">
+	<br><h2 class="marked font-monospace bold" ng-controller="AdvisoryCountCtrl">{{ advisoryCount.total }}</h2>
+	<span>approved advisories</span><br><br>
+</div>

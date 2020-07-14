@@ -1,0 +1,31 @@
+#!/bin/bash
+# Tasks to be run on a daily basis.  This script will be run via cron,
+# and should be executed when there is little or no activity on the
+# system.
+
+# You may want to change settings for your instance.
+
+
+# We run this script with the last installed release, as defined in the
+# crontab.  Interactively used, we get the taranis version in our path
+
+[ -t 0 ] && TARANIS=taranis
+
+umask 022
+
+# Run a full scan of the configured resources.  Problems are logged to
+# the 'errors' table, available in te web-interface.
+
+$TARANIS cve descriptions
+
+
+# Remove stalled locks on items, which got opened by users but never
+# cleanly released.
+
+$TARANIS db close-opened
+
+
+#--- ADDITIONAL TOOLS WILL GET INSERTED HERE AUTOMATICALLY --- DO NOT REMOVE
+# WARNING: upgrades may add additional calls to the end of this script, so
+# do not end this script with 'exit'
+:  # force rc=0

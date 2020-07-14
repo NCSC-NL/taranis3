@@ -1,0 +1,18 @@
+#!perl
+# The item_archive.id was a varchar(16), which is not consequent: its
+# equivalent item.id is an integer
+
+use warnings;
+use strict;
+
+sub {
+	my ($db, %args) = @_;
+
+	$db->query( <<'__RUN__' );
+
+ALTER TABLE item_archive
+   ALTER COLUMN id TYPE integer USING id::integer;
+
+__RUN__
+
+};

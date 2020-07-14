@@ -1,0 +1,203 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden[% END %] ui-state-error ui-corner-all">[% message %]</div>
+
+	<div class="dialog-title">
+		<span>[% IF issue.issuetype == '4'; 'Inform'; ELSIF issue.issuetype == '5'; 'Do not Import'; END %] Issue #[% issue.ii_id %][% IF issue.producer; ': ' _ issue.producer _ ' ' _ issue.name; END %]</span>	
+	</div>
+	
+	<div id="photo-issues-details-tabs" class="dialog-tabs" data-id="[% issue.ii_id %]">
+		<ul>
+			<li><a href="#photo-issues-details-tabs-issue-details">Issue details</a></li>
+			<li><a href="#photo-issues-details-tabs-photo-list">Photo list</a></li>
+		</ul>
+
+<!-- TAB ISSUE DETAILS -->
+		<div id="photo-issues-details-tabs-issue-details">
+			<fieldset>
+				<div class="dialog-input-wrapper block">
+					<span class="dialog-input-label">Description</span><br>
+					<span>[% issue.description %]</span>
+				</div><br>
+
+				<div class="dialog-input-wrapper block">
+					<span class="dialog-input-label">Created</span><br>
+					<span>[% issue.created %]</span>
+				</div><br>
+
+				[% IF ( issue.issuetype != 4 && issue.issuetype != 5 ) || ( issue.issuetype == 4 && issue.followup_on_issue_nr ) %]
+				[% FOR followupIssue IN issue.followupIssues %]
+					[% NEXT IF !followupIssue.producer %]
+					[% issue.producer = followupIssue.producer %]
+					[% issue.name = followupIssue.name %]
+					[% issue.type = followupIssue.type %]
+					[% issue.cpe_id = followupIssue.cpe_id %]
+				[% END %]
+				
+				<div class="dialog-input-wrapper block">
+					<span class="dialog-input-label">Producer</span><br>
+					<span>[% issue.producer %]&nbsp;</span>
+				</div>
+				
+				<div class="dialog-input-wrapper block">
+					<span class="dialog-input-label">Product</span><br>
+					<span>[% issue.name %] [% IF issue.type; ' (' _ issue.type _ ')'; END %]&nbsp;</span>
+				</div>
+
+				<div class="dialog-input-wrapper block">
+					<span class="dialog-input-label">CPE ID</span><br>
+					<span>[% issue.cpe_id %]&nbsp;</span>
+				</div><br>
+				[% END %]
+				
+				[% IF ( issue.issuetype == '4' || issue.issuetype == '1') && selectedSH %]
+				<div class="dialog-input-wrapper block" id="photo-issues-selected-software-hardware-block">
+					<span class="dialog-input-label">Selected Software / Hardware</span><br>
+					<span id="photo-issues-selected-software-hardware">[% IF selectedSH.producer; selectedSH.producer _ ' ' _ selectedSH.name _ ' (' _ selectedSH.description _ ')'; END %]</span>
+					<input type="hidden" id="photo-issues-selected-software-hardware-id" value="[% selectedSH.id %]">
+				</div><br>				
+				[% END %]
+				
+				[% IF issue.status == '3' %]
+				<div class="dialog-input-wrapper block">
+					<span class="dialog-input-label">Resolved by</span><br>
+					<span>[% issue.resolvedby %]</span>
+				</div>
+				<div class="dialog-input-wrapper block">
+					<span class="dialog-input-label">Resolved on</span><br>
+					<span>[% issue.resolvedon %]</span>
+				</div><br>
+				[% END %]
+				
+				[% IF issue.followup_on_issue_nr %]
+				<div class="dialog-input-wrapper block">
+					<span class="dialog-input-label">Followup issue</span><br>
+					<span class="span-link" id="link-followup-on-issue" data-id="[% issue.followup_on_issue_nr %]">#[% issue.followup_on_issue_nr %]</span>
+				</div><br>
+				[% END %]
+
+				<div class="dialog-input-wrapper block">
+					<span class="dialog-input-label">Notes / Solution</span><br>
+					[% IF issue.status != '3' %]
+					<textarea name="comments" id="photo-issues-details-comments" class="input-default">[% issue.comments %]</textarea>
+					[% ELSE %]
+					<pre>[% issue.comments %]</pre>
+					[% END %]
+				</div>
+
+				[% IF issue.issuetype == '2' +%]
+				<!-- start duplicate issue	-->
+				<div class="dialog-input-wrapper block">
+					<div class="hidden" id="photo-issues-duplicate-warning-block">
+						<img src="[% webroot %]/images/icon_warning.png">
+						<span id="photo-issues-duplicate-warning-text"></span><br>
+					</div>
+				</div><br>
+				
+				<div class="dialog-input-wrapper">
+					<div class="block">
+						<span class="dialog-input-label">Duplicates found</span>
+					</div>
+					<table class="dialog-table">
+						<tbody>
+						[% FOREACH duplicate IN duplicates +%]
+							<tr class="[% IF issue.soft_hard_id == duplicate.id && issue.status != '0' %]photo-issues-green colored-item-row[% ELSE %]item-row[% END %]">
+							[% IF issue.status == '0' %]
+								<td>
+									<input type="radio" id="duplicate_[% duplicate.id %]" name="duplicate_option" value="[% duplicate.id %]" [% IF duplicate.id == issue.soft_hard_id %]checked="checked"[% END %]>
+								</td>
+							[% END %]
+								<td>
+									<div class="big-outline-font padding-default">[% loop.count %]</div>
+								</td>
+								<td>
+									<label for="duplicate_[% duplicate.id %]">
+										<span class="bold">[% duplicate.producer _ ' ' _ duplicate.name %]</span><br>
+										CPE: <span class="bold">[% duplicate.cpe_id %]</span><br>
+										Constituent usage count: <span class="bold" data-id="[% duplicate.id %]" id="duplicateUsageCount_[% duplicate.id %]">[% duplicate.usageCount %]</span><br>
+										[% IF duplicate.usageCount == 0 %]
+										<input type="checkbox" id="createIssue_[% duplicate.id %]" [% IF issue.create_new_issue == 1 || issue.soft_hard_id == '' %]checked="checked"[% END %][% IF issue.status == 3 %]disabled="disabled"[% END %] value="1"> 
+										<label for="createIssue_[% duplicate.id %]">Create new &#39;Not in use by other constituents&#39; issue.</label>
+										[% ELSE %]
+										<div>
+											<span class="span-link link-view-photo-issues-constituent-list" data-duplicateoption="[% loop.count %]">Constituent list</span>
+											<ul class="hidden photo-issues-constituent-list">
+											[%- FOREACH group IN duplicate.constituentGroups +%]
+												<li>[% group.name %]</li>
+											[% END %]
+											</ul>
+										</div>
+										[% END %]
+									</label>
+								</td>
+							</tr>
+						[% END +%]
+						</tbody>
+					</table>					
+				</div>
+				[% END %]
+
+				[% IF issue.issuetype == '3' +%]
+				<!-- start No match found issue	-->
+				<div class="dialog-input-wrapper block">
+					<div class="hidden" id="photo-issues-no-match-found-warning-block">
+						<img src="[% webroot %]/images/icon_warning.png">
+						<span id="photo-issues-no-match-found-warning"></span>
+					</div>
+				</div><br>
+
+				<div class="dialog-input-wrapper block" id="photo-issues-selected-software-hardware-block">
+					<span class="dialog-input-label">Selected Software / Hardware</span><br>
+					<span id="photo-issues-selected-software-hardware">[% IF selectedSH.producer; selectedSH.producer _ ' ' _ selectedSH.name _ ' (' _ selectedSH.description _ ')'; END %]</span>
+					<input type="hidden" id="photo-issues-selected-software-hardware-id" value="[% selectedSH.id %]">
+				</div><br>
+					
+					[% IF issue.status == '0' %]
+				<div class="dialog-input-wrapper [% IF ( issue.soft_hard_id && selectedSH.in_use > 0 ) || !issue.soft_hard_id %]hidden[% END %] border-dashed" id="photo-issues-create-issue-block">
+					<img src="[% webroot %]/images/icon_warning.png">
+					<span>Selection is not in use by other constituents.</span><br>
+					<input type="checkbox" id="photo-issues-create-issue" [% IF issue.create_new_issue == 1 || issue.soft_hard_id == '' %]checked="checked"[% END %][% IF issue.status == 3 %]disabled="disabled"[% END %] value="1"> 
+					<label for="photo-issues-create-issue">Create new &#39;Not in use by other constituents&#39; issue.</label>
+				</div><br>
+
+					
+				<div class="dialog-input-wrapper block">
+					<span class="dialog-input-label">Search Software / Hardware</span><br>
+					
+					<input type="text" id="photo-issues-search-software-hardware" class="input-default dialog-input-text">&nbsp;
+					<input type="button" value="Search" class="button" id="btn-photo-issues-search-software-hardware">&nbsp;
+					<input type="button" value="Select" class="button" id="btn-photo-issues-no-match-found-select">&nbsp;
+					<input type="button" value="Reset selection" class="button" id="btn-photo-issues-reset-selection"><br><br>
+					
+					<select size="7" name="sh_list" id="photo-issues-software-hardware-list" class="border-default"></select><br>
+					<span>Red result = result without CPE ID.</span>
+
+				</div>
+					[% END %]
+				[% END %]
+
+			</fieldset>
+		</div>
+		
+<!-- TAB PHOTO LIST -->
+		<div id="photo-issues-details-tabs-photo-list">
+			<fieldset>
+				[% IF photoList && photoList.size > 0 %]
+				<div id="photo-issues-details-photo-list" class="scroll-auto border-default">
+					[% FOREACH photo IN photoList +%]
+					<div class="item-row photo-issues-details-dont-import-item" data-id="[% item.id %]">
+						<span class="bold" id="span_photo_[% photo.id %]">[% photo.name %]</span><br>
+						[% IF photo.imported_on +%]
+						<span class="italic">Photo imported on [% photo.imported %]</span>
+						[% ELSE +%]
+						<span class="italic">Photo not yet imported</span>
+						[% END +%]
+					</div>
+					[% END %]
+				</div>
+				[% ELSE %]
+				<span>Issue not linked to a photo.</span>
+				[% END %]
+			</fieldset>
+		</div>
+	</div>
+</div>

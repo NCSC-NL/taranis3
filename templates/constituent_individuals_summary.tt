@@ -1,0 +1,35 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="hidden"></div>
+
+	<div class="dialog-title">
+		<span>[% constituentGroup.name %]</span>	
+	</div>	
+	
+	<fieldset>
+		<div class="dialog-input-wrapper block">
+			<span class="dialog-input-label">Constituent individual summary</span><br>
+<textarea readonly="readonly" class="textarea-preview scroll-y-always" id="constituent-individual-summary">NAME: [% individual.firstname _ ' ' _ individual.lastname +%]
+EMAIL: [% individual.emailaddress +%]
+TEL: [% individual.tel_regular %], MOB: [% individual.tel_mobile +%]
+ROLE: [% individual.role_names +%]
+CALL FOR HIGH/HIGH: [% IF individual.call_hh ; 'YES' ; ELSE ; 'NO' ; END +%]
+CALL 24/7: [% IF individual.call247 ; 'YES' ; ELSE ; 'NO' ; END +%]
+MANAGED EXTERNALLY: [% IF individual.external_ref %]external id=[% individual.external_ref %][% ELSE %]NO[% END +%]
+
+SUBSCRIBED TO:
+[% FOR publication IN individual.publication_types +%]
+ - [% publication.title +%]
+[% END +%]
+
+MEMBER OF GROUP(S):
+[% FOREACH group IN individual.groups +%]
+- GROUP NAME: [% group.name +%]
+  CALL FOR HIGH/HIGH: [% IF (group.use_sh && group.call_hh) || (!group.use_sh && group.any_hh); 'YES' ; ELSE ; 'NO' ; END +%]
+ : group.any_hh)
+  SOFTWARE/HARDWARE LIST USED: [% IF group.use_sh ; 'YES' ; ELSE ; 'NO' ; END +%]
+[% END %]
+</textarea>
+		</div>
+	
+	</fieldset>
+</div>

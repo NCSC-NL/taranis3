@@ -1,0 +1,130 @@
+#!/usr/bin/env perl
+# Install the mod_perl startup script into apache's modperl module.
+
+use warnings;
+use strict;
+
+use Carp           qw(confess);
+use File::Basename qw(basename);
+
+use Taranis::Install::Perl   qw(perl5lib);
+use Taranis::Install::Config qw(config_release config_generic become_user_taranis
+	sort_versions installed_versions taranis_sources);
+
+become_user_taranis;
+
+my $generic   = config_generic;
+my $version   = $generic->{default_version};
+my $global    = $generic->{apache};
+my $config_fn = "$generic->{lib}/apache_vhosts4u.conf";
+
+print "*   Generating apache vhosts in $config_fn\n";
+
+open my $config, '>:encoding(utf8)', $config_fn
+	or die "ERROR: cannot write $config_fn: $!\n";
+
+my $script = basename __FILE__;
+$config->print(<<_COMMON);
+	# The content of this file is generated during 'install', via
+	# script $script.  Configure this via ~/etc/setup-*
+	# DO NOT CHANGE THIS FILE BY HAND.
+
+_COMMON
+
+my $release     = config_release $version;
+my $install4u   = $release->{install4u};
+my $is_git      = $version eq 'git';
+
+my $settings    = $release->{apache};
+my $vname       = $settings->{vhost4u_name};
+my $vport       = $settings->{vhost4u_port} ||
+	$settings->{vhost_port} || $global->{primary_port};
+
+my $log         = "$release->{logs}/apache";
+-d $log or confess;
+
+my ($docroot);
+if($is_git) {
+	# Use from un-installed location
+	my $sources	= taranis_sources $version;
+	$docroot    = "$sources/taranis4u";
+} else {
+	$docroot    = $install4u;
+}
+
+my @apache_access = ($docroot);
+my $grantdirs   = join "\n", map <<"__ACCESS", @apache_access;
+		<Directory "$_/">
+			Require all granted
+			Options -Indexes -FollowSymLinks -Includes -ExecCGI
+			AllowOverride All
+		</Directory>
+__ACCESS
+
+my $server   = $settings->{vhost_name};
+if(my $port  = $settings->{vhost_port}) {
+	$server .= ":$port";
+}
+
+my $protocol = $generic->{apache}{use_https} ? 'https' : 'http';
+my $rest     = "$protocol://$server/taranis/REST";
+
+my $incldir = "$generic->{etc}/apache-vhost-extra";
+-d $incldir or mkdir $incldir
+	or die "ERROR: cannot create $incldir: $!\n";
+
+my $include     = "$incldir/$vname";
+unless(-f $include) {
+	open my $vh, '>:encoding(utf8)', $include
+		or die "ERROR: cannot create $include: $!\n";
+
+	$vh->print(<<'__HEADER');
+# Site specific vhost configuration.  You may need to add some
+# lines which are not forseen in the standard Taranis installation.
+
+__HEADER
+
+	$vh->print(<<__SSL) if $vport == 443;
+WARNING-NEEDS-CONFIGURATION: SSL vhost must be configured
+# You may change this to any location you want: it will not be
+# overwritten at new installs.
+SSLEngine on
+SSLCertificateFile       $incldir/$vname.crt
+SSLCertificateKeyFile    $incldir/$vname.key
+#SSLCertificateChainFile $incldir/DigiCertCA.crt
+
+__SSL
+		$vh->close;
+	}
+
+$config->print(<<_VIRTUAL_HOST);
+	<VirtualHost *:$vport>
+		ServerName       $vname
+		ServerAdmin      $generic->{admin_email}
+
+		# You may need to add some fields, for instance SSL configuration.
+		Include          $include
+
+		# DO NOT CHANGE THIS BY HERE!!!!
+		# You can change some values in $release->{filebase}.json
+		# and then re-install any taranis version to get this file
+		# updated.
+
+		DocumentRoot	 "$docroot/"
+
+		CustomLog		 "$log/access4u_log" common
+		ErrorLog		 "$log/error4u_log"
+
+$grantdirs
+
+		ProxyPass        /taranis4u/REST $rest
+		ProxyPassReverse /taranis4u/REST $rest
+
+	</VirtualHost>
+
+_VIRTUAL_HOST
+
+$config->close
+	or die "ERROR while writing $config_fn: $!\n";
+
+exit 0;

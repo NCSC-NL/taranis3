@@ -1,0 +1,15 @@
+#!perl
+# installed Taranis may miss this default from the schema.
+
+use warnings;
+use strict;
+
+sub {
+	my ($db, %args) = @_;
+
+	$db->query( <<'__RUN__');
+ALTER TABLE constituent_group
+	ALTER COLUMN use_sh
+		SET DEFAULT false;
+__RUN__
+};

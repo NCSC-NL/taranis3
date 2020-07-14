@@ -1,0 +1,12 @@
+#!perl
+
+use warnings;
+use strict;
+
+sub {
+	my ($db, %args) = @_;
+
+	$db->query(<<'__INDEX');
+CREATE INDEX ON item(status);
+__INDEX
+};

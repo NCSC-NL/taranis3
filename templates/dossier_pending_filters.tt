@@ -1,0 +1,20 @@
+<div class="action-block filter-block-separator">
+	<br>
+    <div class="block">
+        <label title="select all listed items" for="checkAllTop">
+            <input type="button" class="button-blue mousetrap"
+             name="checkbutton1" id="checkAllTop" value="C"></label>&nbsp;
+        <label title="uncheck all items" for="unCheckAllTop">
+            <input type="button" class="button-blue mousetrap"
+             name="checkbutton2" id="unCheckAllTop" value="U"></label>
+    </div>
+
+	<div class="block">
+		<input type="button" class="button btns_addPendingBulk mousetrap"
+		 value="Add pending bulk" id="btn_addPendingBulk">&nbsp;
+	</div>
+
+	<div class="block align-block-right">
+		<span class="bold page-title">My Pending Items</span>
+	</div>
+</div>

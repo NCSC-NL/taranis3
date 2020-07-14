@@ -1,0 +1,15 @@
+#!perl
+# hard-coded limits are moved in branche rewrite/xml-advisories
+
+use warnings;
+use strict;
+
+sub {
+	my ($db, %args) = @_;
+
+	$db->query( <<'__RUN__');
+ALTER TABLE item ALTER COLUMN title TYPE TEXT;
+ALTER TABLE item ALTER COLUMN link TYPE TEXT;
+ALTER TABLE item ALTER COLUMN description TYPE TEXT;
+__RUN__
+};

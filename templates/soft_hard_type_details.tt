@@ -1,0 +1,34 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden[% END %] ui-state-error ui-corner-all">[% message %]</div>
+	
+	[% IF softwareHardwareType.description %]
+	<div class="dialog-title">
+		<span>[% softwareHardwareType.description %]</span>
+	</div>
+	[% END %]
+	
+	<form id="form-software-hardware-type" data-id="[% IF softwareHardwareType.base; softwareHardwareType.base; ELSE; 'NEW'; END %]">
+		<fieldset>
+			<div class="dialog-input-wrapper block">
+				<label for="software-hardware-type-description" class="dialog-input-label">Type description *</label><br>
+				<input type="text" name="description" id="software-hardware-type-description" class="input-default dialog-input-text" value="[% softwareHardwareType.description %]">
+			</div>
+
+			<div class="dialog-input-wrapper block">
+				<label for="software-hardware-type-description" class="dialog-input-label">Subtype *</label><br>
+				[% IF softwareHardwareType.sub_type_description %]
+				<span>[% softwareHardwareType.sub_type_description %]</span>
+				[% ELSIF base_types %]
+				<select name="sub_type" id="software-hardware-type-subtype" class="select-single dialog-input-text">
+					[% FOREACH type IN base_types %]
+					<option value="[% type.base %]">[% type.description %]</option>
+					[% END %]
+				</select>
+				[% ELSE %]
+				<span class="italic">this type has no subtype</span>
+				[% END %]
+			</div>
+
+		</fieldset>
+	</form>
+</div>

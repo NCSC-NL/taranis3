@@ -1,0 +1,83 @@
+[
+   {
+      "title" : "Advisory (email)",
+      "description" : "Complete advisory email template",
+      "template" : "Advisory_email.template",
+      "type_title" : "Advisory (email)",
+      "type_descr" : null
+   },
+   {
+      "title" : "Advisory (update)",
+      "description" : "Complete advisory update template",
+      "template" : "Advisory_update.template",
+      "type_title" : "Advisory (email)",
+      "type_descr" : null
+   },
+   {
+      "title" : "Advisory (website)",
+      "description" : "Complete advisory website template",
+      "template" : "Advisory_website.template",
+      "type_title" : "Advisory (email)",
+      "type_descr" : null
+   },
+   {
+      "title" : "Advisory (website update)",
+      "description" : "Complete advisory website update template",
+      "template" : "Advisory_website_update.template",
+      "type_title" : "Advisory (email)",
+      "type_descr" : null
+   },
+   {
+      "title" : "End-of-Week (email)",
+      "description" : "Complete End-of-Week email template",
+      "template" : "End-of-Week_email.template",
+      "type_title" : "End-of-Week (email)",
+      "type_descr" : null
+   },
+   {
+      "title" : "End-of-Day (email)",
+      "description" : "",
+      "template" : "End-of-Day_email.template",
+      "type_title" : "End-of-Day (email)",
+      "type_descr" : null
+   },
+   {
+      "title" : "End-of-Day (email public)",
+      "description" : "",
+      "template" : "End-of-Day_email_public.template",
+      "type_title" : "End-of-Day (email public)",
+      "type_descr" : null
+   },
+   {
+      "title" : "End-of-Day (email white)",
+      "description" : "",
+      "template" : "End-of-Day_email_white.template",
+      "type_title" : "End-of-Day (email white)",
+      "type_descr" : "Only for constituents in TLP:WHITE"
+   },
+   {
+      "title" : "Advisory (forward)",
+      "description" : "Complete advisory forward template",
+      "template" : "Advisory_forward.template",
+      "type_title" : "Advisory (forward)",
+      "type_descr" : null
+   },
+   {
+      "title" : "Advisory (forward update)",
+      "description" : "Complete advisory forward update template",
+      "template" : "Advisory_forward_update.template",
+      "type_title" : "Advisory (forward)",
+      "type_descr" : null
+   },
+   {
+      "title" : "End-of-Shift (email)",
+      "description" : "Complete End-of-Shift email template",
+      "template" : "End-of-Shift_email.template",
+      "type_title" : "End-of-Shift (email)",
+      "type_descr" : null
+   },
+   {
+      "type_title" : "Advisory (XML)",
+      "type_descr" : null
+   }
+]

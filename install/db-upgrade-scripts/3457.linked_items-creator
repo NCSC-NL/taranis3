@@ -1,0 +1,32 @@
+#!perl
+# Remove collector column 'ip'
+
+use warnings;
+use strict;
+
+sub {
+	my ($db, %args) = @_;
+
+	$db->query( <<'__RUN');
+ALTER TABLE advisory_linked_items
+    ADD COLUMN created_by TEXT;
+__RUN
+ 
+	$db->query( <<'__RUN');
+ALTER TABLE advisory_linked_items
+   ADD CONSTRAINT fk_advisory_linked_created_by
+       FOREIGN KEY (created_by) REFERENCES users(username);
+
+__RUN
+
+    $db->query( <<'__RUN', 'admin');
+UPDATE advisory_linked_items
+  SET created_by = ?;
+__RUN
+
+    $db->query( <<'__RUN');
+ALTER TABLE advisory_linked_items
+    ALTER COLUMN created_by SET NOT NULL;
+__RUN
+
+};

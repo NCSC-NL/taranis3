@@ -1,0 +1,30 @@
+#!/usr/bin/env perl
+# Install local additions, separate files.
+
+use warnings;
+use strict;
+
+use Carp           qw(confess);
+use File::Basename qw(basename);
+
+use Taranis::Install::Bare   qw(clone_dir);
+use Taranis::Install::Config qw(config_release taranis_sources
+	become_user_taranis);
+
+umask 022;
+
+sub scriptdir_clone($$);
+
+become_user_taranis;
+
+my $release = config_release;
+
+unless(-d 'local-additions') {
+	print "*   there are no local additions\n";
+	exit 0;
+}
+
+# Superfluous files are not removed.
+clone_dir 'local-additions/', $release->{extension};
+
+exit 0;

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Taranis</title>
+	<link rel="stylesheet" type="text/css" href="[% webroot %]/include/css/reset.css?_=[% unixtime %]">
+	<link rel="stylesheet" type="text/css" href="[% webroot %]/include/css/jquery-ui-1.10.1.custom.css?_=[% unixtime %]">
+	<link rel="stylesheet" type="text/css" href="[% webroot %]/include/css/jquery.timepicker.css?_=[% unixtime %]">
+	<link rel="Stylesheet" type="text/css" href="[% webroot %]/include/css/font-awesome-5.12.1/css/all.min.css">
+	<link rel="stylesheet" type="text/css" href="[% webroot %]/include/css/main.css?_=[% unixtime %]">
+	<link rel="stylesheet" type="text/css" href="[% webroot %]/include/css/jqcloud.css?_=[% unixtime %]">
+	<link rel="icon" type="image/x-icon" href="[% webroot %]/images/favicon.ico">
+
+</head>
+<body>
+
+	<div id="main-wrapper">
+		<div id="top-menu-wrapper">
+			<div id="user-info" class="block">
+				<span>[% user %]</span> 
+				[% FOREACH role IN pageSettings.info_user_roles %]
+                 | <span>[% role %]</span>
+				[% END %]			
+			</div>
+			<div id="top-menu" class="block align-block-right">
+[% IF pageSettings.menuitem.category
+	|| pageSettings.menuitem.constituent_group
+	|| pageSettings.menuitem.photo_management
+	|| pageSettings.menuitem.constituent_individuals
+	|| pageSettings.menuitem.constituent_roles
+	|| pageSettings.menuitem.constituent_types
+	|| pageSettings.menuitem.cluster
+	|| pageSettings.menuitem.collector
+	|| pageSettings.menuitem.damage_description
+	|| pageSettings.menuitem.soft_hard_type
+	|| pageSettings.menuitem.software_hardware
+	|| pageSettings.menuitem.publication_templates
+	|| pageSettings.menuitem.id_patterns
+	|| pageSettings.menuitem.parsers
+	|| pageSettings.menuitem.strips
+	|| pageSettings.menuitem.sources
+	|| pageSettings.menuitem.tools
+	|| pageSettings.menuitem.users
+	|| pageSettings.menuitem.roles
+	|| pageSettings.menuitem.user_actions
+	|| pageSettings.menuitem.module_collect %]
+
+				<a href="configuration/configuration/displayConfigurationOptions/" class="top-menu-item" id="configuration-menu">Taranis Configuration</a> |
+[% END +%]
+	[% IF pageSettings.menuitem.stats %]
+				<a href="statistics/stats/displayStatisticsOptions/" class="top-menu-item" id="statistics-menu">Statistics</a> |
+	[% END %]
+				<span class="span-link" id="user-panel-link">User settings</span> |
+				<a href="about/about/displayAbout/" class="top-menu-item" id="about-menu">About</a> | 
+				<a href="session/logout/logoutUser/">logout</a>
+			</div>
+		</div>
+		<div id="content-wrapper">
+			<div id="banner">
+				<div class="taranis-logo">
+					<img src="/images/taranis/logo.png" width="199" height="90">
+				</div>
+				[% banner_html %]
+				<div class="taranis-logo">&nbsp;
+				</div>
+			</div>
+			<div id="menu-wrapper">
+			[% PROCESS menu.tt %]
+			</div>
+			<div id="spinner-anchor"></div>
+			<div id="filters-wrapper">
+				<div id="filters"></div>
+			</div>
+			<div id="content"></div>
+		</div>
+	
+		<div id="footer-wrapper">
+			<footer>&nbsp;</footer>
+		</div>
+	</div>
+
+	<div id="dashboard-minified" class="center">
+		<div id="dashboard-minified-content-wrapper" class="block">
+			<span class="fa fa-home fa-4x pointer" id="dashboard-minified-expand"></span><br><br>
+			<div id="dashboard-minified-content" class="block"></div>
+			<img src="[% webroot %]/images/icon_keyboard_check.png" title="page supports keyboard shorcuts" id="icon-keyboard-shortcuts" class="pointer">
+		</div>
+	</div>
+	
+	<div id="dialog" class="hidden" title=""></div>
+
+	<a href="" id="super-secret-link" class="hidden"></a>
+	<input type="hidden" id="hidden-page-number" name="hidden-page-number" value="">
+	
+	<div id="screen-overlay"></div>
+	
+<script type="text/javascript" src="[% webroot %]/include/js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="[% webroot %]/include/js/jquery-ui-1.10.1.custom.min.js?_=[% unixtime %]"></script>
+<script type="text/javascript" src="[% webroot %]/include/js/jquery.timer.js?_=[% unixtime %]?_=[% unixtime %]"></script>
+<script type="text/javascript" src="[% webroot %]/include/js/flot/jquery.flot.js?_=[% unixtime %]"></script>
+<script type="text/javascript" src="[% webroot %]/include/js/flot/jquery.flot.time.js?_=[% unixtime %]"></script>
+<script type="text/javascript" src="[% webroot %]/include/js/flot/jquery.flot.symbol.js?_=[% unixtime %]"></script>
+<script type="text/javascript" src="[% webroot %]/include/js/flot/jquery.flot.threshold.js?_=[% unixtime %]"></script>
+<script type="text/javascript" src="[% webroot %]/include/js/jqcloud.js?_=[% unixtime %]"></script>
+<script type="text/javascript" src="[% webroot %]/include/js/mousetrap.min.js?_=[% unixtime %]"></script>
+<script type="text/javascript" src="[% webroot %]/include/js/mousetrap-pause.min.js?_=[% unixtime %]"></script>
+<script type="text/javascript" src="[% webroot %]/include/js/print_preview.js?_=[% unixtime %]"></script>
+<script type="text/javascript" src="[% webroot %]/include/js/taranis.sorter.js?_=[% unixtime %]"></script>
+<script type="text/javascript" src="[% webroot %]/include/js/spin.js?_=[% unixtime %]"></script>
+<script type="text/javascript" src="[% webroot %]/include/js/taranis.spin.js?_=[% unixtime %]"></script>
+<script type="text/javascript" src="[% webroot %]/include/js/main.js?_=[% unixtime %]"></script>
+<script type="text/javascript" src="[% webroot %]/include/js/taranis.session_keepalive.timer.js?_=[% unixtime %]"></script>
+<script type="text/javascript" src="[% webroot %]/include/js/tagging.js?_=[% unixtime %]"></script>
+<script type="text/javascript" src="[% webroot %]/include/js/taranis.dashboard.timer.js?_=[% unixtime %]"></script>
+<script type="text/javascript" src="[% webroot %]/include/js/cve_tooltips.js?_=[% unixtime %]"></script>
+<script type="text/javascript" src="[% webroot %]/include/js/taranis.assess.timer.js?_=[% unixtime %]"></script>
+<script type="text/javascript" src="[% webroot %]/include/js/menu.js?_=[% unixtime %]"></script>
+<script type="text/javascript" src="[% webroot %]/include/js/dashboard.js?_=[% unixtime %]"></script>
+<script type="text/javascript" src="[% webroot %]/include/js/jslib.js?_=[% unixtime %]"></script>
+<script type="text/javascript" src="[% webroot %]/include/js/shared_dialogs.js?_=[% unixtime %]"></script>
+<script type="text/javascript" src="[% webroot %]/include/js/meta_search.js?_=[% unixtime %]"></script>
+<script type="text/javascript" src="[% webroot %]/include/js/user_panel.js?_=[% unixtime %]"></script>
+<script type="text/javascript" src="[% webroot %]/include/js/datevalidation.js?_=[% unixtime %]"></script>
+<script type="text/javascript" src="[% webroot %]/include/js/letsago/oneup.js?_=[% unixtime %]"></script>
+<script type="text/javascript" src="[% webroot %]/include/js/clipboard-polyfill.js?_=[% unixtime %]"></script>
+
+<script>
+initMain('[% webroot %]', '[% scriptroot %]', '[% user %]', '[% fullname %]', '[% csrfToken %]', '[% shortcutSettings %]');
+</script>
+
+</body>
+</html>

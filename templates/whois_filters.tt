@@ -1,0 +1,20 @@
+<div class="filter-block filter-block-separator">
+
+	<form id="form-whois-search">
+		<div class="block">
+			<label for="whois-host-search">URL, domain or IP</label><br>
+			<input type="text" id="whois-host-search" name="whois" value="[% whois_host %]" class="input-default">
+		</div>
+
+		<div class="block">
+			<span>&nbsp;</span>
+			<input type="button" id="btn-whois-search" class="button" value="WHOIS">		
+		</div>
+	</form>
+</div>
+
+<div class="action-block filter-block-separator">
+	<div class="block align-block-right">
+		<span class="bold page-title">Whois</span>
+	</div>	
+</div>

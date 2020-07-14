@@ -1,0 +1,26 @@
+# A place for developers to put files that are local to their installation and shouldn't be in the repo, such as
+# temporary test scripts or notes.
+local/
+
+# Vim swapfiles.
+*.swp
+*.swo
+
+# Local Vagrant state.
+.vagrant/machines/
+
+# In contrast to the other config files, taranis.conf.xml isn't versioned but shipped as taranis.conf.xml-dist.
+conf/taranis.conf.xml
+
+# User should manually put libraries/binaries here.
+phantomjs/bin/
+ChartDirector/
+local_libraries
+
+# Pidfiles, logs, etc.
+*.pid
+collector/log/
+collector/cookie_jar.txt
+tmp/
+webinterface/stats/tmp/
+try

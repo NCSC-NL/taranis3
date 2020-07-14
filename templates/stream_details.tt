@@ -1,0 +1,31 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden[% END %] ui-state-error ui-corner-all">[% message %]</div>
+	
+	<div class="dialog-title">
+		<span>[% stream.description %]</span>
+	</div>
+	
+	<form id="form-stream-details" data-id="[% IF stream.id; stream.id; ELSE; 'NEW'; END %]">
+	
+		<fieldset>
+			<div class="dialog-input-wrapper block">
+				<label for="stream-details-description" class="dialog-input-label">Description *</label><br>
+				<input type="text" name="description" id="stream-details-description" class="input-default dialog-input-text-wide" value="[% stream.description %]">
+			</div><br>
+			
+			<div class="dialog-input-wrapper block">
+				<label for="stream-details-transition-time" class="dialog-input-label">Tranisition time to next display (in seconds) *</label><br>
+				<input type="text" name="transition_time" id="stream-details-transition-time" class="input-default dialog-input-text-wide" value="[% stream.transition_time %]">
+			</div><br>
+
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Displays</span>
+				<span class="italic">(enter each display on a new line)</span><br>
+				<textarea class="scroll-y-always font-courier border-default" id="stream-details-displays" name="displays">[%- FOREACH display IN displays +%]
+[%+ display +%]
+[%- END -%]</textarea>
+			</div><br>
+			
+		</fieldset>
+	</form>
+</div>

@@ -1,0 +1,31 @@
+<div id="cve-content-heading" class="content-heading">
+	<div id="cve-content-heading-id" class="block configuration-heading-default">
+		<span>CVE ID</span>
+	</div>
+	<div id="cve-content-heading-published" class="block configuration-heading-default">
+		<span>CVE Published</span>
+	</div>
+	<div id="cve-content-heading-modified" class="block configuration-heading-default">
+		<span>CVE Modified</span>
+	</div>
+	<div id="cve-content-heading-has-translation" class="block configuration-heading-default">
+		<span>Has Translation</span>
+	</div>
+</div>
+
+[% IF cveList.size > 0 %]
+	[% FOREACH cve IN cveList %]
+	
+		[% INCLUDE cve_item.tt %]
+	
+	[% END %]
+[% ELSE %]
+<div class="item-row" id="empty-row">No CVEs found...</div>
+
+[% END %]
+
+<div class="action-block filter-block-separator">
+	<div class="center" id="number-of-results">&mdash; [%  page_bar.number_results_text %] &mdash;</div>
+</div>
+
+[% PROCESS page_bar.tt %]

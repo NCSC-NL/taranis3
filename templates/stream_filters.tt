@@ -1,0 +1,11 @@
+<div class="action-block filter-block-separator">
+	<br>
+[% IF write_right +%]
+	<div class="block">
+		<input type="button" class="button" id="btn-add-stream" value="Create a stream">
+	</div>
+[% END %]	
+	<div class="block align-block-right">
+		<span class="bold page-title">Stream settings</span>
+	</div>
+</div>

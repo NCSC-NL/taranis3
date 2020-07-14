@@ -1,0 +1,174 @@
+#!/usr/bin/env perl
+# Install PostgreSQL, the system-dependent bits.
+
+use warnings;
+use strict;
+
+use File::Basename  qw(basename);
+use File::Copy      qw(move);
+use File::Glob      qw(bsd_glob);
+
+use Taranis::Install::Bare   qw(is_ubuntu);
+use Taranis::Install::Config qw(installed_versions config_release
+	config_generic);
+
+my $postgres_data = "/var/lib/pgsql/data";
+
+if(is_ubuntu && ! -d $postgres_data) {
+	$postgres_data = (bsd_glob "/etc/postgresql/*/main")[-1];
+	$postgres_data
+		or die "ERROR: cannot find postgres installation\n";
+}
+
+my $hba_fn        = "$postgres_data/pg_hba.conf";
+
+my $generic       = config_generic;
+my $user          = $generic->{username};
+
+### Detect local networks on all interfaces, for remotely installed
+#   collectors.  Only password login to the database.
+
+my %nets;
+foreach my $line ( qx(ip route list) ) {
+	# NO, via gateway:   default via 192.168.1.1 ...
+	# Yes, on interface: 192.168.1.0/24 dev wlan0 ...
+	$nets{$1}++ if $line =~ m!^([0-9.]*(?:/[123]?[0-9])?) dev!;
+}
+my @nets = sort keys %nets;
+
+### Get all use database/username combinations
+
+my $releases = installed_versions;
+my %via_peer;
+foreach my $version (keys %$releases) {
+	my $release  = config_release $version;
+	my $dbconfig = $release->{database};
+	my ($dbname, $dbuser, $dbhost) = @{$dbconfig}{ qw/name user host/ };
+	$dbhost or next;
+
+	# When it is a remote host, we do not need to configure it ourselves.  When
+	# the name is an alias for an interface also on this machine, then access
+	# is granted via the 'host' lines (all local nets via login)
+	$dbhost eq 'peer' || $dbhost eq 'localhost'
+		or next;
+
+	$via_peer{"$dbname.$dbuser"} = [ $dbname, $dbuser, $dbhost ];
+}
+
+my @via_peer = sort { $a->[0] cmp $b->[0] || $a->[1] cmp $b->[1] }
+	values %via_peer;
+
+### Read all rules.
+
+my @rules;
+if(-f $hba_fn) {
+	open my $hba, '<:encoding(utf8)', $hba_fn
+		or die "ERROR: cannot read hba from $hba_fn: $!\n";
+	@rules = grep !/^#|^\s*$/, $hba->getlines;
+	$hba->close;
+}
+
+### Create the new rules
+
+my $mark = "# $user autoconf";
+my @myrules;
+foreach my $login (@via_peer) {
+	my ($dbname, $dbuser, $dbhost) = @$login;
+	if($dbhost eq 'peer') {
+		push @myrules, [ local => $dbname, $dbuser,    '', 'trust', $mark ];
+	} else {  # dbhost eq localhost
+		push @myrules, [ host  => $dbname, $dbuser, '127.0.0.0/8', 'trust', $mark ],
+				     , [ host  => $dbname, $dbuser, '::1/128',     'trust', $mark ];
+	}
+
+	push @myrules, [ local => 'all',   'postgres', '', 'trust', $mark ];
+	push @myrules, [ host  => $dbname, $dbuser,    $_, 'md5',   $mark ]
+		for @nets;
+}
+
+### Collect rules to keep.
+
+my (@lines, @keeprules);
+
+my $script = basename __FILE__;
+push @lines,
+	"# Created with $script.\n\n",
+	"# Lines without 'autoconf' marking may be modified by hand.  You can\n",
+	"# also add rules.\n\n";
+
+if(grep /\bautoconf\b/i, @rules) {
+	# Have run this script already: do not destroy the manually added lines.
+	print "*   installing $hba_fn\n";
+
+	foreach my $rule (@rules) {
+		next if $rule =~ /\b\Q$user\E autoconf/i;
+
+		my @cols = $rule =~ m/([^"\s]\S+|\#.*|"[^"]*"|'[^']*')/g;
+		splice @cols, 3, 0, '' if $cols[0] eq 'local';
+		push @cols, '' while @cols < 6;
+		push @keeprules, \@cols;
+	}
+
+} else {
+	print "*   setting-up safe postgres access in $hba_fn\n";
+
+	push @lines,
+		"# The next rules were disabled by the first run of the script.\n",
+		"# You may want to reinstate them.\n",
+		map("# $_", @rules), "\n\n";
+
+	# Not really needed: reject is the default behavior
+	push @keeprules,
+		[ qw(host all all 0.0.0.0/0 reject), '' ],
+		[ qw(host all all ::0/0     reject), '' ];
+}
+
+my $format = "%-9s %-12s %-12s %-20s %-10s %s\n";
+push @lines, sprintf $format, @$_
+	for [ '# TYPE', qw/DB USER CIDR-ADDRESS METHOD OPTIONS/],
+		@myrules, @keeprules;
+
+my $hba_tmp = "$hba_fn.tmp";
+open my $fh, '>:encoding(utf8)', $hba_tmp
+	or die "ERROR: cannot write to $hba_tmp: $!\n";
+
+$fh->print(join "", @lines, "\n");
+
+$fh->close
+	or die "ERROR while writing $hba_fn: $!\n";
+
+unless(system 'cmp', '-s', $hba_tmp, $hba_fn) {
+	print "*   no changes in access configuration $hba_fn\n";
+	unlink $hba_tmp;
+	exit 0;
+}
+
+### install new access configuration
+
+my $postuid = getpwnam 'postgres';
+my $postgid = getgrnam 'postgres';
+chown $postuid, $postgid, $hba_tmp
+	or die "ERROR: failed re-own to user postgres of $hba_tmp\n";
+
+move $hba_tmp, $hba_fn
+	or die "ERROR: cannot move $hba_tmp --> $hba_fn\n";
+
+print "*   (re)starting postgresql\n";
+
+if($ENV{X_SCLS} && $ENV{X_SCLS} =~ /postgres/) {
+	# maybe old init scripts
+	my $postrel = (grep /postgres/, split ' ', $ENV{X_SCLS})[0];
+	my $init    = (bsd_glob "/etc/init.d/*$postrel*")[0];
+	exec $init, 'start' if defined $init;
+}
+
+system "systemctl enable postgresql";
+$? and die "ERROR: systemctl doesn't enable postgresql\n";
+
+system "systemctl restart postgresql";
+$? and die "ERROR: systemctl doesn't restart postgresql\n";
+
+system "ps -C postgres >/dev/null";
+$? and die "ERROR: postgres not running\n";
+
+exit 0;

@@ -1,0 +1,20 @@
+<div id="collector-content-heading" class="content-heading">
+	<div id="collector-content-heading-id" class="block configuration-heading-default">
+		<span>Collector description</span>
+	</div>
+</div>
+
+[% IF collectors && collectors.size > 0 %]
+	[% FOREACH collector IN collectors %]
+	
+		[% INCLUDE collector_item.tt %]
+	
+	[% END %]
+[% ELSE %]
+<div class="item-row" id="empty-row">No collectors found...</div>
+
+[% END %]
+
+<div class="action-block filter-block-separator">
+	<div class="center" id="number-of-results">&mdash; [% numberOfResults %] results &mdash;</div>
+</div>

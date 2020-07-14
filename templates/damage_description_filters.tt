@@ -1,0 +1,11 @@
+<div class="filter-block filter-block-separator">
+	<br>
+	[% IF write_right %]
+	<div class="block">
+		<input type="button" id="btn-add-damage-description" class="button" value="Add new damage description">		
+	</div>
+	[% END %]
+	<div class="block align-block-right">
+		<span class="bold page-title">Damage Descriptions</span>
+	</div>
+</div>

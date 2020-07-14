@@ -1,0 +1,27 @@
+<div class="filter-block filter-block-separator">
+
+	<form id="form-stats-search">
+
+		<div class="block">
+			<label for="stats-filters-type">Statistics type</label><br>
+			<select name="statstype" class="select-single" id="stats-filters-type">
+				<option value="">-all statistics-</option>
+		        	[% FOREACH category IN stats_categories %]
+		        		<option value="[% category %]" [% IF stats_selected == category %]selected="selected"[% END %]>[% category %]</option>
+		        	[% END %]
+			</select>
+		</div>
+
+		<div class="block">
+			<span>&nbsp;</span>
+			<input type="button" id="btn-stats-search" class="button" value="Search!">		
+		</div>
+
+	</form>
+</div>
+
+<div class="action-block filter-block-separator">
+	<div class="block align-block-right">
+		<span class="bold page-title">[% page_title %]</span>
+	</div>
+</div>

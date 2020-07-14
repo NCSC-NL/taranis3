@@ -1,0 +1,19 @@
+#!perl
+# As long as we need to be able to support 3.6 with this database, we need
+# the 'role' attribute for individuals.  However, we cannot have it stay a
+# required attribute.  Downgrade the column.
+
+use warnings;
+use strict;
+
+sub {
+	my ($db, %args) = @_;
+
+	$db->query( <<'__RUN__' );
+
+ALTER TABLE constituent_individual
+   ALTER COLUMN role DROP NOT NULL;
+
+__RUN__
+
+};

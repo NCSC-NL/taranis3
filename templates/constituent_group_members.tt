@@ -1,0 +1,52 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="hidden"></div>
+
+	<div class="dialog-title">
+		<span>[% constituentGroup.name %]</span>	
+	</div>	
+	
+	<fieldset>
+		<div class="dialog-input-wrapper block">
+			<span class="dialog-input-label">Constituent group summary</span><br>
+<textarea readonly="readonly" class="textarea-preview scroll-y-always" id="constituent-group-summary">GROUP NAME: [% group.name +%]
+GROUP TYPE: [% group_type +%]
+
+CALL FOR HIGH/HIGH: [% (group.use_sh && group.call_hh) || (!group.use_sh && group.any_hh) ? 'YES' : 'NO'  +%]
+SOFTWARE/HARDWARE LIST IN USE: [% group.use_sh ? 'YES' : 'NO' +%]
+MANAGED EXTERNALLY: [% IF group.external_ref %]external reference id=[% group.external_ref %][% ELSE %]NO[%END +%]
+
+CONSTITUENT MEMBERS: [% members.size==0 ? '(NONE)' : '' +%]
+[% FOR member IN members +%]
+- [% member.firstname _ ' ' _ member.lastname +%]
+  EMAIL: [% member.emailaddress +%]
+  TEL: [% member.tel_regular || '(NONE)' %], MOB: [% member.tel_mobile || '(NONE)' +%]
+  ROLES: [% member.roles.size==0 ? '(NONE)' : '' +%]
+  [% FOR role IN member.roles +%]
+    - [% role.role_name +%]
+  [% END %]
+
+  CALL FOR HIGH/HIGH: [% member.call_hh ? 'YES' : 'NO' +%]
+  CALL 24/7: [% member.call247 ? 'YES' : 'NO' +%]
+  SUBSCRIBED TO: [% member.publication_types.size==0 ? '(NONE)' : '' +%]
+  [% FOR publication IN member.publication_types +%]
+    - [% publication.title || publication.description +%]
+  [% END %]
+
+[% END %]
+
+
+[%+ IF group.notes %]
+NOTES:
+[%+ group.notes %]
+[% END %]</textarea><br><br>
+<span class="dialog-input-label">Constituent group software/hardware list</span><br>
+<textarea readonly="readonly" class="textarea-preview scroll-y-always" id="constituent-group-photo">
+SOFTWARE/HARDWARE LIST:
+[%+ FOR sh IN softwareHardware %]
+[%+ sh.producer _ ',' _ sh.name _ ',' _ sh.cpe_id _ ',' _ sh.description +%]
+[%+ END +%]
+</textarea> 
+		</div>
+	
+	</fieldset>
+</div>

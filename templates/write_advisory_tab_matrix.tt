@@ -1,0 +1,121 @@
+	<div id="advisory-details-tabs-matrix">
+		<fieldset>
+			<table class="advisory-matrix">
+				<tr class="advisory-matrix-score">
+					<td colspan="3">Probability</td>
+					<td class="advisory-matrix-score-result">
+						<select name="probability" id="advisory-details-probability" class="select-single include-in-form">
+							<option value="1"[% IF advisory.probability == 1 %]selected="selected"[% END %]>high</option>
+							<option value="2"[% IF advisory.probability == 2 %]selected="selected"[% END %]>medium</option>
+							<option value="3"[% IF advisory.probability == 3 || !advisory.probability %]selected="selected"[% END %]>low</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>Default configuration?*</td>
+					<td><input type="radio" class="include-in-form" name="pro_standard" id="pro_standard_no" value="1"[% IF advisory.ques_pro_standard == 1 || !advisory.ques_pro_standard %]checked="checked"[% END %]><label for="pro_standard_no">No</label></td>
+					<td colspan="2"><input type="radio" class="include-in-form" name="pro_standard" id="pro_standard_yes" value="3"[% IF advisory.ques_pro_standard == 3 %]checked="checked"[% END %]><label for="pro_standard_yes">Unclear/yes</label></td>
+				</tr>
+				<tr>
+					<td>Exploitcode available?*</td>
+					<td><input type="radio" class="include-in-form" name="pro_exploit" value="1" id="pro_exploit_none"[% IF advisory.ques_pro_exploit == 1 || !advisory.ques_pro_exploit %]checked="checked"[% END %]><label for="pro_exploit_none">None</label></td>
+					<td><input type="radio" class="include-in-form" name="pro_exploit" value="4" id="pro_exploit_poc"[% IF advisory.ques_pro_exploit == 4 %]checked="checked"[% END %]><label for="pro_exploit_poc">PoC</label></td>
+					<td><input type="radio" class="include-in-form" name="pro_exploit" value="6" id="pro_exploit_exploit" [% IF advisory.ques_pro_exploit == 6 %]checked="checked"[% END %]><label for="pro_exploit_exploit">Exploit</label></td>
+				</tr>
+				<tr>
+					<td>Details available?*</td>
+					<td><input type="radio" class="include-in-form" name="pro_details" value="1" id="pro_details_none"[% IF advisory.ques_pro_details == 1 || !advisory.ques_pro_details %]checked="checked"[% END %]><label for="pro_details_none">None</label></td>
+					<td><input type="radio" class="include-in-form" name="pro_details" value="2" id="pro_details_somewhat"[% IF advisory.ques_pro_details == 2 %]checked="checked"[% END %]><label for="pro_details_somewhat">Somewhat</label></td>
+					<td><input type="radio" class="include-in-form" name="pro_details" value="3" id="pro_details_fully"[% IF advisory.ques_pro_details == 3 %]checked="checked"[% END %]><label for="pro_details_fully">Fully</label></td>
+				</tr>
+				<tr>
+					<td>Access required?*</td>
+					<td><input type="radio" class="include-in-form" name="pro_access" value="1" id="pro_access_physical"[% IF advisory.ques_pro_access == 1 || !advisory.ques_pro_access %]checked="checked"[% END %]><label for="pro_access_physical">Physical</label></td>
+					<td><input type="radio" class="include-in-form" name="pro_access" value="4" id="pro_access_lan"[% IF advisory.ques_pro_access == 4 %]checked="checked"[% END %]><label for="pro_access_lan">LAN</label></td>
+					<td><input type="radio" class="include-in-form" name="pro_access" value="6" id="pro_access_internet"[% IF advisory.ques_pro_access == 6 %]checked="checked"[% END %]><label for="pro_access_internet">Internet</label></td>
+				</tr>
+				<tr>
+					<td>Credentials required?*</td>
+					<td><input type="radio" class="include-in-form" name="pro_credent" value="1" id="pro_credent_admin"[% IF advisory.ques_pro_credent == 1 || !advisory.ques_pro_credent %]checked="checked"[% END %]><label for="pro_credent_admin">Admin</label></td>
+					<td><input type="radio" class="include-in-form" name="pro_credent" value="2" id="pro_credent_user"[% IF advisory.ques_pro_credent == 2 %]checked="checked"[% END %]><label for="pro_credent_user">User</label></td>
+					<td><input type="radio" class="include-in-form" name="pro_credent" value="4" id="pro_credent_none"[% IF advisory.ques_pro_credent == 4 %]checked="checked"[% END %]><label for="pro_credent_none">None</label></td>
+				</tr>
+				<tr>
+					<td>Exploit complexity?*</td>
+					<td><input type="radio" class="include-in-form" name="pro_complexity" value="1" id="pro_complexity_complex"[% IF advisory.ques_pro_complexity == 1 || !advisory.ques_pro_complexity %]checked="checked"[% END %]><label for="pro_complexity_complex">Complex</label></td>
+					<td><input type="radio" class="include-in-form" name="pro_complexity" value="2" id="pro_complexity_average"[% IF advisory.ques_pro_complexity == 2 %]checked="checked"[% END %]><label for="pro_complexity_average">Average</label></td>
+					<td><input type="radio" class="include-in-form" name="pro_complexity" value="3" id="pro_complexity_easy"[% IF advisory.ques_pro_complexity == 3 %]checked="checked"[% END %]><label for="pro_complexity_easy">Easy</label></td>
+				</tr>
+				<tr>
+					<td>User-interaction required?*</td>
+					<td><input type="radio" class="include-in-form" name="pro_userint" value="1" id="pro_userint_complex"[% IF advisory.ques_pro_userint == 1 || !advisory.ques_pro_userint %]checked="checked"[% END %]><label for="pro_userint_complex">Complex</label></td>
+					<td><input type="radio" class="include-in-form" name="pro_userint" value="3" id="pro_userint_easy"[% IF advisory.ques_pro_userint == 3 %]checked="checked"[% END %]><label for="pro_userint_easy">Easy</label></td>
+					<td><input type="radio" class="include-in-form" name="pro_userint" value="4" id="pro_userint_none"[% IF advisory.ques_pro_userint == 4 %]checked="checked"[% END %]><label for="pro_userint_none">None</label></td>
+				</tr>						
+				<tr>
+					<td>Actively exploited?*</td>
+					<td><input type="radio" class="include-in-form" name="pro_exploited" value="1" id="pro_exploited_no"[% IF advisory.ques_pro_exploited == 1 || !advisory.ques_pro_exploited %]checked="checked"[% END %]><label for="pro_exploited_no">No</label></td>
+					<td><input type="radio" class="include-in-form" name="pro_exploited" value="2" id="pro_exploited_limited"[% IF advisory.ques_pro_exploited == 2 %]checked="checked"[% END %]><label for="pro_exploited_limited">Limited</label></td>
+					<td><input type="radio" class="include-in-form" name="pro_exploited" value="3" id="pro_exploited_largescale"[% IF advisory.ques_pro_exploited == 3 %]checked="checked"[% END %]><label for="pro_exploited_largescale">Large-scale</label></td>
+				</tr>						
+				<tr>
+					<td>Exploit expected?*</td>
+					<td><input type="radio" class="include-in-form" name="pro_expect" value="1" id="pro_expect_no"[% IF advisory.ques_pro_expect == 1 || !advisory.ques_pro_expect %]checked="checked"[% END %]><label for="pro_expect_no">No</label></td>
+					<td colspan="2"><input type="radio" class="include-in-form" name="pro_expect" value="3" id="pro_expect_yes"[% IF advisory.ques_pro_expect == 3 %]checked="checked"[% END %]><label for="pro_expect_yes">Yes</label></td>
+				</tr>							
+				<tr>
+					<td>Solution available?*</td>
+					<td><input type="radio" class="include-in-form" name="pro_solution" value="1" id="pro_solution_lt2months"[% IF advisory.ques_pro_solution == 1 || !advisory.ques_pro_solution %]checked="checked"[% END %]><label for="pro_solution_lt2months">&gt; 2 months</label></td>
+					<td><input type="radio" class="include-in-form" name="pro_solution" value="2" id="pro_solution_gt2months"[% IF advisory.ques_pro_solution == 2 %]checked="checked"[% END %]><label for="pro_solution_gt2months">&lt; 2 months</label></td>
+					<td><input type="radio" class="include-in-form" name="pro_solution" value="3" id="pro_solution_none"[% IF advisory.ques_pro_solution == 3 %]checked="checked"[% END %]><label for="pro_solution_none">None</label></td>
+				</tr>	
+				<tr class="advisory-matrix-deviation-tr">
+					<td class="advisory-matrix-deviation-label">Specify reason for deviation?<br>(if applicable)</td>
+					<td colspan="3"><textarea class="advisory-matrix-deviation input-default include-in-form" name="pro_deviation" id="advisory-details-pro-deviation">[% advisory.ques_pro_deviation %]</textarea></td>
+				</tr>
+				<tr class="advisory-matrix-score">
+					<td colspan="3">Damage</td>
+					<td class="advisory-matrix-score-result">
+						<select name="damage" id="advisory-details-damage" class="select-single include-in-form">
+							<option value="1"[% IF advisory.damage == 1 %]selected="selected"[% END %]>high</option>
+							<option value="2"[% IF advisory.damage == 2 %]selected="selected"[% END %]>medium</option>
+							<option value="3"[% IF advisory.damage == 3 || !advisory.damage %]selected="selected"[% END %]>low</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>Denial-of-Service?*</td>
+					<td><input type="radio" class="include-in-form" name="dmg_dos" value="0" id="dmg_dos_no"[% IF advisory.ques_dmg_dos == 0 || !advisory.ques_dmg_dos %]checked="checked"[% END %]><label for="dmg_dos_no">No</label></td>
+					<td><input type="radio" class="include-in-form" name="dmg_dos" value="1" id="dmg_dos_yesclient"[% IF advisory.ques_dmg_dos == 1 %]checked="checked"[% END %]><label for="dmg_dos_yesclient">Yes, client</label></td>
+					<td><input type="radio" class="include-in-form" name="dmg_dos" value="2" id="dmg_dos_yesinfrasvc"[% IF advisory.ques_dmg_dos == 2 %]checked="checked"[% END %]><label for="dmg_dos_yesinfrasvc">Yes, infrastructure svc</label></td>
+				</tr>	
+				<tr>
+					<td>Execute arbitrary code?*</td>
+					<td><input type="radio" class="include-in-form" name="dmg_codeexec" value="0" id="dmg_codeexec_no"[% IF advisory.ques_dmg_codeexec == 0 || !advisory.ques_dmg_codeexec %]checked="checked"[% END %]><label for="dmg_codeexec_no">No</label></td>
+					<td><input type="radio" class="include-in-form" name="dmg_codeexec" value="1" id="dmg_codeexec_yesuser"[% IF advisory.ques_dmg_codeexec == 1 %]checked="checked"[% END %]><label for="dmg_codeexec_yesuser">Yes, user rights</label></td>
+					<td><input type="radio" class="include-in-form" name="dmg_codeexec" value="2" id="dmg_codeexec_yesroot"[% IF advisory.ques_dmg_codeexec == 2 %]checked="checked"[% END %]><label for="dmg_codeexec_yesroot">Yes, root/admin</label></td>
+				</tr>
+				<tr>
+					<td>Remote rights?*</td>
+					<td><input type="radio" class="include-in-form" name="dmg_remrights" value="0" id="dmg_remrights_no"[% IF advisory.ques_dmg_remrights == 0 || !advisory.ques_dmg_remrights %]checked="checked"[% END %]><label for="dmg_remrights_no">No</label></td>
+					<td><input type="radio" class="include-in-form" name="dmg_remrights" value="1" id="dmg_remrights_yesshell"[% IF advisory.ques_dmg_remrights == 1 %]checked="checked"[% END %]><label for="dmg_remrights_yesshell">Yes, remote shell</label></td>
+					<td><input type="radio" class="include-in-form" name="dmg_remrights" value="2" id="dmg_remrights_yesrootshell"[% IF advisory.ques_dmg_remrights == 2 %]checked="checked"[% END %]><label for="dmg_remrights_yesrootshell">Yes, remote root shell</label></td>
+				</tr>	
+				<tr>
+					<td>Privilege escalation?*</td>
+					<td><input type="radio" class="include-in-form" name="dmg_privesc" value="0" id="dmg_privesc_no"[% IF advisory.ques_dmg_privesc == 0 || !advisory.ques_dmg_privesc %]checked="checked"[% END %]><label for="dmg_privesc_no">No</label></td>
+					<td colspan="2"><input type="radio" class="include-in-form" class="include-in-form" name="dmg_privesc" value="1" id="dmg_privesc_yes"[% IF advisory.ques_dmg_privesc == 1 %]checked="checked"[% END %]><label for="dmg_privesc_yes">Yes</label></td>
+				</tr>	
+				<tr>
+					<td>Information leakage?*</td>
+					<td><input type="radio" class="include-in-form" name="dmg_infoleak" value="0" id="dmg_infoleak_no"[% IF advisory.ques_dmg_infoleak == 0 || !advisory.ques_dmg_infoleak %]checked="checked"[% END %]><label for="dmg_infoleak_no">No</label></td>
+					<td><input type="radio" class="include-in-form" name="dmg_infoleak" value="1" id="dmg_infoleak_yessysteminfo"[% IF advisory.ques_dmg_infoleak == 1 %]checked="checked"[% END %]><label for="dmg_infoleak_yessysteminfo">Yes, system info</label></td>
+					<td><input type="radio" class="include-in-form" name="dmg_infoleak" value="2" id="dmg_infoleak_yesdata"[% IF advisory.ques_dmg_infoleak == 2 %]checked="checked"[% END %]><label for="dmg_infoleak_yesdata">Yes, data</label></td>
+				</tr>
+				<tr class="advisory-matrix-deviation-tr">
+					<td class="advisory-matrix-deviation-label">Specify reason for deviation?<br>(if applicable)</td>
+					<td colspan="3"><textarea class="advisory-matrix-deviation input-default include-in-form" name="dmg_deviation" id="advisory-details-dmg-deviation">[% advisory.ques_dmg_deviation %]</textarea></td>
+				</tr>
+			</table>
+		</fieldset>
+	</div>

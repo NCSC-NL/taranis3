@@ -1,0 +1,48 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="hidden ui-state-error ui-corner-all">[% message %]</div>
+
+	<div class="dialog-title">
+		<span>Analysis: [% analysis_heading %]</span>
+	</div>
+
+	<div id="analysis-to-publication-tabs" class="dialog-tabs" data-analysisid="[% analysis_id %]" data-publicationtype="[% publication_type %]">
+		<ul>
+		[% IF publication_type == 'advisory' +%]
+			<li><a href="#analysis-to-publication-tabs-1">Publications matched by CVE-ID</a></li>
+		[% END %]
+			<li><a href="#analysis-to-publication-tabs-2">Search publications</a></li>
+		</ul>
+		[% IF publication_type == 'advisory' +%]
+		<div id="analysis-to-publication-tabs-1">
+		
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Publications</span><br>
+				<select size="28" id="analysis-to-publication-publication-id-match" class="select-single dialog-input-text-wide analysis-to-publication-select">
+				[% FOREACH advisory IN advisories_id_match %]
+					<option value="[% advisory.publication_id %]">[% advisory.named_id _ ' [v' _ advisory.version _ '] ' _ advisory.publication_title.substr(0,100) %]</option>
+				[% END %]
+				</select>
+			</div>
+		</div>
+		[% END %]
+
+		<div id="analysis-to-publication-tabs-2">
+
+			<div class="dialog-input-wrapper block">
+				<label for="analysis-to-publication-search" class="dialog-input-label">Search publications</label><br>
+				<input type="text" name="analysis-to-publication-search" id="analysis-to-publication-search" class="input-default dialog-input-text">
+				<input type="button" class="button" value="Search" id="btn-analysis-to-publication-search">
+			</div><br>
+
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Publications</span><br>
+				<select size="28" id="analysis-to-publication-search-results" class="input-default dialog-input-text-wide analysis-to-publication-select">
+				[% FOREACH publication IN publications_no_match %]
+					<option value="[% publication.publication_id %]">[% publication.named_id _ ' [v' _ publication.version _ '] ' _ publication.publication_title.substr(0,100) %]</option>
+				[% END %]
+				</select>
+			</div>
+
+		</div>
+	</div>
+</div>

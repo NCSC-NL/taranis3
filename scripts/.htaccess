@@ -1,0 +1,19 @@
+Options -Indexes
+ErrorDocument 403 /taranis/no_permission.pl
+ErrorDocument 404 /taranis/not_found.pl
+
+Header set Expires "Fri, 17 Oct 1980 08:52:00 GM"
+Header set Cache-Control "no-store, no-cache, must-revalidate, post-check=0, pre-check=0"
+Header set Pragma "no-cache"
+
+RewriteEngine on
+RewriteRule   ^goto/ /taranis/index.pl
+RewriteRule   ^load/ /taranis/index.pl
+RewriteRule   ^loadfile/ /taranis/index.pl
+RewriteRule   ^REST/ /taranis/rest.pl
+RewriteRule   ^session_ok$ /taranis/session_ok.pl
+RewriteRule   ^session_keepalive$ /taranis/session_keepalive.pl
+# /login/ is sometimes requested as /goto/login/ or /goto/<modname>/login/ due to relative redirects, so match "login/"
+# instead of "^login/".
+# (The same goes for /loadfile/, but we can use ^ there anyway since /goto/ ends up at index.pl just like /loadfile/.)
+RewriteRule   login/$ /taranis/login.pl

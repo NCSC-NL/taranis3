@@ -1,0 +1,28 @@
+#!/usr/bin/env perl
+# Install PostgreSQL, the system-dependent bits.
+
+use warnings;
+use strict;
+
+use Taranis::Install::Bare   qw(is_ubuntu);
+use Taranis::Install::Ubuntu qw(ubuntu_packages);
+use Taranis::Install::Perl   qw(perl_install);
+
+unless(is_ubuntu) {
+	print "*   skipped: not running on Ubuntu\n";
+	exit 0;
+}
+
+ubuntu_packages
+	'postgresql',
+	'postgresql-contrib',
+	'libdbd-pgsql',
+
+	# libdbd-pg-perl is not on the Live CD 16.05LTS.  Is it available
+	# during full installation?
+	'libpq-dev',     # set of security -dev libs, needed for DBD::Pg
+	;
+
+perl_install 'DBD::Pg' => 0;
+
+exit 0;

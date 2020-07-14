@@ -1,0 +1,209 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden[% END %] ui-state-error ui-corner-all">[% message %]</div>
+	
+	<div class="dialog-title">
+		<span>Cluster settings</span>
+	</div>
+	
+	<form id="form-cluster" data-id="[% IF cluster.id; cluster.id; ELSE; 'NEW'; END %]">
+
+		<fieldset>
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Category</span><br>
+				<select name="category" id="cluster-details-category" class="select-single dialog-input-text-narrow">
+					[% FOREACH category IN categories +%]
+					<option value="[% category.id %]" [% IF category.id == cluster.category_id %]selected="selected"[% END %] >[% category.name %]</option>
+					[% END +%]
+				</select>
+			</div>
+
+			<div class="dialog-input-wrapper block">
+				<label for="cluster-details-language" class="dialog-input-label">Language</label><br>
+				<select name="language" id="cluster-details-language" class="select-single dialog-input-text include-in-form">
+					<option value="">-select a language-</option>
+                    <option value="ab" [% IF cluster.language == "ab" %] selected="selected" [% END %]>Abkhazian</option>
+                    <option value="aa" [% IF cluster.language == "aa" %] selected="selected" [% END %]>Afar</option>
+                    <option value="af" [% IF cluster.language == "af" %] selected="selected" [% END %]>Afrikaans</option>
+                    <option value="sq" [% IF cluster.language == "sq" %] selected="selected" [% END %]>Albanian</option>
+                    <option value="am" [% IF cluster.language == "am" %] selected="selected" [% END %]>Amharic</option>
+                    <option value="ar" [% IF cluster.language == "ar" %] selected="selected" [% END %]>Arabic</option>
+                    <option value="an" [% IF cluster.language == "an" %] selected="selected" [% END %]>Aragonese</option>
+                    <option value="hy" [% IF cluster.language == "hy" %] selected="selected" [% END %]>Armenian</option>
+                    <option value="as" [% IF cluster.language == "as" %] selected="selected" [% END %]>Assamese</option>
+                    <option value="ay" [% IF cluster.language == "ay" %] selected="selected" [% END %]>Aymara</option>
+                    <option value="az" [% IF cluster.language == "az" %] selected="selected" [% END %]>Azerbaijani</option>
+                    <option value="ba" [% IF cluster.language == "ba" %] selected="selected" [% END %]>Bashkir</option>
+                    <option value="eu" [% IF cluster.language == "eu" %] selected="selected" [% END %]>Basque</option>
+                    <option value="bn" [% IF cluster.language == "bn" %] selected="selected" [% END %]>Bengali (Bangla)</option>
+                    <option value="dz" [% IF cluster.language == "dz" %] selected="selected" [% END %]>Bhutani</option>
+                    <option value="bh" [% IF cluster.language == "bh" %] selected="selected" [% END %]>Bihari</option>
+                    <option value="bi" [% IF cluster.language == "bi" %] selected="selected" [% END %]>Bislama</option>
+                    <option value="br" [% IF cluster.language == "br" %] selected="selected" [% END %]>Breton</option>
+                    <option value="bg" [% IF cluster.language == "bg" %] selected="selected" [% END %]>Bulgarian</option>
+                    <option value="my" [% IF cluster.language == "my" %] selected="selected" [% END %]>Burmese</option>
+                    <option value="be" [% IF cluster.language == "be" %] selected="selected" [% END %]>Byelorussian (Belarusian)</option>
+                    <option value="km" [% IF cluster.language == "km" %] selected="selected" [% END %]>Cambodian</option>
+                    <option value="ca" [% IF cluster.language == "ca" %] selected="selected" [% END %]>Catalan</option>
+                    <option value="ny" [% IF cluster.language == "ny" %] selected="selected" [% END %]>Chewa</option>
+                    <option value="zh" [% IF cluster.language == "zh" %] selected="selected" [% END %]>Chinese (Simplified)</option>
+                    <option value="zh" [% IF cluster.language == "zh" %] selected="selected" [% END %]>Chinese (Traditional)</option>
+                    <option value="co" [% IF cluster.language == "co" %] selected="selected" [% END %]>Corsican</option>
+                    <option value="hr" [% IF cluster.language == "hr" %] selected="selected" [% END %]>Croatian</option>
+                    <option value="cs" [% IF cluster.language == "cs" %] selected="selected" [% END %]>Czech</option>
+                    <option value="da" [% IF cluster.language == "da" %] selected="selected" [% END %]>Danish</option>
+                    <option value="dv" [% IF cluster.language == "dv" %] selected="selected" [% END %]>Divehi</option>
+                    <option value="nl" [% IF cluster.language == "nl" %] selected="selected" [% END %]>Dutch</option>
+                    <option value="en" [% IF cluster.language == "en" %] selected="selected" [% END %]>English</option>
+                    <option value="eo" [% IF cluster.language == "eo" %] selected="selected" [% END %]>Esperanto</option>
+                    <option value="et" [% IF cluster.language == "et" %] selected="selected" [% END %]>Estonian</option>
+                    <option value="fo" [% IF cluster.language == "fo" %] selected="selected" [% END %]>Faeroese</option>
+                    <option value="fa" [% IF cluster.language == "fa" %] selected="selected" [% END %]>Farsi</option>
+                    <option value="fj" [% IF cluster.language == "fj" %] selected="selected" [% END %]>Fiji</option>
+                    <option value="fi" [% IF cluster.language == "fi" %] selected="selected" [% END %]>Finnish</option>
+                    <option value="fr" [% IF cluster.language == "fr" %] selected="selected" [% END %]>French</option>
+                    <option value="fy" [% IF cluster.language == "fy" %] selected="selected" [% END %]>Frisian</option>
+                    <option value="ff" [% IF cluster.language == "ff" %] selected="selected" [% END %]>Fulfulde</option>
+                    <option value="gl" [% IF cluster.language == "gl" %] selected="selected" [% END %]>Galician</option>
+                    <option value="gd" [% IF cluster.language == "gd" %] selected="selected" [% END %]>Gaelic (Scottish)</option>
+                    <option value="gv" [% IF cluster.language == "gv" %] selected="selected" [% END %]>Gaelic (Manx)</option>
+                    <option value="ka" [% IF cluster.language == "ka" %] selected="selected" [% END %]>Georgian</option>
+                    <option value="de" [% IF cluster.language == "de" %] selected="selected" [% END %]>German</option>
+                    <option value="el" [% IF cluster.language == "el" %] selected="selected" [% END %]>Greek</option>
+                    <option value="kl" [% IF cluster.language == "kl" %] selected="selected" [% END %]>Greenlandic</option>
+                    <option value="gn" [% IF cluster.language == "gn" %] selected="selected" [% END %]>Guarani</option>
+                    <option value="gu" [% IF cluster.language == "gu" %] selected="selected" [% END %]>Gujarati</option>
+                    <option value="ht" [% IF cluster.language == "ht" %] selected="selected" [% END %]>Haitian Creole</option>
+                    <option value="ha" [% IF cluster.language == "ha" %] selected="selected" [% END %]>Hausa</option>
+                    <option value="he" [% IF cluster.language == "he" %] selected="selected" [% END %]>Hebrew</option>
+                    <option value="hi" [% IF cluster.language == "hi" %] selected="selected" [% END %]>Hindi</option>
+                    <option value="hu" [% IF cluster.language == "hu" %] selected="selected" [% END %]>Hungarian</option>
+                    <option value="is" [% IF cluster.language == "is" %] selected="selected" [% END %]>Icelandic</option>
+                    <option value="io" [% IF cluster.language == "io" %] selected="selected" [% END %]>Ido</option>
+                    <option value="ig" [% IF cluster.language == "ig" %] selected="selected" [% END %]>Igbo</option>
+                    <option value="id" [% IF cluster.language == "id" %] selected="selected" [% END %]>Indonesian</option>
+                    <option value="ia" [% IF cluster.language == "ia" %] selected="selected" [% END %]>Interlingua</option>
+                    <option value="ie" [% IF cluster.language == "ie" %] selected="selected" [% END %]>Interlingue</option>
+                    <option value="iu" [% IF cluster.language == "iu" %] selected="selected" [% END %]>Inuktitut</option>
+                    <option value="ik" [% IF cluster.language == "ik" %] selected="selected" [% END %]>Inupiak</option>
+                    <option value="ga" [% IF cluster.language == "ga" %] selected="selected" [% END %]>Irish</option>
+                    <option value="it" [% IF cluster.language == "it" %] selected="selected" [% END %]>Italian</option>
+                    <option value="ja" [% IF cluster.language == "ja" %] selected="selected" [% END %]>Japanese</option>
+                    <option value="jv" [% IF cluster.language == "jv" %] selected="selected" [% END %]>Javanese</option>
+                    <option value="kn" [% IF cluster.language == "kn" %] selected="selected" [% END %]>Kannada</option>
+                    <option value="kr" [% IF cluster.language == "kr" %] selected="selected" [% END %]>Kanuri</option>
+                    <option value="ks" [% IF cluster.language == "ks" %] selected="selected" [% END %]>Kashmiri</option>
+                    <option value="kk" [% IF cluster.language == "kk" %] selected="selected" [% END %]>Kazakh</option>
+                    <option value="rw" [% IF cluster.language == "rw" %] selected="selected" [% END %]>Kinyarwanda (Ruanda)</option>
+                    <option value="ky" [% IF cluster.language == "ky" %] selected="selected" [% END %]>Kirghiz</option>
+                    <option value="rn" [% IF cluster.language == "rn" %] selected="selected" [% END %]>Kirundi (Rundi)</option>
+                    <option value="ko" [% IF cluster.language == "ko" %] selected="selected" [% END %]>Korean</option>
+                    <option value="ku" [% IF cluster.language == "ku" %] selected="selected" [% END %]>Kurdish</option>
+                    <option value="lo" [% IF cluster.language == "lo" %] selected="selected" [% END %]>Laothian</option>
+                    <option value="la" [% IF cluster.language == "la" %] selected="selected" [% END %]>Latin</option>
+                    <option value="lv" [% IF cluster.language == "lv" %] selected="selected" [% END %]>Latvian (Lettish)</option>
+                    <option value="li" [% IF cluster.language == "li" %] selected="selected" [% END %]>Limburgish (Limburger)</option>
+                    <option value="ln" [% IF cluster.language == "ln" %] selected="selected" [% END %]>Lingala</option>
+                    <option value="lt" [% IF cluster.language == "lt" %] selected="selected" [% END %]>Lithuanian</option>
+                    <option value="mk" [% IF cluster.language == "mk" %] selected="selected" [% END %]>Macedonian</option>
+                    <option value="mg" [% IF cluster.language == "mg" %] selected="selected" [% END %]>Malagasy</option>
+                    <option value="ms" [% IF cluster.language == "ms" %] selected="selected" [% END %]>Malay</option>
+                    <option value="ml" [% IF cluster.language == "ml" %] selected="selected" [% END %]>Malayalam</option>
+                    <option value="mt" [% IF cluster.language == "mt" %] selected="selected" [% END %]>Maltese</option>
+                    <option value="mi" [% IF cluster.language == "mi" %] selected="selected" [% END %]>Maori</option>
+                    <option value="mr" [% IF cluster.language == "mr" %] selected="selected" [% END %]>Marathi</option>
+                    <option value="mo" [% IF cluster.language == "mo" %] selected="selected" [% END %]>Moldavian</option>
+                    <option value="mn" [% IF cluster.language == "mn" %] selected="selected" [% END %]>Mongolian</option>
+                    <option value="na" [% IF cluster.language == "na" %] selected="selected" [% END %]>Nauru</option>
+                    <option value="ne" [% IF cluster.language == "ne" %] selected="selected" [% END %]>Nepali</option>
+                    <option value="no" [% IF cluster.language == "no" %] selected="selected" [% END %]>Norwegian</option>
+                    <option value="oc" [% IF cluster.language == "oc" %] selected="selected" [% END %]>Occitan</option>
+                    <option value="or" [% IF cluster.language == "or" %] selected="selected" [% END %]>Oriya</option>
+                    <option value="om" [% IF cluster.language == "om" %] selected="selected" [% END %]>Oromo (Afan, Galla)</option>
+                    <option value="ps" [% IF cluster.language == "ps" %] selected="selected" [% END %]>Pashto (Pushto)</option>
+                    <option value="pl" [% IF cluster.language == "pl" %] selected="selected" [% END %]>Polish</option>
+                    <option value="pt" [% IF cluster.language == "pt" %] selected="selected" [% END %]>Portuguese</option>
+                    <option value="pa" [% IF cluster.language == "pa" %] selected="selected" [% END %]>Punjabi</option>
+                    <option value="qu" [% IF cluster.language == "qu" %] selected="selected" [% END %]>Quechua</option>
+                    <option value="rm" [% IF cluster.language == "rm" %] selected="selected" [% END %]>Rhaeto-Romance</option>
+                    <option value="ro" [% IF cluster.language == "ro" %] selected="selected" [% END %]>Romanian</option>
+                    <option value="ru" [% IF cluster.language == "ru" %] selected="selected" [% END %]>Russian</option>
+                    <option value="sm" [% IF cluster.language == "sm" %] selected="selected" [% END %]>Samoan</option>
+                    <option value="sg" [% IF cluster.language == "sg" %] selected="selected" [% END %]>Sangro</option>
+                    <option value="sa" [% IF cluster.language == "sa" %] selected="selected" [% END %]>Sanskrit</option>
+                    <option value="sr" [% IF cluster.language == "sr" %] selected="selected" [% END %]>Serbian</option>
+                    <option value="sh" [% IF cluster.language == "sh" %] selected="selected" [% END %]>Serbo-Croatian</option>
+                    <option value="st" [% IF cluster.language == "st" %] selected="selected" [% END %]>Sesotho</option>
+                    <option value="tn" [% IF cluster.language == "tn" %] selected="selected" [% END %]>Setswana</option>
+                    <option value="sn" [% IF cluster.language == "sn" %] selected="selected" [% END %]>Shona</option>
+                    <option value="ii" [% IF cluster.language == "ii" %] selected="selected" [% END %]>Sichuan Yi</option>
+                    <option value="sd" [% IF cluster.language == "sd" %] selected="selected" [% END %]>Sindhi</option>
+                    <option value="si" [% IF cluster.language == "si" %] selected="selected" [% END %]>Sinhalese</option>
+                    <option value="ss" [% IF cluster.language == "ss" %] selected="selected" [% END %]>Siswati</option>
+                    <option value="sk" [% IF cluster.language == "sk" %] selected="selected" [% END %]>Slovak</option>
+                    <option value="sl" [% IF cluster.language == "sl" %] selected="selected" [% END %]>Slovenian</option>
+                    <option value="so" [% IF cluster.language == "so" %] selected="selected" [% END %]>Somali</option>
+                    <option value="es" [% IF cluster.language == "es" %] selected="selected" [% END %]>Spanish</option>
+                    <option value="su" [% IF cluster.language == "su" %] selected="selected" [% END %]>Sundanese</option>
+                    <option value="sw" [% IF cluster.language == "sw" %] selected="selected" [% END %]>Swahili (Kiswahili)</option>
+                    <option value="sv" [% IF cluster.language == "sv" %] selected="selected" [% END %]>Swedish</option>
+                    <option value="tl" [% IF cluster.language == "tl" %] selected="selected" [% END %]>Tagalog</option>
+                    <option value="tg" [% IF cluster.language == "tg" %] selected="selected" [% END %]>Tajik</option>
+                    <option value="ta" [% IF cluster.language == "ta" %] selected="selected" [% END %]>Tamil</option>
+                    <option value="tt" [% IF cluster.language == "tt" %] selected="selected" [% END %]>Tatar</option>
+                    <option value="te" [% IF cluster.language == "te" %] selected="selected" [% END %]>Telugu</option>
+                    <option value="th" [% IF cluster.language == "th" %] selected="selected" [% END %]>Thai</option>
+                    <option value="bo" [% IF cluster.language == "bo" %] selected="selected" [% END %]>Tibetan</option>
+                    <option value="ti" [% IF cluster.language == "ti" %] selected="selected" [% END %]>Tigrinya</option>
+                    <option value="to" [% IF cluster.language == "to" %] selected="selected" [% END %]>Tonga</option>
+                    <option value="ts" [% IF cluster.language == "ts" %] selected="selected" [% END %]>Tsonga</option>
+                    <option value="tr" [% IF cluster.language == "tr" %] selected="selected" [% END %]>Turkish</option>
+                    <option value="tk" [% IF cluster.language == "tk" %] selected="selected" [% END %]>Turkmen</option>
+                    <option value="tw" [% IF cluster.language == "tw" %] selected="selected" [% END %]>Twi</option>
+                    <option value="ug" [% IF cluster.language == "ug" %] selected="selected" [% END %]>Uighur</option>
+                    <option value="uk" [% IF cluster.language == "uk" %] selected="selected" [% END %]>Ukrainian</option>
+                    <option value="ur" [% IF cluster.language == "ur" %] selected="selected" [% END %]>Urdu</option>
+                    <option value="uz" [% IF cluster.language == "uz" %] selected="selected" [% END %]>Uzbek</option>
+                    <option value="ve" [% IF cluster.language == "ve" %] selected="selected" [% END %]>Venda</option>
+                    <option value="vi" [% IF cluster.language == "vi" %] selected="selected" [% END %]>Vietnamese</option>
+                    <option value="vo" [% IF cluster.language == "vo" %] selected="selected" [% END %]>Volap&uuml;k</option>
+                    <option value="wa" [% IF cluster.language == "wa" %] selected="selected" [% END %]>Wallon</option>
+                    <option value="cy" [% IF cluster.language == "cy" %] selected="selected" [% END %]>Welsh</option>
+                    <option value="wo" [% IF cluster.language == "wo" %] selected="selected" [% END %]>Wolof</option>
+                    <option value="xh" [% IF cluster.language == "xh" %] selected="selected" [% END %]>Xhosa</option>
+                    <option value="yi" [% IF cluster.language == "yi" %] selected="selected" [% END %]>Yiddish</option>
+                    <option value="yo" [% IF cluster.language == "yo" %] selected="selected" [% END %]>Yoruba</option>
+                    <option value="zu" [% IF cluster.language == "zu" %] selected="selected" [% END %]>Zulu</option>                    
+				</select>
+			</div>
+
+			<div class="dialog-input-wrapper block">
+				<label for="cluster-details-threshold" class="dialog-input-label">Threshold *</label><br>
+				<input type="text" name="threshold" id="cluster-details-threshold" class="input-default dialog-input-text" value="[% cluster.threshold %]">
+			</div>
+
+			<div class="dialog-input-wrapper block">
+				<label for="cluster-details-timeframe" class="dialog-input-label">Timeframe in hours*</label><br>
+				<input type="text" name="timeframe_hours" id="cluster-details-timeframe" class="input-default dialog-input-text" value="[% cluster.timeframe_hours %]">
+			</div>
+
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Recluster *</span><br>
+				<input type="radio" name="recluster" id="cluster-details-recluster-yes" value="1" [% IF cluster.recluster == 1 %] checked="checked"[% END %]>
+				<label for="cluster-details-recluster-yes">Yes</label> 
+				<input type="radio" name="recluster" id="cluster-details-recluster-no" value="0" [% IF cluster.recluster == 0 %] checked="checked"[% END %]>
+				<label for="cluster-details-recluster-no">No</label>
+			</div><br>
+		
+		[% IF cluster.id %]
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Disabled *</span><br>
+				<input type="radio" name="disable_cluster" id="cluster-details-disable-yes" value="1" [% IF cluster.is_enabled == 0 %] checked="checked"[% END %]>
+				<label for="cluster-details-disable-yes">Yes</label> 
+				<input type="radio" name="disable_cluster" id="cluster-details-disable-no" value="0" [% IF cluster.is_enabled == 1 %] checked="checked"[% END %]>
+				<label for="cluster-details-disable-no">No</label>
+			</div>
+		[% END %]
+		</fieldset>
+				
+	</form>
+</div>

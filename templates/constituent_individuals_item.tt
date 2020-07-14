@@ -1,0 +1,61 @@
+[% IF renderItemContainer %]
+<div class="constituent-individual-item item-row" id="[% individual.id %]">
+[% END %]
+	
+	<div class="constituent-individual-item-name block [% IF individual.status != 0 %] strikethrough[% END %]">
+		<span>[% individual.lastname %], [% individual.firstname %]</span>
+	</div>		
+
+	<div class="constituent-individual-item-role block">
+		<span>[% individual.role_names %]</span>
+	</div>		
+
+	<div class="constituent-individual-item-groups block">
+		<span>[% individual.groups_enabled %][% IF individual.groups_enabled && individual.groups_disabled %], [% END %]</span>
+		<span class="strikethrough">[% individual.groups_disabled %]</span>
+	</div>		
+
+	<div class="block align-block-right">
+	
+	[% IF individual.call_hh +%]
+		<img src="[% webroot %]/images/icon_phone.png" alt="phone HH" title="wishes to be called in case of H/H incident">
+	[% END +%]
+	[% IF write_right && ! individual.external_ref %]
+		<img src="[% webroot %]/images/icon_modify.png" alt="edit" title="edit constituent" class="pointer btn-edit-constituent-individual" data-id="[% individual.id %]">
+		<img src="[% webroot %]/images/icon_delete.png" alt="delete" title="delete constituent" class="pointer btn-delete-constituent-individual" data-id="[% individual.id %]">
+	[% ELSE %]
+		<img src="[% webroot %]/images/icon_details.png" alt="view" title="view details" class="pointer btn-view-constituent-individual" data-id="[% individual.id %]">
+	[% END %]
+
+		<div class="constituent-individual-contact-info hover-block">
+			<img src="[% webroot %]/images/information.png" alt="info" class="help">
+			<div class="constituent-individual-contact-info-wrapper hover-block-wrapper">
+				<div class="hover-block-content">
+					<table class="constituent-individual-contact-info-table">
+						<tr>
+							<td>tel:</td>
+							<td>[% individual.tel_regular %]</td>
+						</tr>
+						<tr>
+							<td>mob:</td>
+							<td>[% individual.tel_mobile %]</td>
+						</tr>
+						<tr>
+							<td>email:</td>
+							<td>[% individual.emailaddress %]</td>
+						</tr>
+	[% IF individual.external_ref %]
+						<tr>
+							<td>external:</td>
+							<td>reference id=[% individual.external_ref %]</td>
+						</tr>
+	[% END %]
+					</table>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+[% IF renderItemContainer %]
+</div>
+[% END %]

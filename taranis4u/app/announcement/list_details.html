@@ -1,0 +1,7 @@
+<div class="taranis4u-block">
+	<span class="font-monospace">{{ announcement.created_str }}</span><br><br>
+	<h1 class="bold">{{ announcement.title }}</h1><br>
+	<ul>
+		<li ng-repeat="listItem in announcement.content.bullets"><h3 class="fa fa-angle-double-right"></h3><h3 class="block">&nbsp;{{ listItem }}</h3></li>
+	</ul>
+</div>

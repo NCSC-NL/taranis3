@@ -1,0 +1,14 @@
+[%# Tags are loaded dynamically later :-( %]
+[% IF removeWrapper != 1 %]
+<div class="no-padding tags-wrapper block">
+[% END %]
+	<div class="tags-view">
+		<ul class="tags-list block no-padding">
+	[% FOREACH tag IN tags %]
+		<li class="tags-list-item block" title="tag: [% tag %]">[% tag %]</li>
+	[% END %]
+		</ul>
+	</div>
+[% IF removeWrapper != 1 %]
+</div>
+[% END %]

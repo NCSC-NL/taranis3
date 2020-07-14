@@ -1,0 +1,19 @@
+#!/usr/bin/env perl
+# PhantomJS requirements
+
+use warnings;
+use strict;
+
+use Taranis::Install::Bare   qw(is_ubuntu);
+use Taranis::Install::Ubuntu qw(ubuntu_packages);
+
+unless(is_ubuntu) {
+	print "*   skipped: not running on Ubuntu.\n";
+	exit 0;
+}
+
+ubuntu_packages
+	'fonts-liberation',
+	;
+
+exit 0;

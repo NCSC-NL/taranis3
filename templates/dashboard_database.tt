@@ -1,0 +1,47 @@
+<div class="block dashboard-block">
+	<fieldset>
+		<legend class="bold">Database</legend>
+		[% IF numberOfLiveItems %]
+			<div>
+				<img
+					src="[% webroot %]/images/base.png"
+					alt="[% numberOfLiveItems.data.addThousandsSeparators %]"
+					class="align-middle dashboard-icon">
+				<div class="block">
+					There are
+					<span class="bold">
+						[% numberOfLiveItems.data.addThousandsSeparators %]
+					</span>
+					live items.
+				</div>
+			</div>
+			[% IF numberOfArchivedItems || graphNumberOfLiveItems %]
+			<hr class="light">
+			[% END %]
+		[% END %]
+		[% IF numberOfArchivedItems %]
+			<div>
+				<img
+					src="[% webroot %]/images/base_dark.png"
+					alt="[% numberOfArchivedItems.data.addThousandsSeparators %]"
+					class="align-middle dashboard-icon">
+				<div class="block">
+					There are &plusmn;
+					<span class="bold">
+						[% numberOfArchivedItems.data.addThousandsSeparators %]
+					</span>
+					archived items.
+				</div>
+			</div>
+			[% IF graphNumberOfLiveItems %]
+			<hr class="light">
+			[% END %]
+		[% END %]
+		[% IF graphNumberOfLiveItems %]
+		<div class="center">
+			<span class="bold">Number of live items per day</span>
+		</div>
+		<div id="graphNumberOfLiveItems" class="dashboard-graph"></div>
+		[% END %]
+	</fieldset>
+</div>

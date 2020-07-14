@@ -1,0 +1,18 @@
+<div class="block">
+	[% IF numberOfPendingAnalyses && numberOfPendingAnalyses.showMinified %]
+		<div title="[% numberOfPendingAnalyses.data %] pending analyses">
+			<a href="analyze/analyze/displayAnalyze/status=pending" data-callback="setMenu">
+				<span class="dashboard-minified-icons-with-text">[% numberOfPendingAnalyses.data %]</span>
+				<img src="[% webroot %]/images/user.png" alt="[% numberOfPendingAnalyses.data %]">
+			</a>
+		</div>
+	[% END %]
+	[% IF numberOfPendingAnalysesWithoutOwner && numberOfPendingAnalysesWithoutOwner.showMinified %]
+		<div title="[% numberOfPendingAnalysesWithoutOwner.data %] pending analyses without owner">
+			<a href="analyze/analyze/displayAnalyze/status=pending" data-callback="setMenu">
+				<span class="dashboard-minified-icons-with-text">[% numberOfPendingAnalysesWithoutOwner.data %]</span>
+				<img src="[% webroot %]/images/user_new.png" alt="[% numberOfPendingAnalysesWithoutOwner.data %]">
+			</a>
+		</div>
+	[% END %]
+</div>

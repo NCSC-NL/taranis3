@@ -1,0 +1,20 @@
+<div id="patterns-content-heading" class="content-heading">
+	<div id="patterns-content-heading-hostname" class="block">
+		<span>Pattern name</span>
+	</div>
+</div>
+
+[% IF patterns.size > 0 %]
+	[% FOREACH pattern IN patterns %]
+	
+		[% INCLUDE id_patterns_item.tt %]
+	
+	[% END %]
+[% ELSE %]
+<div class="item-row" id="empty-row">No ID patterns found...</div>
+
+[% END %]
+
+<div class="action-block filter-block-separator">
+	<div class="center" id="number-of-results">&mdash; [% numberOfResults %] results &mdash;</div>
+</div>

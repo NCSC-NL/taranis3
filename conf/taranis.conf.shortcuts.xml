@@ -1,0 +1,43 @@
+<?xml version='1.0' standalone='yes'?>
+<shortcuts>
+	<anon>
+		<shortcut>assess/news</shortcut>
+		<modname>assess</modname>
+		<scriptname>assess</scriptname>
+		<action>displayAssess</action>
+		<parameters>category=4</parameters>
+		<menuitem>assess</menuitem>
+	</anon>
+	<anon>
+		<shortcut>assess</shortcut>
+		<modname>assess</modname>
+		<scriptname>assess</scriptname>
+		<action>displayAssess</action>
+		<parameters></parameters>
+		<menuitem>assess</menuitem>
+	</anon>
+	<anon>
+		<shortcut>analyze</shortcut>
+		<modname>analyze</modname>
+		<scriptname>analyze</scriptname>
+		<action>displayAnalyze</action>
+		<parameters></parameters>
+		<menuitem>analyze</menuitem>
+	</anon>
+	<anon>
+		<shortcut>config</shortcut>
+		<modname>configuration</modname>
+		<scriptname>configuration</scriptname>
+		<action>displayConfigurationOptions</action>
+		<parameters></parameters>
+		<menuitem></menuitem>
+	</anon>
+	<anon>
+		<shortcut>photo</shortcut>
+		<modname>configuration</modname>
+		<scriptname>software_hardware</scriptname>
+		<action>displaySoftwareHardware</action>
+		<parameters></parameters>
+		<menuitem></menuitem>
+	</anon>	
+</shortcuts>

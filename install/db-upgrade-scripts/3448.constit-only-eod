@@ -1,0 +1,16 @@
+#!perl
+# Option to disable the sending of separate advisories: only
+# reports like EOD White
+
+use warnings;
+use strict;
+
+sub {
+	my ($db, %args) = @_;
+	$db->query( <<'__RUN__');
+
+ALTER TABLE constituent_group
+  ADD COLUMN only_eod BOOLEAN DEFAULT false NOT NULL;
+
+__RUN__
+};

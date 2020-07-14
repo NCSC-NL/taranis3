@@ -1,0 +1,25 @@
+<div id="stream-content-heading" class="content-heading">
+	<div id="stream-content-heading-description" class="block">
+		<span>Description</span>
+	</div>	
+
+	<div id="stream-content-heading-displays" class="block">
+		<span>Number of displays</span>
+	</div>
+</div>
+
+[% IF streams.size > 0 %]
+	[% FOREACH stream IN streams %]
+	
+		[% INCLUDE stream_item.tt %]
+	
+	[% END %]
+[% ELSE %]
+
+<div class="stream-item bold item-row no-items" id="empty-row">No streams to display.</div>
+
+[% END %]
+
+<div class="action-block filter-block-separator">
+	<div class="block">&nbsp;</div>
+</div>

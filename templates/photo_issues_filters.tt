@@ -1,0 +1,62 @@
+<div class="filter-block filter-block-separator" id="photo-issues-standard-search-wrapper">
+
+	<form id="form-photo-issues-search">
+
+		<div class="block">
+			<span>Search</span><br>
+			<input type="search" id="photo-issues-search" name="search" class="input-default">
+		</div>
+
+		<div class="block">
+			<span>From date</span><br>
+			<input id="photo-issues-start-date" name="startdate" type="text" class="input-default date-picker">
+		</div>	
+	
+		<div class="block">
+			<span>To date</span><br>
+			<input id="photo-issues-end-date" name="enddate" type="text" class="input-default date-picker">
+		</div>
+
+		<div class="block photo-issues-status bold">
+			<label for="photo-issues-status-pending" class="block photo-issues-pending">
+				<span>P</span><br>
+				<input type="checkbox" id="photo-issues-status-pending" title="Pending" name="status" value="0" checked="checked">
+			</label>
+			<label for="photo-issues-status-readyforreview" class="block photo-issues-readyforreview">
+				<span>R</span><br>
+				<input type="checkbox" id="photo-issues-status-readyforreview" title="Read for review" name="status" value="1" checked="checked">
+			</label>
+	
+			<label for="photo-issues-status-done" class="block photo-issues-done">
+				<span>D</span><br>
+				<input type="checkbox" id="photo-issues-status-done" title="Done" name="status" value="3" checked="checked">
+			</label>
+		</div>
+
+		<div class="block">
+			<span>Hits/pg</span><br>
+			<input type="number" size="3" name="hitsperpage" id="photo-issues-hitsperpage" value="100" class="input-default">
+		</div>
+	
+		<div class="block">
+			<span>&nbsp;</span>
+			<input type="button" id="btn-photo-issues-search" class="button" value="Search!">		
+		</div>
+	</form>	
+</div>
+
+<div class="action-block filter-block-separator">
+	<div class="block">
+	[% IF execute_right +%]
+		<input type="button" class="button btn-import-photo" value="Import photo">&nbsp;
+		<input type="button" class="button btn-export-photo" value="Export empty photo">&nbsp;
+		<input type="button" class="button btn-export-photo-in-use" value="Export all products in use">&nbsp;
+		<input type="button" class="button btn-export-all-photos" value="Export all photos">
+		<iframe name="downloadFrame" id="downloadFrame" class="super-secret-iframe" src=""></iframe>
+	[% END %]
+	</div>
+
+	<div class="block align-block-right">
+		<span class="bold page-title">Photo Management</span>
+	</div>
+</div>

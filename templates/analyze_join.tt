@@ -1,0 +1,57 @@
+<div class="dialog-form-wrapper">
+	<div id="dialog-error" class="hidden"></div>
+	<form id="form-analyze-join">
+		<div class="dialog-input-wrapper block">
+			<span>Join the following analysis to create a new analysis: </span>
+		[% FOREACH id IN analysisIds %]
+			<span class="bold">[% 'AN-' _ id.substr(0, 4) _ '-' _ id.substr(4,4) %]</span>, 
+			<input type="hidden" name="analyze-join-id" value="[% id %]">
+		[% END %]
+		</div>
+		<fieldset>
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Title for new analysis</span><br>
+				<select id="analyze-join-existing-title" class="select-single dialog-input-text-wide" name="title">
+				[% FOREACH title IN titleoptions %]
+					<option value="[% title %]">[% title %]</option>
+				[% END %]
+				</select>
+			</div><br>
+			
+			<div class="dialog-input-wrapper block">
+				<span>or</span>
+			</div><br>
+			
+			<div class="dialog-input-wrapper block">
+				<input type="text" name="title_alternative" id="analyze-join-new-title" class="dialog-input-text-wide input-default" maxlength="250" placeholder="create new title...">
+			</div>
+
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Status of new analysis</span><br>
+				[%- USE sts = String(status) +%]
+				<select id="bulk-analysis-status" class="select-single dialog-input-text-narrow" name="status">
+					[% FOREACH status_option IN pageSettings.analysis_status_options +%]
+						<option value="[% status_option %]" [% IF sts.lower == status_option %]selected="selected"[% END %] >[% status_option %]</option>
+					[% END +%]
+				</select>
+			</div>
+			
+			[% IF owneroptions && owneroptions.size > 0 %]
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Owner of new analysis</span><br>
+				[% IF owneroptions.size > 1 %]
+				<select id="bulk-analysis-owner" class="select-single dialog-input-text-narrow" name="owner">
+					[% FOREACH owner IN owneroptions +%]
+						<option value="[% owner %]">[% owner %]</option>
+					[% END +%]
+				</select>
+				[% ELSE %]
+				<span>[% owneroptions.0 %]</span>
+				<input type="hidden" name="owner" value="[% owneroptions.0 %]">
+				[% END %]
+			</div>
+			[% END %]
+			
+		</fieldset>
+	</form>
+</div>

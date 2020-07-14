@@ -1,0 +1,35 @@
+#!/usr/bin/env perl
+# This file is part of Taranis, Copyright NCSC-NL. See http://taranis.ncsc.nl
+# Licensed under EUPL v1.2 or newer, https://spdx.org/licenses/EUPL-1.2.html
+
+# Test the Screenshot functionality, which involves the external phantomjs
+# program.
+
+use warnings;
+use strict;
+
+use lib 'pm', '../pm';
+use Taranis::Screenshot::Phantomjs;
+
+my $outfn = '/tmp/screenshot.jpg';
+unlink $outfn;
+
+@ARGV==1 or die "Usage: $0 <url>\n";
+my $url = $ARGV[0];
+
+my $js    = Taranis::Screenshot::Phantomjs->new;
+my $image = $js->sayCheese(
+	siteAddress        => $url,
+	connectionSettings => { },
+);
+
+$image
+	or die "sayCheese returned error: $js->{errmsg}\n";
+
+open OUT, '>:raw', $outfn
+	or die "cannot write screenshot to $outfn: $!\n";
+
+print OUT $image;
+close OUT;
+
+print "Output in $outfn\n";

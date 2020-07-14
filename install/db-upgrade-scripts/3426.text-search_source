@@ -1,0 +1,12 @@
+#!perl
+
+use warnings;
+use strict;
+
+sub {
+	my ($db, %args) = @_;
+
+	$db->query( <<'__RUN__');
+ALTER TABLE search_source ALTER COLUMN sourcename TYPE TEXT;
+__RUN__
+};

@@ -1,0 +1,27 @@
+<div class="filter-block filter-block-separator">
+
+	<form id="form-strips-search">
+
+		<div class="block">
+			<label for="strips-filters-search">Hostname search</label><br>
+			<input id="strips-filters-search" name="search_hostname" type="text" class="input-default">
+		</div>
+
+		<div class="block">
+			<span>&nbsp;</span>
+			<input type="button" id="btn-strips-search" class="button" value="Search!">		
+		</div>
+
+	</form>
+</div>
+
+<div class="action-block filter-block-separator">
+[% IF write_right +%]
+	<div class="block">
+		<input type="button" class="button" id="btn-add-strips" value="Add new strips">
+	</div>
+[% END %]	
+	<div class="block align-block-right">
+		<span class="bold page-title">Strips</span>
+	</div>
+</div>

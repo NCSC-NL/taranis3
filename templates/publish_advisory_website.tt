@@ -1,0 +1,20 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden[% END %] ui-state-error ui-corner-all">[% message %]</div>
+	
+	<div class="dialog-title">
+		<span>[% advisory_heading %]</span>	
+	</div>
+	
+	<form method="post" id="advisory-website-publish-form" data-publicationid="[% publication_id %]">
+		<input type="hidden" value="[% adv_web_id %]" name="adv_web_id" id="advisory-website-id">
+		<input type="hidden" value="1" name="is_public" id="advisory-website-publish-is-public">
+		<input type="hidden" value="[% is_regular %]" name="is_regular" id="advisory-website-publish-is-regular">
+	
+		<fieldset id="publish-advisory-website-text-view">
+			<div class="dialog-input-wrapper block">
+				<textarea class="scroll-y-always font-courier border-default" name="advisory_preview" id="advisory-preview-text">[% preview %]</textarea>
+			</div>
+		</fieldset>
+
+	</form>
+</div>

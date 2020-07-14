@@ -1,0 +1,31 @@
+[% IF write_right %]
+<div class="block align-block-right padding-default">
+	[% IF item.classification != 1 %]
+	<img src="[% webroot %]/images/icon_email.png" alt="mail" title="E-mail this item" class="btn-dossier-item-mail pointer" data-itemid="[% item.dossier_item_id %]" data-itemtype="[% item.dossier_item_type %]">
+	[% END %]
+	[% IF write_right && dossierStatus.displayDossierStatus != 'JOINED' %]
+	<img src="[% webroot %]/images/icon_modify.png" alt="edit" title="edit item" class="pointer btn-edit-dossier-item" data-itemid="[% item.dossier_item_id %]">
+	[% END %]
+</div>
+[% END %]
+<br>
+
+<div class="block padding-default">
+	<span class="padding-default span-link dossier-item-timeline-notes-expand">[% item.notes.size _ (item.notes.size == 1 ? ' comment ' :' comments ') %]</span> 
+	[% IF write_right && dossierStatus.displayDossierStatus != 'JOINED' %]
+	| <span class="padding-default span-link dossier-item-timeline-add-note" data-itemid="[% item.dossier_item_id %]">add comment</span>
+	[% END %]
+	[% IF item.notesCount %]
+		[% FOREACH notesCountDossier IN item.notesCount %]
+	| <span class="padding-default span-link dossier-item-timeline-notes-count" data-dossierid="[% notesCountDossier.id %]" data-productid="[% item.product_id %]" data-itemtype="[% item.dossier_item_type %]">
+		[% notesCountDossier.notes_count _ (notesCountDossier.notes_count == 1 ? ' comment ' : ' comments ') %] in '[% notesCountDossier.description %]'
+	</span>
+		[% END %]
+	[% END %]
+</div>
+
+<div class="block dossier-item-timeline-notes" data-itemid="[% item.dossier_item_id %]">
+	[% FOREACH note IN item.notes %]
+		[% INCLUDE dossier_item_note.tt %]
+	[% END %]
+</div>

@@ -1,0 +1,19 @@
+[% IF renderItemContainer %]
+<div class="tools-item item-row" id="[% tool.toolname | uri %]">
+[% END %]
+		
+	<div class="tools-item-name block">
+		<span>[% tool.toolname %]</span>
+	</div>		
+
+	<div class="block align-block-right">
+	[% IF write_right %]
+		<img src="[% webroot %]/images/icon_modify.png" alt="edit" title="edit tool" class="pointer btn-edit-tool" data-toolname="[% tool.toolname %]">
+		<img src="[% webroot %]/images/icon_delete.png" alt="delete" title="delete tool" class="pointer btn-delete-tool" data-toolname="[% tool.toolname %]">
+	[% ELSE %]
+		<img src="[% webroot %]/images/icon_details.png" alt="view" title="view details" class="pointer btn-view-tool" data-toolname="[% tool.toolname %]">
+	[% END %]
+	</div>
+[% IF renderItemContainer %]
+</div>
+[% END %]

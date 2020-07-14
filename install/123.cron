@@ -1,0 +1,48 @@
+#!/usr/bin/env perl
+# Enable use of cron
+
+use warnings;
+use strict;
+
+use Taranis::Install::Config qw(config_generic);
+
+my $allow   = '/etc/cron.allow';
+my $deny    = '/etc/cron.deny';
+
+my $generic = config_generic;
+my $user    = $generic->{username};
+
+# Deny is only used when there is no allow.
+if(-f $allow) {
+	unless(-w $allow) {
+		# On RedHat6 under selinux, the file is not writable for root!
+		chmod 0600, $allow;
+		print "*   mode u+w to $allow\n";
+	}
+
+	open my $l, '<:encoding(utf8)', $allow
+		or die "ERROR: cannot read $allow: $!\n";
+
+	if(grep m!^\Q$user\E$!, $l->getlines) {
+		print "*    user $user is already explicitly allowed\n";
+	} else {
+		$l->close;
+
+		open $l, '>>:encoding(utf8)', $allow
+			or die "ERROR: cannot write $allow: $!\n";
+		$l->print("$user\n");
+		$l->close
+			or die "ERROR: write errors to $allow: $!\n";
+
+		print "*   user $user explicitly allowed to use cron\n";
+	}
+
+} elsif(-f $deny) {
+	open my $l, '<:encoding(utf8)', $deny
+		or die "ERROR: cannot read $deny: $!\n";
+
+	die "ERROR: $user needs cron, but is in $deny\n"
+		if grep m!^\Q$user\E$!, $l->getlines;
+}
+
+exit 0;

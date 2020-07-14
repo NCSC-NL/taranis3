@@ -1,0 +1,138 @@
+[% IF renderItemContainer && !item.isCluster %]
+<div class="assess-item item-row" id="[% item.digest | uri %]" data-id="[% item.id %]">
+[% ELSIF renderItemContainer && item.isCluster && item.isSeed %]
+<div class="assess-item item-top-cluster-row" id="[% item.digest | uri %]" data-clusterid="[% item.cluster_id | uri %]" data-id="[% item.id %]">
+[% ELSIF renderItemContainer && item.isCluster && !item.isSeed %]
+<div class="assess-item item-cluster-row" id="[% item.digest | uri %]" data-clusterid="[% item.cluster_id | uri %]" data-id="[% item.id %]">
+[% END %]
+
+	<div class="item-arrow">
+		<div class="selected-row-left"></div>
+		<div class="selected-row-right"></div>
+	</div>
+	
+	[% IF item.isCluster && !item.isSeed %]
+	<div class="item-cluster-row-inner">
+	[% ELSE %]
+	<div class="item-row-inner">
+	[% END %]
+
+		<div class="assess-item-select block">
+		[% IF item.isCluster && ! item.isSeed %]
+			<i class="fa fa-link" style="font-size: 150%"></i>
+		[% ELSIF write_right %]
+			<input class="assess-item-select-input mousetrap" type="checkbox" value="[% item.digest | uri %]" data-iscluster="[% item.isCluster %]" data-id="[% item.id %]">
+		[% END %]
+		</div>
+	
+		<div class="assess-item-timestamp block">
+			[% item.item_date.substr(0, 10) %]<br>
+			[% item.item_date.substr(11, 8) %]
+	
+			[% IF item.itemsInClusterCount && item.itemsInClusterCount > 1 && item.isSeed %]
+			<br>
+				[% USE date %]
+			<span class="grey-font"><br>
+				[% date.format( item.lastUpdateTime.stripSeconds, format = '%d-%m-%Y' ) %]<br>
+				[% date.format( item.lastUpdateTime.stripSeconds, format = '%H:%M:%S' ) %]<br>
+			</span>
+			[% END %]
+			
+		</div>
+		
+		<div class="assess-item-source block">
+			<img src="[% webroot %]/images/icons/[% item.source %].gif" alt="[% item.source %]" title="[% item.source %]"><br>
+			<div class="assess-item-rating">
+				<span title="[% item.rating %]" style="width:[% item.rating %]%"></span>
+			</div>
+		</div>
+
+		<div class="assess-item-title-description block">
+			<div class="assess-item-title block bold assess-[% item.status.displayAssessStatus %][% IF item.isCluster && !item.isSeed %] assess-item-clustered-title[% END %]">
+			[% IF item.is_mail %]
+				<i class="fas fa-envelope"></i>
+				<span data-id="[% item.digest | uri %]" data-link="[% item.link %]" class="span-link assess-email-item-link">[% item.title %]</span>
+			[% ELSIF item.screenshot_object_id %]
+				<i class="fas fa-camera"></i>
+			 	<span data-id="[% item.digest | uri %]" data-link="[% item.link %]" class="span-link assess-screenshot-item-link">[% item.title %]</span>
+			[% ELSE %]
+				<a data-id="[% item.digest | uri %]" href="[% item.link %]" target="_blank"><span>[% item.title %]</span></a>
+			[% END %]
+			</div>
+			[% INCLUDE tags.tt tags=item.tags %]
+
+			<div class="assess-item-description">[% item.description %]</div>
+
+			[% IF item.matching_keywords && item.matching_keywords.size > 0 %]
+			<hr class="[% IF item.itemsInClusterCount && item.itemsInClusterCount > 1 %]blue[% ELSE %]light[% END %]">
+			<span class="assess-item-matching-keywords-list">
+				[% FOREACH keyword IN item.matching_keywords %]
+					<span class="assess-item-matching-keyword">[% keyword %]</span>[%- IF !loop.last -%] | [% END %]
+				[% END %]
+			</span>
+			[% END %]
+			[% IF item.itemsInClusterCount && item.itemsInClusterCount > 1 %]
+			<hr class="blue">
+			<span class="assess-item-cluster-info">
+				[% IF item.isSeed %]
+					<span class="span-link item-clustering-toggle-items" data-clusterid="[% item.cluster_id | uri %]"><span>[% item.itemsInClusterCount %]</span> items in cluster</span>
+					&mdash; total cluster timespan is [% item.seedTime.durationText( item.lastUpdateTime ) || 'zero seconds' %]
+				[% ELSE %]
+					collected [% item.seedTime.durationText( item.created_epoch ) || 'directly' %] after first cluster item
+					&mdash; score is [% item.cluster_score %]
+				[% END %]
+			</span>
+			[% END %]
+			[% IF item.certids && item.certids.size > 0 %]
+			<div style="margin-top: 5px">&mdash;&nbsp;&nbsp;
+				[%- FOREACH certid IN item.certids -%]
+					<span [% IF certid.match('^CVE.*') %]class="assess-details-id pointer" id="[% certidid %]" title=""[% END %]>[%- certid -%]</span>
+					[% IF certid != item.certids.last %], [% END %]
+				[% END -%]
+			</div>
+			[% END %]
+		</div>
+	
+		<div class="block align-block-right icon-block">
+			<i class="far fa-copy clipboard" title="copy to clipboard"></i>
+			<i class="fas fa-tag img-edit-tags" title="add/remove tags"
+				data-itemid="[% item.digest | uri %]" data-tname="item"></i>
+		[% IF execute_right && ( !item.isCluster || ( item.isCluster && item.isSeed ) ) %]
+			<i class="far fa-envelope-open img-assess-item-mail"
+				title="mail this item" data-digest="[% item.digest | uri %]"></i>
+		[% ELSE %]
+			<img src="[% webroot %]/images/icon_none.png" alt="no icon">
+		[% END %] 
+		
+		[% IF !item.isCluster || ( item.isCluster && item.isSeed ) %]
+			[% IF item.item_analysis_right %] 
+			<i class="fas fa-chevron-circle-down img-assess-item-analyze"
+				title="Analyze this item" data-digest="[% item.digest | uri %]"></i>
+			[% END %]       
+		[% ELSE %]
+			<i class="fas fa-unlink btn-unlink-from-cluster" data-digest="[% item.digest | uri %]" data-clusterid="[% item.cluster_id | uri %]" data-seeddigest="[% item.seedDigest | uri %]" title="unlink from cluster"></i>
+		[% END %]
+			<i class="fas fa-info img-assess-item-details"
+			 title="Show details" data-digest="[% item.digest | uri %]"></i>
+
+		[% IF addToPublicationOptions.size > 0 %]
+			<div class="hover-block btn-add-to-publication">
+				<div class="hover-block-wrapper">
+					<div class="hover-block-content">
+						<ul>
+							<li class="addToPublicationOptionHeader" data-checked="no" data-digest="[% item.digest | uri %]">Add to</li>
+							[% FOREACH option IN addToPublicationOptions %]
+							<li class="pointer addToPublicationOption" data-checked="no" data-publicationId="[% option.publication_type %]" data-specifics="[% option.publication_specifics %]" data-digest="[% item.digest | uri %]">[% option.display %]</li>
+							[% END %]
+						</ul>
+					</div>
+				</div>
+			</div>
+		[% END %]
+		</div>
+
+	</div>
+	
+[% IF renderItemContainer %]	
+</div>
+[% END %]

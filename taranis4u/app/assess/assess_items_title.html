@@ -1,0 +1,11 @@
+<ul>
+	<li ng-repeat="assessItem in assessItems.result">
+		<span class="font-monospace">{{ assessItem.created_time }}</span>&nbsp;
+		<img ng-src="/assets/img/source_icons/{{ assessItem.source }}.gif" title="{{ assessItem.source }}" class="source-icon">&nbsp;
+		<a href="{{ assessItem.link }}" target="_blank">
+			<span class="bold marked">{{ assessItem.title }}</span>
+		</a>
+		<br>
+		<hr class="thin" ng-if="!$last">
+	</li>
+</ul>

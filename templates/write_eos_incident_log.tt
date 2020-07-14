@@ -1,0 +1,8 @@
+[% USE date %]
+[% FOREACH entry IN incidentLogEntries %]
+[% date.format( entry.created.stripSeconds, format = '%d-%m-%Y %H:%M' ) %] -- [%+ entry.ticket_number +%] -- [%+ entry.status.displayReportIncidentLogStatus +%]
+constituent: [%+ entry.group_name +%]
+owner: [%+ entry.fullname +%] 
+[%+ entry.description +%]
+######################################################################
+[%+ END %]

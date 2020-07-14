@@ -1,0 +1,170 @@
+This document contains Third Party Software Notices and/or Additional Terms and
+Conditions for licensed third party software components included within Taranis.
+
+
+jQuery
+------
+http://jquery.com/
+Licensed under the MIT License
+==================================================================
+
+jQueryUI
+--------
+http://jquery.com/
+Licensed under the MIT License
+==================================================================
+
+Flot
+----
+http://www.flotcharts.org/
+Copyright (c) 2007-2013 IOLA and Ole Laursen
+
+Permission is hereby granted, free of charge, to any person
+obtaining a copy of this software and associated documentation
+files (the "Software"), to deal in the Software without
+restriction, including without limitation the rights to use,
+copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following
+conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.
+==================================================================
+
+spin.js
+-------
+http://fgnass.github.io/spin.js/
+Copyright (c) 2011-2013 Felix Gnass
+Licensed under the MIT License
+==================================================================
+
+jquery-timer
+------------
+http://jchavannes.com/jquery-timer
+Copyright (c) 2011 Jason Chavannes <jason.chavannes@gmail.com>
+
+Permission is hereby granted, free of charge, to any person
+obtaining a copy of this software and associated documentation
+files (the "Software"), to deal in the Software without
+restriction, including without limitation the rights to use, copy,
+modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+==================================================================
+
+jquery.timepicker
+-----------------
+http://jonthornton.github.io/jquery-timepicker/
+Copyright (c) 2012 Jon Thornton
+Licensed under the MIT License
+==================================================================
+
+jquery-textrange
+----------------
+https://github.com/dwieeb/jquery-textrange
+Copyright (c) 2012 Daniel Imhoff
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+==================================================================
+
+jQCloud
+-------
+https://github.com/lucaong/jQCloud
+Copyright 2011, Luca Ongaro
+Licensed under the MIT License
+==================================================================
+
+Mousetrap
+---------
+http://craig.is/killing/mice
+Copyright 2013 Craig Campbell
+Licensed under the Apache 2.0 License
+==================================================================
+
+Font Awesome
+------------
+http://fortawesome.github.io/Font-Awesome/
+Copyright Dave Gandy
+Code Licensed under the MIT License
+Font Licensed under SIL OFL 1.1
+==================================================================
+
+AngularJS
+---------
+https://angularjs.org/
+Copyright 2010-2014 Google
+Licensed under the MIT License
+==================================================================
+
+angular-loading-bar
+-------------------
+http://chieffancypants.github.io/angular-loading-bar/
+Copyright 2013 Wes Cruver
+Licensed under the MIT License
+==================================================================
+
+angular-ui-router
+-----------------
+https://github.com/angular-ui/ui-router
+Copyright (c) 2014 The AngularUI Team, Karsten Sperling
+Licensed under the MIT License
+==================================================================
+
+RequireJS
+---------
+http://github.com/jrburke/requirejs
+Copyright (c) 2010-2014, The Dojo Foundation
+Licensed under the MIT License
+==================================================================
+
+RequireJS domReady
+------------------
+http://github.com/requirejs/domReady
+Copyright (c) 2010-2014, The Dojo Foundation
+Licensed under the MIT License
+==================================================================
+
+clipboard-polyfill version 4.4.1
+------------------
+https://github.com/lgarron/clipboard-polyfill
+Copyright (c) 2014 Yehuda Katz, Tom Dale, Stefan Penner and contributors (Conversion to
+  ES6 API by Jake Archibald)
+Licensed under MIT license
+  See https://raw.githubusercontent.com/stefanpenner/es6-promise/master/LICENSE

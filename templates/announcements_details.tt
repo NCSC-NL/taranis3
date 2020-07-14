@@ -1,0 +1,136 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden[% END %] ui-state-error ui-corner-all">[% message %]</div>
+
+	<div class="dialog-title">
+		<span>[% IF announcement.title; announcement.title; ELSE; 'Announcement'; END %]</span>	
+	</div>
+	
+	<form id="form-announcement" data-announcementid="[% IF announcement.id; announcement.id; ELSE; 'NEW'; END %]">
+		<fieldset>
+			[% IF announcement.created_str %]
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Created on</span><br>
+				<span>[% announcement.created_str %]</span>
+				<input type="hidden" name="created" value="[% announcement.created_str %]">
+			</div><br>
+			[% END %]
+			<div class="dialog-input-wrapper block">
+				<label for="announcement-title" class="dialog-input-label">Title</label><br>
+				<input type="text" name="title" id="announcement-title" value="[% announcement.title %]" class="input-default dialog-input-text">
+			</div><br>
+			[% IF announcement.id %]
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Is enabled *</span><br>
+				<input type="radio" name="is_enabled" id="announcement-is-enabled-yes" value="1" [% IF announcement.is_enabled == 1 %] checked="checked"[% END %]>
+				<label for="announcement-is-enabled-yes">Yes</label> 
+				<input type="radio" name="is_enabled" id="announcement-is-enabled-no" value="0" [% IF announcement.is_enabled == 0 %] checked="checked"[% END %]>
+				<label for="announcement-is-enabled-no">No</label>
+			</div><br>
+			[% END %]
+			<div class="dialog-input-wrapper block">
+				<span class="dialog-input-label">Type</span><br>
+				<select id="announcement-type" name="type" class="select-single dialog-input-text">
+					<option value="freeform-text" [% IF announcement.type == 'freeform-text' %]selected="selected"[% END %]>Freeform text</option>
+					<option value="bullet-list" [% IF announcement.type == 'bullet-list' %]selected="selected"[% END %]>Bullet List</option>
+					<option value="todo-list" [% IF announcement.type == 'todo-list' %]selected="selected"[% END %]>To-do List</option>
+				</select>
+			</div><br>
+
+			<!-- FREEFORM-TEXT-->
+			<div class="dialog-input-wrapper block" data-announcementtype="freeform-text">
+				<label for="announcement-description" class="dialog-input-label">Description</label><br>
+				<textarea name="description" id="announcement-description" class="input-default scroll-y-always">[% announcement.content.description %]</textarea>
+			</div>
+
+			<!-- BULLET-LIST-->
+			<div class="dialog-input-wrapper block" data-announcementtype="bullet-list">
+				<span class="dialog-input-label">Bullet list</span><br>
+				[% IF announcement.content.bullets && announcement.content.bullets.size > 0 %]
+					[% FOREACH bullet IN announcement.content.bullets %]
+				<div>
+					<input type="text" name="announcement-bullet-list-item" class="input-default dialog-input-text" value="[% bullet %]"/>
+					<img src="[% webroot %]/images/icon_delete.png" alt="delete" title="delete" class="pointer btn-delete-bullet-list-item align-middle"/>
+					<br><br>
+				</div>
+					[% END %]
+				[% ELSE %]
+				<div>
+					<input type="text" name="announcement-bullet-list-item" class="input-default dialog-input-text"/>
+					<img src="[% webroot %]/images/icon_delete.png" alt="delete" title="delete" class="pointer btn-delete-bullet-list-item align-middle"/>
+					<br><br>
+				</div>
+				[% END %]
+				<div class="hidden">
+					<input type="text" name="announcement-bullet-list-item" class="input-default dialog-input-text"/>
+					<img src="[% webroot %]/images/icon_delete.png" alt="delete" title="delete" class="pointer btn-delete-bullet-list-item align-middle"/>
+					<br><br>
+				</div>
+				<span class="span-link" id="announcement-bullet-list-add-item">Add bullet</span>
+			</div>
+			
+			<!-- TODO-LIST-->
+			<div class="dialog-input-wrapper block" data-announcementtype="todo-list">
+				<span class="dialog-input-label">To-do list</span><br>
+				[% IF announcement.content.todos && announcement.content.todos.size > 0 %]
+					[% FOREACH todo IN announcement.content.todos %]
+				<div>
+					<fieldset class="announcement-todo-list-item">
+						<span class="dialog-input-label">Description</span><br>
+						<input type="text" class="input-default dialog-input-text announcement-todo-list-item-description" value="[% todo.description %]"/><br><br>
+						<span class="dialog-input-label">Done status %</span><br>
+						<select class="select-single dialog-input-text-narrow announcement-todo-list-item-done-status">
+							<option [% IF todo.donestatus == 0 %]selected="selected"[% END %] value="0">0%</option>
+							<option [% IF todo.donestatus == 25 %]selected="selected"[% END %] value="25">25%</option>
+							<option [% IF todo.donestatus == 50 %]selected="selected"[% END %] value="50">50%</option>
+							<option [% IF todo.donestatus == 75 %]selected="selected"[% END %] value="75">75%</option>
+							<option [% IF todo.donestatus == 100 %]selected="selected"[% END %] value="100">100%</option>
+						</select><br><br>
+						<span class="dialog-input-label">Comment</span><br>
+						<textarea class="input-default scroll-y-always announcement-todo-list-item-comment">[% todo.comment %]</textarea><br><br>
+						<input type="button" class="button btn-delete-todo-list-item" value="remove to-do"/>
+					</fieldset>
+				</div>
+					[% END %]
+				[% ELSE %]
+				<div>
+					<fieldset class="announcement-todo-list-item">
+						<span class="dialog-input-label">Description</span><br>
+						<input type="text" class="input-default dialog-input-text announcement-todo-list-item-description"/><br><br>
+						<span class="dialog-input-label">Done status %</span><br>
+						<select class="select-single dialog-input-text-narrow announcement-todo-list-item-done-status">
+							<option value="0">0%</option>
+							<option value="25">25%</option>
+							<option value="50">50%</option>
+							<option value="75">75%</option>
+							<option value="100">100%</option>
+						</select><br><br>
+						<span class="dialog-input-label">Comment</span><br>
+						<textarea class="input-default scroll-y-always announcement-todo-list-item-comment"></textarea><br><br>
+						<input type="button" class="button btn-delete-todo-list-item" value="remove to-do"/>
+					</fieldset>
+				</div>
+				[% END %]
+				
+				<div class="hidden">
+					<fieldset class="announcement-todo-list-item">
+						<span class="dialog-input-label">Description</span><br>
+						<input type="text" class="input-default dialog-input-text announcement-todo-list-item-description"/><br><br>
+						<span class="dialog-input-label">Done status %</span><br>
+						<select class="select-single dialog-input-text-narrow announcement-todo-list-item-done-status">
+							<option value="0">0%</option>
+							<option value="25">25%</option>
+							<option value="50">50%</option>
+							<option value="75">75%</option>
+							<option value="100">100%</option>
+						</select><br><br>
+						<span class="dialog-input-label">Comment</span><br>
+						<textarea class="input-default scroll-y-always announcement-todo-list-item-comment"></textarea><br><br>
+						<input type="button" class="button btn-delete-todo-list-item" value="remove to-do"/>
+					</fieldset>
+				</div>
+				<span class="span-link" id="announcement-todo-list-add-item">Add to-do</span>
+			</div><br>
+			
+		</fieldset>
+	</form>
+</div>

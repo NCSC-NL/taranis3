@@ -1,0 +1,80 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Taranis -- Login</title>
+	<link rel="stylesheet" type="text/css" href="[% webroot %]/include/css/reset.css?_=[% unixtime %]" />
+	<link rel="stylesheet" type="text/css" href="[% webroot %]/include/css/main.css?_=[% unixtime %]" />
+	<link rel="icon" type="image/x-icon" href="[% webroot %]/images/favicon.ico" />
+	<meta http-equiv="refresh" content="600">
+	<script type="text/javascript" src="[% webroot %]/include/js/jquery-1.9.1.min.js"></script>
+	<script type="text/javascript" src="[% webroot %]/include/js/jslib.js?_=[% unixtime %]"></script>
+</head>
+
+<script type="text/javascript">
+
+$(function() {
+	$("#login-username").focus();
+});
+
+</script>
+
+<body>
+	<div id="main-wrapper">
+
+		<div id="content-wrapper">
+			<div id="banner">
+				<div class="taranis-logo">
+					<img src="/images/taranis/logo.png" width="199" height="90">
+				</div>
+				[% banner_html %]
+				<div class="taranis-logo">&nbsp;
+				</div>
+			</div>
+			<div id="content">
+
+				<div class="center" id="login-block">
+					[% IF sso_user %]
+						<form name="login" method="post">
+							<input type="hidden" name="login_sso_form_submitted" value="1">
+							<input type="hidden" name="csrf_token" value="[% csrf_token %]">
+							<input type="hidden" name="goto" value="[% goto_url %]">
+							<div class="block align-text-left login-button-block">
+								<input type="submit" class="button" value="login with username [% sso_user %]">
+							</div><br><br>
+							<div class="block align-text-left login-button-block">
+								<span class="bold">OR</span>
+							</div><br>
+						</form>
+					[% END %]
+
+					<form name="login" method="post">
+						<input type="hidden" name="login_userpass_form_submitted" value="1">
+						<input type="hidden" name="csrf_token" value="[% csrf_token %]">
+						<input type="hidden" name="goto" value="[% goto_url %]">
+						<div class="block align-text-left" id="login-input-block">
+							<div class="block">Username</div>
+							<input type="text" id="login-username" name="username" class="input-default"><br>
+							<div class="block">Password</div>
+							<input type="password" name="password" class="input-default" autocomplete="off">
+						</div><br>
+						<div class="block align-text-left login-button-block">
+							<input type="submit" class="button" value="Login">
+						</div><br>
+					</form>
+
+					[% IF error != "" %]
+						<div class="block align-text-left" id="login-error-block">
+							<span class="bold">[% error %]</span>
+						</div>
+					[% END %]
+					</div><br>
+			</div>
+		</div>
+
+		<div id="footer-wrapper">
+			<footer>Taranis &mdash; NCSC-NL</footer>
+		</div>
+
+	</div>
+</body>

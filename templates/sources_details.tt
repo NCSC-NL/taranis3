@@ -1,0 +1,577 @@
+<div class="dialog-form-wrapper block">
+	<div id="dialog-error" class="[% IF !message %]hidden[% END %] ui-state-error ui-corner-all">[% message %]</div>
+	<div class="ui-state-highlight ui-corner-all dialog-highlight hidden"></div>
+
+	[% IF source.id %]
+	<div class="dialog-title">
+		<span>
+		[% source_url = source.host _ source.url %]
+		[% IF source_url.length > 55  %]
+			[% source_url.substr( 55, source_url.length, '...') %]
+		[% ELSE %]
+			[% source_url %]
+		[% END %]
+		</span>	
+	</div>
+	[% END %]
+	
+	<form id="sources-details-form" data-id="[% IF source.id; source.id; ELSE; 'NEW'; END %]" enctype="multipart/form-data">
+		<input type="hidden" name="digest" id="sources-details-digest" value="[% source.digest %]" class="include-in-form">
+		<div id="sources-details-tabs" class="dialog-tabs">
+			<ul>
+				<li><a href="#sources-details-tabs-general">General</a></li>
+				<li><a href="#sources-details-tabs-collector">Collector</a></li>
+				<li><a href="#sources-details-tabs-wordlists">Wordlists</a></li>
+				<li><a href="#sources-details-tabs-advisory-import">Advisory Import</a></li>
+				[% IF source.id %]
+				<li><a href="#sources-details-tabs-error">Error</a></li>
+				[% END %]
+			</ul>
+
+<!-- TAB GENERAL -->
+			<div id="sources-details-tabs-general">
+				<fieldset>
+					<legend>Protocol settings</legend>
+					<div class="dialog-input-wrapper block">
+						<label for="sources-details-protocol" class="dialog-input-label">Protocol *</label><br>
+						<select name="protocol" id="sources-details-protocol" class="select-single dialog-input-text include-in-form source-mail-settings source-connection-settings">
+							<option value="">-select a protocol-</option>
+							<option value="http://" [% IF source.protocol == 'http://' %] selected="selected" [% END %]>http</option>
+							<option value="https://" [% IF source.protocol == 'https://' %] selected="selected" [% END %]>https</option>
+							<option value="imap" [% IF source.protocol == 'imap' %] selected="selected" [% END %]>imap</option>
+							<option value="imaps" [% IF source.protocol == 'imaps' %] selected="selected" [% END %]>imaps</option>
+							<option value="pop3" [% IF source.protocol == 'pop3' %] selected="selected" [% END %]>pop3</option>
+							<option value="pop3s" [% IF source.protocol == 'pop3s' %] selected="selected" [% END %]>pop3s</option>
+						</select>
+					</div><br>
+
+					<div class="dialog-input-wrapper block">
+						<label for="sources-details-host" class="dialog-input-label">Host *</label><br>
+						<input type="text" value="[% source.host %]" name="host" id="sources-details-host" class="input-default dialog-input-text-wide include-in-form source-mail-settings source-connection-settings">
+					</div><br>					
+
+					<div class="dialog-input-wrapper block">
+						<label for="sources-details-port" class="dialog-input-label">Port *</label><br>
+						<input type="text" value="[% source.port %]" name="port" id="sources-details-port" class="input-default dialog-input-text-wide include-in-form source-mail-settings source-connection-settings">
+					</div><br>					
+
+					<div class="dialog-input-wrapper block sources-protocol-dependent" id="sources-details-url-block">
+						<label for="sources-details-url" class="dialog-input-label">URL *</label><br>
+						<input type="text" value="[% source.url %]" name="url" id="sources-details-url" class="input-default dialog-input-text-wide include-in-form source-connection-settings">
+						<br>
+					</div>
+
+					<div class="dialog-input-wrapper block sources-protocol-dependent" id="sources-details-username-block">
+						<label for="sources-details-username" class="dialog-input-label">Username *</label><br>
+						<input type="text" value="[% source.username %]" name="username" id="sources-details-username" class="input-default dialog-input-text-wide include-in-form source-mail-settings">
+						<br>
+					</div>
+					
+					<div class="dialog-input-wrapper block sources-protocol-dependent" id="sources-details-password-block">
+						<label for="sources-details-password" class="dialog-input-label">Password *</label><br>
+						<input type="password" value="[% source.password %]" name="password" id="sources-details-password" class="input-default dialog-input-text-wide include-in-form source-mail-settings">
+						<br>
+					</div>
+
+					<div class="dialog-input-wrapper block sources-protocol-dependent" id="sources-details-keep-mail-block">
+						<span class="dialog-input-label">Keep mail on server *</span><br>
+						<input type="radio" name="delete_mail" id="sources-details-keep-mail-yes" value="0" [% IF source.delete_mail == 0 %] checked="checked"[% END %] class="include-in-form source-mail-settings"> 
+						<label for="sources-details-keep-mail-yes">Yes</label>
+						<input type="radio" name="delete_mail" id="sources-details-keep-mail-no" value="1" [% IF source.delete_mail == 1 %] checked="checked"[% END %] class="include-in-form source-mail-settings">
+						<label for="sources-details-keep-mail-no">No</label>
+						<br>
+					</div>
+
+					<div class="dialog-input-wrapper block sources-protocol-dependent" id="sources-details-use-starttls-block">
+						<span class="dialog-input-label">Use &#39;STARTTLS&#39; *</span><br>
+						<input type="radio" name="use_starttls" id="sources-details-use-starttls-yes" value="1" [% IF source.use_starttls == 1 %] checked="checked"[% END %] class="include-in-form source-mail-settings"> 
+						<label for="sources-details-use-starttls-yes">Yes</label>
+						<input type="radio" name="use_starttls" id="sources-details-use-starttls-no" value="0" [% IF source.use_starttls == 0 %] checked="checked"[% END %] class="include-in-form source-mail-settings">
+						<label for="sources-details-use-starttls-no">No</label>
+						<br>
+					</div>
+
+					<div class="dialog-input-wrapper block sources-protocol-dependent" id="sources-details-mailbox-block">
+						<label for="sources-details-mailbox" class="dialog-input-label">Mailbox *</label><br>
+						<input type="text" value="[% source.mailbox %]" name="mailbox" id="sources-details-mailbox" class="input-default dialog-input-text-wide include-in-form source-mail-settings">
+						<br>
+					</div>
+
+					<div class="dialog-input-wrapper block sources-protocol-dependent" id="sources-details-archive-mailbox-block">
+						<label for="sources-details-archive-mailbox" class="dialog-input-label">Archive mailbox *</label><br>
+						<input type="text" value="[% source.archive_mailbox %]" name="archive_mailbox" id="sources-details-archive-mailbox" class="input-default dialog-input-text-wide include-in-form source-mail-settings">
+						<br>
+					</div>
+				</fieldset>
+				<fieldset class="block sources-details-half-column">
+					<legend>Icon settings</legend>
+					<div class="dialog-input-wrapper block">
+						<span class="dialog-input-label">Source *</span><br>
+
+						<input type="radio" name="source-icon" id="sources-details-use-existing-source" value="0" checked="checked" class="include-in-form"> 
+						<label for="sources-details-use-existing-source" class="dialog-input-label">Use existing sourcename and icon</label><br>
+						<input type="radio" name="source-icon" id="sources-details-use-new-source" value="1" class="include-in-form">
+						<label for="sources-details-use-new-source" class="dialog-input-label">Use new sourcename and icon</label><br>
+						<div class="dialog-input-wrapper block" id="sources-details-use-existing-source-block">
+							<label for="sources-details-sourcename" class="dialog-input-label">Select source</label><br>
+							<select name="sourcename" id="sources-details-sourcename" class="select-single dialog-input-text-normal include-in-form">
+								<option value="">-select a source-</option>
+								[% FOREACH sourceName IN sources %]
+								<option value="[% sourceName %]" [% IF source.sourcename == sourceName %] selected="selected"[% END %]>[% sourceName %]</option>
+								[% END %]
+							</select><br>
+						</div>
+						<div id="sources-details-use-new-source-block" class="dialog-input-wrapper block">
+							<label for="sources-details-new-sourcename" class="dialog-input-label">Source Name</label><br>
+							<input type="text" name="new_sourcename" id="sources-details-new-sourcename" class="input-default dialog-input-text-normal include-in-form"><br>
+							<label for="sources-details-new-icon" class="dialog-input-label">Source image</label><br>
+							<input type="file" name="new_icon" id="sources-details-new-icon" class="input-default dialog-input-text-normal">
+						</div>
+					</div><br>
+				</fieldset>
+				&nbsp;&nbsp;&nbsp;&nbsp;
+				<fieldset class="block align-top sources-details-half-column">
+					<legend>Content settings</legend>
+				
+					<div class="dialog-input-wrapper block">
+						<label for="sources-details-category" class="dialog-input-label">Category *</label><br>
+						<select name="category" id="sources-details-category" class="select-single dialog-input-text-normal include-in-form">
+							<option value="">-select a category-</option>
+			    			[% FOREACH category IN categories %]
+	    				    <option value="[% category.id %]" [% IF source.categoryid == category.id %] selected="selected" [% END %]>[% category.name %]</option>
+			    			[% END %]
+						</select>
+					</div><br>
+
+					<div class="dialog-input-wrapper block">
+						<label for="sources-details-language" class="dialog-input-label">Language</label><br>
+						<select name="language" id="sources-details-language" class="select-single dialog-input-text-normal include-in-form">
+							<option value="">-select a language-</option>
+		                    <option value="ab" [% IF source.language == "ab" %] selected="selected" [% END %]>Abkhazian</option>
+		                    <option value="aa" [% IF source.language == "aa" %] selected="selected" [% END %]>Afar</option>
+		                    <option value="af" [% IF source.language == "af" %] selected="selected" [% END %]>Afrikaans</option>
+		                    <option value="sq" [% IF source.language == "sq" %] selected="selected" [% END %]>Albanian</option>
+		                    <option value="am" [% IF source.language == "am" %] selected="selected" [% END %]>Amharic</option>
+		                    <option value="ar" [% IF source.language == "ar" %] selected="selected" [% END %]>Arabic</option>
+		                    <option value="an" [% IF source.language == "an" %] selected="selected" [% END %]>Aragonese</option>
+		                    <option value="hy" [% IF source.language == "hy" %] selected="selected" [% END %]>Armenian</option>
+		                    <option value="as" [% IF source.language == "as" %] selected="selected" [% END %]>Assamese</option>
+		                    <option value="ay" [% IF source.language == "ay" %] selected="selected" [% END %]>Aymara</option>
+		                    <option value="az" [% IF source.language == "az" %] selected="selected" [% END %]>Azerbaijani</option>
+		                    <option value="ba" [% IF source.language == "ba" %] selected="selected" [% END %]>Bashkir</option>
+		                    <option value="eu" [% IF source.language == "eu" %] selected="selected" [% END %]>Basque</option>
+		                    <option value="bn" [% IF source.language == "bn" %] selected="selected" [% END %]>Bengali (Bangla)</option>
+		                    <option value="dz" [% IF source.language == "dz" %] selected="selected" [% END %]>Bhutani</option>
+		                    <option value="bh" [% IF source.language == "bh" %] selected="selected" [% END %]>Bihari</option>
+		                    <option value="bi" [% IF source.language == "bi" %] selected="selected" [% END %]>Bislama</option>
+		                    <option value="br" [% IF source.language == "br" %] selected="selected" [% END %]>Breton</option>
+		                    <option value="bg" [% IF source.language == "bg" %] selected="selected" [% END %]>Bulgarian</option>
+		                    <option value="my" [% IF source.language == "my" %] selected="selected" [% END %]>Burmese</option>
+		                    <option value="be" [% IF source.language == "be" %] selected="selected" [% END %]>Byelorussian (Belarusian)</option>
+		                    <option value="km" [% IF source.language == "km" %] selected="selected" [% END %]>Cambodian</option>
+		                    <option value="ca" [% IF source.language == "ca" %] selected="selected" [% END %]>Catalan</option>
+		                    <option value="ny" [% IF source.language == "ny" %] selected="selected" [% END %]>Chewa</option>
+		                    <option value="zh" [% IF source.language == "zh" %] selected="selected" [% END %]>Chinese (Simplified)</option>
+		                    <option value="zh" [% IF source.language == "zh" %] selected="selected" [% END %]>Chinese (Traditional)</option>
+		                    <option value="co" [% IF source.language == "co" %] selected="selected" [% END %]>Corsican</option>
+		                    <option value="hr" [% IF source.language == "hr" %] selected="selected" [% END %]>Croatian</option>
+		                    <option value="cs" [% IF source.language == "cs" %] selected="selected" [% END %]>Czech</option>
+		                    <option value="da" [% IF source.language == "da" %] selected="selected" [% END %]>Danish</option>
+		                    <option value="dv" [% IF source.language == "dv" %] selected="selected" [% END %]>Divehi</option>
+		                    <option value="nl" [% IF source.language == "nl" %] selected="selected" [% END %]>Dutch</option>
+		                    <option value="en" [% IF source.language == "en" %] selected="selected" [% END %]>English</option>
+		                    <option value="eo" [% IF source.language == "eo" %] selected="selected" [% END %]>Esperanto</option>
+		                    <option value="et" [% IF source.language == "et" %] selected="selected" [% END %]>Estonian</option>
+		                    <option value="fo" [% IF source.language == "fo" %] selected="selected" [% END %]>Faeroese</option>
+		                    <option value="fa" [% IF source.language == "fa" %] selected="selected" [% END %]>Farsi</option>
+		                    <option value="fj" [% IF source.language == "fj" %] selected="selected" [% END %]>Fiji</option>
+		                    <option value="fi" [% IF source.language == "fi" %] selected="selected" [% END %]>Finnish</option>
+		                    <option value="fr" [% IF source.language == "fr" %] selected="selected" [% END %]>French</option>
+		                    <option value="fy" [% IF source.language == "fy" %] selected="selected" [% END %]>Frisian</option>
+		                    <option value="ff" [% IF source.language == "ff" %] selected="selected" [% END %]>Fulfulde</option>
+		                    <option value="gl" [% IF source.language == "gl" %] selected="selected" [% END %]>Galician</option>
+		                    <option value="gd" [% IF source.language == "gd" %] selected="selected" [% END %]>Gaelic (Scottish)</option>
+		                    <option value="gv" [% IF source.language == "gv" %] selected="selected" [% END %]>Gaelic (Manx)</option>
+		                    <option value="ka" [% IF source.language == "ka" %] selected="selected" [% END %]>Georgian</option>
+		                    <option value="de" [% IF source.language == "de" %] selected="selected" [% END %]>German</option>
+		                    <option value="el" [% IF source.language == "el" %] selected="selected" [% END %]>Greek</option>
+		                    <option value="kl" [% IF source.language == "kl" %] selected="selected" [% END %]>Greenlandic</option>
+		                    <option value="gn" [% IF source.language == "gn" %] selected="selected" [% END %]>Guarani</option>
+		                    <option value="gu" [% IF source.language == "gu" %] selected="selected" [% END %]>Gujarati</option>
+		                    <option value="ht" [% IF source.language == "ht" %] selected="selected" [% END %]>Haitian Creole</option>
+		                    <option value="ha" [% IF source.language == "ha" %] selected="selected" [% END %]>Hausa</option>
+		                    <option value="he" [% IF source.language == "he" %] selected="selected" [% END %]>Hebrew</option>
+		                    <option value="hi" [% IF source.language == "hi" %] selected="selected" [% END %]>Hindi</option>
+		                    <option value="hu" [% IF source.language == "hu" %] selected="selected" [% END %]>Hungarian</option>
+		                    <option value="is" [% IF source.language == "is" %] selected="selected" [% END %]>Icelandic</option>
+		                    <option value="io" [% IF source.language == "io" %] selected="selected" [% END %]>Ido</option>
+		                    <option value="ig" [% IF source.language == "ig" %] selected="selected" [% END %]>Igbo</option>
+		                    <option value="id" [% IF source.language == "id" %] selected="selected" [% END %]>Indonesian</option>
+		                    <option value="ia" [% IF source.language == "ia" %] selected="selected" [% END %]>Interlingua</option>
+		                    <option value="ie" [% IF source.language == "ie" %] selected="selected" [% END %]>Interlingue</option>
+		                    <option value="iu" [% IF source.language == "iu" %] selected="selected" [% END %]>Inuktitut</option>
+		                    <option value="ik" [% IF source.language == "ik" %] selected="selected" [% END %]>Inupiak</option>
+		                    <option value="ga" [% IF source.language == "ga" %] selected="selected" [% END %]>Irish</option>
+		                    <option value="it" [% IF source.language == "it" %] selected="selected" [% END %]>Italian</option>
+		                    <option value="ja" [% IF source.language == "ja" %] selected="selected" [% END %]>Japanese</option>
+		                    <option value="jv" [% IF source.language == "jv" %] selected="selected" [% END %]>Javanese</option>
+		                    <option value="kn" [% IF source.language == "kn" %] selected="selected" [% END %]>Kannada</option>
+		                    <option value="kr" [% IF source.language == "kr" %] selected="selected" [% END %]>Kanuri</option>
+		                    <option value="ks" [% IF source.language == "ks" %] selected="selected" [% END %]>Kashmiri</option>
+		                    <option value="kk" [% IF source.language == "kk" %] selected="selected" [% END %]>Kazakh</option>
+		                    <option value="rw" [% IF source.language == "rw" %] selected="selected" [% END %]>Kinyarwanda (Ruanda)</option>
+		                    <option value="ky" [% IF source.language == "ky" %] selected="selected" [% END %]>Kirghiz</option>
+		                    <option value="rn" [% IF source.language == "rn" %] selected="selected" [% END %]>Kirundi (Rundi)</option>
+		                    <option value="ko" [% IF source.language == "ko" %] selected="selected" [% END %]>Korean</option>
+		                    <option value="ku" [% IF source.language == "ku" %] selected="selected" [% END %]>Kurdish</option>
+		                    <option value="lo" [% IF source.language == "lo" %] selected="selected" [% END %]>Laothian</option>
+		                    <option value="la" [% IF source.language == "la" %] selected="selected" [% END %]>Latin</option>
+		                    <option value="lv" [% IF source.language == "lv" %] selected="selected" [% END %]>Latvian (Lettish)</option>
+		                    <option value="li" [% IF source.language == "li" %] selected="selected" [% END %]>Limburgish (Limburger)</option>
+		                    <option value="ln" [% IF source.language == "ln" %] selected="selected" [% END %]>Lingala</option>
+		                    <option value="lt" [% IF source.language == "lt" %] selected="selected" [% END %]>Lithuanian</option>
+		                    <option value="mk" [% IF source.language == "mk" %] selected="selected" [% END %]>Macedonian</option>
+		                    <option value="mg" [% IF source.language == "mg" %] selected="selected" [% END %]>Malagasy</option>
+		                    <option value="ms" [% IF source.language == "ms" %] selected="selected" [% END %]>Malay</option>
+		                    <option value="ml" [% IF source.language == "ml" %] selected="selected" [% END %]>Malayalam</option>
+		                    <option value="mt" [% IF source.language == "mt" %] selected="selected" [% END %]>Maltese</option>
+		                    <option value="mi" [% IF source.language == "mi" %] selected="selected" [% END %]>Maori</option>
+		                    <option value="mr" [% IF source.language == "mr" %] selected="selected" [% END %]>Marathi</option>
+		                    <option value="mo" [% IF source.language == "mo" %] selected="selected" [% END %]>Moldavian</option>
+		                    <option value="mn" [% IF source.language == "mn" %] selected="selected" [% END %]>Mongolian</option>
+		                    <option value="na" [% IF source.language == "na" %] selected="selected" [% END %]>Nauru</option>
+		                    <option value="ne" [% IF source.language == "ne" %] selected="selected" [% END %]>Nepali</option>
+		                    <option value="no" [% IF source.language == "no" %] selected="selected" [% END %]>Norwegian</option>
+		                    <option value="oc" [% IF source.language == "oc" %] selected="selected" [% END %]>Occitan</option>
+		                    <option value="or" [% IF source.language == "or" %] selected="selected" [% END %]>Oriya</option>
+		                    <option value="om" [% IF source.language == "om" %] selected="selected" [% END %]>Oromo (Afan, Galla)</option>
+		                    <option value="ps" [% IF source.language == "ps" %] selected="selected" [% END %]>Pashto (Pushto)</option>
+		                    <option value="pl" [% IF source.language == "pl" %] selected="selected" [% END %]>Polish</option>
+		                    <option value="pt" [% IF source.language == "pt" %] selected="selected" [% END %]>Portuguese</option>
+		                    <option value="pa" [% IF source.language == "pa" %] selected="selected" [% END %]>Punjabi</option>
+		                    <option value="qu" [% IF source.language == "qu" %] selected="selected" [% END %]>Quechua</option>
+		                    <option value="rm" [% IF source.language == "rm" %] selected="selected" [% END %]>Rhaeto-Romance</option>
+		                    <option value="ro" [% IF source.language == "ro" %] selected="selected" [% END %]>Romanian</option>
+		                    <option value="ru" [% IF source.language == "ru" %] selected="selected" [% END %]>Russian</option>
+		                    <option value="sm" [% IF source.language == "sm" %] selected="selected" [% END %]>Samoan</option>
+		                    <option value="sg" [% IF source.language == "sg" %] selected="selected" [% END %]>Sangro</option>
+		                    <option value="sa" [% IF source.language == "sa" %] selected="selected" [% END %]>Sanskrit</option>
+		                    <option value="sr" [% IF source.language == "sr" %] selected="selected" [% END %]>Serbian</option>
+		                    <option value="sh" [% IF source.language == "sh" %] selected="selected" [% END %]>Serbo-Croatian</option>
+		                    <option value="st" [% IF source.language == "st" %] selected="selected" [% END %]>Sesotho</option>
+		                    <option value="tn" [% IF source.language == "tn" %] selected="selected" [% END %]>Setswana</option>
+		                    <option value="sn" [% IF source.language == "sn" %] selected="selected" [% END %]>Shona</option>
+		                    <option value="ii" [% IF source.language == "ii" %] selected="selected" [% END %]>Sichuan Yi</option>
+		                    <option value="sd" [% IF source.language == "sd" %] selected="selected" [% END %]>Sindhi</option>
+		                    <option value="si" [% IF source.language == "si" %] selected="selected" [% END %]>Sinhalese</option>
+		                    <option value="ss" [% IF source.language == "ss" %] selected="selected" [% END %]>Siswati</option>
+		                    <option value="sk" [% IF source.language == "sk" %] selected="selected" [% END %]>Slovak</option>
+		                    <option value="sl" [% IF source.language == "sl" %] selected="selected" [% END %]>Slovenian</option>
+		                    <option value="so" [% IF source.language == "so" %] selected="selected" [% END %]>Somali</option>
+		                    <option value="es" [% IF source.language == "es" %] selected="selected" [% END %]>Spanish</option>
+		                    <option value="su" [% IF source.language == "su" %] selected="selected" [% END %]>Sundanese</option>
+		                    <option value="sw" [% IF source.language == "sw" %] selected="selected" [% END %]>Swahili (Kiswahili)</option>
+		                    <option value="sv" [% IF source.language == "sv" %] selected="selected" [% END %]>Swedish</option>
+		                    <option value="tl" [% IF source.language == "tl" %] selected="selected" [% END %]>Tagalog</option>
+		                    <option value="tg" [% IF source.language == "tg" %] selected="selected" [% END %]>Tajik</option>
+		                    <option value="ta" [% IF source.language == "ta" %] selected="selected" [% END %]>Tamil</option>
+		                    <option value="tt" [% IF source.language == "tt" %] selected="selected" [% END %]>Tatar</option>
+		                    <option value="te" [% IF source.language == "te" %] selected="selected" [% END %]>Telugu</option>
+		                    <option value="th" [% IF source.language == "th" %] selected="selected" [% END %]>Thai</option>
+		                    <option value="bo" [% IF source.language == "bo" %] selected="selected" [% END %]>Tibetan</option>
+		                    <option value="ti" [% IF source.language == "ti" %] selected="selected" [% END %]>Tigrinya</option>
+		                    <option value="to" [% IF source.language == "to" %] selected="selected" [% END %]>Tonga</option>
+		                    <option value="ts" [% IF source.language == "ts" %] selected="selected" [% END %]>Tsonga</option>
+		                    <option value="tr" [% IF source.language == "tr" %] selected="selected" [% END %]>Turkish</option>
+		                    <option value="tk" [% IF source.language == "tk" %] selected="selected" [% END %]>Turkmen</option>
+		                    <option value="tw" [% IF source.language == "tw" %] selected="selected" [% END %]>Twi</option>
+		                    <option value="ug" [% IF source.language == "ug" %] selected="selected" [% END %]>Uighur</option>
+		                    <option value="uk" [% IF source.language == "uk" %] selected="selected" [% END %]>Ukrainian</option>
+		                    <option value="ur" [% IF source.language == "ur" %] selected="selected" [% END %]>Urdu</option>
+		                    <option value="uz" [% IF source.language == "uz" %] selected="selected" [% END %]>Uzbek</option>
+		                    <option value="ve" [% IF source.language == "ve" %] selected="selected" [% END %]>Venda</option>
+		                    <option value="vi" [% IF source.language == "vi" %] selected="selected" [% END %]>Vietnamese</option>
+		                    <option value="vo" [% IF source.language == "vo" %] selected="selected" [% END %]>Volap&uuml;k</option>
+		                    <option value="wa" [% IF source.language == "wa" %] selected="selected" [% END %]>Wallon</option>
+		                    <option value="cy" [% IF source.language == "cy" %] selected="selected" [% END %]>Welsh</option>
+		                    <option value="wo" [% IF source.language == "wo" %] selected="selected" [% END %]>Wolof</option>
+		                    <option value="xh" [% IF source.language == "xh" %] selected="selected" [% END %]>Xhosa</option>
+		                    <option value="yi" [% IF source.language == "yi" %] selected="selected" [% END %]>Yiddish</option>
+		                    <option value="yo" [% IF source.language == "yo" %] selected="selected" [% END %]>Yoruba</option>
+		                    <option value="zu" [% IF source.language == "zu" %] selected="selected" [% END %]>Zulu</option>                    
+						</select>
+					</div>
+					
+					<div class="dialog-input-wrapper block">
+						<span class="dialog-input-label">Rating *</span><span class="italic">(between 0 and 100)</span><br>
+						<input type="range" name="rating" min="0" max="100" value="[% IF source.rating.defined; source.rating; ELSE; 50; END %]" id="sources-details-rating" class="dialog-input-text-normal align-middle include-in-form">
+						<span id="sources-details-rating-view">[% IF source.rating.defined; source.rating; ELSE; 50; END %]</span>
+					</div><br>
+				</fieldset>
+			</div>
+
+<!-- TAB COLLECTOR -->
+			<div id="sources-details-tabs-collector">
+				<fieldset class="block align-top sources-details-half-column">
+					<div class="dialog-input-wrapper block" id="sources-details-collector-block">
+						<label for="sources-details-language" class="dialog-input-label">Collector *</label><br>
+						<select name="collector" id="sources-details-collector" class="select-single dialog-input-text-normal include-in-form source-connection-settings">
+							<option value="">-select a collector-</option>
+							[% FOREACH collector IN collectors %]
+							<option value="[% collector.id %]" [% IF collector.id == source.collector_id %]selected="selected"[% END %]>[% collector.description %]</option>
+							[% END %]
+						</select>
+					</div>
+
+					<div class="dialog-input-wrapper block sources-protocol-dependent" id="sources-details-parser-block">
+						<label for="sources-details-parser" class="dialog-input-label">Parser *</label><br>
+						<select name="parser" id="sources-details-parser" class="select-single dialog-input-text-normal include-in-form source-connection-settings">
+		    				<option value="">-select a parser-</option>
+			    			[% FOREACH parser IN parsers %]
+		    				<option value="[% parser.parsername %]" [% IF source.parser == parser.parsername %] selected="selected" [% END %]>[% parser.parsername %]</option>
+			    			[% END %]
+						</select>
+						<br>
+					</div><br>
+					
+					<div class="dialog-input-wrapper block sources-protocol-dependent" id="sources-details-checkid-block">
+						<span class="dialog-input-label">Check ID *</span><br>
+						<input type="radio" name="checkid" id="sources-details-checkid-yes" value="1" [% IF source.checkid == 1 %] checked="checked"[% END %] class="include-in-form"> 
+						<label for="sources-details-checkid-yes">Yes</label>
+						<input type="radio" name="checkid" id="sources-details-checkid-no" value="0" [% IF source.checkid == 0 %] checked="checked"[% END %] class="include-in-form">
+						<label for="sources-details-checkid-no">No</label>
+						<br>
+					</div>
+
+					<div class="dialog-input-wrapper block">
+						<span class="dialog-input-label">Clustering enabled *</span><br>
+						<input type="radio" name="clustering_enabled" id="source-details-clustering-enable-yes" value="1" [% IF source.clustering_enabled == 1 %] checked="checked"[% END %] class="include-in-form">
+						<label for="source-details-clustering-enable-yes">Yes</label> 
+						<input type="radio" name="clustering_enabled" id="source-details-clustering-enable-no" value="0" [% IF source.clustering_enabled == 0 %] checked="checked"[% END %] class="include-in-form">
+						<label for="source-details-clustering-enable-no">No</label>
+					</div><br>
+
+					<div class="dialog-input-wrapper block sources-protocol-dependent" id="sources-details-screenshot-block">
+						<span class="dialog-input-label">Take screenshot of page *</span><br>
+						<input type="radio" name="take_screenshot" id="source-details-take-screenshot-yes" value="1" [% IF source.take_screenshot == 1 %] checked="checked"[% END %] class="include-in-form">
+						<label for="source-details-take-screenshot-yes">Yes</label> 
+						<input type="radio" name="take_screenshot" id="source-details-take-screenshot-no" value="0" [% IF source.take_screenshot == 0 %] checked="checked"[% END %] class="include-in-form">
+						<label for="source-details-take-screenshot-no">No</label>
+						<br>
+					</div>
+
+					<div class="dialog-input-wrapper block">
+						<label for="sources-details-mtbc" class="dialog-input-label">Minimum time between checks (mtbc) *</label><br>
+
+						<input type="text" value="[% source.mtbc %]" name="mtbc" id="sources-details-mtbc"
+							class="input-default include-in-form dialog-input-text-very-narrow">
+						<label for="sources-details-mtbc">minutes</label>
+						<br>
+
+						<div class="block dialog-vertical-align-checkbox">
+							<input
+								type="checkbox" name="mtbc_use_random_delay" value="1"
+								id="sources-details-mtbc-use-random-delay" class="include-in-form"
+								[% IF source.mtbc_random_delay_max %] checked="checked"[% END %]>
+						</div>
+						<div class="block dialog-vertical-align-checkbox">
+							<label class="dialog-vertical-align-checkbox" for="sources-details-mtbc-use-random-delay">Enable random delay</label>
+							<br>
+
+							<label data-depends-on="sources-details-mtbc-use-random-delay" for="sources-details-mtbc-random-delay-max">
+								Maximum random delay:
+							</label>
+							<input
+								type="text" value="[% source.mtbc_random_delay_max or '' %]" name="mtbc_random_delay_max"
+								id="sources-details-mtbc-random-delay-max" class="input-default include-in-form dialog-input-text-very-narrow"
+								data-depends-on="sources-details-mtbc-use-random-delay">
+							<label data-depends-on="sources-details-mtbc-use-random-delay" for="sources-details-mtbc-random-delay-max">
+								minutes
+							</label>
+						</div>
+					</div><br>
+				</fieldset>
+				&nbsp;&nbsp;&nbsp;&nbsp;
+				<fieldset class="block align-top sources-details-half-column">
+					<div class="dialog-input-wrapper block">
+						<span class="italic">Additional settings can only be used with custom collector modules.</span>
+					</div>
+					<hr>
+					<div class="dialog-input-wrapper block">
+						<label for="sources-details-additional-collector-module" class="dialog-input-label">Custom collector module</label><br>
+						<select name="collector_module" id="sources-details-additional-collector-module" class="select-single dialog-input-text-normal include-in-form source-connection-settings">
+							<option value="">-use default collector modules-</option>
+							[% FOREACH collector_module IN custom_collector_modules.keys %]
+							<option value="[% collector_module %]" [% IF collector_module == source.collector_module %]selected="selected"[% END %]>[% collector_module %]</option>
+							[% END %]
+						</select>
+					</div>
+					
+					[% FOREACH collector_module IN custom_collector_modules.keys %]
+						[% IF custom_collector_modules.$collector_module.size > 0 %]
+							[% FOREACH additionalConfig IN custom_collector_modules.$collector_module %]
+					<div class="dialog-input-wrapper block sources-details-additional-config [% IF collector_module != source.collector_module %]hidden[% END %]" data-collectormodule="[% collector_module %]">
+						<span class="dialog-input-label sources-details-additional-template-label">[% additionalConfig %]</span><br>
+						<input type="text" value="[% source.$additionalConfig %]" name="[% additionalConfig %]" class="input-default dialog-input-text-normal include-in-form sources-details-additional-template-input source-connection-settings">
+					</div>
+							[% END %]
+						[% END %]
+					[% END %]
+				</fieldset>
+			</div>
+
+<!-- TAB WORDLISTS -->
+			<div id="sources-details-tabs-wordlists">
+				<fieldset>
+					<div class="dialog-input-wrapper block">
+						<span class="dialog-input-label">Use keyword filtering *</span><br>
+						<input type="radio" name="use_keyword_matching" id="sources-details-use-keyword-matching-yes" value="1" [% IF source.use_keyword_matching == 1 %] checked="checked"[% END %] class="include-in-form"> 
+						<label for="sources-details-use-keyword-matching-yes">Yes</label>
+						<input type="radio" name="use_keyword_matching" id="sources-details-use-keyword-matching-no" value="0" [% IF source.use_keyword_matching == 0 %] checked="checked"[% END %] class="include-in-form">
+						<label for="sources-details-use-keyword-matching-no">No</label>
+						<br>
+					</div>
+					<hr>
+					<div class="dialog-input-wrapper block">
+						<table id="table-source-details-wordlists">
+							<tr>
+								<th><span class="dialog-input-label">Wordlist</span></th>
+								<th>&nbsp;</th>
+								<th><span class="dialog-input-label">Wordlist selection for AND selection</span>&nbsp;<span class="italic"> (optional)</span></th>
+							</tr>
+							[% IF sourceWordlists && sourceWordlists.size > 0 %]
+								[% FOREACH sourceWordlist IN sourceWordlists %]
+							<tr class="border-dashed tr-wordlist-selection">
+								<td>
+									<select name="wordlist1" class="select-single dialog-input-text-normal include-in-form select-source-details-wordlist1">
+										<option value="">-select a wordlist-</option>
+										[% FOREACH wordlist IN wordlists %]
+										<option value="[% wordlist.id %]" [% IF wordlist.id == sourceWordlist.wordlist_id %]selected="selected"[% END %]>[% wordlist.description %]</option>
+										[% END %]
+									</select>
+								</td>
+								<td class="">AND</td>
+								<td>
+									<select name="wordlist2" class="select-single dialog-input-text-normal include-in-form select-source-details-wordlist2">
+										<option value="">-select a wordlist-</option>
+										[% FOREACH wordlist IN wordlists %]
+										<option value="[% wordlist.id %]" [% IF wordlist.id == sourceWordlist.and_wordlist_id %]selected="selected"[% END %]>[% wordlist.description %]</option>
+										[% END %]
+									</select>
+									<img src="[% webroot %]/images/icon_delete.png" alt="del" class="pointer btn-delete-source-wordlist align-middle">
+									<input type="hidden" name="source_wordlist_id" value="[% sourceWordlist.id %]" class="include-in-form">
+								</td>
+							</tr>
+								[% END %]
+							[% ELSE %]
+							<tr class="border-dashed tr-wordlist-selection">
+								<td>
+									<select name="wordlist1" class="select-single dialog-input-text-normal include-in-form select-source-details-wordlist1">
+										<option value="">-select a wordlist-</option>
+										[% FOREACH wordlist IN wordlists %]
+										<option value="[% wordlist.id %]">[% wordlist.description %]</option>
+										[% END %]
+									</select>
+								</td>
+								<td class="">AND</td>
+								<td>
+									<select name="wordlist2" class="select-single dialog-input-text-normal include-in-form select-source-details-wordlist2">
+										<option value="">-select a wordlist-</option>
+										[% FOREACH wordlist IN wordlists %]
+										<option value="[% wordlist.id %]">[% wordlist.description %]</option>
+										[% END %]
+									</select>
+								</td>
+							</tr>
+							[% END %]
+							<tr id="tr-add-wordlist">
+								<td colspan="3" class="align-text-right"><input type="button" class="button" id="btn-add-more-source-wordlist" value="Add more"></td>
+							</tr>
+							<tr id="tr-wordlist-default" class="hidden border-dashed">
+								<td>
+									<select name="wordlist1" class="select-single dialog-input-text-normal include-in-form select-source-details-wordlist1">
+										<option value="">-select a wordlist-</option>
+										[% FOREACH wordlist IN wordlists %]
+										<option value="[% wordlist.id %]">[% wordlist.description %]</option>
+										[% END %]
+									</select>
+								</td>
+								<td class="">AND</td>
+								<td>
+									<select name="wordlist2" class="select-single dialog-input-text-normal include-in-form select-source-details-wordlist2">
+										<option value="">-select a wordlist-</option>
+										[% FOREACH wordlist IN wordlists %]
+										<option value="[% wordlist.id %]">[% wordlist.description %]</option>
+										[% END %]
+									</select>
+									<img src="[% webroot %]/images/icon_delete.png" alt="del" class="pointer btn-delete-source-wordlist align-middle">
+								</td>
+							</tr>
+						</table>
+					</div>
+				</fieldset>
+			</div>
+
+<!-- TAB ADVISORY IMPORT -->
+			<div id="sources-details-tabs-advisory-import">
+				<fieldset>
+					<div class="dialog-input-wrapper block">
+						<span class="dialog-input-label">Source contains Taranis XML Advisories *</span><br>
+						<input type="radio" name="contains_advisory" id="sources-details-contains-advisory-yes" value="1" [% IF source.contains_advisory == 1 %] checked="checked"[% END %] class="include-in-form"> 
+						<label for="sources-details-contains-advisory-yes">Yes</label>
+						<input type="radio" name="contains_advisory" id="sources-details-contains-advisory-no" value="0" [% IF source.contains_advisory == 0 %] checked="checked"[% END %] class="include-in-form">
+						<label for="sources-details-contains-advisory-no">No</label>
+					</div><br>
+
+					<div class="dialog-input-wrapper block sources-details-advisory-import [% IF !source.contains_advisory %] hidden[% END %]">
+						<span class="dialog-input-label">Create new advisory *</span><br>
+						<input type="radio" name="create_advisory" id="source-details-create-advisory-yes" value="1" [% IF source.create_advisory == 1 %] checked="checked"[% END %] class="include-in-form">
+						<label for="source-details-create-advisory-yes">Yes</label> 
+						<input type="radio" name="create_advisory" id="source-details-create-advisory-no" value="0" [% IF source.create_advisory == 0 %] checked="checked"[% END %] class="include-in-form">
+						<label for="source-details-create-advisory-no">No</label>
+					</div><br>
+
+					<div class="dialog-input-wrapper block sources-details-advisory-import [% IF !source.contains_advisory %] hidden[% END %]">
+						<span class="dialog-input-label">Advisory import handler *</span><br>
+						<select name="advisory_handler" id="source-details-advisory-handler" class="select-single dialog-input-text-normal include-in-form">
+							<option value="" [% IF !source.advisory_handler %]selected="selected"[% END %]>-select handler-</option>
+						[% FOREACH user IN users %]
+							<option value="[% user.username %]" [% IF source.advisory_handler == user.username %]selected="selected"[% END %]>[% user.fullname %]</option>
+						[% END %] 
+						</select>
+					</div><br>
+				</fieldset>
+			</div>
+
+			[% IF source.id %]
+<!-- TAB ERROR -->
+			<div id="sources-details-tabs-error">
+				<fieldset>
+				[% IF collector_errors.size > 0 %]
+					<table class="dialog-table">
+						<thead>
+							<tr>
+								<th class="bold">Timestamp</th>
+								<th class="bold">Code</th>
+								<th class="bold">Description</th>
+							</tr>
+						</thead>
+						<tbody>
+						[% FOREACH error IN collector_errors %]
+							<tr class="item-row">
+								<td>[% error.time %]</td>
+								<td><img src="[% webroot %]/images/[% error.error_code %].gif" alt="[% error_code %]"></td>
+								<td>[% error.error %]</td>
+							</tr>
+						[% END %]
+						</tbody>
+					</table>
+				[% ELSE %]
+					<span>There are no errors</span>
+				[% END %]
+				</fieldset>
+			</div>
+			[% END %]
+		</div>
+	</form>
+</div>

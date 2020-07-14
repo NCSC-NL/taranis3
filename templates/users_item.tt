@@ -1,0 +1,28 @@
+[% IF renderItemContainer %]
+<div class="users-item item-row" id="[% user.username %]">
+[% END %]
+	
+	<div class="users-item-username block">
+		<span>[% user.username %]</span>
+	</div>		
+
+	<div class="users-item-fullname block">
+		<span>[% user.fullname %]</span>
+	</div>		
+
+	<div class="users-item-role block">
+		<span>[% user.role_name %]</span>
+	</div>		
+
+	<div class="block align-block-right">
+		[% IF write_right %]
+		<img src="[% webroot %]/images/icon_modify.png" alt="edit" title="edit this item" class="pointer btn-edit-user" data-id="[% user.username %]">
+		<img src="[% webroot %]/images/icon_delete.png" alt="delete" title="delete this item" class="pointer btn-delete-user" data-id="[% user.username %]">
+		[% ELSE %]
+		<img src="[% webroot %]/images/icon_details.png" alt="view" title="view details" class="pointer btn-view-user" data-id="[% user.username %]">
+		[% END %]  
+	</div>
+		
+[% IF renderItemContainer %]
+</div>
+[% END %]

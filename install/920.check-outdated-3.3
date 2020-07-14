@@ -1,0 +1,85 @@
+#!/usr/bin/env perl
+# Check for outdated info in the database.
+
+use warnings;
+use strict;
+
+use Taranis::Install::DB qw(connect_db);
+use Taranis::Install::Config qw(config_generic
+	taranis_config taranis_config_fn);
+
+use Taranis   qw(find_config);
+
+my $generic   = config_generic;
+my $db        = connect_db;
+
+my $config_fn = taranis_config_fn;
+my $config    = taranis_config;
+
+### In 3.4, the EOD publication template has changed
+
+my @outdated = $db->query(<<'__CHECK_EOD')->hashes;
+SELECT *
+  FROM publication_template
+ WHERE template LIKE '%setting%'
+   AND title LIKE 'End-of-Day %'
+__CHECK_EOD
+
+
+if(@outdated) {
+	print <<__WARNING;
+WARNING: The layout of EoD publications have changed in 3.4.
+    Read the release docs how to modify your template.
+    Check these templates:
+__WARNING
+
+	foreach my $templ (@outdated) {
+		print "        template '$templ->{title}' (id=$templ->{id})\n";
+	}
+	print "\n";
+}
+
+my $ptfn = find_config $config->{publication_templates};
+-f $ptfn or die "ERROR: cannot find publication_templates file $ptfn\n";
+
+open my $pt, '<:encoding(utf8)', $ptfn
+	or die "ERROR: cannot read $ptfn: $!\n";
+
+my @ptlines = $pt->getlines;
+
+unless(grep /end-of-day.*white/i, @ptlines) {
+	print <<__WARNING;
+WARNING: Include End-of-Day tlp White in your template (optional)
+    Change file $ptfn
+    Add to the <eod> container the line:
+
+        <email_white>End-of-Day (email white)</email_white>
+
+__WARNING
+}
+
+unless($config->{publish_eod_white}) {
+	print <<__WARNING;
+WARNING: availability of eod-white not configured.
+    Add to file $config_fn (example!)
+        <publish_eod_white>ON</publish_eod_white>
+        <publish_eod_white_from>\$email</publish_eod_white_from>
+        <publish_eod_white_to>\$email</publish_eod_white_to>
+        <pgp_signing_endofday_white>OFF</pgp_signing_endofday_white>
+
+__WARNING
+}
+
+my $pgp_sign_eod = $config->{pgp_signing_endofday} || 'OFF';
+unless($config->{pgp_signing_endofday_public}) {
+	# Having pgp-signing turned on for EOD, would produce unsigned eod-publics
+	# during the confidential process, when there is no amber text.
+	print <<__WARNING;
+WARNING: pgp-signing of eod-public got separate option:
+    Add to file $config_fn
+        <pgp_signing_endofday_public>$pgp_sign_eod</pgp_signing_endofday_public>
+
+__WARNING
+}
+
+exit 0;

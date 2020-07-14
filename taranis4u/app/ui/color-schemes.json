@@ -1,0 +1,56 @@
+[
+	{
+		"bgColorName": "black",
+		"fontColorName": "red",
+		"bgColor": "#2a2a2a",
+		"fontColor": "#d52b1e"
+	},
+	{
+		"bgColorName": "black",
+		"fontColorName": "blue",
+		"bgColor": "#2a2a2a",
+		"fontColor": "#09f"
+	},	
+	{
+		"bgColorName": "black",
+		"fontColorName": "green",
+		"bgColor": "#2a2a2a",
+		"fontColor": "#64ca40"
+	},
+	{
+		"bgColorName": "black",
+		"fontColorName": "white",
+		"bgColor": "#2a2a2a",
+		"fontColor": "#ffffff"
+	},
+	{
+		"bgColorName": "red",
+		"fontColorName": "yellow",
+		"bgColor": "#d52b1e",
+		"fontColor": "#f8e61d"
+	},
+	{
+		"bgColorName": "blue",
+		"fontColorName": "blue",
+		"bgColor": "#9597fd",
+		"fontColor": "#2024fb"
+	},	
+	{
+		"bgColorName": "white",
+		"fontColorName": "black",
+		"bgColor": "#ffffff",
+		"fontColor": "#2a2a2a"
+	},
+	{
+		"bgColorName": "grey",
+		"fontColorName": "red",
+		"bgColor": "#F3F5F6",
+		"fontColor": "#D52B1E"
+	},
+	{
+		"bgColorName": "orange",
+		"fontColorName": "white",
+		"bgColor": "#ff831e",
+		"fontColor": "#ffead9"
+	}	
+]

@@ -1,0 +1,112 @@
+#!/usr/bin/env perl
+# Initiate contact with postgress and install plugins.
+#
+# This logic is closely related to the regression script t/054-db-load-schema.t
+# Please check that script as well when you make changes here.
+
+use warnings;
+use strict;
+
+use Carp           qw(confess);
+use DBIx::Simple   ();
+
+use Taranis::Install::Config qw(config_release config_generic
+	taranis_sources is_newest_version);
+use Taranis::Install::DB     qw(connect_db);
+
+my $generic  = config_generic;
+my $release  = config_release;
+
+my $dbconfig = $release->{database}  or confess;
+my $dbhost   = $dbconfig->{host}     or confess;
+my $dbname   = $dbconfig->{name}     or confess;
+my $dbuser   = $dbconfig->{user}     or confess;
+my $dbpasswd = $dbconfig->{password} or confess;
+
+# On some platforms, postgres scripts require our user to be member of
+# the postgres group.  (At least RedHat6)
+my @groups = split ' ', qx(id --groups --name);
+unless(grep $_ eq 'postgres', @groups) {
+	system usermod => '--append',
+		'--group' => 'postgres',
+		$generic->{username}
+		and die "usermod: $!";
+}
+
+### Create the username (root always has access)
+
+my $db = DBIx::Simple->connect("dbi:Pg:dbname=postgres", 'postgres', '',
+	{ AutoCommit => 1, RaiseError => 1 }
+);
+
+my ($pg_version)  = $db->query('SELECT version()')->list;
+print "*   running $pg_version\n";
+
+my ($server_version) = (split ' ', $pg_version)[1];
+my ($major, $minor, $patch) = split /\./, $server_version;
+
+# We use "INSERT ON CONFLICT", which only got implemented in 9.5 (released 2016)
+$major > 9 || ($major==9 && $minor >= 5)
+	or die <<__UPGRADE;
+*** Your progress ($server_version) is too old, minimal required is version 9.5.
+*** How to get a newer release of PostgreSQL depends on your operating system.  Ask
+*** your local sysadmin.
+__UPGRADE
+
+my $user = $db->query('SELECT * FROM pg_roles WHERE rolname = ?',$dbuser)->hash;
+
+if($user) {
+	if($user->{rolsuper}) {
+		print "*   user $dbuser already exists\n";
+	} else {
+		$db->query("ALTER ROLE $dbuser WITH SUPERUSER");
+		print "*   added superuser rights to existing user $dbuser\n";
+	}
+} else {
+	print "*   create new database user $dbuser\n";
+	# $dbuser cannot be quoted
+	$db->query(<<_CREATE_USER, $dbpasswd);
+CREATE ROLE $dbuser WITH SUPERUSER CREATEDB LOGIN ENCRYPTED PASSWORD ?
+_CREATE_USER
+}
+
+### Create the (empty) database, if not exists
+
+my ($db_exists) = $db->query('SELECT 1 FROM pg_database WHERE datname = ?',
+		$dbname)->list;
+
+if($db_exists) {
+	print "*   database $dbname already exists\n";
+} else {
+	print "*   created database $dbname with owner $dbuser\n";
+	# $dbname and $dbuser cannot be quoted
+	$db->query("CREATE DATABASE $dbname WITH OWNER $dbuser ENCODING 'UTF8'");
+}
+
+### Accept the information about the user
+
+$db->disconnect;
+
+###
+### Now we continue configuring the database from "inside"
+###
+
+$db = connect_db;
+
+### Check that all extensions are loaded
+
+my %ext = map +($_ => 1), $db->query( <<'__EXTENSIONS' )->flat;
+SELECT extname FROM pg_extension;
+__EXTENSIONS
+
+unless($ext{lo}) {
+	print "*   enable extension 'lo' (large objects)\n";
+	$db->query('CREATE EXTENSION IF NOT EXISTS lo');
+}
+
+unless($ext{pg_trgm}) {
+	print "*   enable extension 'pg_trgm' (full text search with trigrams)\n";
+	$db->query('CREATE EXTENSION IF NOT EXISTS pg_trgm');
+}
+
+exit 0;

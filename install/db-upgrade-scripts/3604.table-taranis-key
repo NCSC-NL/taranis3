@@ -1,0 +1,14 @@
+#!perl
+# installed Taranis may miss this default from the schema.
+
+use warnings;
+use strict;
+
+sub {
+	my ($db, %args) = @_;
+
+	$db->query( <<'__RUN__');
+ALTER TABLE taranis ADD CONSTRAINT pk_taranis
+	PRIMARY KEY (key);
+__RUN__
+};

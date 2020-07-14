@@ -1,0 +1,21 @@
+#!perl
+
+use warnings;
+use strict;
+
+sub {
+	my ($db, %args) = @_;
+
+	$db->query( <<'__RUN__');
+ALTER TABLE users ALTER COLUMN username TYPE TEXT;
+ALTER TABLE users ALTER COLUMN search TYPE TEXT;
+ALTER TABLE users ALTER COLUMN anasearch TYPE TEXT;
+ALTER TABLE users ALTER COLUMN anastatus TYPE TEXT;
+ALTER TABLE users ALTER COLUMN mailfrom_sender TYPE TEXT;
+ALTER TABLE users ALTER COLUMN mailfrom_email TYPE TEXT;
+ALTER TABLE users ALTER COLUMN statstype TYPE TEXT;
+ALTER TABLE users ALTER COLUMN fullname TYPE TEXT;
+ALTER TABLE users ALTER COLUMN assess_orderby TYPE TEXT;
+ALTER TABLE users ALTER COLUMN source TYPE TEXT;
+__RUN__
+};
