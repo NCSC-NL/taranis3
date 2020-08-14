@@ -303,7 +303,7 @@ the purpose of the display of the individual's facts.
 
 sub mergeRoles($) {
 	my ($self, $individual) = @_;
-	my $roles = $individual->{roles} ||= $self->getRolesForIndividual($individual);
+	my $roles = $individual->{roles} ||= [ $self->getRolesForIndividual($individual) ];
 	$individual->{role_names} = join ', ', sort map $_->{role_name}, @$roles;
 	$self;
 }

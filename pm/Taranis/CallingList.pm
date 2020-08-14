@@ -31,7 +31,8 @@ use Array::Utils qw(intersect);
 use Taranis::Constituent::Group;
 use Taranis::Database;
 use Taranis::Publication;
-use Taranis::FunctionalWrapper qw(Constituent_Group Database Publication);
+use Taranis::Config;
+use Taranis::FunctionalWrapper qw(Constituent_Group Database Publication Config);
 
 
 our @ISA = qw(Exporter);
@@ -82,15 +83,15 @@ sub getCallingList($;$) {
 		-order_by => 'groupname',
 	)->hashes;
 
+	my $ci = Taranis::Constituent::Individual->new(Config);
 	my @list;
 	foreach my $group ( @groups ) {
 		my @indiv = $db->select(
 			-from => [-join => qw/
 				constituent_individual|ci
 					id=constituent_id    membership|m
-					ci.role=id           constituent_role|cr
 			/],
-			-columns => 'ci.firstname, ci.lastname, ci.tel_mobile, ci.tel_regular, cr.role_name, ci.call247',
+			-columns => 'ci.firstname, ci.lastname, ci.tel_mobile, ci.tel_regular, ci.call247',
 			-where => {
 				'm.group_id' => $group->{constituent_group_id},
 				'ci.status'  => 0,
@@ -100,6 +101,11 @@ sub getCallingList($;$) {
 		)->hashes;
 
 		@indiv or next;
+
+		foreach my $indiv (@indiv) {
+			$indiv->{role_name} = join ', ', sort
+				map $_->{role_name}, $ci->getRolesForIndividual($indiv);
+		}
 
 		$group->{individuals} =
 			[ (grep $_->{call_hh}, @indiv), (grep !$_->{call_hh}, @indiv) ];
