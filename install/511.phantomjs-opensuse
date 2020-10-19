@@ -14,7 +14,7 @@ unless(is_opensuse) {
 
 my @packages;
 
-push @packages, is_tumbleweed ? 'liberation-fonts' : 'liberation2-fonts';
+push @packages, 'liberation-fonts';
 
 opensuse_packages @packages;
 
