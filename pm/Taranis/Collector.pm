@@ -447,30 +447,28 @@ sub getObject {
 }
 
 sub _matchingKeywords($@) {
-	my ($self, $source, @text) = @_;
+	my ($self, $source) = (shift, shift);
+	my $text = join ' ', @_;
 
-	my $wordlists = $source->{wordlists}
-		or return ();
-
+	my $wordlists = $source->{wordlists} || [];
 	my %matches;
 	foreach my $wl (@$wordlists) {
 		my $has_wl = $wl->{match};
 		my $and_wl = $wl->{and_match};
 
-		foreach my $text (@text) {
-			my %found;
-			$found{lc $_}++ for $text =~ /$has_wl/g;
+		my @found = $text =~ /$has_wl/g;
+		@found or next;
 
-			if($and_wl) {
-				my %also;
-				$also{lc $_} for $text =~ /$and_wl/g;
-				$also{$_} or delete $found{$_} for keys %found;
-			}
-			$matches{$_}++ for keys %found;
+		my @also;
+		if($and_wl) {
+			@also = $text =~ /$and_wl/g;
+			@also or next;
 		}
+
+		$matches{$_}++ for @found, @also;
 	}
 
-	[ keys %matches ];
+	[ sort keys %matches ];
 }
 
 #XXX Still in use for IMAP and POP sources, awaiting for the full
