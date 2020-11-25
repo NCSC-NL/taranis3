@@ -115,10 +115,7 @@
   <testmode></testmode>
   <timeout>30</timeout>
   <toolsconfig>conf/taranis.conf.tools.xml</toolsconfig>
-  <twitter_consumer_key></twitter_consumer_key>
-  <twitter_consumer_secret></twitter_consumer_secret>
-  <twitter_access_token></twitter_access_token>
-  <twitter_access_token_secret></twitter_access_token_secret>
+  <twitter_bearer_token></twitter_bearer_token>
   <useragent_string>Mozilla/5.0 (Windows NT 6.1; rv:52.0) Gecko/20100101 Firefox/52.0</useragent_string>
   <webroot></webroot>
   <auto_send_eos>yes</auto_send_eos>
