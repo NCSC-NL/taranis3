@@ -37,14 +37,7 @@ sub getSourceData {
 
 	my $response = lwpRequest(
 		get => $retrieve_url,
-		lwp_constructor => sub {
-			LWP::Authen::OAuth->new(
-				oauth_consumer_key => $source->{oauth_consumer_key} || Config->{twitter_consumer_key},
-				oauth_consumer_secret => $source->{oauth_consumer_secret} || Config->{twitter_consumer_secret},
-				oauth_token => $source->{oauth_token} || Config->{twitter_access_token},
-				oauth_token_secret => $source->{oauth_token_secret} || Config->{twitter_access_token_secret},
-			);
-		},
+		Authorization => join ' ', 'Bearer',$source->{oauth_consumer_key} || Config->{twitter_bearer_token},
 	);
 
 	my $code = $self->{http_status_code} = $response->code;
@@ -147,7 +140,7 @@ sub collect {
 }
 
 sub getAdditionalConfigKeys {
-	return [ qw( oauth_consumer_key oauth_consumer_secret oauth_token oauth_token_secret) ];
+	return [ qw( oauth_consumer_key) ];
 }
 
 sub testCollector {
@@ -162,17 +155,10 @@ sub testCollector {
 
 	$fullurl .= $source->{url};
 
-	if ($source->{oauth_consumer_key} || Config->{twitter_consumer_key}) {
+	if ($source->{oauth_consumer_key} || Config->{twitter_bearer_token}) {
 		my $response = lwpRequest(
 			get => decode_entities( $fullurl ),
-			lwp_constructor => sub {
-				LWP::Authen::OAuth->new(
-					oauth_consumer_key => $source->{oauth_consumer_key} || Config->{twitter_consumer_key},
-					oauth_consumer_secret => $source->{oauth_consumer_secret} || Config->{twitter_consumer_secret},
-					oauth_token => $source->{oauth_token} || Config->{twitter_access_token},
-					oauth_token_secret => $source->{oauth_token_secret} || Config->{twitter_access_token_secret},
-				);
-			},
+			Authorization => join ' ', 'Bearer',$source->{oauth_consumer_key} || Config->{twitter_bearer_token},
 		);
 
 		if ( $response->is_success ) {
