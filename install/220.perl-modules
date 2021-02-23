@@ -67,6 +67,7 @@ my @dependencies = qw(
 	Module::Find					0
 	Module::Load					0
 	Pod::Man						0
+	SQL::Abstract      				2.00
 	SQL::Abstract::More				0
 	String::Compare::ConstantTime	0
 	Sys::Syslog						0

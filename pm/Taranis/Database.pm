@@ -280,21 +280,18 @@ sub logError {
 # FULL JOIN: Return rows when there is a match in one of the tables
 sub sqlJoin {
 	my ( $self, $join_columns, $stmnt ) = @_;
-	my ( $str, $table_key);
-	my %columns;
+	my $str;
 
-	for $table_key ( keys %$join_columns ) {
-		$str .= " " . $table_key . " ON ";
+	foreach my $table_key ( keys %$join_columns ) {
 		my $columns = $join_columns->{$table_key};
-		for my $column_key ( keys %$columns ) {
-			$str .= $column_key . " = " . $columns->{$column_key};
-		}
+		my ($key, $other) = %$columns;
+		$str .= " $table_key ON $key = $other ";
 	}
 
-	if ( $stmnt =~ m/(WHERE)/ ) {
-		$stmnt =~ s/( WHERE \()/$str WHERE \(/;
-	} elsif ( $stmnt =~ m/(ORDER BY)/ ) {
-		$stmnt =~ s/( ORDER BY )/$str ORDER BY /;
+	if ( $stmnt =~ m/ WHERE / ) {
+		$stmnt =~ s/ WHERE /$str WHERE /;
+	} elsif ( $stmnt =~ m/ ORDER BY / ) {
+		$stmnt =~ s/ ORDER BY /$str ORDER BY /;
 	} else {
 		$stmnt .= $str;
 	}
