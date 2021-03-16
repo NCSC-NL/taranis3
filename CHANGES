@@ -1,6 +1,8 @@
 CHANGES from 3.7.4 onwards
 
-=== release 3.7.5 (under construction)
+=== release 3.7.6 (under construction)
+
+=== release 3.7.5: Tue Mar 16 10:42:54 CET 2021
 - #361 Individuals without roles not shown in call list
 - #365 = E41: correct use of AND between keyword lists
 - E47: change in SQL::Abstract v2 breaks sqlJoin
