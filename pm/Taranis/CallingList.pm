@@ -43,7 +43,7 @@ our @EXPORT_OK = qw(
 
 # getCallingList: retrieve an array of hashes consisting of constituent groups. Each group has the following keys:
 #
-# * individuals, is also an ARRAY of HASES which has the C<firstname>, C<lastname>, C<role_name>, C<tel_regular> and
+# * individuals, is also an ARRAY of HASES which has the C<firstname>, C<lastname>, C<role_names>, C<tel_regular> and
 # C<tel_mobile> per individual.
 # * comments, concerning the call
 # * group_id and constituent_group_id, internal id of constituent group
@@ -91,7 +91,7 @@ sub getCallingList($;$) {
 				constituent_individual|ci
 					id=constituent_id    membership|m
 			/],
-			-columns => 'ci.firstname, ci.lastname, ci.tel_mobile, ci.tel_regular, ci.call247',
+			-columns => 'ci.firstname, ci.lastname, ci.tel_mobile, ci.tel_regular, ci.call247, ci.id',
 			-where => {
 				'm.group_id' => $group->{constituent_group_id},
 				'ci.status'  => 0,
@@ -103,8 +103,8 @@ sub getCallingList($;$) {
 		@indiv or next;
 
 		foreach my $indiv (@indiv) {
-			$indiv->{role_name} = join ', ', sort
-				map $_->{role_name}, $ci->getRolesForIndividual($indiv);
+			$indiv->{role_names} = join ', ', sort
+				map $_->{role_name}, $ci->getRolesForIndividual($indiv->{id});
 		}
 
 		$group->{individuals} =

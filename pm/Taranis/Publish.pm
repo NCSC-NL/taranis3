@@ -10,6 +10,7 @@ use Taranis qw(:all);
 use Taranis::Database;
 use Taranis::Config;
 use Taranis::Publication;
+use Taranis::Constituent::Individual;
 use Taranis::FunctionalWrapper qw(Config Database Sql);
 use Taranis::Mail ();
 
@@ -463,46 +464,52 @@ sub setSendingResult {
 sub getPublishDetails {
 	my ($self, $publication_id, $publication_type) = @_;
 
-	return {
-		receivers_list => [
-			Database->simple->select(
-				-from => [-join => qw/
-					publication2constituent|p2c
-						constituent_id=id     constituent_individual|ci
-						id=constituent_id     membership
-						group_id=id           constituent_group|cg
-				/],
-				-columns => [
-					"array_to_string(array_agg(cg.name), ', ')|groupname",  # group names, joined by ', '
-					'ci.id|ci_id',
-					'ci.firstname',
-					'ci.lastname',
-					'ci.emailaddress',
-					"to_char(p2c.timestamp, 'DD-MM-YYYY HH24:MI:SS')|timestamp_str",
-				],
-				-where => {'p2c.publication_id' => $publication_id, 'p2c.channel' => 1},
-				-group_by => [qw/ci.id ci.firstname ci.lastname ci.emailaddress timestamp_str p2c.id/],
-				-order_by => [qw/lastname firstname/],
-			)->hashes
+    my @receivers = Database->simple->select(
+		-from => [ -join => qw/
+			publication2constituent|p2c
+				constituent_id=id     constituent_individual|ci
+				id=constituent_id     membership
+				group_id=id           constituent_group|cg
+		/ ],
+		-columns => [
+			"array_to_string(array_agg(cg.name), ', ')|groupname",    # group names, joined by ', '
+			'ci.id|ci_id',
+			'ci.firstname',
+			'ci.lastname',
+			'ci.emailaddress',
+			"to_char(p2c.timestamp, 'DD-MM-YYYY HH24:MI:SS')|timestamp_str",
 		],
+		-where => {'p2c.publication_id' => $publication_id, 'p2c.channel' => 1},
+		-group_by => [qw/ci.id ci.firstname ci.lastname ci.emailaddress timestamp_str p2c.id/],
+		-order_by => [qw/lastname firstname/],
+	)->hashes;
 
-		publication => Database->simple->select(
-			-from => lc($publication_type) eq 'advisory'
-				? [-join => qw/publication|pu   id=publication_id   publication_advisory|pa/]
-				: 'publication as pu',
+	my $indivs = Taranis::Constituent::Individual->new;
+	foreach my $indiv (@receivers) {
+		my @roles = $indivs->getRolesForIndividual($indiv->{ci_id});
+		$indiv->{role_names} = join ', ', map $_->{role_name}, @roles;
+	}
 
-			-columns => [
-				'pu.approved_by', 'pu.published_by',
-				"to_char(pu.approved_on,  'DD-MM-YYYY HH24:MI:SS')|approved_on_str",
-				"to_char(pu.published_on, 'DD-MM-YYYY HH24:MI:SS')|published_on_str",
+	my $publication = Database->simple->select(
+		-from => lc($publication_type) eq 'advisory'
+			? [-join => qw/publication|pu   id=publication_id   publication_advisory|pa/]
+			: 'publication as pu',
 
-				lc($publication_type) eq 'advisory'
-					? ('pa.title|pub_title', 'pa.damage', 'pa.probability')
-					: ('pu.title|pub_title'),
-			],
-			-where => {'pu.id' => $publication_id},
-		)->hash,
-	};
+		-columns => [
+			'pu.approved_by', 'pu.published_by',
+			"to_char(pu.approved_on,  'DD-MM-YYYY HH24:MI:SS')|approved_on_str",
+			"to_char(pu.published_on, 'DD-MM-YYYY HH24:MI:SS')|published_on_str",
+
+			lc($publication_type) eq 'advisory'
+				? ('pa.title|pub_title', 'pa.damage', 'pa.probability')
+				: ('pu.title|pub_title'),
+		],
+		-where => {'pu.id' => $publication_id},
+	)->hash;
+
+	 +{ receivers_list => \@receivers,
+		publication    => $publication,
+      };
 }
 
 # setAnalysisToDoneStatus( $publicationId, $namedPublicationId )

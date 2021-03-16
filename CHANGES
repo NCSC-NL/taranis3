@@ -4,3 +4,4 @@ CHANGES from 3.7.4 onwards
 - #361 Individuals without roles not shown in call list
 - #365 = E41: correct use of AND between keyword lists
 - E47: change in SQL::Abstract v2 breaks sqlJoin
+- #371 Show roles in H/H calling list

@@ -77,7 +77,7 @@ Publication was sent to:
 								<tr class="publishing-details-call-contacts">
 									<td>[% IF individual.call247 %]24/7[% ELSE %]day[% END %]</td>
 									<td>[% individual.lastname _ ', ' _ individual.firstname %]</td>
-									<td>[% individual.role_name %]</td>
+									<td>[% individual.role_names %]</td>
 									<td>tel: [% IF individual.tel_regular; individual.tel_regular; ELSE; '-'; END %]</td> 
 									<td>mob: [% IF individual.tel_mobile; individual.tel_mobile; ELSE; '-'; END %]</td>
 								</tr>

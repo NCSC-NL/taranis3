@@ -5,7 +5,7 @@
 	[% FOREACH contact IN group.individuals %]
 
 		[% IF contact.call247 %][% " 24/7 " %][% ELSE %][% " day  " %][% END %]
-		[% "   CONTACT: " _ contact.firstname.decodeEntity _ contact.lastname.decodeEntity _ " (" _ contact.role_name.decodeEntity _ ")\n" %]  
+		[% "   CONTACT: " _ contact.firstname.decodeEntity _ ' ' _ contact.lastname.decodeEntity _ " (" _ contact.role_names.decodeEntity _ ")\n" %]
 		[%- IF contact.tel_regular %]
 			[% "     tel: " _ contact.tel_regular _ "\n" +%]
 		[% END %]
